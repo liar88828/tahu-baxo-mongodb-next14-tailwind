@@ -4,7 +4,6 @@ import {
   Column, ColumnDef, ColumnOrderState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel,
   getSortedRowModel, SortingState, useReactTable
 } from '@tanstack/react-table';
-import { formatPhone } from '@/lib/utils/formatPhone';
 import { DeleteTable } from '@/app/(pages)/(Transaction)/table/DeleteTable';
 import { newSetTanggal, setTanggal } from '@/lib/utils/formatDate';
 import { StatusButton } from '@/app/(pages)/dashboard/card/StatusButton';
@@ -18,8 +17,9 @@ import { TCREATEORDERAN, TCREATEPRODUCTSEMUA } from '@/lib/validator/zod';
 import { setColumn } from '@/app/(pages)/(Transaction)/table/setColum';
 import { getOrderan } from '@/app/(pages)/(Transaction)/table/getOrderan';
 import { usePathname } from 'next/navigation';
-import { listComplex } from '@/assets/list';
 import Link from 'next/link';
+import { listComplex } from '@/assets/list';
+import { formatPhone } from '@/lib/utils/formatPhone';
 
 //-------------------------Main Table
 export function TableOrder( { dataOrderan }: {
@@ -28,14 +28,9 @@ export function TableOrder( { dataOrderan }: {
     data: TCREATEORDERAN[]
   },
 } ) {
-  //get last pathname
+  // get pathname
   const path = usePathname()
-const slug=path.split('/').pop()
-  // console.log( path.split('/').pop(), 'path' )
-
-
-
-  // console.log( dataOrderan.data )
+  const slug = path.split( '/' ).pop()
 
   const { data } = dataOrderan
   // const router   = useRouter()
@@ -179,7 +174,7 @@ const slug=path.split('/').pop()
         {
           accessorKey: 'hpPenerima',
           header     : 'Telephone Penerima',
-          cell       : info => info.getValue,// formatPhone( info.getValue() as string ),
+          cell       : info =>  formatPhone( info.getValue() as string ),
           footer     : 'Telephone Penerima',
         },
         // @ts-ignore
@@ -373,11 +368,23 @@ const slug=path.split('/').pop()
     }
   }
 
-  let tables = table.getSelectedRowModel().flatRows
-
+  const tables = table.getSelectedRowModel().flatRows
+  // const linkStatus = listComplex.map( d => {
+  //   const h = d.href.split( "/" ).pop()
+  //   // console.log(d.title)
+  //   return (
+  //     <Link
+  //       data-test={ 'link-' + d.title }
+  //       key={ d.title }
+  //       href={ d.href }
+  //       className={ ` btn  ${ d.className } ${ h === slug ? " btn-disabled " : "" }` }
+  //     >
+  //       { d.title }
+  //     </Link>
+  //   )
+  // } )
   // @ts-ignore
   return <div className="p-2 ">
-
     <div className="text-sm breadcrumbs">
       <ul>
         <li><a>Transaction</a></li>
@@ -406,7 +413,7 @@ const slug=path.split('/').pop()
                 <th
 
                   className={ " border border-black  hover:bg-gray-50 text-center bg-gray-200 text-black" }
-                    key={ header.index } colSpan={ header.colSpan }>
+                  key={ header.index } colSpan={ header.colSpan }>
                   { header.isPlaceholder ? null : (
 
                     <div
@@ -499,12 +506,9 @@ const slug=path.split('/').pop()
           </td>
           <td colSpan={ 20 }>Page Rows ({ table.getRowModel().rows.length })
           </td>
-
         </tr>
         </tfoot>
-
       </table>
-
     </div>
 
     {/*------------Move Page -----------*/ }
@@ -593,21 +597,22 @@ const slug=path.split('/').pop()
 
     <div className="flex gap-2 overflow-x-auto w-auto flex-wrap">
 
-      {/*  will move my path name*/}
+      {/*  will move my path name*/ }
       { listComplex.map( d => {
-        const h = d.href.split( "/" ).pop()
-        // console.log(d.title)
-        return (
+        const h = d.href.split( "/" ).pop() === slug
+                  ? " btn-disabled "
+                  : ""
+        return ( <div key={ d.title + d.href }>
           <Link
             data-test={ 'link-' + d.title }
-            key={ d.title }
             href={ d.href }
-            className={ ` btn  ${ d.className } ${ h === slug ? " btn-disabled " : "" }` }
+            className={ ` btn  ${ d.className } ${ h }` }
           >
             { d.title }
           </Link>
-        )
+        </div> )
       } ) }
+
       {/*------------Check Visible----------------*/ }
 
 
@@ -638,6 +643,17 @@ const slug=path.split('/').pop()
         /> }
 
       <div>
+
+        {/*<LinkStatus/>*/ }
+
+        {/*<Link*/ }
+        {/*  data-test={ 'link-Create'   }*/ }
+        {/*  href={ '/orderan/create' }*/ }
+        {/*  className={ ` btn bg-primary text-white shadow` }*/ }
+        {/*>*/ }
+        {/*  Create*/ }
+        {/*</Link>*/ }
+
         <button
           onClick={ () => setOpen( !open ) }
           className={ " btn btn-sm sm:btn-md text-white bg-purple-600 mb-2" }>
@@ -698,3 +714,15 @@ const slug=path.split('/').pop()
   </div>
 }
 
+// export const LinkStatus = () => {
+//   //get last pathname
+//   const path = usePathname()
+//   const slug = path.split( '/' ).pop()
+//
+//   return ( <div>
+//
+
+  // </div>
+// )
+// }
+//

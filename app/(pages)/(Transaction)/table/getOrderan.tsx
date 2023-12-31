@@ -1,3 +1,4 @@
+'use client'
 import { CellContext, HeaderContext } from '@tanstack/table-core';
 import { TCREATEORDERAN, TCREATEPRODUCTSEMUA } from '@/lib/validator/zod';
 import { Rupiah } from '@/lib/utils/formatMoney';
@@ -70,18 +71,14 @@ export function getOrderan(
       {
         accessorKey: 'semuaProduct',
         header     : 'UNG',
-        cell       : ( info: CellContext<TCREATEORDERAN, any> ) =>
-          filterProduct( info.getValue() as ProductInfo[], lokasi[ 1 ] ),
-        footer     : ( props: HeaderContext<TCREATEORDERAN, any> ) =>
-          calculateFooterData( props, lokasi[ 1 ] ),
+        cell       : ( info: CellContext<TCREATEORDERAN, any> ) => filterProduct( info.getValue() as ProductInfo[], lokasi[ 1 ] ),
+        footer     : ( props: HeaderContext<TCREATEORDERAN, any> ) => calculateFooterData( props, lokasi[ 1 ] ),
       },
       {
         accessorKey: 'semuaProduct',
         header     : 'SMG',
-        cell       : ( info: CellContext<TCREATEORDERAN, any> ) =>
-          filterProduct( info.getValue() as ProductInfo[], lokasi[ 0 ] ),
-        footer     : ( props: HeaderContext<TCREATEORDERAN, any> ) =>
-          calculateFooterData( props, lokasi[ 0 ] ),
+        cell       : ( info: CellContext<TCREATEORDERAN, any> ) => filterProduct( info.getValue() as ProductInfo[], lokasi[ 0 ] ),
+        footer     : ( props: HeaderContext<TCREATEORDERAN, any> ) => calculateFooterData( props, lokasi[ 0 ] ),
       },
     ],
   };

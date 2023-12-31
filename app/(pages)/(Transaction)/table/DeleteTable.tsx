@@ -2,39 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { notifyData } from '@/lib/utils/toast';
-export const DeleteTable = ( { ids }: { ids: string[], } ) => {
+
+export const DeleteTable = ( { ids }: {
+  ids: string[],
+} ) => {
   const router = useRouter()
 
   async function deleteTable( id: string[] ) {
     if( confirm( `Apakah anda yakin untuk Menghapus data ini ?` ) ) {
 
-      // if( ids.length === 1 ) {
-      //   // console.log( "one" )
-      //   // console.log( ids )
-      //   // const res = await Fetch( { to: "table", method: "DELETE", id } )
-      //
-      //   const res = await fetch( `http://localhost:3000/api/orderan?id=${ ids }`, {
-      //     method : 'DELETE',
-      //     headers: { 'Content-Type': "application/json" }
-      //   } )
-      //   console.log( res )
-      //   if( !res.ok ) {
-      //
-      //     notifyData( 'fail delete data' )
-      //   }
-      //   else {
-      //     notifyData( 'success delete data' )
-      //   }
-      //
-      // }
-
-      // if( id.length > 1 ) {
-      // console.log( "many" )
-      // console.log( ids )
-      // console.log(ids)
       const res = await fetch( `http://localhost:3000/api/table`, {
-        method : 'DELETE',
-        body   : JSON.stringify( ids ),
+        method: 'DELETE',
+        body: JSON.stringify( ids ),
         headers: { 'Content-Type': "application/json" }
       } )
 

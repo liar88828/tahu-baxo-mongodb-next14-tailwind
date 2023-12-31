@@ -1,3 +1,4 @@
+'use client'
 import { Column, Table as ReactTable } from '@tanstack/react-table';
 
 export function Filters( { column, table, }: { column: Column<any, any>; table: ReactTable<any> } ) {

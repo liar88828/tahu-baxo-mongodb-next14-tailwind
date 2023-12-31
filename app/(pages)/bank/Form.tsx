@@ -14,7 +14,6 @@ import { img } from '@/assets/default';
 import { TBank } from '@/interface/model';
 import { setIdBank } from '@/lib/utils/setID';
 import { url } from '@/lib/utils/url';
-import { revalidateTag } from 'next/cache';
 
 type TYPE = TBank;
 

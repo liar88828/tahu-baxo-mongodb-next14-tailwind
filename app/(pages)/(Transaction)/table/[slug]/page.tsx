@@ -33,11 +33,10 @@ export default async function Page( { params: { slug } }: {
 
   const data = await res.json()
 
- if( !data.success ) {
-    return (
-      <DataEmpty/>
-    )
+  if( !data.success ) {
+    return <DataEmpty/>
+
   }
 
-  return ( <TableOrder dataOrderan={ data }/> )
+  return <TableOrder dataOrderan={ data }/>
 }

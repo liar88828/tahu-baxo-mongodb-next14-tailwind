@@ -18,7 +18,6 @@ export function LinkNavbar( { title, children, href, totalStatus }: {
         { children }
         <div>{ totalStatus }</div>
       </div>
-
       <Link href={ href } className={ " btn btn-sm btn-neutral" }>
         { title }
       </Link>
