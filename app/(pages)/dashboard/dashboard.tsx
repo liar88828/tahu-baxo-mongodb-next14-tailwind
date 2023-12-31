@@ -4,6 +4,8 @@ import { TAggregate, TLines } from '@/interface/dashboard';
 import { DonatChart } from '@/lib/db/prisma';
 import { ListDashboard } from '@/app/(pages)/dashboard/ListDashboard';
 import Lines from '@/app/(pages)/dashboard/chart/Lines';
+import BarVertical from '@/app/(pages)/dashboard/chart/BarVertical';
+import Donat from '@/app/(pages)/dashboard/chart/Donat';
 
 type TDashboard = {
   // ListDashboard: TListDashboard[],
@@ -13,7 +15,7 @@ type TDashboard = {
 }
 
 const chart = async () => await fetch( 'http://localhost:3000/api/dashboard?option=all', {
-    next: { revalidate: 10 }
+    next: { revalidate: 30 }
   }
 ).then( data => data.json() )
 
@@ -37,7 +39,7 @@ export default async function ServerComponent( { id }: { id: string } ) {
             <Lines dataKu={ dataChart.data.LineChart }/>
           </div>
           <div className="shadows bg-white rounded-3xl h-[20rem] sm:h-[100%] p-5">
-            {/*<BarVerticalServer data={ dataChart.data.BarVerticalChart }/>*/ }
+            <BarVertical data={ dataChart.data.BarVerticalChart }/>
           </div>
         </div>
 
@@ -48,7 +50,7 @@ export default async function ServerComponent( { id }: { id: string } ) {
               data={ dataPesanan.data }/>
           </div>
           <div className="  sm:h-[30vw]  shadows bg-white rounded-3xl p-2">
-            {/*<DonatServer data={ dataChart.data.DonatChart }/>*/ }
+            <Donat dataKu={ dataChart.data.DonatChart }/>
           </div>
         </div>
       </div>

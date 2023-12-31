@@ -78,10 +78,10 @@ export const routesNav: TRoutesNav[] = [
         name: "List",
         path: "/product/list?page=1&take=10",
       },
-      {
-        name: "Create",
-        path: "/product/create",
-      },
+      // {
+      //   name: "Create",
+      //   path: "/product/create",
+      // },
     ],
   },
   {
@@ -92,10 +92,10 @@ export const routesNav: TRoutesNav[] = [
         name: "List",
         path: "/delivery/list?page=1&take=10",
       },
-      {
-        name: "Create",
-        path: "/delivery/create",
-      },
+      // {
+      //   name: "Create",
+      //   path: "/delivery/create",
+      // },
     ],
   },
 
@@ -107,10 +107,10 @@ export const routesNav: TRoutesNav[] = [
         name: "List",
         path: "/bank/list?page=1&take=10",
       },
-      {
-        name: "Create",
-        path: "/bank/create",
-      },
+      // {
+      //   name: "Create",
+      //   path: "/bank/create",
+      // },
     ],
   }
 ]

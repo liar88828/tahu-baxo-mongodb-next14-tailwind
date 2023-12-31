@@ -1,7 +1,8 @@
-import { HeaderCard, ImageCards, TextCard } from '@/app/(pages)/(Transaction)/orderan/PopUpComponent';
 import { ReactNode } from 'react';
 import { ProductOrderan } from '@/interface/model';
 import { Rupiah } from '@/lib/utils/formatMoney';
+import { ImageCards } from '@/components/PopUp';
+import { HeaderCard, TextCard } from '@/components/Card';
 
 function CardTrolley( { values, actions, item }: {
   values: ReactNode,

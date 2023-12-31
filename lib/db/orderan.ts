@@ -121,10 +121,18 @@ export class Orderan {
   }
   async destroyMany( array: string [] ) {
     console.log( array )
-    const id          = array.map( d => d )
-    const deleteOrder = prisma.orderan.deleteMany( { where: { id: { in: id } } } )
-
+    const id            = array.map( d => d )
     const deleteProduct = prisma.semuaProduct.deleteMany( { where: { orderanId: { in: id } } } )
+
+    const deleteOrder = prisma.orderan.deleteMany( {
+      where: {
+        id: { in: id }, semuaProduct: {
+          every: {
+            orderanId: { in: id }
+          }
+        }
+      }
+    } )
 
     return prisma.$transaction( [ deleteProduct, deleteOrder ] )
   }

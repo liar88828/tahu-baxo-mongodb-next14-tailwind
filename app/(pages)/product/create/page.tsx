@@ -9,7 +9,6 @@ export default function Page() {
       <FormProduct
         method={ 'POST' }
         defaultData={ defaultFormProduct }
-        id={ "" }
         to={ 'product' }/>
     </Suspense>
   )

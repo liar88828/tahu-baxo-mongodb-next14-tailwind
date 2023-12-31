@@ -1,7 +1,7 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import { ProductOrderan } from '@/interface/model';
-import { ImageCards } from '@/app/(pages)/(Transaction)/orderan/PopUpComponent';
 import { Rupiah } from '@/lib/utils/formatMoney';
+import { ImageCards } from '@/components/PopUp';
 
 export const UlCard = (
   { children, name = "" }:
@@ -73,10 +73,14 @@ export const TextCard   = ( { text }: { text: string | number } ) => {
   return <span className={ "text-xs sm:text-base text-black mb-1 capitalize "  }>{ text }</span>
 
 }
+
 export const HeaderCard = ( { nama }: { nama: string | number } ) => {
   return <span className={ "text-sm sm:text-base font-bold text-black mb-1 capitalize"  }>{ nama }</span>
 
 }
+
+
+
 export const ImageCard  = ( { img, nama }: { img: string, nama: string } ) => {
   return <figure className={ " h-32 object-cover rounded " }>
     <img src={ img }

@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { url } from '@/lib/utils/url';
 
 const sendData = async ( method: 'POST' | 'PUT', data: TDelivery ) => {
-  const res = await fetch( url + '/api/delivery', {
+  const res = await fetch( url + `/api/delivery?id=${data.id}`, {
     method,
     // next   : { tags: [ 'bank' ] },
     headers: { 'Content-Type': 'application/json' },
@@ -29,11 +29,10 @@ const sendData = async ( method: 'POST' | 'PUT', data: TDelivery ) => {
 }
 
 export default function FormDeliver(
-  { defaultData, method, id, to }:
+  { defaultData, method,  to }:
     {
       defaultData: TDelivery,
       method: "POST" | "PUT",
-      id: string
       to: ToModel
     }, ) {
 
@@ -58,15 +57,15 @@ export default function FormDeliver(
     if( confirm( `Apakah anda yakin untuk ${ text } data ini ?` ) ) {
       try {
         // console.log( "send data" )
-        data.id   = setIdDelivery( data )
+        data.id   =method==='POST'? setIdDelivery( data ):data.id
         const res = await sendData( method, data )
         console.log( res )
         // console.log( "get gateway" )
         if( res.success ) {
           notifyData( 'success create data' )
-          // router.refresh()
-          router.prefetch( `/${ to }/list?page=1&take=10` )
-          router.replace( `/${ to }/list?page=1&take=10` )
+          router.refresh()
+          // router.prefetch( `/${ to }/list?page=1&take=10` )
+          // router.replace( `/${ to }/list?page=1&take=10` )
 
         }
         else if( !res.success ) {

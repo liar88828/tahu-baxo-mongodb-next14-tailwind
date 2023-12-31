@@ -24,7 +24,6 @@ export default async function Home( { searchParams }: SearchParams ) {
       <FormBank
         method={ 'PUT' }
         defaultData={ data.data }
-        id={ searchParams.id as string }
         to={ 'bank' }/>
     </Suspense>
   )

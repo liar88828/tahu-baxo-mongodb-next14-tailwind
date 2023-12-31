@@ -23,7 +23,6 @@ export default async function Page(
     <Suspense fallback={ <SkeletonCard/> }>
       <FormProduct method={ 'PUT' }
                    defaultData={ data.data }
-                   id={ searchParams.id as string }
                    to={ 'product' }/>
     </Suspense>
   )

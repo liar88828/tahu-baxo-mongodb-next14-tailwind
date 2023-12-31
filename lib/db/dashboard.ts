@@ -1,10 +1,10 @@
 import prisma from '@/lib/db/prisma';
-import { addDays, currentMonth, currentYear } from '@/lib/utils/formatDate';
+import { addDays, currentDate, currentMonth, currentYear } from '@/lib/utils/formatDate';
 import { TStatusProduk } from '@/app/style/status';
 import { TAggregate, TLine, TLines } from '@/interface/dashboard';
 import { Orderan } from '@/lib/db/orderan';
 
-class DashboardData extends  Orderan{
+class DashboardData extends Orderan {
   async statusNotify() {
     return prisma.orderan.groupBy( {
       by    : [ "status" ],
@@ -27,7 +27,7 @@ class DashboardData extends  Orderan{
   async statusPesanan( status: TStatusProduk = "irim" ) {
     return prisma.orderan.findMany( {
       where : {
-        status: {
+        status    : {
           contains: status
         },
         waktuKirim: {
@@ -72,13 +72,14 @@ class DashboardData extends  Orderan{
   }
 
   async semuaProductLast() {
+    // console.log( currentYear, currentMonth, currentDate )
     return prisma.semuaProduct.groupBy( {
         by    : [ "nama" ],
         _count: { nama: true, },
         where : {
           created_at: {
-            gte: new Date( `${ currentYear }-${ currentMonth === 0 ? 12 : currentMonth - 1 }-01` ),
-            lte: new Date( `${ currentYear }-${ currentMonth === 0 ? 12 : currentMonth - 1 }-30` ),
+            gte: new Date( `${ currentYear }-${ currentMonth }-01` ),
+            lte: new Date( `${ currentYear }-${ currentMonth }-30` ),
           }
         },
       }
@@ -103,22 +104,22 @@ class DashboardData extends  Orderan{
         SELECT nama,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) THEN jumlah
-                       ELSE 0 END)                                                                                    AS total_jumlah_current,
+                       ELSE 0 END) AS total_jumlah_current,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 1 THEN jumlah
-                       ELSE 0 END)                                                                                    AS total_jumlah_last,
+                       ELSE 0 END) AS total_jumlah_last,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 2 THEN jumlah
-                       ELSE 0 END)                                                                                    AS total_jumlah_last_two,
+                       ELSE 0 END) AS total_jumlah_last_two,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) THEN harga
-                       ELSE 0 END)                                                                                    AS total_harga_current,
+                       ELSE 0 END) AS total_harga_current,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 1 THEN harga
-                       ELSE 0 END)                                                                                    AS total_harga_last,
+                       ELSE 0 END) AS total_harga_last,
                SUM(CASE
                        WHEN EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 2 THEN harga
-                       ELSE 0 END)                                                                                    AS total_harga_last_two
+                       ELSE 0 END) AS total_harga_last_two
         FROM "SemuaProducts"
         WHERE EXTRACT(MONTH FROM created_at) BETWEEN EXTRACT(MONTH FROM CURRENT_DATE) - 2 AND EXTRACT(MONTH FROM CURRENT_DATE)
         GROUP BY nama;

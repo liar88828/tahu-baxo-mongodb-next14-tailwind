@@ -3,6 +3,12 @@ import { Res, SearchParams, TProduct } from '@/interface/model';
 import { UlCard } from '@/components/Card';
 import Paginate from '@/components/elements/Pagination';
 import { url } from '@/lib/utils/url';
+import Link from 'next/link';
+import { PopUp } from '@/components/PopUp';
+import FormBank from '@/app/(pages)/bank/Form';
+import { defaultFormBank, defaultFormProduct } from '@/assets/default';
+import React from 'react';
+import FormProduct from '@/app/(pages)/product/Form';
 
 const getData = async ( page: number, take: number ) => {
   return fetch( url + `/api/product?page=${ page }&take=${ take }`, { cache: 'no-store', } )
@@ -36,6 +42,26 @@ export default async function Home( { searchParams }: SearchParams ) {
   console.log( data )
 
   return ( <>
+      <div className={ "flex flex-row gap-5 z-50 p-2 justify-between overflow-x-auto " }>
+        <div className="text-sm breadcrumbs">
+          <ul>
+            <li><a>Product</a></li>
+            <li><Link
+              data-test={ "link-list" }
+              href={ `/product/list?page=1&take=10` }
+            >List
+            </Link>
+            </li>
+          </ul>
+        </div>
+        <PopUp name={ 'product_bank' } title={ 'Create' } styles={ 'btn-primary' }>
+          <FormProduct
+            method={ 'POST' }
+            defaultData={ defaultFormProduct }
+            to={ 'product' }/>
+        </PopUp>
+      </div>
+
       <UlCard name={ "product" }>
         { data.res.map( ( d: TProduct ) => ( <ListProduct d={ d } key={ d.id } to={ 'product' }/> ) ) }
       </UlCard>

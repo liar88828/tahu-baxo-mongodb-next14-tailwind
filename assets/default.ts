@@ -16,7 +16,7 @@ export const defaultFormProduct: TProduct = {
 }
 
 
-export const defaultFormTravel: TDelivery = {
+export const defaultFormDelivery: TDelivery = {
   id        : "",
   nama  : "",
   hp        : "",
@@ -66,6 +66,6 @@ export const defaultFormOrderan: TOrder = {
   typePembayaran: "CASH",
   totalBayar    : 0,
   totalPenjualan: 0,
-  status        : 'Di terima',
+  status        : 'Terima',
   guna          : ""
 }

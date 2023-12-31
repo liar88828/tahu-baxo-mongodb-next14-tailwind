@@ -17,6 +17,9 @@ import { Filters } from '@/app/(pages)/(Transaction)/table/Filters';
 import { TCREATEORDERAN, TCREATEPRODUCTSEMUA } from '@/lib/validator/zod';
 import { setColumn } from '@/app/(pages)/(Transaction)/table/setColum';
 import { getOrderan } from '@/app/(pages)/(Transaction)/table/getOrderan';
+import { usePathname } from 'next/navigation';
+import { listComplex } from '@/assets/list';
+import Link from 'next/link';
 
 //-------------------------Main Table
 export function TableOrder( { dataOrderan }: {
@@ -25,6 +28,12 @@ export function TableOrder( { dataOrderan }: {
     data: TCREATEORDERAN[]
   },
 } ) {
+  //get last pathname
+  const path = usePathname()
+const slug=path.split('/').pop()
+  // console.log( path.split('/').pop(), 'path' )
+
+
 
   // console.log( dataOrderan.data )
 
@@ -367,9 +376,21 @@ export function TableOrder( { dataOrderan }: {
   let tables = table.getSelectedRowModel().flatRows
 
   // @ts-ignore
-  return <div className="p-2 "
+  return <div className="p-2 ">
 
-  >
+    <div className="text-sm breadcrumbs">
+      <ul>
+        <li><a>Transaction</a></li>
+        <li><Link
+          data-test={ "link-list" }
+          href={ `/table/semua` }
+        >Table
+        </Link>
+        </li>
+      </ul>
+    </div>
+
+
     {/*------------Table------------*/ }
     <div className="overflow-x-scroll  border rounded border-black  w-[100%] ">
 
@@ -572,6 +593,21 @@ export function TableOrder( { dataOrderan }: {
 
     <div className="flex gap-2 overflow-x-auto w-auto flex-wrap">
 
+      {/*  will move my path name*/}
+      { listComplex.map( d => {
+        const h = d.href.split( "/" ).pop()
+        // console.log(d.title)
+        return (
+          <Link
+            data-test={ 'link-' + d.title }
+            key={ d.title }
+            href={ d.href }
+            className={ ` btn  ${ d.className } ${ h === slug ? " btn-disabled " : "" }` }
+          >
+            { d.title }
+          </Link>
+        )
+      } ) }
       {/*------------Check Visible----------------*/ }
 
 
@@ -587,16 +623,6 @@ export function TableOrder( { dataOrderan }: {
       { ToggleOn && tables.length > 0 &&
         <button onClick={ () => {
           exportToExcel( table.getRowModel().flatRows as any )
-          // exportToExcel( table.getRowModel()
-          //                       .rows.map( row => {
-          //     return row.cells.map( cell => ( {
-          //       value: cell.value,
-          //       style: {
-          //         background: getBackgroundColorForRow( cell.row.original.color )
-          //       }
-          //     } ) )
-          //   } )
-          // )
         } } className=" btn btn-sm sm:btn-md text-white bg-green-400 ">
           Excel
         </button> }

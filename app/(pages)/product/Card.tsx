@@ -3,6 +3,9 @@ import { CardBody, CardButton, LiCard, TextBody, TextHidden, Texts, TextTitle } 
 import { ImgCard } from '@/components/Images';
 import { DeleteCard, EditCard } from '@/components/elements/Buttons';
 import { Rupiah } from '@/lib/utils/formatMoney';
+import { PopUp } from '@/components/PopUp';
+import FormBank from '@/app/(pages)/bank/Form';
+import FormProduct from '@/app/(pages)/product/Form';
 
 export const to = "product"
 
@@ -28,7 +31,13 @@ export default function ListProduct(
         </div>
 
         <CardButton>
-          <EditCard to={ to } id={ d.id } name={ d.nama }/>
+          {/*<EditCard to={ to } id={ d.id } name={ d.nama }/>*/}
+          <PopUp name={`update_product_${d.id}`} title={'Edit'} styles={'btn-primary'}>
+            <FormProduct
+              method={ 'PUT' }
+              defaultData={ d }
+              to={ 'product' }/>
+          </PopUp>
           <DeleteCard to={ to } id={ d.id } name={ d.nama }/>
         </CardButton>
 

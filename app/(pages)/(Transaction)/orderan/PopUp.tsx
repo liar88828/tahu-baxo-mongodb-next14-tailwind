@@ -3,12 +3,11 @@ import { Status } from '@/app/style/status';
 import { newSetTanggal, setTanggal } from '@/lib/utils/formatDate';
 import { formatPhone } from '@/lib/utils/formatPhone';
 import { useRouter } from 'next/navigation';
-import { CardPopUp, FooterPopUp, PopUpCard } from '@/app/(pages)/(Transaction)/orderan/PopUpComponent';
 import { setIdOrderan } from '@/lib/utils/setID';
 import { ProductOrderan, TOrder } from '@/interface/model';
 import { calculateTotal } from '@/lib/utils/calculate';
 import { notifyData } from '@/lib/utils/toast';
-import { TextPopUp } from '@/components/PopUp';
+import { CardPopUp, FooterPopUp, PopUpCard, TextPopUp } from '@/components/PopUp';
 import { Rupiah } from '@/lib/utils/formatMoney';
 
 export default function PopUp( { data, method, id }: {

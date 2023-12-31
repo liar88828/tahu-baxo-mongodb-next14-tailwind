@@ -3,6 +3,8 @@ import { CardBody, CardButton, LiCard, TextBody, TextHidden, Texts, TextTitle } 
 import { ImgCard } from '@/components/Images';
 import { DeleteCard, EditCard } from '@/components/elements/Buttons';
 import { formatPhone } from '@/lib/utils/formatPhone';
+import { PopUp } from '@/components/PopUp';
+import FormBank from '@/app/(pages)/bank/Form';
 
 export const to = "bank"
 
@@ -26,7 +28,13 @@ export function ListBank( { d }: { d: TBank } ) {
         </div>
 
         <CardButton>
-          <EditCard to={ to } id={ d.id } name={ d.nama }/>
+          <PopUp name={`update_bank_${d.id}`} title={'Edit'} styles={'btn-primary'}>
+            <FormBank
+              method={ 'PUT' }
+              defaultData={ d }
+              to={ 'bank' }/>
+          </PopUp>
+          {/*<EditCard to={ to } id={ d.id } name={ d.nama }/>*/}
           <DeleteCard to={ to } id={ d.id } name={ d.nama }/>
         </CardButton>
 

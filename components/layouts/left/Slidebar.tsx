@@ -14,7 +14,7 @@ export type TRoutesNav = {
     path: string,
   }[]
 }
-  const LinkSlidebar = memo( function ListSlidebar(
+const LinkSlidebar = memo( function ListSlidebar(
   { paths, title, }:
     { paths: string, title: string, } ) {
 
@@ -55,21 +55,15 @@ export function ListAccordion( { titleParent, links, icon }: TRoutesNav ) {
 }
 
 const Slidebar = () => {
-
-
-
-  const ListSlide= <div className={ ` px-2 flex gap-2 flex-col` }>
-        { routesNav.map( d => (
-          <ListAccordion
-            titleParent={ d.titleParent }
-            icon={ d.icon }
-            links={ d.links }
-            key={ d.titleParent }/>
-        ) ) }
-      </div>
-
-
-
+  const ListSlide = <div className={ ` px-2 flex gap-2 flex-col` }>
+    { routesNav.map( d => (
+      <ListAccordion
+        titleParent={ d.titleParent }
+        icon={ d.icon }
+        links={ d.links }
+        key={ d.titleParent }/>
+    ) ) }
+  </div>
 
   return (
     <div className="drawer  left-5">

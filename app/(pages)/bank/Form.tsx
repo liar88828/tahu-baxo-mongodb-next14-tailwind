@@ -14,14 +14,14 @@ import { img } from '@/assets/default';
 import { TBank } from '@/interface/model';
 import { setIdBank } from '@/lib/utils/setID';
 import { url } from '@/lib/utils/url';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 type TYPE = TBank;
 
 const sendBank = async ( method: 'POST' | 'PUT', data: TBank ) => {
-  const res = await fetch(  url +'/api/bank', {
+  const res = await fetch( url + `/api/bank?id=${ data.id }`, {
     method,
-    // next   : { tags: [ 'bank' ] },
+    next   : { tags: [ 'bank' ] },
     headers: { 'Content-Type': 'application/json' },
     body   : JSON.stringify( data )
   } )
@@ -32,13 +32,14 @@ const sendBank = async ( method: 'POST' | 'PUT', data: TBank ) => {
 }
 
 export default function FormBank(
-  { defaultData, method, id, to }:
+  { defaultData, method, to }:
     {
       defaultData: TYPE,
       method: "POST" | "PUT",
-      id: string
-      to: "travel" | "product" | "bank"
+      to: "bank"
     }, ) {
+  // console.log( defaultData )
+
   const router                                                       = useRouter()
   const [ imageUrl, setImageUrl ]                                    = useState<string>( defaultData.img );
   const [ open, setOpen ]                                            = useState<boolean>( false );
@@ -60,29 +61,18 @@ export default function FormBank(
     if( confirm( `Apakah anda yakin untuk ${ text } data ini ?` ) ) {
       try {
         // console.log( "send data" )
-        data.id   = setIdBank( data )
-        console.log('send Data bank')
+        data.id = method === 'POST' ? setIdBank( data ) : data.id
+        console.log( 'send Data bank' )
         const res = await sendBank( method, data )
-        // const res = await Fetch( {
-        //   to    : "bank",
-        //   json  : data,
-        //   method: method,
-        //   id    : id
-        //
-        // } )
         console.log( "get response bank" )
         if( res.success ) {
           // revalidateTag('banks')
           notifyData( 'success create data' )
-          // router.prefetch( `/${ to }/list?page=1&take=10` )
-          // revalidatePath('/bank','page')
-          // revalidatePath('/', 'page')
+          // revalidateTag( 'bank' )
           router.refresh()
-          router.replace( `/${ to }/list?page=1&take=10` )
         }
         else if( !res.success ) {
           notifyData( res.msg )
-          // router.replace( `/${ to }/list?page=1&take=10` )
         }
       }
       catch ( e ) {

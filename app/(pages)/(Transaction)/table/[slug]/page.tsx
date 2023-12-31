@@ -13,10 +13,7 @@ import { DataEmpty } from '@/components/Errors';
 
 const getDataTabel = async ( id: string ) => {
   return fetch( `http://localhost:3000/api/table?id=${ id }&option=table`, {
-    // method : 'GET',
-    // headers: { 'Content-Type': "application/json" },
     cache: 'no-cache'
-    // next: { tags: [ 'orderans' ] }
   } )
 
 }
@@ -35,7 +32,6 @@ export default async function Page( { params: { slug } }: {
   }
 
   const data = await res.json()
-  // console.log(data)
 
  if( !data.success ) {
     return (

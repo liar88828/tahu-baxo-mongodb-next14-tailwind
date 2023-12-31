@@ -1,7 +1,8 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import FormOrderan from '@/app/(pages)/(Transaction)/orderan/FormOrderan';
 import { SkeletonCard } from '@/components/Skeleton';
 import { defaultFormOrderan } from '@/assets/default';
+import Link from 'next/link';
 
 export type OrderanData = {
   travel: { nama: string }[],
@@ -16,15 +17,29 @@ async function getData() {
 
 export default async function Page() {
   const { data }: { data: OrderanData } = await getData()
-  return (
-    <Suspense fallback={ <SkeletonCard/> }>
-      <FormOrderan id={ "" } method={ "POST" }
-                   defaultDataOrder={ defaultFormOrderan }
-                   travel={ data.travel }
-                   product={ data.product }
-                   bank={ data.bank }/>
+  return ( <>
+      <div className="text-sm breadcrumbs">
+      <ul>
+          <li><a>Transaction</a></li>
+          <li><Link
+            data-test={ "link-list" }
+            href={ `/orderan/create` }
+          >Create
+          </Link>
+          </li>
+        </ul>
+      </div>
 
-    </Suspense>
+      <Suspense fallback={ <SkeletonCard/> }>
+
+        <FormOrderan id={ "" } method={ "POST" }
+                     defaultDataOrder={ defaultFormOrderan }
+                     travel={ data.travel }
+                     product={ data.product }
+                     bank={ data.bank }/>
+
+      </Suspense>
+    </>
   )
 }
 

@@ -18,12 +18,6 @@ import CardLists from '@/components/Card';
 enableCache( 'session' );
 export const fomIsi = "bg-white flex-col flex sm:w-[48%]  md:w-[49%] ml-2 gap-3 rounded p-2 sm:p-5";
 
-// function getSchema( method: "POST" | "PUT" ) {
-//   return method === 'POST'
-//          ? CreateZod.OrderanSchema
-//          : UpdateZod.OrderanSchema;
-// }
-
 export default function FormOrderan( {
   id = "",
   method,
@@ -42,22 +36,9 @@ export default function FormOrderan( {
   const { control, register, handleSubmit, formState: { errors, isSubmitted }, reset } = useForm<TOrder>( {
     defaultValues: defaultDataOrder,
     mode         : "onChange",
-    resolver: zodResolver( getSchema( method, 'ORDERAN' ) )
+    resolver     : zodResolver( getSchema( method, 'ORDERAN' ) )
   } );
   console.log( errors )
-  // const [ isError, ] = useState( true )
-  // const requires     = Object.keys( errors )
-  //
-  // if( requires.length !== 0 && isError ) {
-  //   const entries = Object.entries( errors );
-  //   // console.log(entries)
-  //   // entries.forEach( ( d ) => {
-  //   notifyData( `fail, ${ entries[ 0 ][ 0 ].toUpperCase() } is ${ entries[ 0 ][ 1 ].type === "pattern"
-  //                                                                 ? "symbol is not allow "
-  //                                                                 : "value is require" }` )
-  //   // }
-  //   // )
-  // }
 
   const { fields, append, remove, } = useFieldArray( {
     control,
@@ -128,9 +109,6 @@ export default function FormOrderan( {
                        reg={ register( "hpPenerima" ) }/>
             <InputForm errors={ errors } title={ formOrderan.alamatPenerima } type={ "textarea" } tag={ "textarea" }
                        max={ 100 } min={ 0 } reg={ register( "alamatPenerima" ) }/>
-
-            {/*<InputForm errors={ errors } title={ "Alamat Penerima" } type={ "text" }*/ }
-            {/*           reg={ register( "alamatPenerima" ) }/>*/ }
           </>
 
 
@@ -192,9 +170,6 @@ export default function FormOrderan( {
                       ? <Icon icon="ic:baseline-close" color={ 'white' } width={ 20 } height={ 20 }/>
                       : <Icon icon="ic:sharp-search" color={ 'white' } width={ 20 } height={ 20 }/> }
                   </span>
-
-              {/*<span className=" sm:hidden md:block sm:mx-2 ">{ !cariProduct ? "Tutup" : "Cari" }</span>*/ }
-              {/*</span>*/ }
 
             </button>
             <label htmlFor={ "cari" } className={ "w-full" }>
@@ -279,11 +254,6 @@ export default function FormOrderan( {
                                    value={ item.nama }{ ...register( `semuaProduct.${ i }.nama`, { required: true } ) }/>
                           </label>
 
-                          {/*<label htmlFor={ `semuaProduct.${ i }.keterangan` } hidden={ true }>*/ }
-                          {/*  <input type={ 'hidden' } id={ `semuaProduct.${ i }.keterangan` }*/ }
-                          {/*         value={ item.keterangan }{ ...register( `semuaProduct.${ i }.keterangan`, { required: true } ) }/>*/ }
-                          {/*</label>*/ }
-
                           <label htmlFor={ `semuaProduct.${ i }.lokasi` } hidden={ true }>
                             <input type={ 'hidden' } id={ `semuaProduct.${ i }.lokasi` }
                                    value={ item.lokasi }{ ...register( `semuaProduct.${ i }.lokasi`, { required: true } ) }/>
@@ -324,11 +294,11 @@ export default function FormOrderan( {
                           <button
                             data-test={ `trash-product_${ i }` }
                             className={ "text-white btn-sm md:btn-sm lg:btn-md btn btn-error w-full" }
-                                  type={ "button" }
-                                  onClick={ () => {
-                                    removeFromCart( item );
-                                    remove( i )
-                                  } }>
+                            type={ "button" }
+                            onClick={ () => {
+                              removeFromCart( item );
+                              remove( i )
+                            } }>
                             <Icon icon="ic:outline-close"/>
                             <span className="ml-1 hidden md:hidden lg:block">Hapus</span>
                           </button>
@@ -356,11 +326,7 @@ export default function FormOrderan( {
                        max={ `${ currentYear }-${ currentMonth + 1 }-31` }
                        reg={ register( "pesan" ) }
             />
-            {/*<InputForm errors={ errors } tag={ "input" } title={ "Kirim" } type={ "date" }*/ }
-            {/*           min={ `${ currentYear }-${ currentMonth }-01` }*/ }
-            {/*           max={ `${ currentYear }-${ currentMonth + 1 }-31` }*/ }
-            {/*           reg={ register( "kirim", ) }*/ }
-            {/*/>*/ }
+
             <InputForm errors={ errors } tag={ "input" } title={ formOrderan.waktuKirim } type={ "datetime-local" }
                        reg={ register( "waktuKirim", ) }
             />
@@ -371,13 +337,13 @@ export default function FormOrderan( {
 
           <label htmlFor="status"
                  className={ 'text-black mb-1 capitalize' }>{ formOrderan.status }</label>
-          <select id="status" defaultValue={ "Di Terima" }
+          <select id="status" defaultValue={ "Terima" }
                   data-test={ formOrderan.status }
                   className='bg-gray-50 border border-gray-300 p-2 rounded-md'{ ...register( "status" ) }>
             {/*/status/*/ }
-            <option className={ Status( "Terima" ) } value="Terima">Di Terima</option>
-            <option className={ Status( "Proses" ) } value='Proses'>Di Proses</option>
-            <option className={ Status( "Kirim" ) } value="Kirim">Di Kirim</option>
+            <option className={ Status( "Terima" ) } value="Terima">Terima</option>
+            <option className={ Status( "Proses" ) } value='Proses'>Proses</option>
+            <option className={ Status( "Kirim" ) } value="Kirim">Kirim</option>
             <option className={ Status( "Selesai" ) } value="Selesai"> Selesai</option>
           </select>
         </div>

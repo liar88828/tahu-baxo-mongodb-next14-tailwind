@@ -16,7 +16,7 @@ export function ListDashboard(
 
   enableCache( 'session' );
 
-  console.log( objectArray )
+  // console.log( objectArray )
 
   function getDiTerimaObject( status: string ) {
     return objectArray.find( obj => obj.nama.includes( status ) );
