@@ -31,7 +31,6 @@ export const StatusButton = ( { status, id, }: { status: TStatusProduk, id: stri
       return <DataEmpty/>
     }
     const data = await res.json()
-    // console.log( data.data, 'test' )
 
     if( data.success ) {
       console.log( 'test success' )

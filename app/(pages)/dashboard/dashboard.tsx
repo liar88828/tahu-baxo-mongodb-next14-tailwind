@@ -44,7 +44,7 @@ export default async function ServerComponent( { id }: { id: string } ) {
         </div>
 
         <div className="flex flex-col sm:w-[30%] gap-2">
-          <div className="h-[60vw] sm:h-[30vw] overflow-y-auto shadows bg-white rounded-3xl p-5">
+          <div className="h-[60vw] sm:h-[30vw] overflow-y-scroll shadows bg-white rounded-3xl p-2">
             <CardDashboard
               success={ dataPesanan.success }
               data={ dataPesanan.data }/>

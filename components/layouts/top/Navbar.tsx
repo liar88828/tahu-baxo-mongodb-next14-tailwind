@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation';
 import Slidebar from '@/components/layouts/left/Slidebar';
-import Profile from '@/components/layouts/top/Profile';
+import ProfileNav from '@/components/layouts/top/ProfileNav';
 
 
 function Title() {
@@ -21,7 +21,7 @@ function Navbar() {
         <Title/>
       </div>
       <div className="navbar-end">
-        <Profile/>
+        <ProfileNav/>
       </div>
     </div>
   );

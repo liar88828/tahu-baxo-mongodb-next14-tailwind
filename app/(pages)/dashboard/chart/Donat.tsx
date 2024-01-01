@@ -4,12 +4,17 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import { TDonat } from '@/interface/dashboard';
+import { DataEmpty } from '@/components/Errors';
 
 ChartJS.register( ArcElement, Tooltip, Legend );
 
 export default function Donat( { dataKu }: {
   dataKu: TDonat[]
 } ) {
+  if(dataKu.length === 0) {
+    return <DataEmpty/>
+  }
+
   const today = new Date(); // Getting full month name (e.g. "September")
   const month = today.toLocaleString( 'id-ID', { month: 'long' } );
 

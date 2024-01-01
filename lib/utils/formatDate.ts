@@ -1,6 +1,6 @@
 import { TListCard } from '@/interface/dashboard';
 
-export const currentDate = new Date();
+export const currentDate  = new Date();
 export const currentYear  = currentDate.getFullYear();
 export const currentMonth = currentDate.getMonth() + 1; // Adding 1 to adjust for 0-based months
 
@@ -68,8 +68,13 @@ export const newSetTanggal = ( date: string | Date ) => {
 };
 
 export const getDates = ( option: MyTypeObject, value: number ) => {
+  value = currentMonth + value
 
-  const d = new Date( `${ currentYear }-${ currentMonth + value }-01` )
+  const year  = value > 0 ? currentYear : currentYear - 1
+  const month = value > 0 ? value  : value + 12
+
+  // console.log( year,month )
+  const d = new Date( `${ year }-${ month }-01` )
 
   // @ts-ignore
   return d.toLocaleString( 'id-ID', formattingOptions[ option ] );
@@ -79,9 +84,9 @@ export const setDates = ( date: string, ): Date | string => {
   const d     = new Date( Date.parse( date ) ).toLocaleString(
     "id-ID",
     {
-      year: 'numeric',
+      year : 'numeric',
       month: '2-digit',
-      day : '2-digit',
+      day  : '2-digit',
     } )
   const array = d.split( "/" )
   return array[ 2 ] + "-" + array[ 1 ] + "-" + array[ 0 ]

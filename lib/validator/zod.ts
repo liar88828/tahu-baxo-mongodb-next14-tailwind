@@ -143,6 +143,24 @@ export class UpdateZod {
   } )satisfies z.Schema<Omit<OrderanUpdate, 'semuaProduct'>>
 
 }
+export const UserSchemaZod = z.object( {
+  name    : z.string().min( 1 ).max( 100 ),
+  email   : z.string().min( 1 ).max( 100 ).email(),
+  password: z.string().min( 1 ).max( 100 ),
+} )
+
+
+
+export const CreateUserSchemaZod = UserSchemaZod.merge(
+  z.object( {
+    confirmPassword: z.string().min( 1 ).max( 100 ),
+  } ),
+).refine( ( data ) => data.confirmPassword === data.password, {
+  message: "Passwords don't match",
+  path   : [ 'confirmPassword' ],
+} )
+export type TCreateUserZod = z.infer<typeof CreateUserSchemaZod>
+
 
 export type TCREATEBANK = z.infer<typeof CreateZod.BankSchema>;
 export type TCREATEDELIVER = z.infer<typeof CreateZod.DeliverySchema>;

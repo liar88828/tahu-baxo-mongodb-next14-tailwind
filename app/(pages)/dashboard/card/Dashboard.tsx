@@ -40,8 +40,8 @@ export default function CardDashboard( { data, success }: { data: TListCard[], s
         - getKirim( b.waktuKirim ).getTime() )
       .map( ( d, i ) => ( <li
         key={ d.id }
-        className={ " my-1 static card card-compact lg:card-side w-[100%] h-[18%] bg-neural shadow-xl border-4 " +
-          " border-green-200" }>
+        className={ " my-1 static card card-compact lg:card-side w-[100%] h-[18%] bg-neural border-4 " +
+          " border-green-200 shadows" }>
         <div className="card-body ">
           <div className="flex flex-row sm:flex-col lg:flex-row items-start justify-between gap-1 md:gap-2">
             <h1 className="card-title text-lg sm:text-md capitalize mr-10 sm:mr-0">

@@ -1,6 +1,14 @@
+'use client'
 import { Icon } from '@iconify/react';
+import LogoutButton from '@/components/layouts/top/LogoutButton';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
-export default function Profile() {
+export default function ProfileNav() {
+  const { data: session } = useSession()
+  if( !session ) {
+    // console.log('not login', session)
+  }
   return (
     <div className="flex-none">
       <div className="dropdown dropdown-end">
@@ -21,21 +29,36 @@ export default function Profile() {
         </div>
       </div>
       <div className="dropdown dropdown-end">
+
         <label tabIndex={ 0 } className="btn btn-ghost btn-circle avatar">
           <div className="w-10 rounded-full">
-            <img src="https://picsum.photos/200/300"
-                 alt={ "avatar" }/>
+            <img
+              src={
+                session?.user.image ?? 'https://picsum.photos/200/200.webp'
+              }
+              alt={ 'profile' }
+            />
           </div>
         </label>
         <ul tabIndex={ 0 } className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
           <li>
-            <a className="justify-between">
+            <Link
+              href={ '/profile' }
+              replace>
               Profile
-              <span className="badge">New</span>
-            </a>
+              <span className='badge'>New</span>
+            </Link>
           </li>
           <li><a>Settings</a></li>
-          <li><a>Logout</a></li>
+          { session ? (
+            <li>
+              <LogoutButton/>
+            </li>
+          ) : (
+              <li>
+                <Link href={ 'api/auth/signin?callbackUrl=/profile' }>Login</Link>
+              </li>
+            ) }
         </ul>
       </div>
     </div>
