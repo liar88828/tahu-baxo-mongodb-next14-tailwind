@@ -8,9 +8,14 @@ import { errorEmptyID } from '@/lib/utils/errorResponse';
 
 export async function GET( request: NextRequest, ) {
   const { method, id, option } = await Inputs( request )
+  console.log( id, option, 'test get orderan' )
   return Outputs( method, async () => {
 
     if( id !== undefined && option !== undefined ) {
+      if( option === "table" && id === "all" ) {
+        return orderan.findAll()
+      }
+
       if( option === "table" ) {
         return orderan.findByStatus( id )
       }
@@ -24,13 +29,9 @@ export async function GET( request: NextRequest, ) {
     }
 
     if( id !== undefined ) {
-      if( id.includes( "_" ) ) {
+      if( id.includes( "_" ) ||id.includes( "-" ) ) {
         return orderan.findOne( id )
       }
-    }
-
-    if( option === "table" && id === "all" ) {
-      return orderan.findAll()
     }
 
     if( id === '' ) {
@@ -43,7 +44,8 @@ export async function GET( request: NextRequest, ) {
 
 export async function POST( request: NextRequest, ) {
   const { method, json } = await Inputs( request )
-  console.log( `route api ${ method } orderan` )
+  // console.log( `route api ${ method } orderan` )
+  console.log( 'test post orderan', )
 
   return Outputs( method, async () => {
     if( json === undefined ) {
@@ -81,37 +83,46 @@ export async function PUT( request: NextRequest, ) {
   // console.log( `route api ${ method } orderan` )
   return Outputs( method, async () => {
 
-    if( id === '' ) {
+    if( json === undefined || id === undefined ) {
       throw { message: 'Bad Request', status: 400 }
     }
 
-    if( json === undefined ) {
-      return NextResponse.json( { msg: `Error ${ method }`, error: "Cannot empty data" } )
+    if( id === '' || isObjectEmpty( json ) ) {
+      throw { message: 'Bad Request', status: 400 }
     }
-    if( id !== undefined ) {
+    console.log('test put Data orderan')
 
-      if( id.length > 5 || !isObjectEmpty( json ) ) {
-        const data = UpdateZod.OrderanSchema.parse( json )
-        const res  = await orderan.updateOne( data, id )
-        // console.log( res )
-        return res
-      }
-      return NextResponse.json( errorEmptyID( method ), { status: 400 } )
+    if( id.length > 5 || id.includes( '_' ) ||id.includes( "-" ) ) {
+      const data = UpdateZod.OrderanSchema.parse( json )
+      const res  = await orderan.updateOne( data, id )
+      console.log( res )
+      return res
     }
+    return NextResponse.json( errorEmptyID( method ), { status: 400 } )
+
   } )
 }
 
 export async function DELETE( request: NextRequest, ) {
-  const { method, json: array } = await Inputs( request )
+  const { method, json: array, id } = await Inputs( request )
+  // console.log( array, 'array' )
+  //   console.log(Array.isArray( array ), 'array')
   return Outputs( method, async () => {
 
-    if( Array.isArray( array ) ) {
-      return { message: 'Bad Request', status: 400 }
+    if( !Array.isArray( array ) ) {
+      throw { message: 'Bad Request', status: 400 }
+    }
+    else if( array.length === 0 ) {
+      if( array.length > 1 ) {
+        return orderan.destroyMany( array )
+      }
+    }
+    if( id === undefined || id === '' ) {
+      throw { message: 'Bad Request', status: 400 }
+    }
+    else if( id !== '' ) {
+      return orderan.deleteOne( id )
     }
 
-    if( array.length > 1 ) {
-      return orderan.destroyMany( array )
-
-    }
   } )
 }

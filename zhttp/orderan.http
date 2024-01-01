@@ -4,8 +4,7 @@ Content-Type: application/json
 
 
 ### get all
-GET http://localhost:3000/api/orderan?id=all&table=table
-Content-Type: application/json
+GET http://localhost:3000/api/orderan?id=all&option=table
 
 ### get by id
 GET http://localhost:3000/api/orderan?id=1_231
@@ -17,6 +16,7 @@ POST http://localhost:3000/api/orderan
 Content-Type: application/json
 
 {
+  "id": "test_1",
   "dari": "tokopedia ku lagi 23",
   "pengirim": "kosong",
   "hpPengirim": "123",
@@ -46,7 +46,7 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/orderan?id=Piuvr_L_231221_Sem_02817
+PUT http://localhost:3000/api/orderan?id=test_1
 Content-Type: application/json
 
 {
@@ -68,7 +68,7 @@ Content-Type: application/json
   "status": "Kirim",
   "semuaProduct": [
     {
-      "harga": 3681802,
+      "harga": 10,
       "jenis": "string",
       "jumlah": 10,
       "lokasi": "string",
@@ -130,8 +130,16 @@ Content-Type: application/json
 }
 
 
-### delete
-DELETE http://localhost:3000/api/orderan?id=1_231
+### delete success
+DELETE http://localhost:3000/api/orderan
+Content-Type: application/json
+
+[
+  "test_22"
+]
+
+### delete error
+DELETE http://localhost:3000/api/orderan
 Content-Type: application/json
 
 {}

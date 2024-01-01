@@ -3,6 +3,8 @@ import { ToModel } from '@/interface/model';
 import { useRouter } from 'next/navigation';
 import { notifyData } from '@/lib/utils/toast';
 import { url } from '@/lib/utils/url';
+import { PopUp } from '@/components/PopUp';
+import FormBank from '@/app/(pages)/bank/Form';
 
 export function SubmitButton( props: { method: 'POST' | 'PUT' } ) {
   return <button
@@ -61,7 +63,7 @@ export function DeleteCard( {
   return (
     <button
       data-test={ "delete-" + name }
-      className={ ` btn sm:btn-sm btn-error text-white ${ css } ` }
+      className={ ` btn btn-error text-white   ` }
       type={ "button" }
       onClick={ async () => {
         if( confirm( "Apakah anda yakin untuk menghapus data ini ?" ) ) {
@@ -83,7 +85,7 @@ export function DeleteCard( {
           }
         }
         else {
-          notifyData( "batal di ubah " )
+          notifyData( "Batal di Hapus " )
         }
       } }
     >Delete
@@ -91,3 +93,4 @@ export function DeleteCard( {
 
   )
 }
+

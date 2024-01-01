@@ -30,8 +30,8 @@ const MyComponent = () => {
       { PrintPng }
       <div
         ref={ elementRef }
-        className={ "flex flex-wrap bg-white border border-black w-[297mm]" }>{
-        table
+        className={ " bg-white" }>
+        { table
         .sort( ( a: Required<TCREATEORDERAN>, b: TCREATEORDERAN ) => a.semuaProduct.length - b.semuaProduct.length )
         .map( ( d: TCREATEORDERAN ) => {
 
@@ -49,7 +49,7 @@ const MyComponent = () => {
 
           return (
 
-            <div className={ "border-double border-4 border-black m-2 max-w-[10cm] min-w-[10cm] " +
+            <div className={ "border-double border-4 border-black  max-w-[10cm] min-w-[10cm] " +
               " max-h-[10cm] min-h-[10cm] text-[7pt]" }
                  key={ d.id }>
               {/*----------------------Head*/ }
@@ -80,7 +80,7 @@ const MyComponent = () => {
 
                   <li className={ "flex gap-1" }>
                     <h1
-                      className={ "uppercase whitespace-nowrap" }>{ d.alamatPenerima }</h1>
+                      className={ "" }>{ d.alamatPenerima }</h1>
                   </li>
                 </ul>
 

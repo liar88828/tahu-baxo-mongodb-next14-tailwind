@@ -6,7 +6,8 @@ import { InputForm } from '@/components/elements/InputForm';
 import { formOrderan } from '@/assets/model';
 import { useFormContext } from 'react-hook-form';
 import { currentMonth, currentYear } from '@/lib/utils/formatDate';
-import { Status } from '@/app/style/status';
+import { statusWarna } from '@/app/style/status';
+// import { Status } from '@/app/style/status';
 
 function Waktu() {
   const { register, formState: { errors }, } = useFormContext();
@@ -31,10 +32,10 @@ function Waktu() {
               data-test={ formOrderan.status }
               className='bg-gray-50 border border-gray-300 p-2 rounded-md'{ ...register( "status" ) }>
         {/*/status/*/ }
-        <option className={ Status( "Terima" ) } value="Terima">Terima</option>
-        <option className={ Status( "Proses" ) } value='Proses'>Proses</option>
-        <option className={ Status( "Kirim" ) } value="Kirim">Kirim</option>
-        <option className={ Status( "Selesai" ) } value="Selesai"> Selesai</option>
+        <option className={ statusWarna( "Terima" ) } value="Terima">Terima</option>
+        <option className={ statusWarna( "Proses" ) } value='Proses'>Proses</option>
+        <option className={ statusWarna( "Kirim" ) } value="Kirim">Kirim</option>
+        <option className={ statusWarna( "Selesai" ) } value="Selesai"> Selesai</option>
       </select>
     </>
 

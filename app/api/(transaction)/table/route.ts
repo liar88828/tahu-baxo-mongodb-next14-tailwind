@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { TMethod } from '@/interface/model';
 import { Inputs } from '@/lib/utils/Inputs';
-import { isObjectEmpty } from '@/lib/utils/Objects';
 import { orderan } from '@/lib/db/orderan';
 import { errorEmptyID } from '@/lib/utils/errorResponse';
-import { dashboard } from '@/lib/db/dashboard';
 import { Outputs } from '@/lib/utils/Outputs';
 
 export async function GET( request: NextRequest, ) {
@@ -22,7 +20,7 @@ export async function GET( request: NextRequest, ) {
         return orderan.findByStatus( id )
       }
 
-      if( id.includes( "_" ) ) {
+      if( id.includes( "_" ) || id.includes( "-" ) ) {
         return orderan.findOne( id )
       }
     }

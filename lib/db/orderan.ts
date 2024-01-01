@@ -91,6 +91,7 @@ export class Orderan {
   async updateOne( data: TUPDATEORDERAN, id: string, ) {
 
     return prisma.$transaction( async ( tx ) => {
+
       await tx.semuaProduct.deleteMany( { where: { orderanId: id } } )
 
       const updateData = await tx.orderan.update( {
@@ -102,14 +103,14 @@ export class Orderan {
         data: this.setMany( {
           data  : data.semuaProduct,
           method: "POST",
-          id    : updateData.id
+          id    : id
         } )
       } )
       return { orderan: updateData, product }
     }, {
-      maxWait       : 5000, // default: 2000
-      timeout       : 10000, // default: 5000
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database
+      // maxWait       : 5000, // default: 2000
+      // timeout       : 10000, // default: 5000
+      // isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database
                                                                      // configuration
 
     } )
@@ -117,19 +118,26 @@ export class Orderan {
   }
 
   async deleteOne( id: string ) {
-    return prisma.orderan.delete( { where: { id } } )
+
+    return prisma.$transaction( async ( tx ) => {
+
+      const deleteProduct = await tx.semuaProduct.deleteMany( { where: { orderanId: id } } )
+      const deleteOrder   = await tx.orderan.delete( { where: { id } } )
+
+      return { deleteProduct, deleteOrder }
+    } )
   }
   async destroyMany( array: string [] ) {
-    console.log( array )
+    // console.log( array )
     const id            = array.map( d => d )
     const deleteProduct = prisma.semuaProduct.deleteMany( { where: { orderanId: { in: id } } } )
 
     const deleteOrder = prisma.orderan.deleteMany( {
       where: {
         id: { in: id }, semuaProduct: {
-          every: {
-            orderanId: { in: id }
-          }
+          // every: {
+          //   orderanId: { in: id }
+          // }
         }
       }
     } )

@@ -59,7 +59,7 @@ export async function DELETE( request: NextRequest ) {
   console.log( `route api ${ method } bank` )
 
   return Outputs( method, async () => {
-    if( id === '' ||id===undefined) {
+    if( id === '' || id === undefined ) {
       throw { message: 'Bad Request', status: 400 }
     }
     if( id.length > 2 ) {
@@ -77,7 +77,7 @@ export async function PUT( request: NextRequest ) {
 
   return Outputs( method, async () => {
 
-    if( id === '' || json === undefined ||id===undefined) {
+    if( id === '' || json === undefined || id === undefined ) {
       throw { message: 'Bad Request', status: 400 }
     }
 

@@ -1,8 +1,8 @@
 import { PropsWithChildren, ReactNode } from 'react';
-
 import { ImageCard, Texts } from '@/components/Card';
 import { ProductOrderan } from '@/interface/model';
 import { Rupiah } from '@/lib/utils/formatMoney';
+import Icon from '@/components/Icon';
 
 export const FooterPopUp = ( { text }: { text: ReactNode } ) => {
   return <>
@@ -102,7 +102,8 @@ export function PopUp( {
 ) {
   return ( <>
       <label htmlFor={ `my_modal_${ name }` }
-             className={ `  btn sm:btn-sm text-white ${ styles } cursor-pointer` }>
+             data-test={ `popup-${ name }` }
+             className={ `  btn sm:btn-sm md:btn-md text-white ${ styles } cursor-pointer` }>
         <div>
           { title }
         </div>
@@ -110,13 +111,80 @@ export function PopUp( {
 
       <input type="checkbox" id={ `my_modal_${ name }` } className="modal-toggle"/>
 
-      <div className="modal  " role="dialog">
+      <div
+        data-test={ 'popup-modal' }
+        className="modal  " role="dialog">
         <div className="modal-box w-11/12 max-w-5xl">
+          <div className={ 'flex justify-between' }>
+            <h1 className="text-lg font-bold py-2">{ title }</h1>
+            <label
+              data-test={ 'popup-Close' }
+              htmlFor={ `my_modal_${ name }` }
+              className={ 'btn btn-circle btn-outline' }>
+              <Icon name={ 'x' }/>
+            </label>
+          </div>
           { children }
+        </div>
+        <label className="modal-backdrop"
+          // data-test={ 'popup-close' }
+               htmlFor={ `my_modal_${ name }` }>Close</label>
+      </div>
+    </>
+  );
+}
+
+export function PopUpAction( {
+    children,
+    name = '1',
+    title = 'Create',
+    styles = ''
+  }: PropsWithChildren & {
+    size?: boolean,
+    color?: boolean,
+    name?: string,
+    title?: string | ReactNode,
+    styles?: string
+  }
+) {
+  return ( <>
+      <label htmlFor={ `my_modal_${ name }` }
+             data-test={ `popup-${ name }` }
+             className={ `  btn sm:btn-sm md:btn-md   text-white   ${ styles } cursor-pointer` }>
+        <div>
+          { title }
+        </div>
+      </label>
+
+      <input type="checkbox" id={ `my_modal_${ name }` } className="modal-toggle"/>
+
+      <div
+        data-test={ 'popup-modal' }
+        className="modal  " role="dialog">
+        <div className="modal-box w-11/12 max-w-5xl">
+          <div className={ 'flex justify-between' }>
+            <h1 className="text-lg font-bold py-2">{ title }</h1>
+            <label
+              data-test={ 'popup-Close' }
+              htmlFor={ `my_modal_${ name }` }
+              className={ 'btn btn-circle btn-outline' }>
+              <Icon name={ 'x' }/>
+            </label>
+          </div>
+          <p className={'text-lg'}>
+            Apakah anda yakin untuk menghapus data <span className={ 'font-bold' }> { name?.split( '_' ).pop() }</span>
+          </p>
+          <div className="modal-action">
+            { children }
+            <label htmlFor={ `my_modal_${ name }` }
+                   data-test={ 'popup-Close-button' }
+                   className="btn">Close!</label>
+          </div>
         </div>
         <label className="modal-backdrop" htmlFor={ `my_modal_${ name }` }>Close</label>
       </div>
     </>
   );
 }
+
 

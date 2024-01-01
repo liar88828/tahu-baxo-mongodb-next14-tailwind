@@ -1,5 +1,5 @@
 'use client'
-import { Status } from '@/app/style/status';
+// import { Status } from '@/app/style/status';
 import { newSetTanggal, setTanggal } from '@/lib/utils/formatDate';
 import { formatPhone } from '@/lib/utils/formatPhone';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import { calculateTotal } from '@/lib/utils/calculate';
 import { notifyData } from '@/lib/utils/toast';
 import { CardPopUp, FooterPopUp, PopUpCard, TextPopUp } from '@/components/PopUp';
 import { Rupiah } from '@/lib/utils/formatMoney';
+import { statusWarna } from '@/app/style/status';
 
 export default function PopUp( { data, method, id }: {
   data: TOrder
@@ -98,7 +99,7 @@ export default function PopUp( { data, method, id }: {
       <label
         htmlFor={ `my_modal_Check_${ data.id }` }
         data-test={ 'button-check' }
-        className={ "btn whitespace-nowrap text-white w-full" + Status( data.status ) }>
+        className={ "btn whitespace-nowrap text-white w-full" + statusWarna( data.status ) }>
         Check
       </label>
 
@@ -116,7 +117,7 @@ export default function PopUp( { data, method, id }: {
             <div className="card ">
               <h1 className={ "font-bold uppercase " }>
                 Detail Pesanan
-                <span className={ Status( data.status ) + "p-2" }>{ data.status }</span>
+                <span className={ statusWarna( data.status ) + "p-2" }>{ data.status }</span>
                 <TextPopUp title={ "Kode" }
                            value={ data.id as string }
                            style2={ "font-normal italic" }/>

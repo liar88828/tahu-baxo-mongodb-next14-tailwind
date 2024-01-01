@@ -12,15 +12,15 @@ export const OStatus = [
   { s: "Selesai" }
 ]
 
-export const Status = ( s: TStatusProduk ): string => {
-  return ( s === "Terima" ) ? SDiTerima :
-         ( s === "Proses" ) ? SProcess :
-         ( s === "Kirim" ) ? SKirim : SSelesai
-}
+// export const Status = ( s: TStatusProduk ): string => {
+//   return ( s === "Terima" ) ? SDiTerima :
+//          ( s === "Proses" ) ? SProcess :
+//          ( s === "Kirim" ) ? SKirim : SSelesai
+// }
 
 export const statusWarna = ( s: TStatusProduk ): string => {
   return ( s === "Terima" ) ? " bg-error " :
-         ( s === "Proses" ) ? "  bg-info " :
+         ( s === "Proses" ) ? " bg-info " :
          ( s === "Kirim" ) ? " bg-warning " :
          " bg-success "
 }

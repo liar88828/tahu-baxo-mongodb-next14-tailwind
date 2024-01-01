@@ -14,47 +14,8 @@ export type TRoutesNav = {
     path: string,
   }[]
 }
-const LinkSlidebar = memo( function ListSlidebar(
-  { paths, title, }:
-    { paths: string, title: string, } ) {
 
-  const pathname = usePathname()
-  const path     = pathname.split( "/" )[ 1 ]
-
-  return ( <Link href={ paths } replace={ true }
-                 className={ `flex rounded items-center px-2 py-2 mb-2
-                  ${ path.includes( title.toLowerCase() )
-                     ? " bg-info hover:bg-blue-500 "
-                     : " bg-success hover:bg-green-500 " } 
-                  ` }
-    >
-      <span className={ `ml-2 text-white font-bold  ` }>{ title }</span>
-    </Link>
-  )
-} )
-
-export function ListAccordion( { titleParent, links, icon }: TRoutesNav ) {
-  return <div className="collapse bg-neutral">
-    <input type="radio" name="my-accordion-1"/>
-
-    <div className="collapse-title text-xl font-medium flex items-center gap-5">
-      <Icon icon={ icon } color={ 'black' } name={ titleParent }
-            width={ 20 }
-            height={ 20 }
-      />
-      <span>{ titleParent }</span>
-    </div>
-    <div className="collapse-content ">
-      { links.map( d => (
-        <LinkSlidebar paths={ d.path } title={ d.name } key={ d.name }/>
-      ) ) }
-
-    </div>
-  </div>
-
-}
-
-const Slidebar = () => {
+export default function Slidebar() {
   const ListSlide = <div className={ ` px-2 flex gap-2 flex-col` }>
     { routesNav.map( d => (
       <ListAccordion
@@ -109,4 +70,43 @@ const Slidebar = () => {
     </div> )
 }
 
-export default Slidebar
+function ListAccordion( { titleParent, links, icon }: TRoutesNav ) {
+  return <div className="collapse bg-base-100/90">
+    <input type="radio" name="my-accordion-1"/>
+
+    <div className="collapse-title text-xl font-medium flex items-center gap-5">
+      <Icon icon={ icon } color={ 'black' } name={ titleParent }
+            width={ 20 }
+            height={ 20 }
+      />
+      <span>{ titleParent }</span>
+    </div>
+    <div className="collapse-content ">
+      { links.map( d => (
+        <LinkSlidebar paths={ d.path } title={ d.name } key={ d.name }/>
+      ) ) }
+
+    </div>
+  </div>
+
+}
+
+const LinkSlidebar = memo( function ListSlidebar(
+  { paths, title, }:
+    { paths: string, title: string, } ) {
+
+  const pathname = usePathname()
+  const path     = pathname.split( "/" )[ 1 ]
+
+  return ( <Link href={ paths } replace={ true }
+                 className={ `flex rounded items-center px-2 py-2 mb-2
+                  ${ path.includes( title.toLowerCase() )
+                     ? " btn-info "
+                     : " btn-primary " } 
+                  ` }
+    >
+      <span className={ `ml-2 text-white font-bold  ` }>{ title }</span>
+    </Link>
+  )
+} )
+

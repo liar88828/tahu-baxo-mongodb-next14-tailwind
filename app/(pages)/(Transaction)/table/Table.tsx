@@ -512,7 +512,7 @@ export function TableOrder( { dataOrderan }: {
     </div>
 
     {/*------------Move Page -----------*/ }
-    <div className="flex overflow-x-auto items-center bg-white p-2 border ">
+    <div className="flex overflow-x-auto items-center bg-white p-2 border mt-2">
       <div className="px-2 flex flex-row items-center gap-2 rounded ">
 
         <button
@@ -595,7 +595,7 @@ export function TableOrder( { dataOrderan }: {
       </div>
     </div>
 
-    <div className="flex gap-2 overflow-x-auto w-auto flex-wrap">
+    <div className="flex gap-2 overflow-x-auto w-auto flex-wrap mt-2">
 
       {/*  will move my path name*/ }
       { listComplex.map( d => {

@@ -44,7 +44,7 @@ export default async function Page( { searchParams }: any ) {
         </ul>
       </div>
 
-      <PopUp name={ 'create_bank' } title={ 'Create' } styles={ 'btn-primary' }>
+      <PopUp name={ 'create_bank' } title={ 'Create' } styles={ 'btn-info' }>
         <FormBank
           method={ 'POST' }
           defaultData={ defaultFormBank }

@@ -16,7 +16,7 @@ export async function Outputs( method: string, fun: any ) {
   catch ( e: any ) {
 
     if( e instanceof ZodError ) {
-      console.log( e.errors )
+      // console.log( e.errors )
       return NextResponse.json( {
         msg    : `Error ${ method }`,
         success: false,

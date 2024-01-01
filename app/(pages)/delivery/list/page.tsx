@@ -63,7 +63,7 @@ export default async function Home( { searchParams }: SearchParams ) {
             </li>
           </ul>
         </div>
-        <PopUp name={ 'delivery_bank' } title={ 'Create' } styles={ 'btn-primary' }>
+        <PopUp name={ 'create_delivery' } title={ 'Create' } styles={ 'btn-primary' }>
           <FormDeliver
             method={ 'POST' }
             defaultData={ defaultFormDelivery }

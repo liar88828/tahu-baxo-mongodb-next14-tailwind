@@ -1,6 +1,7 @@
-import { Status } from '@/app/style/status';
 
 // @ts-ignore
+import { statusWarna } from '@/app/style/status';
+
 export const listComplex = [
   {
     title    : "Create",
@@ -15,22 +16,22 @@ export const listComplex = [
   {
     title    : "Terima",
     href     : "/table/Terima",
-    className: Status( "Terima" )
+    className: statusWarna( "Terima" )
   },
   {
     title    : "Proses",
     href     : "/table/Proses",
-    className: Status( "Proses" )
+    className: statusWarna( "Proses" )
   },
   {
     title    : "Kirim",
     href     : "/table/Kirim",
-    className: Status( "Kirim" )
+    className: statusWarna( "Kirim" )
   },
   {
     title    : "Selesai",
     href     : "/table/Selesai",
-    className: Status( "Selesai" )
+    className: statusWarna( "Selesai" )
   },
 ]
 

@@ -40,7 +40,9 @@ export default function FormOrderan( {
     setValueForm( data )
   };
 
-  return ( <form onSubmit={ handleSubmit( onSubmit ) }>
+  return ( <form
+    data-test={'form-orderan'}
+    onSubmit={ handleSubmit( onSubmit ) }>
 
     <div className="flex flex-col sm:flex-row  sm:gap-3 mt-5">
       <FormProvider { ...methods } >

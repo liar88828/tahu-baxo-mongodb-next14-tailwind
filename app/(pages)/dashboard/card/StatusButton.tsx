@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation';
-import { OStatus, Status, TStatusProduk } from '@/app/style/status';
+import { OStatus, statusWarna, TStatusProduk } from '@/app/style/status';
 import { DataEmpty } from '@/components/Errors';
 import { notifyData } from '@/lib/utils/toast';
 
@@ -48,7 +48,7 @@ export const StatusButton = ( { status, id, }: { status: TStatusProduk, id: stri
   return ( <>
     <label
       htmlFor={ `my_modal_status_${ id }` }
-      className={ "btn btn-sm sm:btn-md text-white whitespace-nowrap " + Status( status ) }>
+      className={ "btn btn-sm sm:btn-md text-white whitespace-nowrap " + statusWarna( status ) }>
       { status }
     </label>
 
@@ -64,7 +64,7 @@ export const StatusButton = ( { status, id, }: { status: TStatusProduk, id: stri
           { OStatus.map( ( { s } ) => ( <button
               key={ s }
               className={ `btn-sm sm:btn-md btn font-bold text-white  ${
-                ( Status( s ) ) }` }
+                ( statusWarna( s ) ) }` }
               onClick={ () => getOnClick( s ) }>
               { s }
             </button>
