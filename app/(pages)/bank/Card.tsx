@@ -41,6 +41,7 @@ export function ListBank( { d }: { d: TBank } ) {
           <PopUpAction title={ 'Delete' } name={ `delete_bank_${ d.nama }` } styles={'btn-error'}>
             <DeleteCard to={ to } id={ d.id } name={ d.nama }/>
           </PopUpAction>
+
         </CardButton>
 
       </CardBody>

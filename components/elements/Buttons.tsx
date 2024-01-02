@@ -3,8 +3,6 @@ import { ToModel } from '@/interface/model';
 import { useRouter } from 'next/navigation';
 import { notifyData } from '@/lib/utils/toast';
 import { url } from '@/lib/utils/url';
-import { PopUp } from '@/components/PopUp';
-import FormBank from '@/app/(pages)/bank/Form';
 
 export function SubmitButton( props: { method: 'POST' | 'PUT' } ) {
   return <button

@@ -1,3 +1,4 @@
+'use client'
 import { usePathname } from 'next/navigation';
 import Slidebar from '@/components/layouts/left/Slidebar';
 import ProfileNav from '@/components/layouts/top/ProfileNav';
@@ -5,7 +6,6 @@ import ProfileNav from '@/components/layouts/top/ProfileNav';
 
 function Title() {
   let path = usePathname().split( "/" )[ 1 ].toUpperCase()
-  // console.log(path)
   path     = path === 'TRAVEL' ? 'DELIVERY' : path
   return ( <a className="btn btn-ghost normal-case text-xl">{ path || "DASHBOARD" }</a> );
 }

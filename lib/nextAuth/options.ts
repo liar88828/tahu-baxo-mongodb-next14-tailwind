@@ -1,22 +1,24 @@
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import EmailProvider from 'next-auth/providers/email'
+// import EmailProvider from 'next-auth/providers/email'
 import CredentialProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcrypt'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import prisma from '@/lib/db/prisma';
 import { AuthOptions, NextAuthOptions } from 'next-auth';
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaClient } from "@prisma/client"
 
+const prisma                      = new PrismaClient()
 export const options: AuthOptions = {
-  
-  adapter  : PrismaAdapter( prisma ),
+
+  adapter: PrismaAdapter( prisma ),
+
   secret   : process.env.NEXTAUTH_SECRET,
   session  : {
     strategy: 'jwt',// 'database' akan masuk ke data base
     // maxAge: 30 * 24 * 60 * 60, // 30 days
     // updateAge: 24 * 60 * 60, // 24 hours
     // generateSessionToken: () => {
-    // 	return new Date().toISOString()
+    // 	return new Date().toISOString()z
     // },
   },
   providers: [
@@ -129,17 +131,17 @@ export const options: AuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET as string,
     } ),
 
-    EmailProvider( {
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
-      },
-      from  : process.env.EMAIL_FROM,
-    } ),
+    // EmailProvider( {
+    //   server: {
+    //     host: process.env.EMAIL_SERVER_HOST,
+    //     port: process.env.EMAIL_SERVER_PORT,
+    //     auth: {
+    //       user: process.env.EMAIL_SERVER_USER,
+    //       pass: process.env.EMAIL_SERVER_PASSWORD,
+    //     },
+    //   },
+    //   from  : process.env.EMAIL_FROM,
+    // } ),
 
     // EmailProvider({
     // 	server: process.env.EMAIL_SERVER,
@@ -158,7 +160,7 @@ export const options: AuthOptions = {
     // 	return true
     // },
 
-    async jwt( { token, user, account, session, profile, trigger } ) {
+    async jwt( { token, user, account } ) {
       if( user ) {
         token.id = user.id
       }
@@ -200,4 +202,5 @@ export const options: AuthOptions = {
       return session
     },
   },
+
 } satisfies NextAuthOptions;

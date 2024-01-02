@@ -1,26 +1,19 @@
+'use client'
 import Image from 'next/image';
 import profilePic from '@/public/logo.png';
 import React, { memo } from 'react';
-import { routesNav } from '@/assets/list';
-import { Icon } from '@iconify/react';
+import { routesNav, TRoutesNav } from '@/assets/list';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Icon from '@/components/Icon';
 
-export type TRoutesNav = {
-  titleParent: string,
-  icon: string,
-  links: {
-    name: string,
-    path: string,
-  }[]
-}
 
 export default function Slidebar() {
   const ListSlide = <div className={ ` px-2 flex gap-2 flex-col` }>
     { routesNav.map( d => (
       <ListAccordion
         titleParent={ d.titleParent }
-        icon={ d.icon }
+        icon={d.icon}
         links={ d.links }
         key={ d.titleParent }/>
     ) ) }
@@ -70,14 +63,14 @@ export default function Slidebar() {
     </div> )
 }
 
-function ListAccordion( { titleParent, links, icon }: TRoutesNav ) {
+function ListAccordion( { titleParent, links, icon }: TRoutesNav  ) {
   return <div className="collapse bg-base-100/90">
     <input type="radio" name="my-accordion-1"/>
-
     <div className="collapse-title text-xl font-medium flex items-center gap-5">
-      <Icon icon={ icon } color={ 'black' } name={ titleParent }
+      <Icon name={ icon }
             width={ 20 }
             height={ 20 }
+            color={ 'black' }
       />
       <span>{ titleParent }</span>
     </div>

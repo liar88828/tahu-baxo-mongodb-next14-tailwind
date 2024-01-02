@@ -145,7 +145,6 @@ export default function FormBank(
         </FormPrev>
       </FormLayout>
     </form>
-
   )
 }
 

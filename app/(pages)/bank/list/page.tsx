@@ -28,11 +28,8 @@ export default async function Page( { searchParams }: any ) {
 
   const { data }: Res<any> = await getData( page, take )
 
-  // console.log( data )
-
   return <>
     <div className={ "flex flex-row gap-5 z-50 p-2 justify-between overflow-x-auto " }>
-
       <div className="text-sm breadcrumbs">
         <ul>
           <li><a>Bank</a></li>
@@ -63,6 +60,7 @@ export default async function Page( { searchParams }: any ) {
         </>
       }
     </UlCard>
+
     <Paginate
       take={ take }
       page={ page }

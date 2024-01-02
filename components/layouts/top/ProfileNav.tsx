@@ -1,8 +1,7 @@
 'use client'
-import { Icon } from '@iconify/react';
-import LogoutButton from '@/components/layouts/top/LogoutButton';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Icon from '@/components/Icon';
 
 export default function ProfileNav() {
   const { data: session } = useSession()
@@ -14,7 +13,7 @@ export default function ProfileNav() {
       <div className="dropdown dropdown-end">
         <label tabIndex={ 0 } className="btn btn-ghost btn-circle ">
           <div className="indicator">
-            <Icon icon={ 'ic:round-shopping-cart' } width={ 18 } height={ 18 }/>
+            <Icon name={ 'shopping-cart' } width={ 18 } height={ 18 }/>
             <span className="badge badge-sm  badge-info indicator-item">8</span>
           </div>
         </label>
@@ -43,9 +42,7 @@ export default function ProfileNav() {
         <ul tabIndex={ 0 } className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
           <li>
             <Link
-              href={ '/profile' }
-              replace>
-              Profile
+              href={ '/profile' } replace>Profile
               <span className='badge'>New</span>
             </Link>
           </li>
@@ -63,5 +60,13 @@ export default function ProfileNav() {
       </div>
     </div>
 
+  )
+}
+
+function LogoutButton() {
+  return (
+    <button
+      onClick={ () => signOut() }
+    >Logout Client</button>
   )
 }

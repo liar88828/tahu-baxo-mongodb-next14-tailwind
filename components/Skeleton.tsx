@@ -1,9 +1,7 @@
 import { memo } from 'react';
 
 export const SkeletonCard = memo( function SkeletonCard() {
-    return (
-      <>
-        <div className="flex w-full flex-1 flex-col items-center  px-20">
+    return ( <div className="flex w-full flex-1 flex-col items-center  px-20 static">
           <div
             className="mt-12 w-1/2 animate-pulse flex-row items-center justify-center space-x-1 rounded-xl border p-6 ">
             <div className="flex flex-col space-y-2">
@@ -14,7 +12,6 @@ export const SkeletonCard = memo( function SkeletonCard() {
             </div>
           </div>
         </div>
-      </>
     );
   }
 )
