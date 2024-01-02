@@ -84,43 +84,44 @@ export default function FormBank(
     }
   }
 
+  const dataTest = method === 'POST' ? method : defaultData.nama
   return (
     <form onSubmit={ handleSubmit( handleSave ) }>
       <FormLayout>
         <FormBody>
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.nama }
                      type="text"
                      reg={ register( "nama" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.lokasi }
                      type="text"
                      reg={ register( "lokasi" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.jenis }
                      type="text"
                      reg={ register( "jenis" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.hp }
                      type="tel"
                      reg={ register( "hp" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.no }
                      type="number"
                      reg={ register( "no" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      tag={ "textarea" } title={ formBank.keterangan }
                      type="textarea"
                      min={ 0 }
                      max={ 100 }
                      reg={ register( "keterangan" ) }/>
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest } errors={ errors }
                      title={ formBank.img }
                      type="text"
                      min={ 0 }

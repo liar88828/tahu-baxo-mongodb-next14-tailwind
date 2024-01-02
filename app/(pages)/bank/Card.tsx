@@ -28,17 +28,17 @@ export function ListBank( { d }: { d: TBank } ) {
         </div>
 
         <CardButton>
-          <PopUp name={ `update_bank_${ d.nama }` }
-                 title={ 'Edit' } styles={ 'btn-primary' }>
+          <PopUp
+            name={ `update_bank_${ d.nama }` }
+            title={ `Edit` }
+            styles={ 'btn-primary' }>
             <FormBank
               method={ 'PUT' }
               defaultData={ d }
               to={ 'bank' }/>
           </PopUp>
-          {/*<EditCard to={ to } id={ d.id } name={ d.nama }/>*/ }
 
-
-          <PopUpAction title={ 'Delete' } name={ `delete_bank_${ d.nama }` } styles={'btn-error'}>
+          <PopUpAction title={ 'Delete' } name={ `delete_bank_${ d.nama }` } styles={ 'btn-error' }>
             <DeleteCard to={ to } id={ d.id } name={ d.nama }/>
           </PopUpAction>
 

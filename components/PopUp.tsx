@@ -5,7 +5,9 @@ import { ProductOrderan } from '@/interface/model';
 import { Rupiah } from '@/lib/utils/formatMoney';
 import { Icon } from '@iconify/react';
 
-export const FooterPopUp = ( { text }: { text: ReactNode } ) => {
+export const FooterPopUp = ( { text }: {
+  text: ReactNode
+} ) => {
   return <>
     <div className="shadow shadow-slate-300 p-2 rounded ">
       <Texts>Keterangan</Texts>
@@ -14,7 +16,10 @@ export const FooterPopUp = ( { text }: { text: ReactNode } ) => {
     </div>
   </>
 }
-export const CardBody    = ( { title, text }: { title: ReactNode, text: ReactNode } ) => {
+export const CardBody    = ( { title, text }: {
+  title: ReactNode,
+  text: ReactNode
+} ) => {
   return <>
     <div className="card-body rounded p-1 sm:p-2 ">
       { title }
@@ -23,13 +28,17 @@ export const CardBody    = ( { title, text }: { title: ReactNode, text: ReactNod
   </>
 }
 
-export const CardMaster = ( { children }: { children: ReactNode, } ) => {
+export const CardMaster = ( { children }: {
+  children: ReactNode,
+} ) => {
   return <ul className="  relative overflow-x-auto rounded-lg bg-white p-2 mt-1 gap-2 flex shadow shadow-slate-300">
     { children }
   </ul>
 }
 
-export const Card = ( { children }: { children: ReactNode, } ) => {
+export const Card = ( { children }: {
+  children: ReactNode,
+} ) => {
   return <div className={ "card flex-nowrap flex" }>
     <div className="w-[10rem] rounded shadow shadow-gray-500 p-1 sm:p-2">
       { children }
@@ -37,7 +46,9 @@ export const Card = ( { children }: { children: ReactNode, } ) => {
   </div>
 }
 
-export const CardPopUp = ( { semuaProduct }: { semuaProduct: ProductOrderan[] } ) => {
+export const CardPopUp = ( { semuaProduct }: {
+  semuaProduct: ProductOrderan[]
+} ) => {
   return <CardMaster>
     { semuaProduct.map( ( item: ProductOrderan, ) => {
       return (
@@ -59,7 +70,9 @@ export const CardPopUp = ( { semuaProduct }: { semuaProduct: ProductOrderan[] } 
   </CardMaster>
 }
 
-export const PopUpCard = ( { children }: { children: ReactNode } ) => {
+export const PopUpCard = ( { children }: {
+  children: ReactNode
+} ) => {
   return <div className=" border border-gray-200 rounded p-2 gap-4 flex flex-col w-full sm:w-[50%]">{ children }</div>
 }
 export const TextPopUp = ( { title, value, titik = false, style1 = "", style2 = "" }: {
@@ -76,7 +89,10 @@ export const TextPopUp = ( { title, value, titik = false, style1 = "", style2 = 
   </div>
 }
 
-export const ImageCards = ( { img, nama }: { img: string, nama: string } ) => {
+export const ImageCards = ( { img, nama }: {
+  img: string,
+  nama: string
+} ) => {
   return <figure className={ " h-32 object-cover rounded " }>
     <img src={ img }
          alt={ nama }
@@ -101,6 +117,7 @@ export function PopUp( {
     styles?: string
   }
 ) {
+
   return ( <>
       <label htmlFor={ `my_modal_${ name }` }
              data-test={ `popup-${ name }` }
@@ -119,7 +136,7 @@ export function PopUp( {
           <div className={ 'flex justify-between' }>
             <h1 className="text-lg font-bold py-2">{ title }</h1>
             <label
-              data-test={ 'popup-Close' }
+              data-test={ `popup-Close_${ name }` }
               htmlFor={ `my_modal_${ name }` }
               className={ 'btn btn-circle btn-outline' }>
               <Icon icon={ 'material-symbols:close' }/>
@@ -172,7 +189,7 @@ export function PopUpAction( {
               <Icon icon={ 'material-symbols:close' }/>
             </label>
           </div>
-          <p className={'text-lg'}>
+          <p className={ 'text-lg' }>
             Apakah anda yakin untuk menghapus data <span className={ 'font-bold' }> { name?.split( '_' ).pop() }</span>
           </p>
           <div className="modal-action">

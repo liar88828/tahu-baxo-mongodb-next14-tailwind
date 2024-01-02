@@ -118,7 +118,7 @@ model Orderan {
 
 model Product {
   id         String   @id @default(uuid())
-  nama       String   @db.VarChar(100)
+  nama       String   @unique @db.VarChar(100)
   lokasi     String   @db.VarChar(100)
   jenis      String   @db.VarChar(100)
   img        String   @db.Text
@@ -134,7 +134,7 @@ model Product {
 
 model Delivery {
   id         String @id @default(uuid())
-  nama       String
+  nama       String @unique
   hp         String
   lokasi     String
   jenis      String
@@ -147,7 +147,7 @@ model Delivery {
 
 model Bank {
   id         String @id @default(uuid())
-  nama       String
+  nama       String @unique
   hp         String
   no         String
   lokasi     String

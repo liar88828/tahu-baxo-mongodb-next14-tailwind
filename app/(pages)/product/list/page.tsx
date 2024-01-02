@@ -1,5 +1,5 @@
 import { Res, SearchParams, TProduct } from '@/interface/model';
-import React from 'react';
+import React, { Suspense } from 'react';
 import ListProduct from '@/app/(pages)/product/Card';
 import Paginate from '@/components/elements/Pagination';
 import FormProduct from '@/app/(pages)/product/Form';
@@ -8,6 +8,7 @@ import { UlCard } from '@/components/Card';
 import Link from 'next/link';
 import { url } from '@/lib/utils/url';
 import { defaultFormProduct } from '@/assets/default';
+import { SkeletonCard } from '@/components/Skeleton';
 
 const getData = async ( page: number, take: number ) => {
   return fetch( url + `/api/product?page=${ page }&take=${ take }`, { cache: 'no-store', } )
@@ -38,7 +39,9 @@ export default async function Home( { searchParams }: SearchParams ) {
             </li>
           </ul>
         </div>
-        <PopUp name={ 'create_product' } title={ 'Create' } styles={ 'btn-primary' }>
+        <PopUp name={ `create_product` }
+               title={ 'Create' }
+               styles={ 'btn-primary' }>
           <FormProduct
             method={ 'POST' }
             defaultData={ defaultFormProduct }
@@ -47,7 +50,9 @@ export default async function Home( { searchParams }: SearchParams ) {
       </div>
 
       <UlCard name={ "product" }>
-        { data.res.map( ( d: TProduct ) => ( <ListProduct d={ d } key={ d.id } to={ 'product' }/> ) ) }
+        <Suspense fallback={ <SkeletonCard/> }>
+          { data.res.map( ( d: TProduct ) => ( <ListProduct d={ d } key={ d.id } to={ 'product' }/> ) ) }
+        </Suspense>
       </UlCard>
       <Paginate
         take={ take }

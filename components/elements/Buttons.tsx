@@ -6,10 +6,10 @@ import { url } from '@/lib/utils/url';
 
 export function SubmitButton( props: { method: 'POST' | 'PUT' } ) {
   return <button
-    data-test={ "button-submit" }
+    data-test={ `button-submit_${ props.method }` }
     type="submit"
     className="bg-blue-500 p-2 rounded-md text-white">
-    { props.method === 'POST' ? 'Simpan' : 'EDIT' }
+    { props.method === 'POST' ? 'Simpan' : 'Ubah' }
   </button>;
 }
 

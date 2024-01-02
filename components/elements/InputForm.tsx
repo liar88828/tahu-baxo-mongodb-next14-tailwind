@@ -2,10 +2,12 @@ import React, { HTMLInputTypeAttribute, ReactElement } from 'react';
 import { DeepRequired, FieldErrorsImpl, GlobalError } from 'react-hook-form';
 import { JSX } from 'react/jsx-dev-runtime';
 import IntrinsicElements = JSX.IntrinsicElements;
+
 const StyleInputForm = ( salah: boolean ): string => ` p-2 bg-gray-100 text-black border rounded mb-1 leading-tight focus:outline-none focus:bg-white 
 ${ !salah
    ? ""
    : "border-red-500" } `
+
 interface InputFormProps {
   tag?: keyof IntrinsicElements | React.ComponentType<any>;
   title: string;
@@ -15,6 +17,7 @@ interface InputFormProps {
   min?: number | string
   max?: number | string
   defaultValue?: string | number,
+  method?: string,
   errors: Partial<FieldErrorsImpl<DeepRequired<any>>> & { root?: Record<string, GlobalError> & GlobalError }
 }
 
@@ -25,17 +28,15 @@ export function InputForm(
     reg,
     min,
     max,
-    errors
+    errors,
+    method = ''
   }
     : InputFormProps ): ReactElement {
-
-
-
 
   const Input = type === "textarea"
                 ?
                 <textarea
-                  data-test={ title }
+                  data-test={ `${ title }_${ method }` }
                   maxLength={ max ?? 10 }
                   minLength={ min ?? 10 }
                   id={ title }
@@ -45,7 +46,7 @@ export function InputForm(
                 />
                 :
                 <input
-                  data-test={ title }
+                  data-test={ `${ title }_${ method }` }
                   className={ "input input-bordered input-neural" }
                   placeholder={ ` Masukan ${ title }....` }
                   id={ title }

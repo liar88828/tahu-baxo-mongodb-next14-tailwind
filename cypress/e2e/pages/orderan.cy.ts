@@ -40,25 +40,25 @@ describe( 'template spec', () => {
         cy.url().should( 'include', '/orderan/create' )
 
         // penerima
-        cy.get( `[data-test="${ formOrderan.penerima }"]` ).type( "penerima test 1" )
-        cy.get( `[data-test="${ formOrderan.dari }"]` ).type( "Shoppe" )
-        cy.get( `[data-test="${ formOrderan.hpPenerima }"]` ).type( "0123123123" )
-        cy.get( `[data-test="${ formOrderan.alamatPenerima }"]` )
+        cy.get( `[data-test="${ formOrderan.penerima }_"]` ).type( "penerima test 1" )
+        cy.get( `[data-test="${ formOrderan.dari }_"]` ).type( "Shoppe" )
+        cy.get( `[data-test="${ formOrderan.hpPenerima }_"]` ).type( "0123123123" )
+        cy.get( `[data-test="${ formOrderan.alamatPenerima }_"]` )
           .type( "Kecamatan Semarang Barat. Alamat: Jalan Ronggolawe Nomor2, Gisikdrono, Kota Semarang" )
         // Pengirim
-        cy.get( `[data-test="${ formOrderan.pengirim }"]` ).clear().type( "jnt" )
-        cy.get( `[data-test="${ formOrderan.hpPengirim }"]` ).type( "0812312312312" )
+        cy.get( `[data-test="${ formOrderan.pengirim }_"]` ).clear().type( "jnt" )
+        cy.get( `[data-test="${ formOrderan.hpPengirim }_"]` ).type( "0812312312312" )
+        cy.get( `[data-test="${ formOrderan.ongkir }_"]` ).type( "2000" )
         cy.get( `[data-test="${ formOrderan.namaPengiriman }"]` ).select( 0 )
-        cy.get( `[data-test="${ formOrderan.ongkir }"]` ).type( "2000" )
         cy.get( `[data-test="${ formOrderan.lokasi }"]` ).select( 0 )
         cy.get( `[data-test="${ formOrderan.typePembayaran }"]` ).select( 0 )
         // Product
         cy.get( `[data-test="search-product"]` ).type( " " )
         cy.get( `[data-test="product_0"]` ).click()
         // waktu
-        cy.get( `[data-test="${ formOrderan.pesan }"]` ).clear().type( "2024-12-13" )
-        cy.get( `[data-test="${ formOrderan.waktuKirim }"]` ).clear().type( "2024-12-13T08:30" )
-        cy.get( `[data-test="${ formOrderan.guna }"]` ).type( "untuk di test" )
+        cy.get( `[data-test="${ formOrderan.pesan }_"]` ).clear().type( "2024-12-13" )
+        cy.get( `[data-test="${ formOrderan.waktuKirim }_"]` ).clear().type( "2024-12-13T08:30" )
+        cy.get( `[data-test="${ formOrderan.guna }_"]` ).type( "untuk di test" )
         cy.get( `[data-test="${ formOrderan.status }"]` ).select( 0 )
 
         cy.get( `[data-test="button-submit"]` ).click()
@@ -89,16 +89,16 @@ describe( 'template spec', () => {
         cy.url().should( 'include', '/orderan/edit' )
 
         // penerima
-        cy.get( `[data-test="${ formOrderan.penerima }"]` ).clear().type( "penerima update" )
-        cy.get( `[data-test="${ formOrderan.dari }"]` ).type( "Shoppe" )
-        cy.get( `[data-test="${ formOrderan.hpPenerima }"]` ).type( "4" )
-        cy.get( `[data-test="${ formOrderan.alamatPenerima }"]` ).clear()
+        cy.get( `[data-test="${ formOrderan.penerima }_"]` ).clear().type( "penerima update" )
+        cy.get( `[data-test="${ formOrderan.dari }_"]` ).type( "Shoppe" )
+        cy.get( `[data-test="${ formOrderan.hpPenerima }_"]` ).type( "4" )
+        cy.get( `[data-test="${ formOrderan.alamatPenerima }_"]` ).clear()
           .type( "Kecamatan Semarang Barat. Alamat: Jalan Ronggolawe Nomor2, Gisikdrono, Kota Semarang" )
         // Pengirim
-        cy.get( `[data-test="${ formOrderan.pengirim }"]` ).clear().type( "jnt" )
-        cy.get( `[data-test="${ formOrderan.hpPengirim }"]` ).type( "3" )
+        cy.get( `[data-test="${ formOrderan.pengirim }_"]` ).clear().type( "jnt" )
+        cy.get( `[data-test="${ formOrderan.hpPengirim }_"]` ).type( "3" )
+        cy.get( `[data-test="${ formOrderan.ongkir }_"]` ).type( "2000" )
         cy.get( `[data-test="${ formOrderan.namaPengiriman }"]` ).select( 0 )
-        cy.get( `[data-test="${ formOrderan.ongkir }"]` ).type( "2000" )
         cy.get( `[data-test="${ formOrderan.lokasi }"]` ).select( 0 )
         cy.get( `[data-test="${ formOrderan.typePembayaran }"]` ).select( 0 )
         // Product
@@ -109,9 +109,9 @@ describe( 'template spec', () => {
         cy.get( `[data-test="search-product"]` ).type( " " )
         cy.get( `[data-test="product_0"]` ).click()
         // waktu
-        cy.get( `[data-test="${ formOrderan.pesan }"]` ).clear().type( "2024-12-13" )
-        cy.get( `[data-test="${ formOrderan.waktuKirim }"]` ).clear().type( "2024-12-13T08:30" )
-        cy.get( `[data-test="${ formOrderan.guna }"]` ).type( "untuk di test" )
+        cy.get( `[data-test="${ formOrderan.pesan }_"]` ).clear().type( "2024-12-13" )
+        cy.get( `[data-test="${ formOrderan.waktuKirim }_"]` ).clear().type( "2024-12-13T08:30" )
+        cy.get( `[data-test="${ formOrderan.guna }_"]` ).type( "untuk di test" )
         cy.get( `[data-test="${ formOrderan.status }"]` ).select( 0 )
 
         cy.get( `[data-test="button-submit"]` ).click()

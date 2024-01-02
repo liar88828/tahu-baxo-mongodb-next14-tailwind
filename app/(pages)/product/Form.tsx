@@ -8,7 +8,7 @@ import { setIdProduct } from '@/lib/utils/setID';
 import { notifyData } from '@/lib/utils/toast';
 import { FormBody, FormButton, FormLayout, FormPrev } from '@/components/Form';
 import { InputForm } from '@/components/elements/InputForm';
-import { formBank, formProduct, } from '@/assets/model';
+import { formProduct, } from '@/assets/model';
 import { OpenButton, SubmitButton } from '@/components/elements/Buttons';
 import { ImagePrev, LayoutImagePrev } from '@/components/Images';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -89,36 +89,42 @@ export default function FormProduct(
       notifyData( `Batal ${ text }` )
     }
   }
+  const dataTest   = method === 'POST' ? method : defaultData.nama
 
   return (
     <form onSubmit={ handleSubmit( handleSave ) }>
       <FormLayout>
         <FormBody>
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest }
+                     errors={ errors }
                      title={ formProduct.nama }
                      type="text"
                      reg={ register( "nama" ) }
           />
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest }
+                     errors={ errors }
                      title={ formProduct.harga }
                      type="number"
                      reg={ register( "harga", { valueAsNumber: true } ) }
           />
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest }
+                     errors={ errors }
                      title={ formProduct.lokasi }
                      type="text"
                      reg={ register( "lokasi" ) }
           />
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest }
+                     errors={ errors }
                      title={ formProduct.jenis }
                      type="text"
                      reg={ register( "jenis" ) }
           />
 
-          <InputForm errors={ errors }
+          <InputForm method={ dataTest }
+                     errors={ errors }
                      title={ formProduct.keterangan }
                      type="textarea"
                      min={ 0 }
@@ -126,8 +132,9 @@ export default function FormProduct(
                      reg={ register( "keterangan" ) }
           />
 
-          <InputForm errors={ errors }
-                     title={ formBank.img }
+          <InputForm method={ dataTest }
+                     errors={ errors }
+                     title={ formProduct.img }
                      type="textarea"
                      min={ 0 }
                      max={ 300 }

@@ -31,13 +31,19 @@ export default function ListProduct(
 
         <CardButton>
           {/*<EditCard to={ to } id={ d.id } name={ d.nama }/>*/ }
-          <PopUp name={ `update_product_${ d.nama }` } title={ 'Edit' } styles={ 'btn-primary' }>
+          <PopUp
+            name={ `update_product_${ d.nama }` }
+            title={ 'Edit' }
+            styles={ 'btn-primary' }>
             <FormProduct
               method={ 'PUT' }
               defaultData={ d }
               to={ 'product' }/>
           </PopUp>
-          <PopUpAction title={ 'Delete' } name={ `delete_product_${ d.nama }` } styles={ 'btn-error' }>
+          <PopUpAction
+            title={ 'Delete' }
+            name={ `delete_product_${ d.nama }` }
+            styles={ 'btn-error' }>
             <DeleteCard to={ to } id={ d.id } name={ d.nama }/>
           </PopUpAction>
 

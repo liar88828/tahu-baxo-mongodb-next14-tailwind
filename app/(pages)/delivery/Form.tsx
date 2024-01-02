@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { url } from '@/lib/utils/url';
 
 const sendData = async ( method: 'POST' | 'PUT', data: TDelivery ) => {
-  const res = await fetch( url + `/api/delivery?id=${data.id}`, {
+  const res = await fetch( url + `/api/delivery?id=${ data.id }`, {
     method,
     // next   : { tags: [ 'bank' ] },
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +29,7 @@ const sendData = async ( method: 'POST' | 'PUT', data: TDelivery ) => {
 }
 
 export default function FormDeliver(
-  { defaultData, method,  to }:
+  { defaultData, method, to }:
     {
       defaultData: TDelivery,
       method: "POST" | "PUT",
@@ -57,7 +57,7 @@ export default function FormDeliver(
     if( confirm( `Apakah anda yakin untuk ${ text } data ini ?` ) ) {
       try {
         // console.log( "send data" )
-        data.id   =method==='POST'? setIdDelivery( data ):data.id
+        data.id = method === 'POST' ? setIdDelivery( data ) : data.id
         const res = await sendData( method, data )
         console.log( res )
         // console.log( "get gateway" )
@@ -81,44 +81,45 @@ export default function FormDeliver(
       notifyData( `Batal ${ text }` )
     }
   }
+  const dataTest   = method === 'POST' ? method : defaultData.nama
 
   return <form onSubmit={ handleSubmit( handleSave ) }>
     <FormLayout>
       <FormBody>
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formTravel.nama }
                    type="text"
                    reg={ register( "nama" ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formTravel.hp }
                    type="tel"
                    reg={ register( "hp" ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formTravel.lokasi }
                    type="text"
                    reg={ register( "lokasi" ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formTravel.jenis }
                    type="text"
                    reg={ register( "jenis" ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formTravel.harga }
                    type="number"
                    reg={ register( "harga",
                      { valueAsNumber: true } ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    min={ 0 }
                    max={ 100 }
                    title={ formTravel.keterangan }
                    type="textarea"
                    reg={ register( "keterangan" ) }/>
 
-        <InputForm errors={ errors }
+        <InputForm method={ dataTest } errors={ errors }
                    title={ formBank.img }
                    type="text"
                    min={ 0 }

@@ -47,7 +47,7 @@ export const formOrderan: Record<keyof TOrder, any> = {
   pesan     : 'Pesan',
   waktuKirim: 'Waktu Kirim',
 }
-export const formBank: Record<keyof TBank, any> = {
+export const formBank: Record<keyof TBank, any>     = {
   hp        : "No Telephone Perusahaan",
   nama      : "Nama Bank",
   no        : "No Rekening",

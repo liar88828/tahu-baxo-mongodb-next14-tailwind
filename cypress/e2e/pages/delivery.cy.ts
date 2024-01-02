@@ -1,4 +1,5 @@
 import { formTravel } from '../../../assets/model';
+import { jpgTextNotFound } from '../../../assets/default';
 
 describe( 'template spec', () => {
   beforeEach( () => {
@@ -43,6 +44,95 @@ describe( 'template spec', () => {
     cy.wait( 500 )
   } )
 
+  it( "Create action delivery", () => {
+    cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
+      if( !$el.text().includes( "delivery create" ) ) {
+
+        cy.get( '[data-test="popup-create_delivery"]' ).click()
+        cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
+          if( $el.text().includes( "Create" ) ) {
+            cy.contains( 'Create' )
+
+            //form
+            cy.get( `[data-test="${ formTravel.nama }_POST"]` ).type( "delivery create" )
+            cy.get( `[data-test="${ formTravel.lokasi }_POST"]` ).type( "semarang" )
+            cy.get( `[data-test="${ formTravel.jenis }_POST"]` ).type( "box" )
+            cy.get( `[data-test="${ formTravel.hp }_POST"]` ).type( "01231231" )
+            cy.get( `[data-test="${ formTravel.harga }_POST"]` ).type( "5000" )
+            cy.get( `[data-test="${ formTravel.keterangan }_POST"]` ).type( "biasa di wilayah semarang" )
+            cy.get( `[data-test="${ formTravel.img }_POST"]` ).type( jpgTextNotFound )
+
+            // button
+            cy.get( `[data-test="img-prev"]` ).should( "not.exist" )
+            cy.get( `[data-test="button-check"]` ).click( { multiple: true, force: true } )
+            cy.get( `[data-test="img-prev"]` ).should( "exist" )
+            cy.get( `[data-test="button-check"]` ).click( { multiple: true, force: true } )
+            cy.get( `[data-test="img-prev"]` ).should( "not.exist" )
+            cy.get( `[data-test="button-submit_POST"]` ).click( { multiple: true, force: true } )
+
+            cy.get( '[data-test="popup-Close_create_delivery"]' ).click( { multiple: true, force: true } )
+          }
+        } )
+      }
+    } )
+  } )
+
+  it( "Update action delivery", () => {
+    cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
+      if( $el.text().includes( "delivery create" ) || !$el.text().includes( "delivery update" ) ) {
+
+        cy.get( '[data-test="popup-update_delivery_delivery create"]' ).click( { force: true, multiple: true } )
+        cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
+          if( $el.text().includes( "Edit" ) ) {
+            cy.get( `[data-test="${ formTravel.nama }_delivery create"]` ).clear().type( "delivery update" )
+            cy.get( `[data-test="${ formTravel.lokasi }_delivery create"]` ).clear().type( "semarang" )
+            cy.get( `[data-test="${ formTravel.jenis }_delivery create"]` ).clear().type( "box" )
+            cy.get( `[data-test="${ formTravel.hp }_delivery create"]` ).clear().type( "01231231" )
+            cy.get( `[data-test="${ formTravel.harga }_delivery create"]` ).clear().type( "5000" )
+            cy.get( `[data-test="${ formTravel.keterangan }_delivery create"]` )
+              .clear()
+              .type( "biasa di wilayah semarang" )
+            // cy.wait( 500 )
+
+            cy.get( `[data-test="img-prev"]` ).should( "not.exist" )
+            cy.get( `[data-test="button-check"]` ).click( { multiple: true, force: true } )
+            cy.get( `[data-test="img-prev"]` ).should( "exist" )
+            cy.get( `[data-test="button-check"]` ).click( { multiple: true, force: true } )
+            cy.get( `[data-test="img-prev"]` ).should( "not.exist" )
+            cy.get( `[data-test="button-submit_PUT"]` ).click( { multiple: true, force: true } )
+          }
+        } )
+      }
+    } )
+  } )
+
+  it( 'delete after update', () => {
+    cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
+      if( $el.text().includes( "delivery create" ) ) {
+        cy.get( '[data-test="popup-delete_delivery_delivery create"]' ).click()
+        cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
+          if( $el.text().includes( "Delete" ) ) {
+            cy.get( '[data-test="delete-delivery create"]' ).should( "exist" ).click()
+          }
+        } )
+      }
+      cy.wait( 500 )
+    } )
+  } )
+
+  it( 'delete after create', () => {
+    cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
+      if( $el.text().includes( "delivery update" ) ) {
+        cy.get( '[data-test="popup-delete_delivery_delivery update"]' ).click()
+        cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
+          if( $el.text().includes( "Delete" ) ) {
+            cy.get( '[data-test="delete-delivery update"]' ).should( "exist" ).click()
+          }
+        } )
+      }
+      cy.wait( 500 )
+    } )
+  } )
   it.skip( "move links delivery", () => {
     cy.get( '[data-test="link-create"]' ).click()
     cy.url().should( 'include', '/delivery/create' )
