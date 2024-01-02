@@ -1,40 +1,24 @@
-import ListProduct from '@/app/(pages)/product/Card';
 import { Res, SearchParams, TProduct } from '@/interface/model';
-import { UlCard } from '@/components/Card';
-import Paginate from '@/components/elements/Pagination';
-import { url } from '@/lib/utils/url';
-import Link from 'next/link';
-import { PopUp } from '@/components/PopUp';
-import FormBank from '@/app/(pages)/bank/Form';
-import { defaultFormBank, defaultFormProduct } from '@/assets/default';
 import React from 'react';
+import ListProduct from '@/app/(pages)/product/Card';
+import Paginate from '@/components/elements/Pagination';
 import FormProduct from '@/app/(pages)/product/Form';
+import { PopUp } from '@/components/PopUp';
+import { UlCard } from '@/components/Card';
+import Link from 'next/link';
+import { url } from '@/lib/utils/url';
+import { defaultFormProduct } from '@/assets/default';
 
 const getData = async ( page: number, take: number ) => {
   return fetch( url + `/api/product?page=${ page }&take=${ take }`, { cache: 'no-store', } )
 }
-// export const revalidate = 0
 
 export default async function Home( { searchParams }: SearchParams ) {
   const page = Number( searchParams.page )
   const take = Number( searchParams.take )
-  // console.log(page,take)
-  // const { data }: TRes<TProduct[]> = await Fetch(
-  //   {
-  //     method: "GET",
-  //     to    : "product",
-  //     page  : page,
-  //     take  : take
-  //   } )
-  // const length =await prisma.product.count({take:100})
-
-  // const [ data, length ] = await Promise.all( [
-  //   prisma.product.findMany( { skip: ( page - 1 ) * take, take: take } ),
-  //   prisma.product.count( { take: 100 } )
-  // ] )
 
   const res = await getData( page, take )
-  
+
   if( !res.ok ) {
     throw new Error( `Error! status: ${ res.status }` );
   }

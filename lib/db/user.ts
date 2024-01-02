@@ -1,14 +1,22 @@
 import prisma from '@/lib/db/prisma';
+import bcrypt from 'bcrypt';
 
-export class BankRepo {
-  async findPaginate(data:{email:string, password:string} ) {
+export class User {
+  async create( data: {
+    email: string,
+    password: string
+  } ) {
 
-    const hasPassword = by
-    return prisma.user.create({
-      data:{
+    // const hasPassword = bcrypt.hash( data.password, 10 )
+    return prisma.user.create( {
+      data: {
         email: data.email,
-        password: ,
+        // password: data.password,
+        name         : 'test',
+        image        : 'test',
+        emailVerified: null,
+        role         : 'test',
       }
-    })
+    } )
   }
 }

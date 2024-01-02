@@ -1,8 +1,9 @@
+'use client';
 import { PropsWithChildren, ReactNode } from 'react';
 import { ImageCard, Texts } from '@/components/Card';
 import { ProductOrderan } from '@/interface/model';
 import { Rupiah } from '@/lib/utils/formatMoney';
-import Icon from '@/components/Icon';
+import { Icon } from '@iconify/react';
 
 export const FooterPopUp = ( { text }: { text: ReactNode } ) => {
   return <>
@@ -121,7 +122,7 @@ export function PopUp( {
               data-test={ 'popup-Close' }
               htmlFor={ `my_modal_${ name }` }
               className={ 'btn btn-circle btn-outline' }>
-              <Icon name={ 'x' }/>
+              <Icon icon={ 'material-symbols:close' }/>
             </label>
           </div>
           { children }
@@ -168,7 +169,7 @@ export function PopUpAction( {
               data-test={ 'popup-Close' }
               htmlFor={ `my_modal_${ name }` }
               className={ 'btn btn-circle btn-outline' }>
-              <Icon name={ 'x' }/>
+              <Icon icon={ 'material-symbols:close' }/>
             </label>
           </div>
           <p className={'text-lg'}>

@@ -1,7 +1,7 @@
 'use client'
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import Icon from '@/components/Icon';
+import { Icon } from '@iconify/react';
 
 export default function ProfileNav() {
   const { data: session } = useSession()
@@ -13,7 +13,7 @@ export default function ProfileNav() {
       <div className="dropdown dropdown-end">
         <label tabIndex={ 0 } className="btn btn-ghost btn-circle ">
           <div className="indicator">
-            <Icon name={ 'shopping-cart' } width={ 18 } height={ 18 }/>
+            <Icon icon={ 'mdi:cart-outline' } width={ 18 } height={ 18 }/>
             <span className="badge badge-sm  badge-info indicator-item">8</span>
           </div>
         </label>

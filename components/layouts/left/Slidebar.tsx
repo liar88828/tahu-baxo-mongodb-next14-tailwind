@@ -5,7 +5,7 @@ import React, { memo } from 'react';
 import { routesNav, TRoutesNav } from '@/assets/list';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Icon from '@/components/Icon';
+import { Icon } from '@iconify/react';
 
 
 export default function Slidebar() {
@@ -67,7 +67,7 @@ function ListAccordion( { titleParent, links, icon }: TRoutesNav  ) {
   return <div className="collapse bg-base-100/90">
     <input type="radio" name="my-accordion-1"/>
     <div className="collapse-title text-xl font-medium flex items-center gap-5">
-      <Icon name={ icon }
+      <Icon icon={ icon }
             width={ 20 }
             height={ 20 }
             color={ 'black' }

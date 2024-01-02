@@ -1,7 +1,7 @@
 
 // @ts-ignore
 import { statusWarna } from '@/app/style/status';
-import { IconProps } from '@/components/Icon';
+import { IconProps } from '@iconify/react';
 
 export const listComplex = [
   {
@@ -38,7 +38,7 @@ export const listComplex = [
 
 export type TRoutesNav = {
   titleParent: string,
-  icon: IconProps['name'],
+  icon: IconProps['icon'],
   links: {
     name: string,
     path: string,
@@ -48,7 +48,8 @@ export type TRoutesNav = {
 export const routesNav: TRoutesNav[] = [
   {
     titleParent: "Dashboard",
-    icon       : "pie-chart",
+    icon       : "fluent:data-pie-24-filled",
+
     links: [
       {
         name: "Dashboard",
@@ -58,7 +59,7 @@ export const routesNav: TRoutesNav[] = [
   },
   {
     titleParent: "Transaction",
-    icon       : "shopping-cart",
+    icon       : "mdi:trolley",
 
     links: [
       {
@@ -73,7 +74,7 @@ export const routesNav: TRoutesNav[] = [
   },
   {
     titleParent: "Product",
-    icon       : "package-search",
+    icon       : "icon-park-outline:ad-product",
     links      : [
       {
         name: "List",
@@ -87,7 +88,7 @@ export const routesNav: TRoutesNav[] = [
   },
   {
     titleParent: "Delivery",
-    icon       : "truck",
+    icon       : "carbon:delivery",
     links      : [
       {
         name: "List",
@@ -102,7 +103,7 @@ export const routesNav: TRoutesNav[] = [
 
   {
     titleParent: "Bank",
-    icon       : "banknote",
+    icon       : "tdesign:money",
     links      : [
       {
         name: "List",
