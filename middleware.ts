@@ -23,7 +23,7 @@ export default withAuth(
 		callbacks: {
 			authorized: ({ req, token }: { token: JWT | null; req: any }) => {
 				// console.log(req)
-				// console.log(token)
+              console.log( token )
 				if (req.nextUrl.pathname.startsWith('/adminxxx')) {
 					return token.role === 'adminxxx'
 				}
@@ -34,7 +34,11 @@ export default withAuth(
 )
 export const config = {
 	matcher: [ '/',
-		//'/profile',
-		// '/admin:path*'
+      '/delivery/:path*',
+      '/orderan/:path*',
+      '/table/:path*',
+      '/bank/:path*',
+      '/product/:path*',
+      '/admin/:path*'
 	]
 }

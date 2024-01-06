@@ -20,7 +20,7 @@ export default function RootLayout( {
     <html lang="en" className={ inter.className }
           data-theme={ 'mytheme' }>
 
-    <body className={ "bg-green-50  max-h-screen" }>
+    <body className={ "bg-green-50  min-h-screen" }>
     <NextAuthProvider>
       <BasicLayout>
         { children }

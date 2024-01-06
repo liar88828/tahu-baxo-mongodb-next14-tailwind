@@ -226,3 +226,19 @@ export function getSchema<T extends SchemaType>(
   }
 }
 
+export const schema = z.object( {
+  email: z.string( { invalid_type_error: 'Invalid Email', } ).email().max( 80 ),
+} )
+
+export const changePasswordSchema = z.object(
+  {
+    email   : z.string( { invalid_type_error: 'Invalid Email', } ).email().max( 80 ),
+    otp     : z.number( { invalid_type_error: 'Invalid Otp', } ).min( 6, 'number must be 6' ),
+    password: z.string( { invalid_type_error: 'Invalid password', } ).max( 80 ),
+    confPass: z.string( { invalid_type_error: 'Invalid confirmPass', } ).max( 80 ),
+  }
+).refine( ( arg ) => {
+  const valid = arg.password == arg.confPass
+
+  return valid
+}, 'Password and Confirm Password must be same' )

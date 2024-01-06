@@ -10,6 +10,10 @@ import { PrismaClient } from "@prisma/client"
 const prisma                      = new PrismaClient()
 export const options: AuthOptions = {
 
+  pages: {
+    signIn: "/login",
+  },
+
   adapter: PrismaAdapter( prisma ),
 
   secret   : process.env.NEXTAUTH_SECRET,

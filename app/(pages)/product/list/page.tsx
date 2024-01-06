@@ -24,7 +24,7 @@ export default async function Home( { searchParams }: SearchParams ) {
     throw new Error( `Error! status: ${ res.status }` );
   }
   const { data }: Res<any> = await res.json()
-  console.log( data )
+  // console.log( data )
 
   return ( <>
       <div className={ "flex flex-row gap-5 z-50 p-2 justify-between overflow-x-auto " }>
