@@ -1,12 +1,12 @@
 import { formTravel } from '../../../assets/model';
 import { jpgTextNotFound } from '../../../assets/default';
 
-describe( 'template spec', () => {
+describe( 'pengujian halaman delivery', () => {
   beforeEach( () => {
     cy.visit( '/delivery/list?page=1&take=10' )
   } )
 
-  it( "click delivery", () => {
+  it( "bisa melakukan beberapa aksi tombol pada page delivery", () => {
     // create button
     cy.get( '[data-test="popup-create_delivery"]' ).click()
     cy.wait( 500 )
@@ -44,13 +44,17 @@ describe( 'template spec', () => {
     cy.wait( 500 )
   } )
 
-  it( "Create action delivery", () => {
+  it( "bisa membuat data di dalam form delivery", () => {
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
-      if( !$el.text().includes( "delivery create" ) ) {
+      if( !$el.text().includes( "delivery create" ) ||
+        !$el.text().includes( "delivery update" ) ) {
 
         cy.get( '[data-test="popup-create_delivery"]' ).click()
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Create" ) ) {
+          if( $el.text().includes( "Create" ) ||
+            !$el.text().includes( "delivery create" ) ||
+            !$el.text().includes( "delivery update" )
+          ) {
             cy.contains( 'Create' )
 
             //form
@@ -77,13 +81,16 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( "Update action delivery", () => {
+  it( "bisa mengubah data di dalam form delivery", () => {
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
       if( $el.text().includes( "delivery create" ) || !$el.text().includes( "delivery update" ) ) {
 
         cy.get( '[data-test="popup-update_delivery_delivery create"]' ).click( { force: true, multiple: true } )
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Edit" ) ) {
+          if( $el.text().includes( "Edit" ) ||
+            $el.text().includes( "delivery create" ) ||
+            !$el.text().includes( "delivery update" )
+          ) {
             cy.get( `[data-test="${ formTravel.nama }_delivery create"]` ).clear().type( "delivery update" )
             cy.get( `[data-test="${ formTravel.lokasi }_delivery create"]` ).clear().type( "semarang" )
             cy.get( `[data-test="${ formTravel.jenis }_delivery create"]` ).clear().type( "box" )
@@ -106,7 +113,7 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( 'delete after update', () => {
+  it( 'bisa menghapus data di dalam list delivery', () => {
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
       if( $el.text().includes( "delivery create" ) ) {
         cy.get( '[data-test="popup-delete_delivery_delivery create"]' ).click()
@@ -133,6 +140,7 @@ describe( 'template spec', () => {
       cy.wait( 500 )
     } )
   } )
+
   it.skip( "move links delivery", () => {
     cy.get( '[data-test="link-create"]' ).click()
     cy.url().should( 'include', '/delivery/create' )

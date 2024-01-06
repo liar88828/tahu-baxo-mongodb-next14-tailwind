@@ -1,43 +1,41 @@
-import { TCREATEORDERAN } from '@/lib/validation/zod/createZod';
-import { TUPDATEORDERAN } from '@/lib/validation/zod/updateZod';
+import { TCREATEORDERAN, TUPDATEORDERAN } from '../../../lib/validator/zod';
 
 describe( 'ORDERAN spec', () => {
 
-  describe( 'method CREATE ORDERAN', () => {
+  describe( 'POST ORDERAN', () => {
 
-    it( "POST ORDERAN success", () => {
+    it( "bisa melakukan membuat data orderan dengan method POST", () => {
       cy.request(
         'POST',
         'http://localhost:3000/api/orderan',
 
-
         {
-          "id": "test_1",
-          "dari": "tokopedia ku lagi 23",
-          "pengirim": "kosong",
-          "hpPengirim": "123",
-          "penerima": "kosong",
+          "id"          : "test_1",
+          "dari"        : "tokopedia ku lagi 23",
+          "pengirim"    : "kosong",
+          "hpPengirim"  : "123",
+          "penerima"    : "kosong",
           "alamatPenerima": "kosong",
-          "hpPenerima": "12",
-          "pesan": "2023-12-12T00:00:00.000Z",
-          "waktuKirim": "2023-12-12T00:00:00.000Z",
-          "guna": "kosong",
-          "lokasi": "kosong",
+          "hpPenerima"  : "12",
+          "pesan"       : "2023-12-12T00:00:00.000Z",
+          "waktuKirim"  : "2023-12-12T00:00:00.000Z",
+          "guna"        : "kosong",
+          "lokasi"      : "kosong",
           "namaPengiriman": "kosong",
-          "ongkir": 0,
+          "ongkir"      : 0,
           "typePembayaran": "kosong",
-          "totalBayar": 0,
+          "totalBayar"  : 0,
           "totalPenjualan": 0,
-          "status": "Kirim",
+          "status"      : "Kirim",
           "semuaProduct": [
             {
               "harga": 3681802,
               "jenis": "string",
               "jumlah": 10,
               "lokasi": "string",
-              "nama": "string",
-              "img": "dasda",
-              "orderanId" : "test_1"
+              "nama" : "string",
+              "img"  : "dasda",
+              // "orderanId" : "test_1"
             }
           ]
         } as TCREATEORDERAN
@@ -52,12 +50,12 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "POST ORDERAN fail because data can't be empty", () => {
+    it( "tidak bisa membuat data karena data orderan kosong", () => {
       cy.request( {
           method          : 'POST',
           url             : 'http://localhost:3000/api/orderan',
           failOnStatusCode: false,
-          body            : { nama: "tahu baxo" },
+        body: {},
         }
       )
         .then( ( response ) => {
@@ -75,7 +73,7 @@ describe( 'ORDERAN spec', () => {
 
   describe( 'Method GET ORDERAN', () => {
 
-    it( "GET ORDERAN success", () => {
+    it( "bisa melakukan mengambil data orderan menggunakan method GET ", () => {
       cy.request( 'http://localhost:3000/api/orderan?id=all&option=table' )
         .then( ( response ) => {
           cy.log( response.body )
@@ -87,7 +85,7 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "GET ORDERAN by id success", () => {
+    it( "bisa melakukan mengambil data orderan menggunakan method GET dengan id ", () => {
       cy.request( 'http://localhost:3000/api/orderan?id=test_1' )
         .then( ( response ) => {
           cy.log( response.body )
@@ -99,7 +97,7 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "GET Orderan be error because empty id", () => {
+    it( "tidak bisa mengambil data orderan menggunakan method GET karena id kosong", () => {
       cy.request( {
         method          : 'GET',
         url             : 'http://localhost:3000/api/orderan?id=',
@@ -118,37 +116,38 @@ describe( 'ORDERAN spec', () => {
   } )
 
   describe( 'method EDIT ORDERAN', () => {
-    it( "UPDATE ORDERAN success", () => {
+
+    it( "bisa melakukan mengedit data orderan menggunakan method PUT", () => {
       cy.request(
         'PUT',
         'http://localhost:3000/api/orderan?id=test_1',
         {
-          "id": "test_1",
-          "dari": "tokopedia update",
-          "pengirim": "kosong",
-          "hpPengirim": "123",
-          "penerima": "kosong",
+          "id"          : "test_1",
+          "dari"        : "tokopedia update",
+          "pengirim"    : "kosong",
+          "hpPengirim"  : "123",
+          "penerima"    : "kosong",
           "alamatPenerima": "kosong",
-          "hpPenerima": "12",
-          "pesan": "2023-12-12T00:00:00.000Z",
-          "waktuKirim": "2023-12-12T00:00:00.000Z",
-          "guna": "kosong",
-          "lokasi": "kosong",
+          "hpPenerima"  : "12",
+          "pesan"       : "2023-12-12T00:00:00.000Z",
+          "waktuKirim"  : "2023-12-12T00:00:00.000Z",
+          "guna"        : "kosong",
+          "lokasi"      : "kosong",
           "namaPengiriman": "kosong",
-          "ongkir": 0,
+          "ongkir"      : 0,
           "typePembayaran": "kosong",
-          "totalBayar": 0,
+          "totalBayar"  : 0,
           "totalPenjualan": 0,
-          "status": "Kirim",
+          "status"      : "Kirim",
           "semuaProduct": [
             {
               "harga": 3681802,
               "jenis": "string",
               "jumlah": 10,
               "lokasi": "string",
-              "nama": "string",
-              "img": "dasda",
-              "orderanId" : "test_1"
+              "nama" : "string",
+              "img"  : "dasda",
+              // "orderanId" : "test_1"
             }
           ]
         } as TUPDATEORDERAN
@@ -163,13 +162,13 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "EDIT ORDERAN fail because data can't be empty", () => {
+    it( "tidak bisa mengedit data orderan karena data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
           url             : 'http://localhost:3000/api/orderan?id=test_1',
           failOnStatusCode: false,
-          body            : { nama: "tahu baxo" },
+          body: {},
         }
       )
         .then( ( response ) => {
@@ -183,7 +182,7 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "EDIT ORDERAN fail because data can't be empty id", () => {
+    it( "tidak bisa mengedit data orderan karena id dan data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -206,12 +205,12 @@ describe( 'ORDERAN spec', () => {
 
   describe( 'DELETE ORDERAN', () => {
 
-    it( "DELETE Orderan", () => {
+    it( "bisa melakukan menghapus data orderan menggunakan method DELETE ", () => {
       cy.request(
         {
           method: 'DELETE',
           url   : 'http://localhost:3000/api/orderan?id=test_1',
-          body  : ['test_1']
+          body: [ 'test_1' ]
         }
       )
         .then( ( response ) => {
@@ -225,7 +224,7 @@ describe( 'ORDERAN spec', () => {
         } )
     } )
 
-    it( "DELETE Orderan error because data can't be empty id", () => {
+    it( "tidak bisa melakukan menghapus data orderan karena id kosong", () => {
       cy.request(
         {
           method          : 'DELETE',

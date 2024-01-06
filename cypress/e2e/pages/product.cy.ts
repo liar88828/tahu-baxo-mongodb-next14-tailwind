@@ -9,7 +9,7 @@ describe( 'template spec', () => {
 
   } )
 
-  it.skip( "click product", () => {
+  it( "bisa melakukan beberapa aksi tombol pada page produk", () => {
 
     // button create
     cy.get( '[data-test="popup-create_product"]' ).click()
@@ -48,14 +48,19 @@ describe( 'template spec', () => {
     cy.wait( 500 )
   } )
 
-  it( "Create action product", () => {
+  it( "bisa membuat data di dalam form produk", () => {
     cy.visit( '/product/list?page=1&take=10' )
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
-      if( !$el.text().includes( "product create" ) ) {
+      if( !$el.text().includes( "product create" ) ||
+        !$el.text().includes( "product update" )
+      ) {
 
         cy.get( '[data-test="popup-create_product"]' ).click()
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Create" ) ) {
+          if( $el.text().includes( "Create" ) &&
+            !$el.text().includes( "product update" ) ||
+            !$el.text().includes( "product create" )
+          ) {
             cy.contains( 'Create' )
             cy.get( '[data-test="iki div test"]' ).should( "exist" )
             //  form
@@ -80,14 +85,19 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( "Update action product", () => {
+  it( "bisa mengubah data di dalam form produk", () => {
     cy.visit( '/product/list?page=1&take=10' )
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
-      if( $el.text().includes( "product create" ) || !$el.text().includes( "product update" ) ) {
+      if( $el.text().includes( "product create" ) ||
+        !$el.text().includes( "product update" )
+      ) {
 
         cy.get( '[data-test="popup-update_product_product create"]' ).click( { force: true, multiple: true } )
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Edit" ) ) {
+          if( $el.text().includes( "Edit" ) &&
+            !$el.text().includes( "product update" ) ||
+            $el.text().includes( "product create" )
+          ) {
             //  form
             cy.get( `[data-test="${ formProduct.nama }_product create"]` ).clear().type( "product update" )
             cy.get( `[data-test="${ formProduct.harga }_product create"]` ).clear().type( "20000" )
@@ -110,7 +120,7 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( 'delete after action', () => {
+  it( 'bisa menghapus data di dalam list produk', () => {
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
       if( $el.text().includes( "product update" ) ) {
         cy.get( '[data-test="popup-delete_product_product update"]' ).click()
@@ -141,7 +151,7 @@ describe( 'template spec', () => {
   it.skip( "create form", () => {
     cy.get( `[data-test="list-product"]` ).then( ( $el ) => {
         cy.wait( 500 )
-        if( $el.text().includes( "update product" ) ) {
+      if( $el.text().includes( "product update" ) ) {
           cy.get( `[data-test="delete-update product"]` ).click()
           cy.wait( 500 )
         }

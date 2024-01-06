@@ -48,7 +48,7 @@ export const StatusButton = ( { status, id, }: { status: TStatusProduk, id: stri
     <label
       htmlFor={ `my_modal_status_${ id }` }
       className={ "btn btn-sm sm:btn-md text-white whitespace-nowrap " + statusWarna( status ) }>
-      { status }
+      ubah { status }
     </label>
 
     <input type="checkbox"

@@ -1,12 +1,12 @@
 import { formBank } from '../../../assets/model';
 import { jpgTextNotFound } from '../../../assets/default';
 
-describe( 'template spec', () => {
+describe( 'pengujian halaman bank', () => {
   beforeEach( () => {
     cy.visit( '/bank/list?page=1&take=10' )
   } )
 
-  it( "click bank", () => {
+  it( "bisa melakukan beberapa aksi tombol pada page bank", () => {
 
 // create button
     cy.get( '[data-test="popup-create_bank"]' ).click()
@@ -45,14 +45,18 @@ describe( 'template spec', () => {
     cy.wait( 500 )
   } )
 
-  it( "Create action bank", () => {
+  it( "bisa membuat data di dalam form bank", () => {
     cy.visit( '/bank/list?page=1&take=10' )
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
-      if( !$el.text().includes( "bank create" ) ) {
+      if( !$el.text().includes( "bank create" ) ||
+        !$el.text().includes( "bank update" ) ) {
 
         cy.get( '[data-test="popup-create_bank"]' ).click()
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Create" ) ) {
+          if( $el.text().includes( "Create" ) ||
+            !$el.text().includes( "bank update" ) ||
+            !$el.text().includes( "bank create" )
+          ) {
             cy.contains( 'Create' )
             cy.get( '[data-test="iki div test"]' ).should( "exist" )
             // create form
@@ -79,14 +83,17 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( "Update action bank", () => {
+  it( "bisa mengubah data di dalam form bank", () => {
     cy.visit( '/bank/list?page=1&take=10' )
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
       if( $el.text().includes( "bank create" ) || !$el.text().includes( "bank update" ) ) {
 
         cy.get( '[data-test="popup-update_bank_bank create"]' ).click( { force: true, multiple: true } )
         cy.get( `[data-test="popup-modal"]` ).then( ( $el ) => {
-          if( $el.text().includes( "Edit" ) ) {
+          if( $el.text().includes( "Edit" ) ||
+            !$el.text().includes( "bank update" ) ||
+            $el.text().includes( "bank create" )
+          ) {
             cy.get( `[data-test="${ formBank.nama }_bank create"]` ).clear().type( "bank update" )
             cy.get( `[data-test="${ formBank.lokasi }_bank create"]` ).clear().type( "ungaran" )
             cy.get( `[data-test="${ formBank.jenis }_bank create"]` ).clear().type( "titl" )
@@ -110,7 +117,7 @@ describe( 'template spec', () => {
     } )
   } )
 
-  it( 'delete after action', () => {
+  it( 'bisa menghapus data di dalam list bank', () => {
     cy.get( `[data-test="test-master"]` ).then( ( $el ) => {
       if( $el.text().includes( "bank update" ) ) {
         cy.get( '[data-test="popup-delete_bank_bank update"]' ).click()

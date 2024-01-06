@@ -1,10 +1,10 @@
-import { TCREATEPRODUCT } from '@/lib/validation/zod/createZod';
+import { TCREATEPRODUCT } from '../../../lib/validator/zod';
 
 describe( 'PRODUCT spec', () => {
 
   describe( 'CREATE Product', () => {
 
-    it( "POST Product", () => {
+    it( "bisa melakukan membuat data produk dengan method POST", () => {
       cy.request(
         'POST',
         'http://localhost:3000/api/product', {
@@ -28,7 +28,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "POST Product fail because data can't be empty", () => {
+    it( "tidak bisa membuat data karena data produk kosong", () => {
       cy.request( {
           method          : 'POST',
           url             : 'http://localhost:3000/api/product',
@@ -51,7 +51,7 @@ describe( 'PRODUCT spec', () => {
 
   describe( 'FIND Product', () => {
 
-    it( "GET Product", () => {
+    it( "bisa melakukan mengambil data produk menggunakan method GET", () => {
       cy.request( 'http://localhost:3000/api/product?id=all' )
         .then( ( response ) => {
           cy.log( response.body )
@@ -63,7 +63,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "GET Product by id", () => {
+    it( "bisa melakukan mengambil data produk menggunakan method GET dengan id", () => {
       cy.request( 'http://localhost:3000/api/product?id=test_1' )
         .then( ( response ) => {
           cy.log( response.body )
@@ -75,7 +75,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "GET Product be error because empty id", () => {
+    it( "tidak bisa mengambil data produk menggunakan method GET karena id kosong", () => {
       cy.request( {
         method          : 'GET',
         url             : 'http://localhost:3000/api/product?id=',
@@ -94,7 +94,8 @@ describe( 'PRODUCT spec', () => {
   } )
 
   describe( 'EDIT Product', () => {
-    it( "UPDATE Product", () => {
+
+    it( "bisa melakukan mengedit data produk menggunakan method PUT", () => {
       cy.request(
         'PUT',
         'http://localhost:3000/api/product?id=test_1', {
@@ -117,7 +118,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "EDIT Product fail because data can't be empty", () => {
+    it( "tidak bisa mengedit data produk karena data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -137,7 +138,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "EDIT Product fail because data can't be empty id", () => {
+    it( "tidak bisa mengedit data produk karena id dan data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -160,7 +161,7 @@ describe( 'PRODUCT spec', () => {
 
   describe( 'DELETE PRODUCTS', () => {
 
-    it( "DELETE Product", () => {
+    it( "bisa melakukan menghapus data produk menggunakan method DELETE", () => {
       cy.request(
         {
           method: 'DELETE',
@@ -179,7 +180,7 @@ describe( 'PRODUCT spec', () => {
         } )
     } )
 
-    it( "DELETE Product error because data can't be empty id", () => {
+    it( "tidak bisa melakukan menghapus data produk karena id kosong", () => {
       cy.request(
         {
           method          : 'DELETE',

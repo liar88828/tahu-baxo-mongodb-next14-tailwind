@@ -7,7 +7,7 @@ import { setIdDelivery } from '@/lib/utils/setID';
 import { notifyData } from '@/lib/utils/toast';
 import { FormBody, FormButton, FormLayout, FormPrev } from '@/components/Form';
 import { InputForm } from '@/components/elements/InputForm';
-import { formBank, formTravel } from '@/assets/model';
+import { formTravel } from '@/assets/model';
 import { OpenButton, SubmitButton } from '@/components/elements/Buttons';
 import { ImagePrev, LayoutImagePrev } from '@/components/Images';
 import { img } from '@/assets/default';
@@ -120,7 +120,7 @@ export default function FormDeliver(
                    reg={ register( "keterangan" ) }/>
 
         <InputForm method={ dataTest } errors={ errors }
-                   title={ formBank.img }
+                   title={ formTravel.img }
                    type="text"
                    min={ 0 }
                    max={ 300 }

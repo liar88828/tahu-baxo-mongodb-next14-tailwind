@@ -1,11 +1,10 @@
-import { TCREATEDELIVER } from '@/lib/validation/zod/createZod';
-import { TUPDATEDELIVER } from '@/lib/validation/zod/updateZod';
+import { TCREATEDELIVER, TUPDATEDELIVER } from '../../../lib/validator/zod';
 
 describe( 'DELIVERY spec', () => {
 
   describe( 'CREATE DELIVERY', () => {
 
-    it( "POST DELIVERY", () => {
+    it( "bisa melakukan membuat data delivery dengan method POST", () => {
       cy.request(
         'POST',
         'http://localhost:3000/api/delivery', {
@@ -29,7 +28,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "POST DELIVERY fail because data can't be empty", () => {
+    it( "tidak bisa membuat data  delivery karena data kosong", () => {
       cy.request( {
           method          : 'POST',
           url             : 'http://localhost:3000/api/delivery',
@@ -52,7 +51,7 @@ describe( 'DELIVERY spec', () => {
 
   describe( 'FIND DELIVERY', () => {
 
-    it( "GET DELIVERY", () => {
+    it( "bisa melakukan mengambil data delivery menggunakan method GET ", () => {
       cy.request( 'http://localhost:3000/api/delivery?id=all' )
         .then( ( response ) => {
 
@@ -64,7 +63,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "GET DELIVERY by id", () => {
+    it( "bisa melakukan mengambil data delivery menggunakan method GET dengan id", () => {
       cy.request( 'http://localhost:3000/api/delivery?id=test_1' )
         .then( ( response ) => {
 
@@ -76,7 +75,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "GET DELIVERY be error because empty id", () => {
+    it( "tidak bisa mengambil data delivery menggunakan method GET karena id kosong", () => {
       cy.request( {
         method          : 'GET',
         url             : 'http://localhost:3000/api/delivery?id=',
@@ -95,7 +94,8 @@ describe( 'DELIVERY spec', () => {
   } )
 
   describe( 'EDIT DELIVERY', () => {
-    it( "UPDATE DELIVERY", () => {
+
+    it( "bisa melakukan mengedit data delivery menggunakan method PUT", () => {
       cy.request(
         'PUT',
         'http://localhost:3000/api/delivery?id=test_1', {
@@ -119,7 +119,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "EDIT DELIVERY fail because data can't be empty", () => {
+    it( "tidak bisa mengedit data delivery karena data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -139,7 +139,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "EDIT DELIVERY fail because data can't be empty id", () => {
+    it( "tidak bisa mengedit data delivery karena id dan data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -162,7 +162,7 @@ describe( 'DELIVERY spec', () => {
 
   describe( 'DELETE DELIVERY', () => {
 
-    it( "DELETE DELIVERY", () => {
+    it( "bisa melakukan menghapus data delivery menggunakan method DELETE", () => {
       cy.request(
         {
           method: 'DELETE',
@@ -181,7 +181,7 @@ describe( 'DELIVERY spec', () => {
         } )
     } )
 
-    it( "DELETE DELIVERY error because data can't be empty id", () => {
+    it( "tidak bisa melakukan menghapus data delivery karena id kosong", () => {
       cy.request(
         {
           method          : 'DELETE',

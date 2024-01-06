@@ -174,7 +174,7 @@ export function TableOrder( { dataOrderan }: {
         {
           accessorKey: 'hpPenerima',
           header     : 'Telephone Penerima',
-          cell       : info =>  formatPhone( info.getValue() as string ),
+          cell: info => formatPhone( info.getValue() as string ),
           footer     : 'Telephone Penerima',
         },
         // @ts-ignore
@@ -595,112 +595,115 @@ export function TableOrder( { dataOrderan }: {
       </div>
     </div>
 
-    <div className="flex gap-2 overflow-x-auto w-auto flex-wrap mt-2">
+    <div className=" ">
+      <div className={ 'flex gap-2 overflow-x-auto w-auto flex-wrap mt-2' }>
 
-      {/*  will move my path name*/ }
-      { listComplex.map( d => {
-        const h = d.href.split( "/" ).pop() === slug
-                  ? " btn-disabled "
-                  : ""
-        return ( <div key={ d.title + d.href }>
-          <Link
-            data-test={ 'link-' + d.title }
-            href={ d.href }
-            className={ ` btn  ${ d.className } ${ h }` }
-          >
-            { d.title }
-          </Link>
-        </div> )
-      } ) }
+        {/*  will move my path name*/ }
+        { listComplex.map( d => {
+          const h = d.href.split( "/" ).pop() === slug
+                    ? " btn-disabled "
+                    : ""
+          return ( <div key={ d.title + d.href }>
+            <Link
+              data-test={ 'link-' + d.title }
+              href={ d.href }
+              className={ ` btn  ${ d.className } ${ h }` }
+            >
+              { d.title }
+            </Link>
+          </div> )
+        } ) }
 
-      {/*------------Check Visible----------------*/ }
-
-
-      { tables.length > 0 ?
-        ( <DeleteTable ids={ tables.map( d => d.original.id as string ) }
-        /> ) : ""
-      }
-
-
-      { tables.length === 1 &&
-        ( <EditTable id={ tables[ 0 ].original.id as string }/> ) }
-
-      { ToggleOn && tables.length > 0 &&
-        <button onClick={ () => {
-          exportToExcel( table.getRowModel().flatRows as any )
-        } } className=" btn btn-sm sm:btn-md text-white bg-green-400 ">
-          Excel
-        </button> }
-      {/* @ts-ignore*/ }
-      { tables.length > 0 && <PrintButton title={ "Memo" } color={ "bg-orange-400" } table={ tables }/> }
-      {/* @ts-ignore*/ }
-      { tables.length > 0 && <PrintButton title={ "Termal" } color={ "bg-yellow-400" } table={ tables }/> }
-
-      { tables.length === 1
-        && <StatusButton
-          id={ tables[ 0 ].original.id as string }
-          status={ tables[ 0 ].original.status }
-        /> }
-
-      <div>
-
-        {/*<LinkStatus/>*/ }
-
-        {/*<Link*/ }
-        {/*  data-test={ 'link-Create'   }*/ }
-        {/*  href={ '/orderan/create' }*/ }
-        {/*  className={ ` btn bg-primary text-white shadow` }*/ }
-        {/*>*/ }
-        {/*  Create*/ }
-        {/*</Link>*/ }
-
-        <button
-          onClick={ () => setOpen( !open ) }
-          className={ " btn btn-sm sm:btn-md text-white bg-purple-600 mb-2" }>
-          { open ? "Open" : "Close" }
-        </button>
-
-
-        <div className={ `cursor-pointer gap-2 text-white rounded flex flex-wrap ${ open ? "hidden" : "" }` }>
-
-          <div className="p-1 border border-black text-black z-50 rounded bg-white w-fit ">
-            <label htmlFor={ "checkbox1" }>
-              <input
-                name={ "checkbox1" }
-                className={ "mr-1" }
-                { ...{
-                  type    : 'checkbox',
-                  checked : table.getIsAllColumnsVisible(),
-                  onChange: table.getToggleAllColumnsVisibilityHandler(),
-                } }
-              />
-              Toggle All
-            </label>
-          </div>
-
-          { table.getAllLeafColumns().map( ( column, i ) => ( <div
-              key={ column.id + `${ i }` }
-              className={ `p-1 border border-black text-black z-50 rounded ${
-                setColumn( column ) }` }>
-              <label htmlFor={ "checkbox2" }>
-                <input
-                  name={ "checkbox2" }
-                  className={ "mr-1" }
-
-                  { ...{
-                    type    : 'checkbox',
-                    checked : column.getIsVisible(),
-                    onChange: column.getToggleVisibilityHandler(),
-                  } }
-                />
-                {/*{ i + 1 }.*/ }
-                { ToggleName( column ) }
-              </label>
-            </div>
-          ) ) }
-        </div>
+        {/*------------Check Visible----------------*/ }
       </div>
 
+      <div className={ 'flex gap-2 overflow-x-auto w-auto flex-wrap mt-2' }>
+
+        { tables.length > 0 ?
+          ( <DeleteTable ids={ tables.map( d => d.original.id as string ) }
+          /> ) : ""
+        }
+
+
+        { tables.length === 1 &&
+          ( <EditTable id={ tables[ 0 ].original.id as string }/> ) }
+
+        { ToggleOn && tables.length > 0 &&
+          <button onClick={ () => {
+            exportToExcel( table.getRowModel().flatRows as any )
+          } } className=" btn btn-sm sm:btn-md text-white bg-green-400 ">
+            Excel
+          </button> }
+        {/* @ts-ignore*/ }
+        { tables.length > 0 && <PrintButton title={ "Memo" } color={ "bg-orange-400" } table={ tables }/> }
+        {/* @ts-ignore*/ }
+        { tables.length > 0 && <PrintButton title={ "Termal" } color={ "bg-yellow-400" } table={ tables }/> }
+
+        { tables.length === 1
+          && <StatusButton id={ tables[ 0 ].original.id as string } status={ tables[ 0 ].original.status }
+          /> }
+
+        <div>
+
+          {/*<LinkStatus/>*/ }
+
+          {/*<Link*/ }
+          {/*  data-test={ 'link-Create'   }*/ }
+          {/*  href={ '/orderan/create' }*/ }
+          {/*  className={ ` btn bg-primary text-white shadow` }*/ }
+          {/*>*/ }
+          {/*  Create*/ }
+          {/*</Link>*/ }
+
+          <button
+            onClick={ () => setOpen( !open ) }
+            className={ " btn btn-sm sm:btn-md text-white bg-purple-600 mb-2" }>
+            { open ? "Open" : "Close" }
+          </button>
+
+
+          <div className={ `cursor-pointer gap-2 text-white rounded flex flex-wrap ${ open ? "hidden" : "" }` }>
+
+            <div className="p-1 border border-black text-black z-50 rounded bg-white w-fit ">
+              <label htmlFor={ "checkbox1" }>
+                <input
+                  name={ "checkbox1" }
+                  className={ "mr-1" }
+                  { ...{
+                    type    : 'checkbox',
+                    checked : table.getIsAllColumnsVisible(),
+                    onChange: table.getToggleAllColumnsVisibilityHandler(),
+                  } }
+                />
+                Toggle All
+              </label>
+            </div>
+
+            { table.getAllLeafColumns().map( ( column, i ) => ( <div
+                key={ column.id + `${ i }` }
+                className={ `p-1 border border-black text-black z-50 rounded ${
+                  setColumn( column ) }` }>
+                <label htmlFor={ "checkbox2" }>
+                  <input
+                    name={ "checkbox2" }
+                    className={ "mr-1" }
+
+                    { ...{
+                      type    : 'checkbox',
+                      checked : column.getIsVisible(),
+                      onChange: column.getToggleVisibilityHandler(),
+                    } }
+                  />
+                  {/*{ i + 1 }.*/ }
+                  { ToggleName( column ) }
+                </label>
+              </div>
+            ) ) }
+          </div>
+        </div>
+
+
+      </div>
 
     </div>
 
@@ -722,7 +725,7 @@ export function TableOrder( { dataOrderan }: {
 //   return ( <div>
 //
 
-  // </div>
+// </div>
 // )
 // }
 //

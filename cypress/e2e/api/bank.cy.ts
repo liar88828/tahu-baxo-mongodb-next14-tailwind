@@ -1,11 +1,10 @@
-import { TCREATEBANK } from '@/lib/validation/zod/createZod';
-import { TUPDATEBANK } from '@/lib/validation/zod/updateZod';
+import { TCREATEBANK, TUPDATEBANK } from '../../../lib/validator/zod';
 
 describe( 'BANK spec', () => {
 
   describe( 'CREATE Bank', () => {
 
-    it( "POST Bank", () => {
+    it( "bisa melakukan membuat data orderan dengan method POST", () => {
       cy.request(
         'POST',
         'http://localhost:3000/api/bank', {
@@ -29,7 +28,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "POST Bank fail because data can't be empty", () => {
+    it( "tidak bisa membuat data karena data orderan kosong", () => {
       cy.request( {
           method          : 'POST',
           url             : 'http://localhost:3000/api/bank',
@@ -52,7 +51,7 @@ describe( 'BANK spec', () => {
 
   describe( 'FIND Bank', () => {
 
-    it( "GET Bank", () => {
+    it( "bisa melakukan mengambil data orderan menggunakan method GET", () => {
       cy.request( 'http://localhost:3000/api/bank?id=all' )
         .then( ( response ) => {
 
@@ -64,7 +63,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "GET Bank by id", () => {
+    it( "bisa melakukan mengambil data orderan menggunakan method GET dengan id", () => {
       cy.request( 'http://localhost:3000/api/bank?id=test_1' )
         .then( ( response ) => {
 
@@ -76,7 +75,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "GET Bank be error because empty id", () => {
+    it( "tidak bisa mengambil data orderan menggunakan method GET karena id kosong", () => {
       cy.request( {
         method          : 'GET',
         url             : 'http://localhost:3000/api/bank?id=',
@@ -95,7 +94,8 @@ describe( 'BANK spec', () => {
   } )
 
   describe( 'EDIT Bank', () => {
-    it( "UPDATE Bank", () => {
+
+    it( "bisa melakukan mengedit data orderan menggunakan method PUT", () => {
       cy.request(
         'PUT',
         'http://localhost:3000/api/bank?id=test_1', {
@@ -119,7 +119,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "EDIT Bank fail because data can't be empty", () => {
+    it( "tidak bisa mengedit data orderan karena data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -139,7 +139,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "EDIT Bank fail because data can't be empty id", () => {
+    it( "tidak bisa mengedit data orderan karena id dan data kosong", () => {
       cy.request(
         {
           method          : 'PUT',
@@ -162,7 +162,7 @@ describe( 'BANK spec', () => {
 
   describe( 'DELETE Bank', () => {
 
-    it( "DELETE Bank", () => {
+    it( "bisa melakukan menghapus data orderan menggunakan method DELETE", () => {
       cy.request(
         {
           method: 'DELETE',
@@ -181,7 +181,7 @@ describe( 'BANK spec', () => {
         } )
     } )
 
-    it( "DELETE Bank error because data can't be empty id", () => {
+    it( "tidak bisa melakukan menghapus data orderan karena id kosong", () => {
       cy.request(
         {
           method          : 'DELETE',
