@@ -1,12 +1,13 @@
-import ServerComponent from '@/app/(pages)/dashboard/dashboard';
-import { Suspense } from 'react';
-import { SearchParams } from '@/interface/model';
-import { SkeletonCard } from '@/components/Skeleton';
+import Link from 'next/link'
 
-export default function Page( { searchParams }: SearchParams ) {
-  return <Suspense fallback={ <SkeletonCard/> }>
-    <ServerComponent id={ searchParams.id as string ?? 'Kirim' }/>
-  </Suspense>
+export default function Page() {
+	return (
+		<div className=''>
+			<Link
+				href='/home'
+				className='btn btn-outline'>
+				Click
+			</Link>
+		</div>
+	)
 }
-
-
