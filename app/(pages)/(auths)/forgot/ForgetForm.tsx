@@ -3,7 +3,8 @@ import { useFormState } from 'react-dom'
 import { changePassword, createOTP, TAction } from '@/app/(pages)/(auths)/forgot/action';
 import Horizon from '@/components/elements/Horizon';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import {redirect, useRouter} from 'next/navigation';
+import {useSession} from "next-auth/react";
 
 const initialState: TAction = {
   message: '',
@@ -17,8 +18,16 @@ function ForgetForm() {
   // const route                         = useRouter()
   if( statePass?.success ) {
     redirect( '/login' )
-
   }
+
+  const router = useRouter();
+  const {data} = useSession()
+  // console.log(data)
+  if (data !== null) {
+    router.replace('/')
+  }
+
+
   // console.log( timeOtp( 5 ))
 
   console.log( stateOTP, statePass )

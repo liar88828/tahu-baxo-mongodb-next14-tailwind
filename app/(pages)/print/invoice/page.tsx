@@ -17,7 +17,7 @@ const MyComponent = () => {
   const [ table, setTable ] = useState( [] );
 
   useEffect( () => {
-    const tableData = sessionStorage.getItem( "termal" )
+    const tableData = sessionStorage.getItem( "invoice" )
     if( tableData ) {
       setTable( JSON.parse( tableData ) )
     }

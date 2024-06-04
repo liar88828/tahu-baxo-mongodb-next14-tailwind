@@ -160,3 +160,46 @@ model Bank {
 
   @@map("Banks")
 }
+
+//
+// model SemuaProduct {
+//   id         String   @id @default(uuid())
+//   nama       String   @db.VarChar(100)
+//   lokasi     String   @db.VarChar(100)
+//   jenis      String   @db.VarChar(100)
+//   harga      Int      @db.Integer
+//   jumlah     Int      @db.Integer
+//   img        String   @db.Text
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+//   Orderan    Orderan? @relation(fields: [orderanId], references: [id])
+//   orderanId  String?
+//
+//
+//   @@map("SemuaProducts")
+// }
+//
+// model Orderan {
+//   id             String         @id @default(uuid())
+//   dari           String         @db.VarChar(20)
+//   pengirim       String         @db.VarChar(100)
+//   hpPengirim     String         @db.VarChar(20)
+//   penerima       String         @db.VarChar(100)
+//   alamatPenerima String         @db.VarChar(100)
+//   hpPenerima     String         @db.VarChar(100)
+//   pesan          DateTime       @db.Date
+//   waktuKirim     DateTime       @db.Timestamp
+//   guna           String         @db.Text
+//   lokasi         String         @db.VarChar(100)
+//   namaPengiriman String         @db.VarChar(100)
+//   ongkir         Int            @db.Integer
+//   typePembayaran String         @db.VarChar(100)
+//   totalBayar     Int            @db.Integer
+//   totalPenjualan Int            @db.Integer
+//   status         String         @db.VarChar(20)
+//   semuaProduct   SemuaProduct[]
+//   created_at     DateTime       @default(now())
+//   updated_at     DateTime       @updatedAt
+//
+//   @@map("Orderans")
+// }

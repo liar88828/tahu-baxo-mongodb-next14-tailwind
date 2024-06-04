@@ -46,9 +46,23 @@ export type TAggregate = {
 
 }
 
+export type BarStatus = {
+  nama: string,
+  jumlah_terima: number,
+  jumlah_proses: number,
+  jumlah_selesai: number,
+
+  total_terima: number,
+  total_proses: number
+  total_selesai: number
+
+}
+
 //untuk notif
 export type TLine = {
-  year: number,
+  // year: number,
+  // month: string,
+  status: string
   month: string,
   jumlah_pesanan: bigint
 };
@@ -68,8 +82,16 @@ export type TStatus = {
 }
 
 export type TLines = {
-  year: number,
-  month: string,
+  // year: number,
+  // month: string,
+  status: string,
+  month: number,
   jumlah_pesanan: number
 };
 
+export type PenjualanTotalProdukBulanSekarang={
+  harga_produk:number,
+  jumlah_produk:number,
+  nama:string,
+  total?:number
+}

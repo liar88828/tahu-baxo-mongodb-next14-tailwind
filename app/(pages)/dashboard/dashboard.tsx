@@ -51,6 +51,7 @@ export default async function ServerComponent( { id }: { id: string } ) {
           </div>
           <div className="  sm:h-[30vw]  shadows bg-white rounded-3xl p-2">
             <Donat dataKu={ dataChart.data.DonatChart }/>
+            {/*<Donat dataKu={ dataChart.data.BarVerticalChart  }/>*/}
           </div>
         </div>
       </div>

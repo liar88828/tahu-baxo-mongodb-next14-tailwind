@@ -15,9 +15,11 @@ export async function GET( request: NextRequest ) {
       if( option === "all" ) {
         return {
           // ListDashboard   : await dashboard.statusNotify(),
-          LineChart       : await dashboard.semuaOrderTahun(),
-          DonatChart      : await dashboard.semuaProductLast(),
-          BarVerticalChart: await dashboard.aggregateProductPerMonth(),
+          LineChart       : await dashboard.semuaOrderStatus(),
+          BarVerticalChart: await dashboard.productPerMonthStatus(),
+          // DonatChart      : await dashboard.semuaProductLast(),
+          DonatChart      : await dashboard.PenjualanDonat(),
+          // BarVerticalChart: await dashboard.aggregateProductPerMonth(),
         }
 
       }
