@@ -17,6 +17,14 @@ declare module 'next-auth' {
 	// 		role: string
 	// 	}
 	// }
+	interface Profile {
+		email_verified:string
+		email:string
+	}
+
+	interface Account {
+
+	}
 
 	interface Session {
 		user: User & {

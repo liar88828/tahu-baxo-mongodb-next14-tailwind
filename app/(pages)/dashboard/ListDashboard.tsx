@@ -6,7 +6,7 @@ import { listsMenu } from '@/assets/list';
 
 export function ListDashboard(
   { data }: { data: TStatus[] } ) {
-  console.log( data )
+  // console.log( data )
 
   const objectArray = data.map( d => {
     const count = d._count.status
@@ -35,4 +35,3 @@ export function ListDashboard(
     </div>
   );
 }
-

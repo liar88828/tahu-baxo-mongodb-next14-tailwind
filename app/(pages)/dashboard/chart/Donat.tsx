@@ -3,13 +3,13 @@ import React from 'react';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
-import { TDonat } from '@/interface/dashboard';
+import {PenjualanTotalProdukBulanSekarang, TDonat} from '@/interface/dashboard';
 import { DataEmpty } from '@/components/Errors';
 
 ChartJS.register( ArcElement, Tooltip, Legend );
 
 export default function Donat( { dataKu }: {
-  dataKu: TDonat[]
+  dataKu: PenjualanTotalProdukBulanSekarang[]
 } ) {
   if(dataKu.length === 0) {
     return <DataEmpty/>
@@ -18,7 +18,7 @@ export default function Donat( { dataKu }: {
   const today = new Date(); // Getting full month name (e.g. "September")
   const month = today.toLocaleString( 'id-ID', { month: 'long' } );
 
-  console.log( month );
+  // console.log( month );
   const produk: string[] = [
     // 'Tahu Bakso Rebus',
     // 'Tahu Bakso Vakum',
@@ -85,7 +85,7 @@ export default function Donat( { dataKu }: {
     datasets: [
       {
         label          : 'Per Bulan',
-        data           : dataKu.map( d => d._count.nama ),
+        data           : dataKu.map( d => d.total ),
         backgroundColor: produk.map( () => faker.color.rgb( { format: 'css' } ) ),
         borderColor    : [
           'rgba(255, 99, 132, 1)',

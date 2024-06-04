@@ -637,7 +637,7 @@ export function TableOrder( { dataOrderan }: {
         {/* @ts-ignore*/ }
         { tables.length > 0 && <PrintButton title={ "Memo" } color={ "bg-orange-400" } table={ tables }/> }
         {/* @ts-ignore*/ }
-        { tables.length > 0 && <PrintButton title={ "Termal" } color={ "bg-yellow-400" } table={ tables }/> }
+        { tables.length > 0 && <PrintButton title={ "Invoice" } color={ "bg-yellow-400" } table={ tables }/> }
 
         { tables.length === 1
           && <StatusButton id={ tables[ 0 ].original.id as string } status={ tables[ 0 ].original.status }
