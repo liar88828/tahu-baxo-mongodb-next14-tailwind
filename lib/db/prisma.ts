@@ -32,18 +32,15 @@ if( process.env.NODE_ENV !== 'production' ) globalForPrisma.prisma = prisma
  // const prisma = new PrismaClient()
 
 // export default prisma
-export type BankCreate = Prisma.Args<typeof prisma.bank, 'create'>['data']
-export type ProductCreate = Prisma.Args<typeof prisma.product, 'create'>['data']
-export type DeliveryCreate = Prisma.Args<typeof prisma.delivery, 'create'>['data']
-export type SemuaProductCreate = Prisma.Args<typeof prisma.semuaProduct, 'create'>['data']
-export type OrderanCreate = Prisma.Args<typeof prisma.orderan, 'create'>['data']
+export type BankCreate = Prisma.Args<typeof prisma.bankDB, 'create'>['data']
+export type ProductCreate = Prisma.Args<typeof prisma.productDB, 'create'>['data']
+export type DeliveryCreate = Prisma.Args<typeof prisma.deliveryDB, 'create'>['data']
+export type OrderanCreate = Prisma.Args<typeof prisma.orderanDB, 'create'>['data']
 
-export type BankUpdate = Prisma.Args<typeof prisma.bank, 'update'>['data']
-export type ProductUpdate = Prisma.Args<typeof prisma.product, 'update'>['data']
-export type DeliveryUpdate = Prisma.Args<typeof prisma.delivery, 'update'>['data']
-export type SemuaProductUpdate = Prisma.Args<typeof prisma.semuaProduct, 'update'>['data']
-export type OrderanUpdate = Prisma.Args<typeof prisma.orderan, 'update'>['data']
+export type BankUpdate = Prisma.Args<typeof prisma.bankDB, 'update'>['data']
+export type ProductUpdate = Prisma.Args<typeof prisma.productDB, 'update'>['data']
+export type DeliveryUpdate = Prisma.Args<typeof prisma.deliveryDB, 'update'>['data']
+export type OrderanUpdate = Prisma.Args<typeof prisma.orderanDB, 'update'>['data']
 
 export const  PrismaError= Prisma.PrismaClientKnownRequestError
 
-export type DonatChart = ( Prisma.PickEnumerable<Prisma.SemuaProductGroupByOutputType, "nama"[]> & {} );

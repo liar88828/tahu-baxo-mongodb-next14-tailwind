@@ -1,13 +1,16 @@
+import {NextRequest} from "next/server"
+
+import {Params} from "@/interface/params";
+
 export interface IController {
-  findAll ( request: NextRequest ): Promise<any>
+  findAll(request: NextRequest): Promise<Response>
 
-  findOne ( request: NextRequest ): Promise<any>
-
+  findId(request: NextRequest, params: Params): Promise<Response>
   // findPaginate(): Promise<any>
 
-  createOne ( request: NextRequest ): Promise<any>
+  createOne(request: NextRequest): Promise<Response>
 
-  updateOne ( request: NextRequest ): Promise<any>
+  updateOne(request: NextRequest, params: Params): Promise<Response>
 
-  deleteOne ( request: NextRequest ): Promise<any>
+  deleteOne(request: NextRequest, params: Params): Promise<Response>
 }

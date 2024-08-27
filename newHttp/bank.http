@@ -1,0 +1,60 @@
+### get data Bank
+GET http://localhost:3000/api/bank
+#Ma_09_Un_Kr_Bi_1693367481943
+### get data Bank by id
+
+### get data Bank
+GET http://localhost:3000/api/bank/2
+Content-Type: application/json
+
+####GET http://localhost:3000/api/bank?id=kosongkosongkosongkosongkosong
+POST http://localhost:3000/api/bank
+Content-Type: application/json
+
+{
+  "hp": "(081 242 2333 234)",
+  "no": "123 2323324 2324 243",
+  "nama": "mandiri semarang 2",
+  "lokasi": "semarang",
+  "jenis": "atm",
+  "keterangan": "orak genah"
+}
+
+
+
+### create data Bank
+POST http://localhost:3000/api/bank
+Content-Type: application/json
+
+{
+  "hp": "test1",
+  "no": "asdasdas",
+  "nama": "mandiri",
+  "lokasi": "Semrang",
+  "keterangan": "orak jelas",
+  "img": "https://logowik.com/content/uploads/images/cash2548.jpg",
+  "jenis": "Kredit"
+}
+
+###
+
+### update data Bank
+PUT http://localhost:3000/api/bank/2
+Content-Type: application/json
+
+{
+  "hp": "test1",
+  "no": "asdasdas",
+  "nama": "mandiri apik",
+  "lokasi": "Semrang",
+  "keterangan": "orak jelas",
+  "img": "https://logowik.com/content/uploads/images/cash2548.jpg",
+  "jenis": "Kredit"
+}
+
+###
+DELETE http://localhost:3000/api/bank/2
+Content-Type: application/json
+
+{
+}

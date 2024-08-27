@@ -1,26 +1,31 @@
-import { NextRequest } from 'next/server';
+import {NextRequest} from 'next/server'
 
+import {Params} from "@/interface/params";
 
 export type GetId = {
-  id: string | number
+  id: string
+}
+export type GetIdInt = {
+  id: number
 }
 export type GetPage = {
-  page: number
-  take: number
+	page: number
+	take: number
 }
 
-export type GetData = {
-  data: Object
+export type GetData<T > = {
+	data: T
 }
 
-export type GetUpdate = {
-  data: Object
-  id: string | number
+export type GetUpdate<D> = {
+  data: D
+  id: string
 }
-export interface IServiceRequest
-{
-  getId ( request: NextRequest ): GetId;
-  getPage ( request: NextRequest ): GetPage;
-  getData ( request: NextRequest ): Promise<GetData>;
-  getUpdate ( request: NextRequest ): Promise<GetUpdate>
+export interface IServiceRequest {
+  getId(params: Params): GetId
+	getPage(request: NextRequest): GetPage
+
+  getData<T>(request: NextRequest): Promise<GetData<T>>
+
+  getUpdate<T, U>(request: NextRequest, params: Params): Promise<GetUpdate<T, U>>
 }

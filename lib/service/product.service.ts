@@ -1,43 +1,51 @@
-import { DeliveryUpdate } from '../db/prisma';
-import { DeliveryCreate } from '../validator/schema/deliver.schema';
-import prisma from '@/lib/db/prisma';
+import {ProductCreate, ProductUpdate} from './../db/prisma'
+import prisma from '@/lib/db/prisma'
+import {ProductDB} from '@prisma/client'
 
-export class ProductService
-{
-  async findAll ( page: number, take: number = 100 )
-  {
-    return prisma.$transaction( async ( tx ) =>
-    {
-      const count = await tx.product.count()
-      const res = await tx.product.findMany( {
+export class ProductService {
+  async findAll(page: number, take: number = 100) {
+    return prisma.$transaction(async (tx) => {
+      const data = await tx.productDB.findMany({
         take: take,
-        skip: ( page - 1 ) * take,
-      } )
-      return { res, count }
-    } )
+        skip: (page - 1) * take,
+      })
+      return {data, page, take}
+    })
   }
 
   // async findAll() {
   //   return prisma.bank.findAll()
   // }
 
-  async findOne ( id: number )
-  {
-    return prisma.product.findUnique( { where: { id } } )
+  async findOne(id: number): Promise<ProductDB> {
+    const data = await prisma.productDB.findUnique({where: {id}})
+    if (!data) {
+      throw new Error('Data Product is Not found ')
+    }
+    return data
   }
 
-  async createOne ( data: DeliveryCreate )
-  {
-    return prisma.product.create( { data: { ...data } } )
+  async createOne({id, ...data}: ProductCreate) {
+    return prisma.productDB.create({
+      data: {
+        harga: data.harga,
+        img: data.img,
+        jenis: data.jenis,
+        lokasi: data.lokasi,
+        keterangan: data.keterangan,
+        nama: data.nama,
+        jumlah: data.jumlah,
+        ...(id ? {id} : {}),
+      },
+    })
   }
 
-  async updateOne ( data: DeliveryUpdate, id: string, )
-  {
-    return prisma.product.update( { data: { ...data }, where: { id: id } } )
+  async updateOne(data: ProductUpdate, id: number) {
+    console.log("id : ", id)
+    return prisma.productDB.update({data: {...data}, where: {id: id}})
   }
 
-  async deleteOne ( id: String )
-  {
-    return prisma.product.delete( { where: { id } } )
+  async deleteOne(id: number) {
+    return prisma.productDB.delete({where: {id}})
   }
 }

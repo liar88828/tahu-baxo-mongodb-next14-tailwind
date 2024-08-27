@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -16,12 +16,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token String?
+  access_token  String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token      String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -45,12 +45,12 @@ model User {
   name          String
   email         String    @unique
   emailVerified Boolean   @default(false)
-  image         String?
+  image String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
   accounts      Account[]
   sessions      Session[]
   //
   role          String    @default("USER")
-  password      String? 
+  password      String?
   otp           Int?
   expiresOtp    DateTime?
 
@@ -66,140 +66,78 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-model SemuaProduct {
-  id         String   @id @default(uuid())
-  nama       String   @db.VarChar(100)
-  lokasi     String   @db.VarChar(100)
-  jenis      String   @db.VarChar(100)
-  harga      Int      @db.Integer
-  jumlah     Int      @db.Integer
-  img        String   @db.Text
-  // keterangan String   @db.Text
-  // at update / create
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Orderan    Orderan? @relation(fields: [orderanId], references: [id])
-  orderanId  String?
-
-  // relational
-  // Orderan    Orderan? @relation(fields: [orderanId], references: [id])
-  // orderanId  String?  @unique
-  @@map("SemuaProducts")
-}
-
-model Orderan {
-  id             String         @id @default(uuid())
+model OrderanDB {
+  id             String   @id @default(uuid())
   // orang
-  dari           String         @db.VarChar(20)
-  pengirim       String         @db.VarChar(100)
-  hpPengirim     String         @db.VarChar(20)
-  penerima       String         @db.VarChar(100)
-  alamatPenerima String         @db.VarChar(100)
-  hpPenerima     String         @db.VarChar(100)
+  dari           String
+  pengirim       String
+  hpPengirim     String
+  penerima       String
+  alamatPenerima String
+  hpPenerima     String
   // tanggal
-  pesan          DateTime       @db.Date
-  waktuKirim     DateTime       @db.Timestamp
+  pesan          DateTime
+  waktuKirim     DateTime
   // keterangan
-  guna           String         @db.Text
-  lokasi         String         @db.VarChar(100)
+  guna           String
+  lokasi         String
   // travel
-  namaPengiriman String         @db.VarChar(100)
-  ongkir         Int            @db.Integer
+  namaPengiriman String
+  ongkir         Int
   // total
-  typePembayaran String         @db.VarChar(100)
-  totalBayar     Int            @db.Integer
-  totalPenjualan Int            @db.Integer
-  status         String         @db.VarChar(20)
+  typePembayaran String
+  totalBayar     Int
+  totalPenjualan Int
+  status         String
   // semua
-  semuaProduct   SemuaProduct[]
   // at update / create
-  created_at     DateTime       @default(now())
-  updated_at     DateTime       @updatedAt
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
-  @@map("Orderans")
+  TransactionDB   TransactionDB? @relation(fields: [transactionDBId], references: [id])
+  transactionDBId Int?           @unique
 }
 
-model Product {
-  id         String   @id @default(uuid())
-  nama       String   @unique @db.VarChar(100)
-  lokasi     String   @db.VarChar(100)
-  jenis      String   @db.VarChar(100)
-  img        String   @db.Text
-  harga      Int      @db.Integer
-  jumlah     Int      @db.Integer
-  keterangan String   @db.Text
+model ProductDB {
+  id            Int             @id @default(autoincrement())
+  nama       String  @unique
+  lokasi     String
+  jenis      String
+  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  harga      Int
+  jumlah     Int
+  keterangan String
   // at update / create
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@map("Products")
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  TransactionDB TransactionDB[]
 }
 
-model Delivery {
-  id         String @id @default(uuid())
-  nama       String @unique
+model DeliveryDB {
+  id         Int     @id @default(autoincrement())
+  nama       String  @unique
   hp         String
   lokasi     String
   jenis      String
-  harga      Int    @db.Integer
-  img        String @db.Text
-  keterangan String @db.Text
-
-  @@map("Deliverys")
+  harga      Int
+  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  keterangan String
 }
 
-model Bank {
-  id         String @id @default(uuid())
-  nama       String @unique
+model BankDB {
+  id         Int     @id @default(autoincrement())
+  nama       String  @unique
   hp         String
   no         String
   lokasi     String
   jenis      String
-  img        String @db.Text
-  keterangan String @db.Text
-
-  @@map("Banks")
+  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  keterangan String
 }
 
-//
-// model SemuaProduct {
-//   id         String   @id @default(uuid())
-//   nama       String   @db.VarChar(100)
-//   lokasi     String   @db.VarChar(100)
-//   jenis      String   @db.VarChar(100)
-//   harga      Int      @db.Integer
-//   jumlah     Int      @db.Integer
-//   img        String   @db.Text
-//   created_at DateTime @default(now())
-//   updated_at DateTime @updatedAt
-//   Orderan    Orderan? @relation(fields: [orderanId], references: [id])
-//   orderanId  String?
-//
-//
-//   @@map("SemuaProducts")
-// }
-//
-// model Orderan {
-//   id             String         @id @default(uuid())
-//   dari           String         @db.VarChar(20)
-//   pengirim       String         @db.VarChar(100)
-//   hpPengirim     String         @db.VarChar(20)
-//   penerima       String         @db.VarChar(100)
-//   alamatPenerima String         @db.VarChar(100)
-//   hpPenerima     String         @db.VarChar(100)
-//   pesan          DateTime       @db.Date
-//   waktuKirim     DateTime       @db.Timestamp
-//   guna           String         @db.Text
-//   lokasi         String         @db.VarChar(100)
-//   namaPengiriman String         @db.VarChar(100)
-//   ongkir         Int            @db.Integer
-//   typePembayaran String         @db.VarChar(100)
-//   totalBayar     Int            @db.Integer
-//   totalPenjualan Int            @db.Integer
-//   status         String         @db.VarChar(20)
-//   semuaProduct   SemuaProduct[]
-//   created_at     DateTime       @default(now())
-//   updated_at     DateTime       @updatedAt
-//
-//   @@map("Orderans")
-// }
+model TransactionDB {
+  id          Int        @id @default(autoincrement())
+  ProductDB   ProductDB? @relation(fields: [productDBId], references: [id])
+  productDBId Int?
+  OrderanDB   OrderanDB?
+}

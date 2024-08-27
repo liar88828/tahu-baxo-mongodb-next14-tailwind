@@ -1,34 +1,48 @@
-import { Prisma,Bank } from '@prisma/client'
-import prisma from '@/lib/db/prisma';
-import {TCREATEBANK, TUPDATEBANK} from '@/lib/validator/zod';
+import {BankCreate, BankUpdate} from './../validator/schema/bank.schema'
+import prisma from '@/lib/db/prisma'
+import {BankDB} from '@prisma/client'
 
 export class ServiceBank {
-  async findPaginate(page: number, take: number) {
+  async findPaginate(page: number = 1, take: number = 100): Promise<BankDB[]> {
     return prisma.$transaction(async (tx) => {
-      return tx.bank.findMany({
+      return tx.bankDB.findMany({
         take: take,
         skip: (page - 1) * take,
       })
     })
   }
 
-  async findAll() {
-    return prisma.bank.findAll()
+  async findAll(): Promise<BankDB[]> {
+    return prisma.bankDB.findMany({
+      take: 100,
+    })
   }
 
-  async findOne(id: number) {
-    return prisma.bank.findOne(id)
+  async findId(id: number): Promise<BankDB> {
+    const data = await prisma.bankDB.findUnique({where: {id}})
+    if (!data) {
+      throw new Error('Data Bank Is Not Found')
+    }
+    return data
   }
 
-  async createOne(data: TCREATEBANK):Promise<Bank> {
-    return prisma.bank.create({data: {...data}})
+  async createOne(data: BankCreate): Promise<BankDB> {
+    return prisma.bankDB.create({data: {...data}})
   }
 
-  async updateOne(data: TUPDATEBANK, id: string,) {
-    return prisma.bank.update({data: {...data}, where: {id: id}})
+  async updateOne(data: BankUpdate, id: number): Promise<BankDB> {
+    // console.log('---------')
+    // console.log(data,id)
+    // console.log('---------')
+
+    return prisma.bankDB.update({data: {...data}, where: {id}})
   }
 
-  async deleteOne(id: String) {
-    return prisma.bank.findUnique({where: {id}})
+  async deleteOne(id: number): Promise<BankDB> {
+    return prisma.bankDB.delete({where: {id}})
+    // if (!data) {
+    //   throw 'Fail Delete data: the Data is Not Found '
+    // }
+    // return data
   }
 }

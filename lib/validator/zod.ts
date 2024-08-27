@@ -12,7 +12,9 @@ import {
   SemuaProductUpdate
 } from '@/lib/db/prisma';
 
-export class CreateZod {
+export class CreateZod
+{
+  
   // master
   static BankSchema = z.object({
     id: z.string({required_error: 'ID is required',}).optional(),

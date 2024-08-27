@@ -1,15 +1,15 @@
 import {NextRequest} from 'next/server'
-import {bankController} from '@/lib/controller/bank.controller'
+import {productController} from '@/lib/controller/product.controller'
 import {Params} from "@/interface/params";
 
 export async function GET(request: NextRequest, params: Params) {
-  return bankController.findId(request, params)
+	return productController.findId(request, params)
 }
 
 export async function PUT(request: NextRequest, params: Params) {
-  return bankController.updateOne(request, params)
+	return productController.updateOne(request, params)
 }
 
 export async function DELETE(request: NextRequest, params: Params) {
-  return bankController.deleteOne(request, params)
+	return productController.deleteOne(request, params)
 }
