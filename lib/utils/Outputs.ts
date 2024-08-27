@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isObjectEmpty } from '@/lib/utils/Objects';
-import { ZodError } from 'zod';
+import { ZodError } from 'schema';
 import { PrismaError } from '@/lib/db/prisma';
 
 export async function Outputs( method: string, fun: any ) {

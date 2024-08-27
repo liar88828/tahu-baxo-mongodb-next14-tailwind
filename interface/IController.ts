@@ -1,13 +1,13 @@
 export interface IController {
-  findAll(): Promise<any>
+  findAll ( request: NextRequest ): Promise<any>
 
-  findOne(): Promise<any>
+  findOne ( request: NextRequest ): Promise<any>
 
   // findPaginate(): Promise<any>
 
-  createOne(): Promise<any>
+  createOne ( request: NextRequest ): Promise<any>
 
-  updateOne(): Promise<any>
+  updateOne ( request: NextRequest ): Promise<any>
 
-  deleteOne(): Promise<any>
+  deleteOne ( request: NextRequest ): Promise<any>
 }

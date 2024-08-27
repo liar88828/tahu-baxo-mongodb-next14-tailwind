@@ -7,5 +7,5 @@ export interface ISchema {
 
   updateValid(data: Object): Object;
 
-  idValid(id: Number): Number;
+  idValid ( id: any ): any
 }
