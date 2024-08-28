@@ -1,0 +1,38 @@
+@api = http://localhost:3000/api
+@path = {{api}}/user
+@token = xxxeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMSIsImlkIjoiY20wZWM1YmFlMDAwMHhqdm93c3U5cHV3MSIsImlhdCI6MTcyNDg4MDEyNSwiZXhwIjoxNzI0ODgzNzI1fQ.ziHrHX0yc9J9bhrGGU8TnjReqdeac3zPeRyULFhrhUY
+
+###
+POST {{path}}/login
+Content-Type: application/json
+
+{
+  "email": "user1@gmail.com",
+  "password": "user1234"
+}
+
+###
+POST {{path}}/register
+Content-Type: application/json
+
+{
+  "name": "user1",
+  "email": "user1@gmail.com",
+  "password": "user1234",
+  "confPass": "user1234"
+}
+
+###
+GET {{path}}/refresh
+Content-Type: application/json
+
+###
+
+DELETE {{path}}/logout
+Content-Type: application/json
+Authorization: "Bearer {{token}}"
+
+###
+GET {{path}}/logout
+Content-Type: application/json
+Authorization: Bearer {{token}}

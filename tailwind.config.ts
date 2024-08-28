@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type {Config} from 'tailwindcss'
 
 const config: Config = {
   content: [
@@ -22,7 +22,6 @@ const config: Config = {
           "primary"  : "#008aff",
           "secondary": "#c4b5fd",
           "accent"   : "#f472b6",
-
           "neutral"  : "#e5e7eb",
           "base-100" : "#e1ffe4",
           "info"     : "#00ceff",

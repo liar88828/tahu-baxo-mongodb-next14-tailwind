@@ -3,6 +3,7 @@ import {NextRequest} from "next/server"
 import {Params} from "@/interface/params";
 
 export interface IController {
+
   findAll(request: NextRequest): Promise<Response>
 
   findId(request: NextRequest, params: Params): Promise<Response>

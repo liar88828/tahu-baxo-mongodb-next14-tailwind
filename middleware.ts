@@ -1,54 +1,21 @@
-import {JWT} from 'next-auth/jwt'
-import {NextRequestWithAuth, withAuth} from 'next-auth/middleware'
-import {NextResponse} from 'next/server'
+import NextAuth from "next-auth";
+import {authConfig} from "@/lib/utils/auth.config";
+import {DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT} from "@/lib/utils/routes";
 
-export default withAuth(
-  function middleware(req: NextRequestWithAuth,) {
-    // console.log(req.nextUrl.pathname)
-    // console.log('test')
-    // console.log(req?.nextauth.token?.role)
-    // if (
-    // 	req.nextUrl.pathname.startsWith('/createUser') &&
-    // 	req.nextauth.token?.role !== 'admin'
-    // ) {
-    // 	return NextResponse.rewrite(new URL('/denied', req.url))
-    // }
-    // if (req.nextUrl.pathname.startsWith('/login')
-    //   || req.nextUrl.pathname.startsWith('/register')
-    // ) {
-    //   // if (req.nextauth.token !== null||req.nextauth.token !== undefined) {
-    //   //   return NextResponse.rewrite(new URL('/', req.url))
-    //   // }
-    // }
+const {auth} = NextAuth(authConfig);
+export default auth((req) => {
+  const {nextUrl} = req;
 
-    // if (
-    //   req.nextUrl.pathname.startsWith('/admin') //&&
-    //   // req.nextauth.token?.role !== 'admin'
-    // ) {
-    //   return NextResponse.rewrite(new URL('/denied', req.url))
-    // }
-  },
-  {
-    callbacks: {
-      authorized: ({req, token}: { token: JWT | null; req: any }) => {
-        // console.log(req)
-        // console.log(token)
-        if (req.nextUrl.pathname.startsWith('/adminxxx')) {
-          return token.role === 'adminxxx'
-        }
-        return !!token // will remove token
-      },
-    },
-  },
-)
+  const isAuthenticated = !!req.auth;
+  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+
+  if (isPublicRoute && isAuthenticated)
+    return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
+
+  if (!isAuthenticated && !isPublicRoute)
+    return Response.redirect(new URL(ROOT, nextUrl));
+});
+
 export const config = {
-  matcher: ['/',
-    // '/login',
-    '/delivery/:path*',
-    '/orderan/:path*',
-    '/table/:path*',
-    '/bank/:path*',
-    '/product/:path*',
-    '/admin/:path*'
-  ]
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 }

@@ -9,4 +9,6 @@ export async function GET(req: Request,) {
   if (querys === 'checkStock') {
     return dashboardController.checkStock(req)
   }
+  return Response.json('not implemented')
+
 }

@@ -1,15 +1,14 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ServiceDeliver} from './../service/delivery.service'
-import {DeliverSchema, DeliveryCreate, DeliveryUpdate} from './../validator/schema/deliver.schema'
+import {deliveryService, ServiceDeliver} from '../service/delivery.service'
+import {DeliveryCreate, DeliveryUpdate} from '@/lib/schema/deliver.schema'
 import {IController} from '@/interface/IController'
-import {RequestService} from '../service/request.service'
+import {requestService, RequestService} from '../service/request.service'
 import {errorHanding} from "@/lib/utils/errorHanding";
 import {Params} from "@/interface/params";
 
 class DeliverController implements IController {
   constructor(
     private serviceDeliver: ServiceDeliver,
-    private serviceZod: DeliverSchema,
     private serviceReq: RequestService,
   ) {
   }
@@ -26,9 +25,8 @@ class DeliverController implements IController {
 
   async findId(request: NextRequest, params: Params) {
     try {
-      let {id} = this.serviceReq.getId(params)
-      let validId = this.serviceZod.idValid(id)
-      const data = await this.serviceDeliver.findOne(validId)
+      let {id} = this.serviceReq.getIdInt(params)
+      const data = await this.serviceDeliver.findOne(id)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)
@@ -38,7 +36,6 @@ class DeliverController implements IController {
   async createOne(request: NextRequest) {
     try {
       let {data} = await this.serviceReq.getData<DeliveryCreate>(request)
-      data = this.serviceZod.createValid(data)
       data = await this.serviceDeliver.createOne(data)
       return Response.json(data)
     } catch (e: unknown) {
@@ -48,10 +45,8 @@ class DeliverController implements IController {
 
   async updateOne(request: NextRequest, params: Params) {
     try {
-      let {data, id} = await this.serviceReq.getUpdate<DeliveryUpdate>(request, params)
-      let validId = this.serviceZod.idValid(id)
-      data = this.serviceZod.updateValid(data)
-      data = await this.serviceDeliver.updateOne(data, validId)
+      let {data, id} = await this.serviceReq.getUpdateInt<DeliveryUpdate>(request, params)
+      data = await this.serviceDeliver.updateOne(data, id)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)
@@ -60,9 +55,8 @@ class DeliverController implements IController {
 
   async deleteOne(req: NextRequest, params: Params) {
     try {
-      let {id} = this.serviceReq.getId(params)
-      let validId = this.serviceZod.idValid(id)
-      const data = await this.serviceDeliver.deleteOne(validId)
+      let {id} = this.serviceReq.getIdInt(params)
+      const data = await this.serviceDeliver.deleteOne(id)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)
@@ -71,7 +65,6 @@ class DeliverController implements IController {
 }
 
 export const deliveryController = new DeliverController(
-  new ServiceDeliver(),
-  new DeliverSchema(),
-  new RequestService(),
+  deliveryService,
+  requestService,
 )

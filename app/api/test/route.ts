@@ -1,5 +1,4 @@
 import {NextResponse} from "next/server";
-import {dashboard} from "@/lib/db/dashboard";
 
 export async function GET() {
   //                SELECT *
@@ -44,7 +43,8 @@ export async function GET() {
 //   ;
 //   console.log(result)
   return NextResponse.json(
-    await dashboard.PenjualanDonat()
+    // await dashboard.PenjualanDonat()
     // result
+    ''
   )
 }

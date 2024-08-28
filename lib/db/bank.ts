@@ -1,35 +1,39 @@
 import prisma from '@/lib/db/prisma';
-import { TCREATEBANK, TUPDATEBANK } from '@/lib/validator/zod';
+import {TCREATEBANK, TUPDATEBANK} from '@/lib/validator/zod';
 
 export class BankRepo {
+  static async deleteOne(id: number) {
+    return prisma.bankDB.delete({where: {id}})
+  }
+
   async findPaginate( page: number, take: number ) {
     return prisma.$transaction( async ( tx ) => {
-      const count = await tx.bank.count()
-      const res   = await tx.bank.findMany( {
+      const count = await tx.bankDB.count()
+      const res = await tx.bankDB.findMany({
         take: take,
         skip: ( page - 1 ) * take,
       } )
       return { res, count }
     } )
   }
-  static async deleteOne( id: string ) {
-    return prisma.bank.delete( { where: { id } } )
-  }
+
   async createOne( data: TCREATEBANK ) {
-    return prisma.bank.create( { data: { ...data } } )
+    return prisma.bankDB.create({data: {...data}})
   }
   async findAll() {
-    return prisma.bank.findMany()
+    return prisma.bankDB.findMany()
   }
-  async findOne( id: string ) {
-    return prisma.bank.findUnique( { where: { id } } )
+
+  async findOne(id: number) {
+    return prisma.bankDB.findUnique({where: {id}})
   }
-  async deleteOne( id: string ) {
+
+  async deleteOne(id: number) {
     return BankRepo.deleteOne( id )
   }
 
-  async updateOne( data: TUPDATEBANK, id: string, ) {
-    return prisma.bank.update( { data: { ...data }, where: { id: id } } )
+  async updateOne(data: TUPDATEBANK, id: number,) {
+    return prisma.bankDB.update({data: {...data}, where: {id: id}})
   }
 
 }

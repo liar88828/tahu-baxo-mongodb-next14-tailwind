@@ -1,9 +1,10 @@
 import {transactionController} from "@/lib/controller/transaction.controller";
 import {NextRequest} from "next/server";
+import {Params} from "@/interface/params";
 
 
-export async function GET(req: NextRequest,) {
-  return transactionController.getStockProduct(req)
+export async function GET(req: NextRequest, param: Params) {
+  return transactionController.getStockProduct(req, param)
 }
 
 

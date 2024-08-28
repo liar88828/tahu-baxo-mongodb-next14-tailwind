@@ -1,5 +1,4 @@
 import prisma from '@/lib/db/prisma';
-import bcrypt from 'bcrypt';
 
 export class User {
   async create( data: {
@@ -14,7 +13,7 @@ export class User {
         // password: data.password,
         name         : 'test',
         image        : 'test',
-        emailVerified: null,
+        // emailVerified: null,
         role         : 'test',
       }
     } )

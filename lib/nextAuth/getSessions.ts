@@ -1,6 +1,9 @@
-import { getServerSession } from 'next-auth'
-import { options } from './options'
+import {auth} from "@/auth";
 
 export const getSessions = async () => {
-	return await getServerSession(options)
+  const session = await auth()
+  if (!session) {
+    throw new Error('not authenticated');
+  }
+  return session
 }

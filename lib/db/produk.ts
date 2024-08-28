@@ -1,11 +1,11 @@
-import { TCREATEPRODUCT, TUPDATEPRODUCT } from '@/lib/validator/zod';
+import {TCREATEPRODUCT} from '@/lib/validator/zod';
 import prisma from '@/lib/db/prisma';
 
 export class ProductRepo {
   async findPaginate( page: number, take: number ) {
     return prisma.$transaction( async ( tx ) => {
-      const count = await tx.product.count()
-      const res   = await tx.product.findMany( {
+      const count = await tx.productDB.count()
+      const res = await tx.productDB.findMany({
         take: take,
         skip: ( page - 1 ) * take,
       } )
@@ -13,7 +13,7 @@ export class ProductRepo {
     } )
   }
   async createOne( data: TCREATEPRODUCT ) {
-    return prisma.product.create( {
+    return prisma.productDB.create({
       data: {
 
         id        : data.id,
@@ -29,20 +29,20 @@ export class ProductRepo {
     } )
   }
   async findAll() {
-    return prisma.product.findMany()
+    return prisma.productDB.findMany()
   }
 
-  async findOne( id: string ) {
-    return prisma.product.findUnique( { where: { id } } )
+  async findOne(id: number) {
+    return prisma.productDB.findUnique({where: {id}})
   }
 
-  async deleteOne( id: string ) {
-    return prisma.product.delete( { where: { id } } )
+  async deleteOne(id: number) {
+    return prisma.productDB.delete({where: {id}})
   }
 
-  async updateOne( data: TUPDATEPRODUCT, id: string, ) {
-    return prisma.product.update( { data: { ...data }, where: { id: id } } )
-  }
+  // async updateOne( data: TUPDATEPRODUCT, id: number, ) {
+  //   return prisma.productDB.update( { data: { ...data }, where: { id: id } } )
+  // }
 }
 
 export const produk = new ProductRepo()

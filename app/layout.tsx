@@ -1,8 +1,6 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type {Metadata} from 'next'
+import {Inter} from 'next/font/google'
 import './globals.css'
-import BasicLayout from '@/components/layouts/BasicLayout';
-import NextAuthProvider from '@/components/provider/NextAuthProvider';
 
 const inter = Inter( { subsets: [ 'latin' ] } )
 
@@ -22,11 +20,7 @@ export default function RootLayout ( {
       data-theme={ 'mytheme' }>
 
       <body className={ "bg-green-50  min-h-screen" }>
-        <NextAuthProvider>
-          <BasicLayout>
             { children }
-          </BasicLayout>
-        </NextAuthProvider>
       </body>
     </html>
   )

@@ -1,9 +1,14 @@
 import {ProductCreate, ProductUpdate} from './../db/prisma'
 import prisma from '@/lib/db/prisma'
 import {ProductDB} from '@prisma/client'
-import {ProductTransaction} from "@/lib/validator/schema/transaction.schema";
+import {productSchema, ProductSchema, ProductTransaction} from "@/lib/schema/product.schema";
 
 export class ProductService {
+  constructor(
+    private valid: ProductSchema,
+  ) {
+  }
+
   async findAll(page: number, take: number = 100) {
     return prisma.$transaction(async (tx) => {
       const data = await tx.productDB.findMany({
@@ -19,6 +24,7 @@ export class ProductService {
   // }
 
   async findId(id: number): Promise<ProductDB> {
+    id = this.valid.idValid(id)
     const data = await prisma.productDB.findUnique({where: {id}})
     if (!data) {
       throw new Error('Data Product is Not found ')
@@ -27,6 +33,7 @@ export class ProductService {
   }
 
   async createOne({id, ...data}: ProductCreate) {
+    data = this.valid.createValid(data)
     return prisma.productDB.create({
       data: {
         harga: data.harga,
@@ -42,15 +49,18 @@ export class ProductService {
   }
 
   async updateOne(data: ProductUpdate, id: number) {
-    console.log("id : ", id)
+    id = this.valid.idValid(id)
+    data = this.valid.updateValid(data)
     return prisma.productDB.update({data: {...data}, where: {id: id}})
   }
 
   async deleteOne(id: number) {
+    id = this.valid.idValid(id)
     return prisma.productDB.delete({where: {id}})
   }
 
   async addStock(data: ProductTransaction, id: number) {
+    data = this.valid.addStockValid(data)
     return prisma.productDB.update({
       data: {jumlah: data.jumlah},
       where: {id: id}
@@ -59,3 +69,7 @@ export class ProductService {
 
 
 }
+
+export const productService = new ProductService(
+  productSchema
+)

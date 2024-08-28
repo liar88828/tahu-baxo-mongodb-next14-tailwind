@@ -24,5 +24,6 @@ export class BcryptService {
       throw new Error('Password is Not Valid')
     }
   }
-
 }
+
+export const bcryptService = new BcryptService()

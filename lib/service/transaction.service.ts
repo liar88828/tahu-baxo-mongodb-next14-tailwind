@@ -1,5 +1,5 @@
 import prisma from "@/lib/db/prisma";
-import {TransactionCreate} from "@/lib/validator/schema/transaction.schema";
+import {TransactionCreate, TransactionSchema, transactionSchema} from "@/lib/schema/transaction.schema";
 
 type transactionId = {
   idProduct: number,
@@ -8,8 +8,15 @@ type transactionId = {
 }
 
 export class TransactionService {
-  async createOne({product, order}: TransactionCreate
+  constructor(
+    private valid: TransactionSchema
   ) {
+  }
+
+  async createOne(data: TransactionCreate
+  ) {
+    const {product, order} = this.valid.transactionValid(data)
+
     return prisma.$transaction(async (tx) => {
 
       const transactionDB = await tx.transactionDB.create({
@@ -75,3 +82,7 @@ export class TransactionService {
   }
 
 }
+
+export const transactionService = new TransactionService(
+  transactionSchema
+)

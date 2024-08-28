@@ -4,6 +4,24 @@ import {GetData, GetPage, GetUpdate, IServiceRequest,} from '../../interface/ISe
 import {Params} from "@/interface/params";
 
 export class RequestService implements IServiceRequest {
+
+  getTokenCookie(req: NextRequest) {
+
+    const token = req.cookies.get('token')
+    if (!token) {
+      throw new Error("Not have token in Cookie",)
+    }
+    return token.value
+  }
+
+  getTokenBearer(req: NextRequest) {
+    const Bearer = req.headers.get('Authorization')
+    if (!Bearer) {
+      throw new Error("Not have token in Bearer",)
+    }
+    return Bearer.split(' ')[1]
+  }
+
   async getUpdate<D, >(request: NextRequest, params: Params): Promise<GetUpdate<D, string>> {
     // console.log(params)
     return {
@@ -57,3 +75,6 @@ export class RequestService implements IServiceRequest {
     }
   }
 }
+
+
+export const requestService = new RequestService()

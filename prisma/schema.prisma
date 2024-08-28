@@ -16,13 +16,16 @@ model Account {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token String?
-  access_token  String?
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token      String?
+  id_token          String?
   session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -32,29 +35,35 @@ model Account {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id")
+  sessionToken String   @unique
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  accounts      Account[]
-  sessions      Session[]
+  email         String  @unique
+  emailVerified Boolean @default(false)
+  image         String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+
   //
-  role          String    @default("USER")
+  role          String          @default("USER")
   password      String?
   otp           Int?
   expiresOtp    DateTime?
+  refresh_token String?
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+  accounts      Account[]
+  sessions      Session[]
 
-  @@map("users")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -64,6 +73,22 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
 
 model OrderanDB {
@@ -100,13 +125,13 @@ model OrderanDB {
 
 model ProductDB {
   id            Int             @id @default(autoincrement())
-  nama       String  @unique
-  lokasi     String
-  jenis      String
-  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  harga      Int
-  jumlah     Int
-  keterangan String
+  nama          String          @unique
+  lokasi        String
+  jenis         String
+  img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  harga         Int
+  jumlah        Int
+  keterangan    String
   // at update / create
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
@@ -137,7 +162,7 @@ model BankDB {
 
 model TransactionDB {
   id          Int        @id @default(autoincrement())
-  jumlah Int
+  jumlah      Int
   ProductDB   ProductDB? @relation(fields: [productDBId], references: [id])
   productDBId Int?
   OrderanDB   OrderanDB?

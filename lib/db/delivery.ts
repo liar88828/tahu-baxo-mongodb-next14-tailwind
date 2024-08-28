@@ -1,12 +1,12 @@
 import prisma from '@/lib/db/prisma';
-import { TCREATEDELIVER, TUPDATEDELIVER } from '@/lib/validator/zod';
+import {TCREATEDELIVER, TUPDATEDELIVER} from '@/lib/validator/zod';
 
 export class DeliveryRepo {
 
   async findPaginate( page: number, take: number ) {
     return prisma.$transaction( async ( tx ) => {
-      const count = await tx.delivery.count()
-      const res   = await tx.delivery.findMany( {
+      const count = await tx.deliveryDB.count()
+      const res = await tx.deliveryDB.findMany({
         take: take,
         skip: ( page - 1 ) * take,
       } )
@@ -14,21 +14,22 @@ export class DeliveryRepo {
     } )
   }
   async createOne( data: TCREATEDELIVER ) {
-    return prisma.delivery.create( { data: { ...data } } )
+    return prisma.deliveryDB.create({data: {...data}})
   }
   async findAll() {
-    return prisma.delivery.findMany()
-  }
-  async findOne( id: string ) {
-    return prisma.delivery.findUnique( { where: { id } } )
+    return prisma.deliveryDB.findMany()
   }
 
-  async deleteOne( id: string ) {
-    return prisma.delivery.delete( { where: { id } } )
+  async findOne(id: number) {
+    return prisma.deliveryDB.findUnique({where: {id}})
   }
 
-  async updateOne( data: TUPDATEDELIVER, id: string, ) {
-    return prisma.delivery.update( { data: { ...data }, where: { id: id } } )
+  async deleteOne(id: number) {
+    return prisma.deliveryDB.delete({where: {id}})
+  }
+
+  async updateOne(data: TUPDATEDELIVER, id: number,) {
+    return prisma.deliveryDB.update({data: {...data}, where: {id: id}})
   }
 }
 

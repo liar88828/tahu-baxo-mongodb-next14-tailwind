@@ -1,19 +1,18 @@
 // register
 import {NextRequest} from "next/server";
-import {userController} from "@/lib/controller/user.controller";
+import {forgetController} from "@/lib/controller/forget.controller";
 
 // valid otp
 export async function POST(req: NextRequest) {
-  return userController.validOtp(req)
+  return forgetController.validOtp(req)
 }
-
 
 // get otp
 export async function GET(req: NextRequest) {
-  return userController.getOtp(req)
+  return forgetController.getOtp(req)
 }
 
 //  generate
 export async function PUT(req: NextRequest) {
-  return userController.getAgain(req)
+  return forgetController.getAgain(req)
 }
