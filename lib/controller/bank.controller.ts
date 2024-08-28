@@ -1,7 +1,7 @@
 import {BankCreate, BankUpdate} from './../validator/schema/bank.schema'
-import {ServiceRequest} from './../utils/ServiceRequest'
+import {RequestService} from '../service/request.service'
 import {NextRequest} from 'next/server'
-import {ServiceBank} from '@/lib/service/bank.service'
+import {BankService} from '@/lib/service/bank.service'
 import {BankSchema} from '@/lib/validator/schema/bank.schema'
 import {IController} from '@/interface/IController'
 import {errorHanding} from '../utils/errorHanding'
@@ -9,9 +9,9 @@ import {Params} from "@/interface/params";
 
 class BankController implements IController {
   constructor(
-    private serviceBank: ServiceBank,
+    private serviceBank: BankService,
     private serviceZod: BankSchema,
-    private serviceReq: ServiceRequest,
+    private serviceReq: RequestService,
   ) {
   }
 
@@ -75,7 +75,7 @@ class BankController implements IController {
 }
 
 export const bankController = new BankController(
-  new ServiceBank(),
+  new BankService(),
   new BankSchema(),
-  new ServiceRequest(),
+  new RequestService(),
 )

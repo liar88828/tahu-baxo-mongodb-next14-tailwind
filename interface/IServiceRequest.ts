@@ -17,9 +17,9 @@ export type GetData<T > = {
 	data: T
 }
 
-export type GetUpdate<D> = {
+export type GetUpdate<D, I> = {
   data: D
-  id: string
+  id: I
 }
 export interface IServiceRequest {
   getId(params: Params): GetId
@@ -27,5 +27,5 @@ export interface IServiceRequest {
 
   getData<T>(request: NextRequest): Promise<GetData<T>>
 
-  getUpdate<T, U>(request: NextRequest, params: Params): Promise<GetUpdate<T, U>>
+  getUpdate<T, >(request: NextRequest, params: Params): Promise<GetUpdate<T, string>>
 }

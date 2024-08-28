@@ -3,7 +3,7 @@ import {NextRequest} from 'next/server'
 import {ProductSchema} from './../validator/schema/product.schema'
 import {ProductService} from './../service/product.service'
 import {IController} from '@/interface/IController'
-import {ServiceRequest} from '../utils/ServiceRequest'
+import {RequestService} from '../service/request.service'
 import {errorHanding} from '../utils/errorHanding'
 import {Params} from "@/interface/params";
 
@@ -11,7 +11,7 @@ class ProductController implements IController {
   constructor(
     private serviceProduct: ProductService,
     private serviceZod: ProductSchema,
-    private serviceReq: ServiceRequest,
+    private serviceReq: RequestService,
   ) {
   }
 
@@ -29,7 +29,7 @@ class ProductController implements IController {
     try {
       let {id} = this.serviceReq.getId(params)
       let validId = this.serviceZod.idValid(id)
-      const data = await this.serviceProduct.findOne(validId)
+      const data = await this.serviceProduct.findId(validId)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)
@@ -75,5 +75,5 @@ class ProductController implements IController {
 export const productController = new ProductController(
   new ProductService(),
   new ProductSchema(),
-  new ServiceRequest(),
+  new RequestService(),
 )

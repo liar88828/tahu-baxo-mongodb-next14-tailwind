@@ -7,6 +7,7 @@ export type ProductCreate = Prisma.Args<
   typeof prisma.productDB,
   'create'
 >['data']
+
 export type ProductUpdate = Prisma.Args<
   typeof prisma.productDB,
   'update'

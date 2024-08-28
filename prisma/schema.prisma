@@ -137,6 +137,7 @@ model BankDB {
 
 model TransactionDB {
   id          Int        @id @default(autoincrement())
+  jumlah Int
   ProductDB   ProductDB? @relation(fields: [productDBId], references: [id])
   productDBId Int?
   OrderanDB   OrderanDB?

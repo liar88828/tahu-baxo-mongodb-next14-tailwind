@@ -1,17 +1,24 @@
 import {NextRequest} from 'next/server'
-import {GetData, GetPage, GetUpdate,} from './../../interface/IServiceRequest'
-import {IServiceRequest} from '../../interface/IServiceRequest'
+import {GetData, GetPage, GetUpdate, IServiceRequest,} from '../../interface/IServiceRequest'
 
 import {Params} from "@/interface/params";
 
-export class ServiceRequest implements IServiceRequest {
-  async getUpdate<D>(request: NextRequest, params: Params): Promise<GetUpdate<D>> {
+export class RequestService implements IServiceRequest {
+  async getUpdate<D, >(request: NextRequest, params: Params): Promise<GetUpdate<D, string>> {
     // console.log(params)
     return {
       data: await this.getData<D>(request).then((res) => res.data),
       id: this.getId(params).id,
     }
   }
+
+  async getUpdateInt<D>(request: NextRequest, params: Params): Promise<GetUpdate<D, number>> {
+    return {
+      data: await this.getData<D>(request).then((res) => res.data),
+      id: this.getIdInt(params).id,
+    }
+  }
+
 
   getId({params}: Params): { id: string } {
     return {id: params.id}
@@ -31,6 +38,18 @@ export class ServiceRequest implements IServiceRequest {
       take,
     }
   }
+
+
+  getEmail(request: NextRequest): { email: string } {
+    const searchParams = request.nextUrl.searchParams
+    let email = searchParams.get('email')
+    if (!email) {
+      throw new Error("please add email, this email empty")
+    }
+
+    return {email}
+  }
+
 
   async getData<T>(request: NextRequest): Promise<GetData<T>> {
     return {

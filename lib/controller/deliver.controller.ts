@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from 'next/server'
 import {ServiceDeliver} from './../service/delivery.service'
 import {DeliverSchema, DeliveryCreate, DeliveryUpdate} from './../validator/schema/deliver.schema'
 import {IController} from '@/interface/IController'
-import {ServiceRequest} from '../utils/ServiceRequest'
+import {RequestService} from '../service/request.service'
 import {errorHanding} from "@/lib/utils/errorHanding";
 import {Params} from "@/interface/params";
 
@@ -10,7 +10,7 @@ class DeliverController implements IController {
   constructor(
     private serviceDeliver: ServiceDeliver,
     private serviceZod: DeliverSchema,
-    private serviceReq: ServiceRequest,
+    private serviceReq: RequestService,
   ) {
   }
 
@@ -73,5 +73,5 @@ class DeliverController implements IController {
 export const deliveryController = new DeliverController(
   new ServiceDeliver(),
   new DeliverSchema(),
-  new ServiceRequest(),
+  new RequestService(),
 )
