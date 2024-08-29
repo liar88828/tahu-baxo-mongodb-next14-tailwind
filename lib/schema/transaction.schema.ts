@@ -1,54 +1,34 @@
 import {z} from "zod";
-import {OrderanDB, Prisma} from "@prisma/client";
-import prisma from "@/lib/db/prisma";
-import {productSchema, ProductSchema, ProductTransaction} from "@/lib/schema/product.schema";
+import {productSchema, ProductSchema} from "@/lib/schema/product.schema";
+import {PenerimaSchema, penerimaSchema} from "@/lib/schema/penerima.schema";
+import {OrderCreate, orderSchema, OrderSchema} from "@/lib/schema/order.schema";
+import {TransactionCreate} from "@/interface/transaction";
 
-
-export type OrderTransaction = Prisma.Args<
-  typeof prisma.orderanDB,
-  'create'
->['data']
-
-
-export type TransactionCreate = {
-  product: ProductTransaction,
-  order: OrderTransaction
-}
 
 export class TransactionSchema {
+  create = z.object({
+    id: z.number(),
+    jumlah: z.number(),
+    productDBId: z.number(),
+    // orderanDBId: z.string(),// because will add in transaction db
+    penerimaDBId: z.number(),
+    deliveryDBId: z.number(),
+    bankDBId: z.number(),
+  }) //satisfies z.Schema<TransactionDB>
   private transactionSchema = z.object({
-    product: this.productSchema.productTransactionSchema,
-    order: this.orderTransactionSchema,
-  }) satisfies z.Schema<TransactionCreate>
+    transaction: this.create,
+    order: this.orderSchema.create,
+    // product: this.productSchema.productTransactionSchema,
+    // penerima: this.penerimaSchema.create
 
-  private orderTransactionSchema = z.object({
-    id: z.string(),
-    dari: z.string(),
-    pengirim: z.string(),
-    hpPengirim: z.string(),
-    penerima: z.string(),
-    alamatPenerima: z.string(),
-    hpPenerima: z.string(),
-    pesan: z.date(),
-    waktuKirim: z.date(),
-    guna: z.string(),
-    lokasi: z.string(),
-    namaPengiriman: z.string(),
-    ongkir: z.number(),
-    typePembayaran: z.string(),
-    totalBayar: z.number(),
-    totalPenjualan: z.number(),
-    status: z.string(),
-    created_at: z.date(),
-    updated_at: z.date(),
-    transactionDBId: z.number(),
-  }) satisfies z.Schema<OrderTransaction>
+  }) //satisfies z.Schema<TransactionCreate>
 
   constructor(
-    private productSchema: ProductSchema
+    private productSchema: ProductSchema,
+    private penerimaSchema: PenerimaSchema,
+    private orderSchema: OrderSchema
   ) {
   }
-
 
   idProduct(id: number) {
     id = z.number().parse(id)
@@ -58,8 +38,8 @@ export class TransactionSchema {
     return id
   }
 
-  orderValid(data: OrderanDB) {
-    data = this.orderTransactionSchema.parse(data)
+  orderValid(data: OrderCreate) {
+    data = this.orderSchema.create.parse(data)
     if (!data) {
       throw new Error("data is Not valid")
     }
@@ -75,15 +55,18 @@ export class TransactionSchema {
   }
 
   transactionValid(data: TransactionCreate) {
-    data = this.transactionSchema.parse(data)
-    if (!data) {
+    const validData = this.transactionSchema.parse(data)
+    if (!validData) {
       throw new Error("Data transaction schema is not valid")
     }
-    return data
+    return validData
 
   }
 }
 
+
 export const transactionSchema = new TransactionSchema(
-  productSchema
+  productSchema,
+  penerimaSchema,
+  orderSchema
 )

@@ -91,23 +91,26 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model PenerimaDB {
+  id            Int             @id @default(autoincrement())
+  nama          String
+  alamat        String
+  hp            String
+  TransactionDB TransactionDB[]
+}
+
 model OrderanDB {
   id             String   @id @default(uuid())
   // orang
   dari           String
   pengirim       String
-  hpPengirim     String
-  penerima       String
-  alamatPenerima String
-  hpPenerima     String
+  hp             String
   // tanggal
   pesan          DateTime
   waktuKirim     DateTime
   // keterangan
   guna           String
   lokasi         String
-  // travel
-  namaPengiriman String
   ongkir         Int
   // total
   typePembayaran String
@@ -119,8 +122,7 @@ model OrderanDB {
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  TransactionDB   TransactionDB? @relation(fields: [transactionDBId], references: [id])
-  transactionDBId Int?           @unique
+  TransactionDB TransactionDB[]
 }
 
 model ProductDB {
@@ -139,31 +141,40 @@ model ProductDB {
 }
 
 model DeliveryDB {
-  id         Int     @id @default(autoincrement())
-  nama       String  @unique
-  hp         String
-  lokasi     String
-  jenis      String
-  harga      Int
-  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  keterangan String
+  id            Int             @id @default(autoincrement())
+  nama          String          @unique
+  hp            String
+  lokasi        String
+  jenis         String
+  harga         Int
+  img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  keterangan    String
+  TransactionDB TransactionDB[]
 }
 
 model BankDB {
-  id         Int     @id @default(autoincrement())
-  nama       String  @unique
-  hp         String
-  no         String
-  lokasi     String
-  jenis      String
-  img        String? @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  keterangan String
+  id            Int             @id @default(autoincrement())
+  nama          String          @unique
+  hp            String
+  no            String
+  lokasi        String
+  jenis         String
+  img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  keterangan    String
+  TransactionDB TransactionDB[]
 }
 
 model TransactionDB {
-  id          Int        @id @default(autoincrement())
-  jumlah      Int
-  ProductDB   ProductDB? @relation(fields: [productDBId], references: [id])
-  productDBId Int?
-  OrderanDB   OrderanDB?
+  id           Int         @id @default(autoincrement())
+  jumlah       Int
+  ProductDB    ProductDB?  @relation(fields: [productDBId], references: [id])
+  productDBId  Int
+  OrderanDB    OrderanDB?  @relation(fields: [orderanDBId], references: [id])
+  orderanDBId  String
+  PenerimaDB   PenerimaDB? @relation(fields: [penerimaDBId], references: [id])
+  penerimaDBId Int
+  DeliveryDB   DeliveryDB? @relation(fields: [deliveryDBId], references: [id])
+  deliveryDBId Int
+  BankDB       BankDB?     @relation(fields: [bankDBId], references: [id])
+  bankDBId     Int
 }

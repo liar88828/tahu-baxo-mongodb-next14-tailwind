@@ -64,7 +64,7 @@ export class DeliverSchema implements ISchema {
   idValid(id: number | undefined): number {
     id = this.id.parse(id)
     if (!id) {
-      throw new Error('data is not valid')
+      throw new Error('id is not valid')
     }
     return id
   }

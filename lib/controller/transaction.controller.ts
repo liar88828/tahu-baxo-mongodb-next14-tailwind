@@ -7,8 +7,8 @@ import {errorHanding} from "@/lib/utils/errorHanding";
 import {Params} from "@/interface/params";
 import {requestService, RequestService} from "@/lib/service/request.service";
 import {transactionService, TransactionService} from "@/lib/service/transaction.service";
-import {TransactionCreate} from "@/lib/schema/transaction.schema";
 import {ProductTransaction} from "@/lib/schema/product.schema";
+import {TransactionCreate} from "@/interface/transaction";
 
 class TransactionController {
   constructor(
@@ -21,7 +21,7 @@ class TransactionController {
   ) {
   }
 
-  async createOne(req: NextRequest) {
+  async checkOut(req: NextRequest) {
     try {
       let {data} = await this.serviceReq.getData<TransactionCreate>(req)
       const res = await this.serviceTransaction.createOne(data)
@@ -77,6 +77,10 @@ class TransactionController {
     } catch (e) {
       return errorHanding(e)
     }
+  }
+
+  addTrolley(request: NextRequest, param: Params) {
+    return Promise.resolve(undefined);
   }
 }
 

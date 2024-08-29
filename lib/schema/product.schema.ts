@@ -4,25 +4,7 @@ import {ISchema} from '@/interface/ISchema'
 import {Prisma} from '@prisma/client'
 
 
-export type ProductTransaction = {
-  jumlah: number,
-  productId: number,
-};
-
-export type ProductCreate = Prisma.Args<
-  typeof prisma.productDB,
-  'create'
->['data']
-
-export type ProductUpdate = Prisma.Args<
-  typeof prisma.productDB,
-  'update'
->['data']
-
-
 export class ProductSchema implements ISchema {
-
-
   id = z.number({required_error: 'ID is required'}).optional()
   create = z.object({
     id: this.id,
@@ -100,3 +82,18 @@ export class ProductSchema implements ISchema {
 }
 
 export const productSchema = new ProductSchema()
+
+export type ProductTransaction = {
+  jumlah: number,
+  productId: number,
+};
+
+export type ProductCreate = Prisma.Args<
+  typeof prisma.productDB,
+  'create'
+>['data']
+
+export type ProductUpdate = Prisma.Args<
+  typeof prisma.productDB,
+  'update'
+>['data']

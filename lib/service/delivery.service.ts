@@ -39,7 +39,7 @@ export class ServiceDeliver {
 
   async deleteOne(id: number) {
     id = this.valid.idValid(id)
-    return prisma.deliveryDB.findUnique({where: {id}})
+    return prisma.deliveryDB.delete({where: {id}})
   }
 }
 
