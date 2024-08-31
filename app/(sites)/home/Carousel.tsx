@@ -1,64 +1,42 @@
 import React from 'react'
+import { repeat } from "@/lib/utils/repeat";
 
 export default function Carousel() {
-	return (
-		<div>
-			<div className='carousel w-full'>
-				<div
-					id='item1'
-					className='carousel-item w-full'>
-					<img
-						src='https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp'
-						className='w-full'
-					/>
-				</div>
-				<div
-					id='item2'
-					className='carousel-item w-full'>
-					<img
-						src='https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp'
-						className='w-full'
-					/>
-				</div>
-				<div
-					id='item3'
-					className='carousel-item w-full'>
-					<img
-						src='https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp'
-						className='w-full'
-					/>
-				</div>
-				<div
-					id='item4'
-					className='carousel-item w-full'>
-					<img
-						src='https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp'
-						className='w-full'
-					/>
-				</div>
-			</div>
-			{/* <div className='flex w-full justify-center gap-2 py-2'>
-				<a
-					href='#item1'
-					className='btn btn-xs'>
-					1
-				</a>
-				<a
-					href='#item2'
-					className='btn btn-xs'>
-					2
-				</a>
-				<a
-					href='#item3'
-					className='btn btn-xs'>
-					3
-				</a>
-				<a
-					href='#item4'
-					className='btn btn-xs'>
-					4
-				</a>
-			</div> */}
-		</div>
-	)
+  return (
+    <div>
+      <div className='carousel w-full space-x-2'>
+        {repeat().map((item, i) => (
+          <CarouselItem key={i} index={i} />))}
+      </div>
+      <div className='flex w-full justify-center gap-2 py-2'>
+        {repeat().map((item, i) => (
+          <a
+            key={i}
+            href={`#item_${i} `}
+            className='btn btn-xs bg-white/50 btn-circle'
+          >
+          </a>))}
+      </div>
+    </div>
+  )
+}
+
+export function CarouselItem({index} : { index : number }) {
+  return (
+    <div
+      id={`item_${index}`}
+      className='carousel-item w-full flex justify-center '
+    >
+      <div className={`rounded-xl h-40 w-full object-cover  flex  ${index % 2 === 0 ? 'bg-blue-400' : 'bg-red-400'}`}>
+        <div className="py-5 pl-5 flex justify-between flex-col">
+          <h1 className={'text-xl font-extrabold text-base-300/60'}>Up to 65% Off on All Products </h1>
+          <h2 className={' text-md font-medium text-base-300/60'}>Lorem ipsum dolor sit amet</h2>
+        </div>
+        <img
+          src='/xbox.png'
+          className=' h-40 w-auto object-cover'
+        />
+      </div>
+    </div>
+  );
 }

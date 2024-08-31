@@ -1,36 +1,35 @@
 'use client'
-import React from 'react'
+
 import { repeat } from '@/lib/utils/repeat'
 import { Icon } from '@iconify/react'
+
+import React from 'react'
 
 export function ProductList() {
   return (
     <div>
-      <div className="flex justify-between items-center w-full text-2xl mb-2 ">
-        <div className="flex space-x-2 items-center justify-between ">
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-          <h1 className={'font-bold text-xl'}>Product List</h1>
-        </div>
-        {/*<button className={'btn btn-primary btn-sm'}>Show</button>*/}
+      <div className="flex justify-between items-center w-full text-2xl mb-2">
+        <h1 className={'font-bold text-xl'}>Product List</h1>
+        <button className={'btn btn-primary btn-sm'}>Show</button>
       </div>
-      <div className='space-y-4'>
+      <div className='space-y-2 h-56 overflow-y-auto'>
         {repeat(20).map((_, index) => (
-          <ProductListItem key={index}>
-            <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-          </ProductListItem>
+          <ProductListItem key={index} />
         ))}
       </div>
+      <textarea
+        className={'textarea  textarea-bordered w-full'}
+        placeholder='Write a description...'
+      ></textarea>
     </div>
   )
 }
 
-export function ProductListItem({children} : { children? : React.ReactNode }) {
+export function ProductListItem() {
   return (
-    <div className={'flex items-center '}>
-      <div className={'pr-2 '}>
-        {children}
-      </div>
-      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 w-full'>
+    <div>
+      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2'>
+        {/*  image product */}
         <img
           src='https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
           alt='product image'

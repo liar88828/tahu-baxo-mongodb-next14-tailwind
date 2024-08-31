@@ -6,7 +6,7 @@ import React from 'react'
 export default function Category() {
 	return (
 		<div className='rounded-lg'>
-			<div className='grid grid-cols-4 gap-2'>
+			<div className='grid grid-cols-4 gap-4'>
 				{repeat(8).map((_, i) => {
 					return (
 						<div
@@ -15,10 +15,10 @@ export default function Category() {
 							<button className='btn btn-circle btn-outline btn-md'>
 								<Icon
 									icon='ic:round-category'
-									className='size-8'
+									className='size-5'
 								/>
 							</button>
-							<h1 className='font-bold mt-1 text-sm'>Category </h1>
+							<h1 className='font-semibold mt-2 text-sm'>Category </h1>
 						</div>
 					)
 				})}
@@ -26,4 +26,3 @@ export default function Category() {
 		</div>
 	)
 }
-
