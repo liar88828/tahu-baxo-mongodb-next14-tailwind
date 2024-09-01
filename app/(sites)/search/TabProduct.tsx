@@ -1,23 +1,32 @@
-export function TabProduct() {
-	return (
-		<div
-			role='tablist'
-			className='tabs tabs-boxed'>
-			<a
-				role='tab'
-				className='tab'>
-				New Product
-			</a>
-			<a
-				role='tab'
-				className='tab tab-active'>
-				Best Selling
-			</a>
-			<a
-				role='tab'
-				className='tab'>
-				Discount
-			</a>
-		</div>
-	)
+import { ParamsProfile } from "@/interface/ParamsProfile";
+import Link from "next/link";
+
+export function TabProduct({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
+  return (
+    <div role="tablist" className="tabs tabs-boxed">
+      <Link
+        href={'/search?tab=new-product'}
+        role='tab'
+        className={`tab ${tab === 'new-product' || tab == null ? 'tab-active' : ''}`}
+
+      >
+        New Product
+      </Link>
+      <Link
+        href={'/search?tab=best-selling'}
+        role='tab'
+        className={`tab ${tab === 'best-selling' ? 'tab-active' : ''}`}
+      >
+        Best Selling
+      </Link>
+      <Link
+        href={'/search?tab=discount'}
+        role='tab'
+        className={`tab ${tab === 'discount' ? 'tab-active' : ''}`}
+
+      >
+        Discount
+      </Link>
+    </div>
+  )
 }

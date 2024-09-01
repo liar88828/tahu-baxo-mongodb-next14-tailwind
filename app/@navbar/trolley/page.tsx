@@ -23,11 +23,7 @@ export default function Navbar() {
       </div>
       <div className='navbar-end'>
         <button className='btn btn-ghost btn-circle'>
-          <Icon icon={'mdi:favorite'}
-                className={'size-5'}
-          />
         </button>
-
       </div>
     </div>
   )

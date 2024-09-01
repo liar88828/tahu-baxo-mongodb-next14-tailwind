@@ -1,7 +1,6 @@
-'use client'
 import React from 'react'
 import { repeat } from '@/lib/utils/repeat'
-import { Icon } from '@iconify/react'
+import { IconAdd, IconDelete, IconRemove } from "@/components/icon/IconMore";
 
 export function ProductList() {
   return (
@@ -13,10 +12,10 @@ export function ProductList() {
         </div>
         {/*<button className={'btn btn-primary btn-sm'}>Show</button>*/}
       </div>
-      <div className='space-y-4'>
+      <div className='space-y-4 '>
         {repeat(20).map((_, index) => (
           <ProductListItem key={index}>
-            <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
+            <input type="checkbox" defaultChecked className="checkbox checkbox-sm mr-2" />
           </ProductListItem>
         ))}
       </div>
@@ -27,14 +26,14 @@ export function ProductList() {
 export function ProductListItem({children} : { children? : React.ReactNode }) {
   return (
     <div className={'flex items-center '}>
-      <div className={'pr-2 '}>
+      <div className={' '}>
         {children}
       </div>
-      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 w-full'>
+      <div className='flex rounded-lg p-2 space-x-2 w-full   border '>
         <img
           src='https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
           alt='product image'
-          className='h-auto w-20 rounded-full object-fill'
+          className='h-auto w-20 rounded-full object-cover'
         />
         <div className='flex  w-full'>
           <div className=' w-full'>
@@ -43,13 +42,10 @@ export function ProductListItem({children} : { children? : React.ReactNode }) {
                 <h1 className='text-lg font-semibold text-base-content/80'>
                   Camera
                 </h1>
-                <h2 className='font-bold text-base-content/50'>Red</h2>
+                <h2 className='text-sm font-bold text-base-content/50'>Red</h2>
               </div>
               <button className='btn btn-circle btn-outline btn-sm'>
-                <Icon
-                  icon='ic:round-delete'
-                  className='size-5'
-                />
+                <IconDelete />
               </button>
             </div>
             <div className='flex justify-between items-center w-full '>
@@ -68,18 +64,12 @@ export function ProductListCount() {
     <div className='flex space-x-2 justify-center items-center'>
       <button className='btn btn-square btn-outline btn-sm'>
         {/* icon plus */}
-        <Icon
-          icon='ic:round-add'
-          className='size-5'
-        />
+        <IconAdd />
       </button>
       <h1 className='font-bold text-xl'>1</h1>
       <button className='btn btn-square btn-outline btn-sm'>
         {/* icon minus */}
-        <Icon
-          icon='ic:round-remove'
-          className='size-5'
-        />
+        <IconRemove />
       </button>
     </div>
   )

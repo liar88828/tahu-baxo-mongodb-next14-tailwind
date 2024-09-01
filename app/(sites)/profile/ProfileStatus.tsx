@@ -1,31 +1,40 @@
-'use client'
+import { ParamsProfile } from "@/interface/ParamsProfile";
+import { IconAdd } from "@/components/icon/IconMore";
+import Link from "next/link";
 
-export function ProfileStatus() {
-	return (
-		<div className='grid grid-cols-2 gap-2'>
-			<ProfileStatusItem
-				title='All Types Product'
-				count={10}
-			/>
-			<ProfileStatusItem
-				title='All Products Sold'
-				count={2324}
-			/>
-		</div>
-	)
+export function ProfileStatus({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
+  return (
+    <div className='grid grid-cols-2 gap-2'>
+      <ProfileStatusItem
+        title={`All Types ${tab}`}
+        count={10}
+        tab={tab}
+      />
+      <ProfileStatusItem
+        title={`All ${tab} Sold`}
+        count={2324}
+        tab={tab}
+      />
+    </div>
+  )
 }
 
-export function ProfileStatusItem({
-	title,
-	count,
-}: {
-	title: string
-	count: number
-}) {
-	return (
-		<div className='rounded-lg border-white/30 p-2 border-2'>
-			<h1 className='text-lg font-bold'>{title}</h1>
-			<h2>{count}</h2>
-		</div>
-	)
+export function ProfileStatusItem(
+  {title, count, tab} : {
+    title : string
+    count : number,
+    tab : string
+  }) {
+  return (
+    <div className='rounded-lg border-white/30 p-2 border-2 shadow bg-base-200/20'>
+      <div className="flex justify-between w-full">
+        <h1 className='text font-bold capitalize'>{title}</h1>
+        <Link
+          href={`/profile/${tab}/create`}
+          className={'btn btn-xs btn-square btn-outline'}
+        ><IconAdd /></Link>
+      </div>
+      <h2>{count}</h2>
+    </div>
+  )
 }

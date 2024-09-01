@@ -8,11 +8,12 @@ export default function Category() {
         <h1 className={'font-bold text-xl'}>Category</h1>
         <button className={'btn btn-primary btn-sm'}>Select</button>
       </div>
-      <div className=' flex flex-wrap gap-2 justify-between '>
+      {/*justify-between*/}
+      <div className=' flex flex-wrap gap-2  '>
         {dataCategory.map((item, i) => (
           <button
             key={i}
-            className="btn btn-sm"
+            className="btn btn-sm shadow"
           >{item.title}</button>
         ))}
       </div>

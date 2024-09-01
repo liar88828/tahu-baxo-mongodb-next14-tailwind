@@ -5,7 +5,7 @@ import React from "react";
 export function TotalPay() {
   const route = useRouter()
 
-  return (<div className={'space-y-2'}>
+  return (<div className={'space-y-2 '}>
       <div className='flex justify-between items-center '>
         <h1 className='text-lg '>Promo</h1>
         <h1 className='text-lg font-bold'>Rp21312.23</h1>
@@ -19,7 +19,7 @@ export function TotalPay() {
         <h1 className='text-lg font-bold'>Rp21312.23</h1>
       </div>
       <button
-        onClick={() => route.push('/home')}
+        onClick={() => route.push('/transaction')}
         className='btn btn-primary w-full font-bold text-lg  '
       >
         Buy Now

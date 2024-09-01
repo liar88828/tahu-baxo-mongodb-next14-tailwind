@@ -7,16 +7,14 @@ export function PaymentList() {
         <h1 className={'font-bold text-xl'}>Payment Method</h1>
         <button className={'btn btn-primary btn-sm'}>Show</button>
       </div>
-      <div className=' flex gap-2 overflow-x-auto '>
         <PaymentListItem />
-      </div>
     </div>
   )
 }
 
 export function PaymentListItem() {
   return (
-    <div className="card card-bordered bg-base-200 border-white/50 card-compact w-full">
+    <div className="card card-bordered bg-base-200/50 border-white/50 card-compact w-full shadow">
       <div className="card-body">
         <div className="flex justify-between items-center w-full text-2xl mb-2">
           <h1 className="card-title">Mandiri</h1>

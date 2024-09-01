@@ -30,7 +30,7 @@ export function DeliveryList() {
 
 export function DeliveryListItem() {
   return (
-    <div className="card card-bordered bg-base-200 border-white/50 card-compact w-full">
+    <div className="card card-bordered bg-base-200/50 border-white/50 card-compact w-full shadow">
       <div className="card-body">
         <div className="flex justify-between items-center w-full text-2xl mb-2">
           <h1 className="card-title">JNT</h1>

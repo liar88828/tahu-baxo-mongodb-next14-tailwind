@@ -1,14 +1,32 @@
 'use client'
 import { Icon } from '@iconify/react'
 
+import React from 'react';
+
+function TitleCardProfile({title, text, click} : { title : string, text : string, click : () => void }) {
+  return (
+    <div className="flex justify-between items-center w-full text-2xl mb-2 ">
+      <h1 className={'font-bold text-xl'}>{title}</h1>
+      <button
+        onClick={click}
+        className={'btn btn-primary btn-sm'}
+      >{text}</button>
+    </div>
+  );
+}
+
+export default ProfileInfo;
+
 export function ProfileInfo() {
   return (
     <div>
-      <div className="flex justify-between items-center w-full text-2xl mb-2">
-        <h1 className={'font-bold text-xl'}>User Info</h1>
-        <button className={'btn btn-primary btn-sm'}>Select</button>
-      </div>
-      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2'>
+      <TitleCardProfile
+        title={'User Information'}
+        text={'Select'}
+        click={() => {
+        }}
+      />
+      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 shadow'>
         <img
           src='https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'
           alt='avatar'

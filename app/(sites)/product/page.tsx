@@ -1,18 +1,16 @@
 import React from 'react'
-import Navbar from './Navbar'
 import { CarouselImageDetail } from './CarouselImageDetail'
-import NavBottom from "@/app/(sites)/product/NavBottom";
 import { Description } from "@/app/(sites)/product/description";
+import NavBottom from "@/app/(sites)/product/NavBottom";
 
 export default function page() {
   return (
     <>
-      <Navbar />
-      <div className='p-2 space-y-2'>
+      <div className='p-2 space-y-2 pb-16'>
         <CarouselImageDetail />
         <Description />
-        <NavBottom />
       </div>
+      <NavBottom />
     </>
   )
 }

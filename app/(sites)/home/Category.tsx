@@ -5,14 +5,16 @@ import React from 'react'
 
 export default function Category() {
 	return (
-		<div className='rounded-lg'>
+    <div className='rounded-lg shadow p-2 bg-base-200/40'>
 			<div className='grid grid-cols-4 gap-4'>
 				{repeat(8).map((_, i) => {
 					return (
 						<div
 							className='flex flex-col  items-center '
 							key={i}>
-							<button className='btn btn-circle btn-outline btn-md'>
+							<button
+								className='btn btn-circle btn-outline btn-md'
+							>
 								<Icon
 									icon='ic:round-category'
 									className='size-5'

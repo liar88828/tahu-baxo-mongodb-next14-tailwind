@@ -1,10 +1,10 @@
 'use client'
-import { Icon } from '@iconify/react'
+import { IconEdit } from "@/components/icon/IconMore";
 
 export function ProfileInfo() {
 	return (
 		<div>
-			<div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2'>
+      <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 bg-base-200/20 shadow'>
 				<img
 					src='https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'
 					alt='avatar'
@@ -24,8 +24,7 @@ export function ProfileInfo() {
 						</div>
 					</div>
 					<button className='btn btn-circle btn-outline btn-sm'>
-						{/* edit */}
-						<Icon icon='material-symbols:edit' />
+						<IconEdit />
 					</button>
 				</div>
 			</div>
