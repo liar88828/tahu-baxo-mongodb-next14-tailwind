@@ -1,5 +1,7 @@
 function Default() {
-  return null
+  return (<div>
+    hellos
+  </div>)
 }
 
 export default Default;

@@ -3,6 +3,7 @@ import { IconAdd } from "@/components/icon/IconMore";
 import Link from "next/link";
 
 export function ProfileStatus({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
+  tab = tab === undefined ? 'product' : tab;
   return (
     <div className='grid grid-cols-2 gap-2'>
       <ProfileStatusItem
@@ -31,7 +32,7 @@ export function ProfileStatusItem(
         <h1 className='text font-bold capitalize'>{title}</h1>
         <Link
           href={`/profile/${tab}/create`}
-          className={'btn btn-xs btn-square btn-outline'}
+          className={'btn btn-xs btn-square btn-outline m-1'}
         ><IconAdd /></Link>
       </div>
       <h2>{count}</h2>

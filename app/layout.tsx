@@ -26,9 +26,11 @@ export default function RootLayout(
       className={inter.className}
       // data-theme={ 'mytheme' }
     >
-    <body className={' min-h-screen container  '}>
-    {navbar}
-    {children}
+    <body className={' min-h-screen   '}>
+    <div className="container">
+      {navbar}
+      {children}
+    </div>
     </body>
     </html>
   )

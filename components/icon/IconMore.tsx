@@ -9,6 +9,13 @@ export function IconMore() {
     />
   );
 }
+export function IconMenu() {
+  return (
+    <Icon icon='mdi:menu'
+          className='size-5'
+    />
+  );
+}
 export function IconBack() {
   return (
     <Icon

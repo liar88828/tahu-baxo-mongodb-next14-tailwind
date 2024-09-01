@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 
-export default function Category() {
+export default function CategoryWrap() {
   return (
     <div>
       <div className="flex justify-between items-center w-full text-2xl mb-2 px-2">
