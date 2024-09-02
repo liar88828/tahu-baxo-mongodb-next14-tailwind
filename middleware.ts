@@ -1,12 +1,22 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/utils/auth.config";
+import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/utils/routes";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-	return NextResponse.redirect(new URL('/home', request.url))
-}
+const {auth} = NextAuth(authConfig);
+//@ts-expect-error
+export default auth((req) => {
+  const {nextUrl} = req;
 
-// See "Matching Paths" below to learn more
+  const isAuthenticated = !!req.auth;
+  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+
+  if (isPublicRoute && isAuthenticated)
+    return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
+
+  if (!isAuthenticated && !isPublicRoute)
+    return Response.redirect(new URL(ROOT, nextUrl));
+});
+
 export const config = {
-	matcher: '/about/:path*',
+  matcher : ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 }

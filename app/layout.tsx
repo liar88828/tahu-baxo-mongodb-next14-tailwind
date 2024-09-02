@@ -4,10 +4,6 @@ import './globals.css'
 import React from "react";
 
 const inter = Inter({subsets : ['latin']})
-// const nunito = Nunito({
-// 	subsets : ['latin'],
-// 	weight : ['400', '700']
-// })
 
 export const metadata : Metadata = {
   title : 'Create Next App',
@@ -18,7 +14,6 @@ export default function RootLayout(
   {children, navbar,} : {
     children : React.ReactNode,
     navbar : React.ReactNode,
-
   }) {
   return (
     <html
