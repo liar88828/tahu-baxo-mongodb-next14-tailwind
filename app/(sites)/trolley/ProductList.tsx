@@ -1,8 +1,13 @@
 import React from 'react'
 import { repeat } from '@/lib/utils/repeat'
 import { IconAdd, IconDelete, IconRemove } from "@/components/icon/IconMore";
+import { getTrolleyAll } from "@/server/action/trolley.action";
 
-export function ProductList() {
+export async function ProductList({id_trolley} : { id_trolley : number }) {
+  const data = await getTrolleyAll({trolleyId : id_trolley})
+  if (!data) {
+    return <h1>Error Bos</h1>
+  }
   return (
     <div>
       <div className="flex justify-between items-center w-full text-2xl mb-2 ">

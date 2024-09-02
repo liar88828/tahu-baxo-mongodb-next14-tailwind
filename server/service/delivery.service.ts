@@ -1,6 +1,12 @@
-import { DeliveryUpdate } from '../../config/prisma'
-import { DeliverSchema, DeliveryCreate, deliverySchema } from '@/server/schema/deliver.schema'
+import {
+  DeliverSchema,
+  DeliveryCreate,
+  DeliveryId,
+  deliverySchema,
+  DeliveryUpdate
+} from '@/server/schema/deliver.schema'
 import prisma from '@/config/prisma'
+import { DeliveryDB } from "@prisma/client";
 
 export class ServiceDeliver {
   constructor(
@@ -8,7 +14,7 @@ export class ServiceDeliver {
   ) {
   }
 
-  async findAll(page : number, take : number) {
+  async findAll(page : number, take : number) : Promise<DeliveryDB[]> {
     return prisma.$transaction(async (tx) => {
       return tx.deliveryDB.findMany({
         take : take,
@@ -17,29 +23,26 @@ export class ServiceDeliver {
     })
   }
 
-  async findOne(id : number) {
-    id = this.valid.idValid(id)
-    const data = await prisma.deliveryDB.findUnique({where : {id}})
+  async findOne({id_delivery} : DeliveryId) : Promise<DeliveryDB> {
+    const data = await prisma.deliveryDB.findUnique({where : {id : id_delivery}})
     if (!data) {
       throw new Error("Data delivery is not found")
     }
     return data
   }
 
-  async createOne(data : DeliveryCreate) {
+  async createOne(data : DeliveryCreate) : Promise<DeliveryDB> {
     data = this.valid.createValid(data)
     return prisma.deliveryDB.create({data : {...data}})
   }
 
-  async updateOne(data : DeliveryUpdate, id : number) {
+  async updateOne(data : DeliveryUpdate, {id_delivery} : DeliveryId) : Promise<DeliveryDB> {
     data = this.valid.updateValid(data)
-    id = this.valid.idValid(id)
-    return prisma.deliveryDB.update({data : {...data}, where : {id : id}})
+    return prisma.deliveryDB.update({data : {...data}, where : {id : id_delivery}})
   }
 
-  async deleteOne(id : number) {
-    id = this.valid.idValid(id)
-    return prisma.deliveryDB.delete({where : {id}})
+  async deleteOne({id_delivery} : DeliveryId) {
+    return prisma.deliveryDB.delete({where : {id : id_delivery}})
   }
 }
 

@@ -1,7 +1,8 @@
-import { LoginUser, NewPassword, RegisterUser, userSchema, UserSchema } from '@/server/schema/user.schema'
+import { LoginUser, NewPassword, RegisterUser, ResetSchema, userSchema, UserSchema } from '@/server/schema/user.schema'
 import prisma from '../../config/prisma'
-import { User } from '@prisma/client'
 import { bcryptService, BcryptService } from "@/server/service/bcrypt.service";
+import { UserId, UserPublic } from "@/interface/user/UserPublic";
+export type SelectPrisma<T> = Record<keyof T, true>
 
 export class UserService {
   constructor(
@@ -10,10 +11,22 @@ export class UserService {
   ) {
   }
 
-  validPassword(data : {
-    password : string
-    confPass : string
-  }) {
+  //
+  selectPrismaUserPublic : SelectPrisma<UserPublic> = {
+    id : true,
+    name : true,
+    email : true,
+    emailVerified : true,
+    image : true,
+    role : true,
+    createdAt : true,
+    trolleyId : true,
+    phone : true,
+    address : true
+
+  };
+
+  validPassword(data : ResetSchema) {
     if (data.confPass !== data.password) {
       throw new Error('Password is not match')
     }
@@ -22,21 +35,28 @@ export class UserService {
 
   async register(data : RegisterUser, refreshToken : string) {
     data.password = await this.serviceBcrypt.hashPassword(data)
-    return prisma.user.create({
-      select : {
-        name : true,
-        email : true,
-        image : true,
-        password : true,
-        id : true
+    return prisma.$transaction(async (tx) => {
+      const trolley = await tx.trolley.create({})
+      return prisma.user.create({
+        select : {
+          name : true,
+          email : true,
+          image : true,
+          password : true,
+          id : true,
+          trolleyId : true
+        },
+        data : {
+          name : data.fullname,
+          password : data.password,
+          email : data.email,
+          refresh_token : refreshToken,
+          trolleyId : trolley.id,
+          address : data.address,
+          phone : data.phone
 
-      },
-      data : {
-        name : data.name,
-        password : data.password,
-        email : data.email,
-        refresh_token : refreshToken
-      },
+        },
+      })
     })
   }
 
@@ -64,13 +84,13 @@ export class UserService {
         name : true,
         id : true,
         password : true,
+        trolleyId : true
       }
     })
     if (!data) {
       throw new Error('Email is not found')
     }
     await this.serviceBcrypt.comparePassword(userReq.password, data.password)
-
     return data
   }
 
@@ -106,9 +126,21 @@ export class UserService {
     }
   }
 
-  async findId(id : string) : Promise<User> {
+  async findId({id_user} : UserId) : Promise<UserPublic> {
     const data = await prisma.user.findUnique({
-      where : {id},
+      where : {id : id_user},
+      select : this.selectPrismaUserPublic
+    })
+    if (!data) {
+      throw new Error('User is not found')
+    }
+    return data
+  }
+
+  async findAll() : Promise<UserPublic[]> {
+
+    const data = await prisma.user.findMany({
+      select : this.selectPrismaUserPublic
     })
     if (!data) {
       throw new Error('User is not found')
@@ -119,11 +151,12 @@ export class UserService {
   // async loginUser(data: LoginUser) {
   //   return this.findEmail(data)
   // }
-  async newPassword(data : NewPassword) {
+  async newPassword(data : NewPassword) : Promise<UserPublic> {
     data.password = await this.serviceBcrypt.hashPassword(data)
     return prisma.user.update({
       where : {email : data.email},
-      data : {password : data.password}
+      data : {password : data.password},
+      select : this.selectPrismaUserPublic
     })
   }
 }

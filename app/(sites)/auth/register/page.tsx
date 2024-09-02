@@ -1,10 +1,10 @@
 'use client'
 import React from 'react';
 import Link from "next/link";
-import { onRegister } from "@/server/action/auth";
+import { onRegister } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
-import { initialState } from "@/server/schema/auth.schema";
 import { redirect } from "next/navigation";
+import { initialState } from "@/server/schema/user.schema";
 
 function Page() {
   const [state, formAction,] = useFormState(onRegister, initialState)

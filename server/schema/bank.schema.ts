@@ -1,10 +1,11 @@
 import prisma from "@/config/prisma";
 import { z } from 'zod'
 import { ISchema } from "@/interface/ISchema";
-import { Prisma } from '@prisma/client'
+import { BankDB, Prisma } from '@prisma/client'
 
 export type BankUpdate = Prisma.Args<typeof prisma.bankDB, 'update'>[ 'data' ]
 export type BankCreate = Prisma.Args<typeof prisma.bankDB, 'create'>[ 'data' ]
+export type BankId = { id_bank : BankDB['id'] }
 
 export class BankSchema implements ISchema {
   id = z.number({required_error : 'ID is required',}).optional()
@@ -46,21 +47,21 @@ export class BankSchema implements ISchema {
     return data
   }
 
-  idValid(id : string) : number {
-    let validId = this.id.parse(Number(id))
-    if (!validId) {
-      throw new Error("data is not valid")
-    }
-    return validId
-  }
+  // idValid(id : string) : number {
+  //   let validId = this.id.parse(Number(id))
+  //   if (!validId) {
+  //     throw new Error("data is not valid")
+  //   }
+  //   return validId
+  // }
 
-  idValidInt(id : number | undefined) : number {
-    id = this.id.parse(id)
-    if (!id) {
-      throw new Error("data is not valid")
-    }
-    return id
-  }
+  // idValidInt(id : number | undefined) : number {
+  //   id = this.id.parse(id)
+  //   if (!id) {
+  //     throw new Error("data is not valid")
+  //   }
+  //   return id
+  // }
 }
 
 export const bankSchema = new BankSchema()

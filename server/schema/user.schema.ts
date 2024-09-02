@@ -2,17 +2,50 @@ import prisma from '@/config/prisma'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 
-export type UserCreate = Prisma.Args<typeof prisma.user, 'create'>['data']
-export type UserUpdate = Prisma.Args<typeof prisma.user, 'update'>['data']
-
 export class UserSchema {
+
   id = z.string({required_error : 'ID is required'}).optional()
   register = z.object({
-    name : z.string().min(1).max(100),
-    email : z.string().email(),
-    password : z.string(),
-    confPass : z.string(),
+    fullname : z.string().min(1).max(100),
+    email : z.string().email().min(1).max(50),
+    password : z.string().min(8).max(50),
+    confPass : z.string().min(8).max(50),
+    phone : z.string(),
+    address : z.string(),
+
   }) satisfies z.Schema<RegisterUser>
+  registerSchema = this.register
+    .superRefine(
+      ({confPass, password}, ctx) => {
+        if (confPass !== password) {
+          ctx.addIssue({
+            code : "custom",
+            message : "The passwords did not match",
+            path : ['confPass']
+          });
+        }
+      })
+
+  forgotSchema = z.object({
+    email : z.string().email().min(1).max(50),
+  })
+
+  otpSchema = z.object({
+    otp : z.string().min(6).max(6),
+  })
+  resetSchema = z.object({
+    password : z.string().min(8).max(50),
+    confPass : z.string().min(8).max(50),
+  }).superRefine(
+    ({confPass, password}, ctx) => {
+      if (confPass !== password) {
+        ctx.addIssue({
+          code : "custom",
+          message : "The passwords did not match",
+          path : ['confirmPassword']
+        });
+      }
+    })
 
   update = z.object({
     id : this.id,
@@ -23,8 +56,8 @@ export class UserSchema {
   }) satisfies z.Schema<UserUpdate>
 
   login = z.object({
-    email : z.string().email(),
-    password : z.string(),
+    email : z.string().email().min(1).max(50),
+    password : z.string().min(8).max(50),
   }) satisfies z.Schema<LoginUser>
 
   createValid(data : RegisterUser) {
@@ -51,13 +84,13 @@ export class UserSchema {
     return data
   }
 
-  idValid<T>(id : any) : T {
-    id = this.id.parse(id)
-    if (!id) {
-      throw new Error('data is not valid')
-    }
-    return id
-  }
+  // idValid<T>(id : any) : T {
+  //   id = this.id.parse(id)
+  //   if (!id) {
+  //     throw new Error('data is not valid')
+  //   }
+  //   return id
+  // }
 }
 
 export type LoginUser = {
@@ -68,7 +101,10 @@ export type RegisterUser = {
   email : string
   password : string
   confPass : string
-  name : string
+  fullname : string
+  phone : string
+  address : string
+
 }
 
 export type NewPassword = {
@@ -77,5 +113,15 @@ export type NewPassword = {
   confPass : string
 
 }
-
 export const userSchema = new UserSchema()
+
+export type UserCreate = Prisma.Args<typeof prisma.user, 'create'>['data']
+export type UserUpdate = Prisma.Args<typeof prisma.user, 'update'>['data']
+export type ResetSchema = z.output<typeof userSchema.resetSchema>
+export type otpError = z.inferFlattenedErrors<typeof userSchema.otpSchema>
+type InitialFormState = {
+  message : string[]
+}
+export const initialState : InitialFormState = {
+  message : [''],
+}

@@ -1,9 +1,9 @@
 'use client'
 import { useFormState, useFormStatus } from 'react-dom';
 import Link from "next/link";
-import { onForgot } from "@/server/action/auth";
-import { initialState } from "@/server/schema/auth.schema";
+import { onForgot } from "@/server/action/auth.action";
 import { redirect } from "next/navigation";
+import { initialState } from "@/server/schema/user.schema";
 
 function Page() {
   const [state, formAction,] = useFormState(onForgot, initialState)

@@ -4,8 +4,14 @@ import { repeat } from '@/lib/utils/repeat'
 
 import React from 'react'
 import { ProductListItem } from "@/app/(sites)/trolley/ProductList";
+import { getTrolleyAll } from "@/server/action/trolley.action";
+import { TrolleyDataAll } from "@/server/service/trolley.service";
 
-export function ProductList() {
+export async function ProductList({trolleyId} : TrolleyDataAll) {
+  const data = await getTrolleyAll({trolleyId})
+  if (!data) {
+    return <h1>Data Bank is Not found</h1>
+  }
   return (
     <div className="">
       <div className="flex justify-between items-center w-full text-2xl mb-2 ">

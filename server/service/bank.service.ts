@@ -1,4 +1,4 @@
-import { BankCreate, bankSchema, BankSchema, BankUpdate } from '@/server/schema/bank.schema'
+import { BankCreate, BankId, bankSchema, BankSchema, BankUpdate } from '@/server/schema/bank.schema'
 import prisma from '@/config/prisma'
 import { BankDB } from '@prisma/client'
 
@@ -23,9 +23,8 @@ export class BankService {
     })
   }
 
-  async findId(id : number) : Promise<BankDB> {
-    id = this.valid.idValidInt(id)
-    const data = await prisma.bankDB.findUnique({where : {id}})
+  async findId({id_bank} : BankId) : Promise<BankDB> {
+    const data = await prisma.bankDB.findUnique({where : {id : id_bank}})
     if (!data) {
       throw new Error('Data Bank Is Not Found')
     }
@@ -37,23 +36,13 @@ export class BankService {
     return prisma.bankDB.create({data : {...data}})
   }
 
-  async updateOne(data : BankUpdate, id : number) : Promise<BankDB> {
-    id = this.valid.idValidInt(id)
+  async updateOne(data : BankUpdate, {id_bank} : BankId) : Promise<BankDB> {
     data = this.valid.updateValid(data)
-
-    console.log('service----')
-    console.log(id, data)
-    console.log('service----')
-    return prisma.bankDB.update({data : {...data}, where : {id}})
+    return prisma.bankDB.update({data : {...data}, where : {id : id_bank}})
   }
 
-  async deleteOne(id : number) : Promise<BankDB> {
-    id = this.valid.idValidInt(id)
-    return prisma.bankDB.delete({where : {id}})
-    // if (!data) {
-    //   throw 'Fail Delete data: the Data is Not Found '
-    // }
-    // return data
+  async deleteOne({id_bank} : BankId) : Promise<BankDB> {
+    return prisma.bankDB.delete({where : {id : id_bank}})
   }
 }
 

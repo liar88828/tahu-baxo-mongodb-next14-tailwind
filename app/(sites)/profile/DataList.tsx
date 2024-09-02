@@ -1,11 +1,14 @@
-'use client'
-import { repeat } from '@/lib/utils/repeat'
 import React from 'react'
 import { ProductItem } from "@/components/ProductItem";
 import { TitleCard } from "@/components/TitleCard";
 import { IconFilter } from "@/components/icon/IconMore";
+import { getProductsAll } from "@/server/action/product.action";
 
-export function DataList() {
+export async function DataList() {
+  const data = await getProductsAll()
+  if (!data) {
+    return <h1>Data Product is Not found</h1>
+  }
   return (
     <div>
       <TitleCard
@@ -14,8 +17,8 @@ export function DataList() {
         click={() => console.log("click")}
       />
       <div className='grid grid-cols-2 gap-2'>
-        {repeat(8).map((_, i) => {
-          return <ProductItem key={i} />
+        {data.map((item, i) => {
+          return <ProductItem item={item} key={item.id} />
         })}
       </div>
     </div>

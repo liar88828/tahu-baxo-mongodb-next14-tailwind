@@ -1,9 +1,9 @@
 'use client'
 import React, { ChangeEvent, FormEvent, KeyboardEvent, useRef, useState } from 'react';
 import Link from "next/link";
-import { otpError, otpSchema } from "@/server/schema/auth.schema";
 import { ZodError } from "zod";
 import { useRouter } from "next/navigation";
+import { otpError, userSchema } from "@/server/schema/user.schema";
 
 export default function Page() {
   const route = useRouter()
@@ -12,7 +12,7 @@ export default function Page() {
   const handleOtpSubmit = (otp : string) => {
     setLoading(true)
     try {
-      const data = otpSchema.parse({otp})
+      const data = userSchema.otpSchema.parse({otp})
       setError({...error, otp : ['']})
       console.log('Submitted OTP:', data);
       route.push('/auth/done')

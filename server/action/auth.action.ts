@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
-import { forgotSchema, loginSchema, registerSchema, resetSchema } from "@/server/schema/auth.schema";
+import { userSchema } from "@/server/schema/user.schema";
 
 export async function onLogin(prevState : any, formData : FormData) {
   try {
@@ -8,7 +8,7 @@ export async function onLogin(prevState : any, formData : FormData) {
       email : formData.get('email'),
       password : formData.get('password'),
     }
-    const data = loginSchema.parse(rawFormData);
+    const data = userSchema.login.parse(rawFormData);
     // console.log(data, 'success')
     // revalidatePath('/auth')
     // redirect('/auth/register')
@@ -25,7 +25,7 @@ export async function onRegister(prevState : any, formData : FormData) {
 
   try {
     const rawFormData = Object.fromEntries(formData.entries())
-    const data = registerSchema.parse(rawFormData);
+    const data = userSchema.registerSchema.parse(rawFormData);
     console.log(data, 'success')
     // redirect('/otp')
     return {message : ['true']}
@@ -41,7 +41,7 @@ export async function onForgot(prevState : any, formData : FormData) {
     const rawFormData = {
       email : formData.get('email'),
     }
-    const data = forgotSchema.parse(rawFormData);
+    const data = userSchema.forgotSchema.parse(rawFormData);
     // console.log(data, 'success')
     revalidatePath('/')
     return {message : ['true']}
@@ -55,7 +55,6 @@ export async function onForgot(prevState : any, formData : FormData) {
 }
 
 export async function onReset(prevState : any, formData : FormData) {
-
   const form = Object.fromEntries(formData.entries())
   console.log(form);
   try {
@@ -63,14 +62,14 @@ export async function onReset(prevState : any, formData : FormData) {
       password : formData.get('password'),
       confPass : formData.get('confPass'),
     }
-    const data = resetSchema.parse(rawFormData);
+    const data = userSchema.resetSchema.parse(rawFormData);
     console.log(data, 'success')
-    return {message : 'success'}
+    return {message : ['true']}
 
   } catch (err) {
     if (err instanceof ZodError) {
       console.log(err.flatten().fieldErrors);
-      return {message : 'Please enter a valid email'}
+      return err.flatten().fieldErrors
 
     }
   }

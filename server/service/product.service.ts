@@ -1,7 +1,12 @@
-import { ProductCreate, ProductUpdate } from '../../config/prisma'
-import prisma from '@/config/prisma'
-import { ProductDB } from '@prisma/client'
-import { productSchema, ProductSchema, ProductTransaction } from "@/server/schema/product.schema";
+import {
+  ProductCreate,
+  productSchema,
+  ProductSchema,
+  ProductTransaction,
+  ProductUpdate
+} from "@/server/schema/product.schema";
+import { ProductDB } from ".prisma/client";
+import prisma from "@/config/prisma";
 
 export class ProductService {
   constructor(

@@ -2,11 +2,12 @@ import { NextRequest } from 'next/server'
 import { GetData, GetPage, GetUpdate, IServiceRequest, } from '../../interface/IServiceRequest'
 
 import { Params } from "@/interface/params";
+import { z } from "zod";
+import { AccessTokenPayload, JwtService } from "@/server/service/jwt.service";
 
 export class RequestService implements IServiceRequest {
 
   getTokenCookie(req : NextRequest) {
-
     const token = req.cookies.get('token')
     if (!token) {
       throw new Error("Not have token in Cookie",)
@@ -38,11 +39,11 @@ export class RequestService implements IServiceRequest {
   }
 
   getId({params} : Params) : { id : string } {
-    return {id : params.id}
+    return {id : z.string().min(1).parse(params.id)}
   }
 
   getIdInt({params} : Params) : { id : number } {
-    return {id : Number(params.id)}
+    return {id : z.number().min(1).parse(Number(params.id))}
   }
 
   getPage(request : NextRequest) : GetPage {
@@ -70,6 +71,12 @@ export class RequestService implements IServiceRequest {
     return {
       data : await request.json()
     }
+  }
+
+  getUserPayload(req : NextRequest) {
+    const bearer = this.getTokenBearer(req)
+    const user = JwtService.jwtPayloadStatic(bearer,)
+    return user as AccessTokenPayload
   }
 }
 

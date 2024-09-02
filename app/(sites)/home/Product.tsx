@@ -1,9 +1,13 @@
-'use client'
-import { repeat } from '@/lib/utils/repeat'
 import React from 'react'
 import { ProductItem } from "@/components/ProductItem";
 import { TitleCard } from "@/components/TitleCard";
-export default function Product() {
+import { getProductsAll } from "@/server/action/product.action";
+
+export default async function Product() {
+  const data = await getProductsAll()
+  if (!data) {
+    return <h1>Error Bos</h1>
+  }
   return (
     <div className=''>
       <TitleCard
@@ -11,8 +15,8 @@ export default function Product() {
         button={'View more'}
       />
       <div className='grid grid-cols-2 gap-3'>
-        {repeat(8).map((_, i) => {
-          return <ProductItem key={i} />
+        {data.map((item) => {
+          return <ProductItem item={item} key={item.id} />
         })}
       </div>
     </div>

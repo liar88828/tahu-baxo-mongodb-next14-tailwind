@@ -3,9 +3,9 @@ import { requestService, RequestService } from '@/server/service/request.service
 import { NextRequest } from 'next/server'
 import { bankService, BankService } from '@/server/service/bank.service'
 import { IController } from '@/interface/IController'
-import { errorHanding } from '../../lib/utils/errorHanding'
 import { Params } from "@/interface/params";
 import { auth } from "@/auth";
+import { errorHanding } from "@/lib/utils/errorHanding";
 
 class BankController implements IController {
   constructor(
@@ -30,7 +30,7 @@ class BankController implements IController {
   async findId(req : NextRequest, params : Params) {
     try {
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceBank.findId(id)
+      const data = await this.serviceBank.findId({id_bank : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -52,7 +52,7 @@ class BankController implements IController {
     console.log('test', params)
     try {
       let {data, id} = await this.serviceReq.getUpdateInt<BankUpdate>(req, params)
-      data = await this.serviceBank.updateOne(data, id)
+      data = await this.serviceBank.updateOne(data, {id_bank : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -62,7 +62,7 @@ class BankController implements IController {
   async deleteOne(req : NextRequest, params : Params) {
     try {
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceBank.deleteOne(id)
+      const data = await this.serviceBank.deleteOne({id_bank : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)

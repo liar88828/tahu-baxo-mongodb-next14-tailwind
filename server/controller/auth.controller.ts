@@ -4,13 +4,18 @@ import { userService, UserService } from '@/server/service/user.service'
 import { NextRequest } from 'next/server'
 import { errorHanding } from "@/lib/utils/errorHanding";
 import { JwtService, RefreshTokenPayload } from "@/server/service/jwt.service";
+import { UserController } from "@/server/controller/user.controller";
 
-class AuthController {
+class AuthController extends UserController {
   constructor(
-    private serviceUser : UserService,
-    private serviceRequest : RequestService,
+    protected serviceUser : UserService,
+    protected serviceRequest : RequestService,
     private serviceJwt : JwtService
   ) {
+    super(
+      serviceUser,
+      serviceRequest,
+    )
   }
 
 // auth
@@ -22,7 +27,7 @@ class AuthController {
       await this.serviceUser.foundEmail(data)
       // hash
       // token
-      const refreshToken = this.serviceJwt.refreshToken({email : data.email, name : data.name})
+      const refreshToken = this.serviceJwt.refreshToken({email : data.email, name : data.fullname})
       const {password, ...userDb} = await this.serviceUser.register(data, refreshToken)
       const accessToken = this.serviceJwt.accessToken(userDb)
       //send
@@ -96,6 +101,7 @@ class AuthController {
       // valid
       const token = this.serviceRequest.getTokenCookie(req)
       // const refreshToken = this.serviceJwt.verifyRefresh(token)
+      //
       const refreshToken = this.serviceJwt.jwtPayload(token) as RefreshTokenPayload
 
       return Response.json('test',
@@ -113,12 +119,12 @@ class AuthController {
   async test(req : NextRequest) {
     try {
 
-      const bearel = req.headers.get('Authorization')
-      if (!bearel) {
+      const bearer = req.headers.get('Authorization')
+      if (!bearer) {
         return Response.json("not token", {status : 404})
       }
-      // console.log(bearel)
-      const accessToken = bearel.split(' ')[1]
+      // console.log(bearer)
+      const accessToken = bearer.split(' ')[1]
       // console.log(accessToken)
       // const token = req.cookies.get('token')
       // if (!token) {

@@ -2,9 +2,9 @@
 import Link from "next/link";
 import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { onLogin } from "@/server/action/auth";
-import { initialState } from "@/server/schema/auth.schema";
+import { onLogin } from "@/server/action/auth.action";
 import { redirect } from "next/navigation";
+import { initialState } from "@/server/schema/user.schema";
 
 export default function Page() {
   const [state, formAction,] = useFormState(onLogin, initialState)

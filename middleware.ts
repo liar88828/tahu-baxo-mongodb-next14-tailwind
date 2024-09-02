@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
 import { authConfig } from "@/lib/utils/auth.config";
 import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/utils/routes";
+import { NextAuthRequest } from "next-auth/lib";
 
 const {auth} = NextAuth(authConfig);
-//@ts-expect-error
-export default auth((req) => {
+export default auth((req : NextAuthRequest) => {
   const {nextUrl} = req;
 
   const isAuthenticated = !!req.auth;

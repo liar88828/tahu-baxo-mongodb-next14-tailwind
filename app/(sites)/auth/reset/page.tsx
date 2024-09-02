@@ -1,13 +1,18 @@
 'use client'
 import React from 'react';
 import Link from "next/link";
-import { onReset } from "@/server/action/auth";
+import { onReset } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
-import { initialState } from "@/server/schema/auth.schema";
+import { redirect } from "next/navigation";
+import { initialState } from "@/server/schema/user.schema";
 
 function Page() {
   const [state, formAction,] = useFormState(onReset, initialState)
   const {pending} = useFormStatus();
+  console.log(state)
+  if (state?.message?.[0] === 'true') {
+    redirect('/auth/done')
+  }
   return (
     <div className="p-5 space-y-5">
       <div className="text-left">
@@ -27,6 +32,11 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your New Password ..."
           />
+          {state?.password &&
+            <p className={'text-error text-xs'}>
+              {state.password}
+            </p>
+          }
         </div>
 
         <div>
@@ -37,11 +47,20 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Confirm New Password ..."
           />
+          {state?.confPass &&
+            <p className={'text-error text-xs'}>
+              {state.confPass}
+            </p>
+          }
         </div>
       </form>
 
       <div className="">
-        <button className={'btn btn-block btn-primary'}>Reset Password</button>
+        <button
+          disabled={pending}
+          className={'btn btn-block btn-primary'}
+        >Reset Password
+        </button>
 
         <p> Remembered your password?<Link
           href={'/auth/login'}
