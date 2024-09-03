@@ -1,5 +1,5 @@
 export type Params = {
-  params: {
-    id: string
+  params : {
+    id : string
   }
 }

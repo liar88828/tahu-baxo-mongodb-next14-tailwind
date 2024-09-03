@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
-import {authConfig} from "@/lib/utils/auth.config";
-import {DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT} from "@/lib/utils/routes";
+import { authConfig } from "@/lib/utils/auth.config";
+import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/utils/routes";
 
 const {auth} = NextAuth(authConfig);
+//@ts-expect-error
 export default auth((req) => {
   const {nextUrl} = req;
 
@@ -17,5 +18,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher : ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 }

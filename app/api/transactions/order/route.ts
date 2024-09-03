@@ -1,10 +1,10 @@
-import {NextRequest} from "next/server";
-import {transactionController} from "@/lib/controller/transaction.controller";
+import { NextRequest } from "next/server";
+import { transactionController } from "@/server/controller/transaction.controller";
 
-export async function GET(req: NextRequest) {
+export async function GET(req : NextRequest) {
   return transactionController.findAll(req)
 }
 
-export async function POST(req: NextRequest) {
-  return transactionController.createOne(req)
+export async function POST(req : NextRequest) {
+  return transactionController.checkOut(req)
 }

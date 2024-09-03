@@ -1,10 +1,10 @@
-import {testApiHandler} from "next-test-api-route-handler";
-import {afterAll, beforeAll, describe, expect, it} from 'vitest';
-import prisma from "@/lib/db/prisma";
+import { testApiHandler } from "next-test-api-route-handler";
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import prisma from "@/config/prisma";
 import * as appHandler from "../../app/api/bank/route"
 import * as appHandlerParam from "../../app/api/bank/[id]/route";
-import {BankDB} from "@prisma/client";
-import {dataTestCreate, dataTestCreate2, dataTestError, dataTestUpdate} from "@/__test__/utils/bank";
+import { BankDB } from "@prisma/client";
+import { dataTestCreate, dataTestCreate2, dataTestError, dataTestUpdate } from "@/__test__/utils/bank";
 
 describe.sequential('can test api bank', async () => {
   beforeAll(async () => {
@@ -16,22 +16,22 @@ describe.sequential('can test api bank', async () => {
   describe.sequential("POST can create Data Bank", async () => {
     it('SUCCESS Create data bank use mock', async () => {
       const res = await fetch("http://localhost:3000/api/bank", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(dataTestCreate),
+        method : "POST",
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify(dataTestCreate),
       }).then((res) => res.json())
       expect(res).toMatchObject(dataTestCreate)
-      expect(res).not.toMatchObject({error: "bos"})
+      expect(res).not.toMatchObject({error : "bos"})
     })
 
     it("SUCCESS Create data bank use mock", async () => {
       await testApiHandler({
         appHandler,
-        test: async ({fetch}) => {
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(dataTestCreate2),
+            method : "POST",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(dataTestCreate2),
           });
           const json = await response.json();
           expect(response.status).toBe(200);
@@ -51,8 +51,8 @@ describe.sequential('can test api bank', async () => {
     it("SUCCESS GET can get data bank use mock", async () => {
       await testApiHandler({
         appHandler,
-        test: async ({fetch}) => {
-          const response = await fetch({method: "GET"});
+        test : async ({fetch}) => {
+          const response = await fetch({method : "GET"});
           const json = await response.json();
           expect(response.status).toBe(200);
           expect(json).toMatchObject([dataTestCreate, dataTestCreate2]);
@@ -63,10 +63,10 @@ describe.sequential('can test api bank', async () => {
     it("SUCCESS GET can get data bank by id  data use mock", async () => {
       const {id} = await prisma.bankDB.findFirst() as BankDB
       await testApiHandler({
-        params: {id: `${id}`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
-          const response = await fetch({method: "GET"});
+        params : {id : `${id}`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
+          const response = await fetch({method : "GET"});
           const json = await response.json();
           expect(response.status).toBe(200);
           expect(json).toMatchObject(dataTestCreate);
@@ -76,17 +76,16 @@ describe.sequential('can test api bank', async () => {
 
     it("ERROR GET can get data bank by id  data use mock, because wrong id ", async () => {
       await testApiHandler({
-        params: {id: `wrong`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
-          const response = await fetch({method: "GET"});
+        params : {id : `wrong`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
+          const response = await fetch({method : "GET"});
           const json = await response.json();
           expect(response.status).toBe(400);
           expect(json).not.toMatchObject(dataTestCreate);
         },
       });
     });
-
 
   })
 
@@ -95,13 +94,13 @@ describe.sequential('can test api bank', async () => {
     it("SUCCESS can update data bank by id  data use mock", async () => {
       const {id} = await prisma.bankDB.findFirst() as BankDB
       await testApiHandler({
-        params: {id: `${id}`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
+        params : {id : `${id}`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "PUT",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(dataTestUpdate),
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(dataTestUpdate),
           });
           const json = await response.json();
           expect(response.status).toBe(200);
@@ -112,13 +111,13 @@ describe.sequential('can test api bank', async () => {
 
     it("ERROR can update data bank by id data use mock, because wrong id", async () => {
       await testApiHandler({
-        params: {id: `wrong`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
+        params : {id : `wrong`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "PUT",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(dataTestUpdate),
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(dataTestUpdate),
           });
           const json = await response.json();
           expect(response.status).toBe(400);
@@ -127,18 +126,16 @@ describe.sequential('can test api bank', async () => {
       });
     });
 
-
     it("ERROR can update data bank by id data use mock, because wrong data", async () => {
 
-
       await testApiHandler({
-        params: {id: `wrong`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
+        params : {id : `wrong`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "PUT",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(dataTestError),
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(dataTestError),
           });
           const json = await response.json();
           expect(response.status).toBe(400);
@@ -152,11 +149,11 @@ describe.sequential('can test api bank', async () => {
     it("SUCCESS can delete data bank by id  data use mock", async () => {
       const {id} = await prisma.bankDB.findFirst() as BankDB
       await testApiHandler({
-        params: {id: `${id}`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
+        params : {id : `${id}`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "DELETE",
+            method : "DELETE",
           });
           const json = await response.json();
           expect(response.status).toBe(200);
@@ -168,11 +165,11 @@ describe.sequential('can test api bank', async () => {
     it("ERROR can delete data bank by id  data use mock, because has deleted", async () => {
       const {id} = await prisma.bankDB.findFirst() as BankDB
       await testApiHandler({
-        params: {id: `${id}`},
-        appHandler: appHandlerParam,
-        test: async ({fetch}) => {
+        params : {id : `${id}`},
+        appHandler : appHandlerParam,
+        test : async ({fetch}) => {
           const response = await fetch({
-            method: "DELETE",
+            method : "DELETE",
           });
           const json = await response.json();
           expect(response.status).toBe(200);

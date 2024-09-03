@@ -1,20 +1,20 @@
-import {NextAuthConfig} from "next-auth";
+import { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
-  session: {
-    strategy: 'jwt',
+  session : {
+    strategy : 'jwt',
   },
-  pages: {
-    error: '/',
-    signIn: '/',
-    signOut: '/',
+  pages : {
+    error : '/',
+    signIn : '/',
+    signOut : '/',
   },
-  callbacks: {
+  callbacks : {
     authorized({auth}) {
       const isAuthenticated = !!auth?.user;
 
       return isAuthenticated;
     },
   },
-  providers: [],
+  providers : [],
 } satisfies NextAuthConfig;

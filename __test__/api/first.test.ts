@@ -1,6 +1,6 @@
-import {describe, expect, it} from "vitest";
+import { describe, expect, it } from "vitest";
 
-const math = (a: number, b: number) => {
+const math = (a : number, b : number) => {
   return a + b
 }
 describe('test', () => {

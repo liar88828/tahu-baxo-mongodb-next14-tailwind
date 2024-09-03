@@ -1,7 +1,5 @@
-
-export default function Page ()
-{
-  return <h1>Hello</h1>
+export default function page() {
+  return (
+    <main>hello</main>
+  )
 }
-
-

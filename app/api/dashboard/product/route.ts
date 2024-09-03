@@ -1,8 +1,8 @@
-import {dashboardController} from "@/lib/controller/dashboard.controller";
+import { dashboardController } from "@/server/controller/dashboard.controller";
 
-let querys: "getEmptyStock" | "addStock" | "checkStock"
+let querys : "getEmptyStock" | "addStock" | "checkStock"
 
-export async function GET(req: Request,) {
+export async function GET(req : Request,) {
   if (querys === "getEmptyStock") {
     return dashboardController.getEmptyStock(req)
   }

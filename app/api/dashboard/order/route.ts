@@ -1,8 +1,8 @@
-import {dashboardController} from "@/lib/controller/dashboard.controller";
+import { dashboardController } from "@/server/controller/dashboard.controller";
 
-let queryReq: | "getIdTransactionToday" | "getAllTransactionToday"
+let queryReq : | "getIdTransactionToday" | "getAllTransactionToday"
 
-export async function GET(req: Request,) {
+export async function GET(req : Request,) {
   if (queryReq === 'getAllTransactionToday') {
     dashboardController.getAllTransactionToday(req)
   }
@@ -11,12 +11,12 @@ export async function GET(req: Request,) {
   }
 }
 
-export async function PUT(req: Request,) {
+export async function PUT(req : Request,) {
   if (queryReq === 'getIdTransactionToday') {
   }
 }
 
-export async function DELETE(req: Request,) {
+export async function DELETE(req : Request,) {
   if (queryReq === 'getIdTransactionToday') {
   }
 }

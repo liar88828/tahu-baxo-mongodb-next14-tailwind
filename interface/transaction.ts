@@ -1,10 +1,9 @@
-import {OrderCreate} from "@/lib/schema/order.schema";
-import {TransactionDB} from "@prisma/client";
-
+import { OrderCreate } from "@/server/schema/order.schema";
+import { TransactionDB } from "@prisma/client";
 
 export type TransactionCreate = {
-  transaction: TransactionDB,
+  transaction : TransactionDB,
   // product: ProductTransaction,
-  order: OrderCreate
+  order : OrderCreate
   // penerima: PenerimaCreate
 }

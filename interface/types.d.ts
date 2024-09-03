@@ -1,4 +1,4 @@
-import {type DefaultSession} from "next-auth"
+import { type DefaultSession } from "next-auth"
 // The `JWT` interface can be found in the `next-auth/jwt` submodule
 
 declare module "next-auth" {
@@ -20,7 +20,7 @@ declare module "next-auth" {
    * Returned by `useSession`, `auth`, contains information about the active session.
    */
   interface Session {
-    user: {} & DefaultSession["user"]
+    user : {} & DefaultSession["user"]
   }
 }
 
@@ -28,6 +28,6 @@ declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    idToken?: string
+    idToken? : string
   }
 }

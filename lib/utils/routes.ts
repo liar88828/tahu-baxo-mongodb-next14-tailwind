@@ -1,5 +1,5 @@
 export const config = {
-  matcher: ['/',
+  matcher : ['/',
     // '/login',
     '/delivery/:path*',
     '/orderan/:path*',
