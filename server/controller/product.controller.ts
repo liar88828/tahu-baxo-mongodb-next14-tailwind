@@ -1,10 +1,10 @@
-import { ProductCreate, ProductUpdate } from '../../config/prisma'
 import { NextRequest } from 'next/server'
 import { productService, ProductService } from '@/server/service/product.service'
 import { IController } from '@/interface/IController'
 import { requestService, RequestService } from '@/server/service/request.service'
-import { errorHanding } from '../../lib/utils/errorHanding'
+import { errorHanding } from '@/lib/utils/errorHanding'
 import { Params } from "@/interface/params";
+import { ProductCreate, ProductUpdate } from "@/server/schema/product.schema";
 
 class ProductController implements IController {
   constructor(

@@ -26,7 +26,7 @@ class DeliverController implements IController {
   async findId(request : NextRequest, params : Params) {
     try {
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceDeliver.findOne(id)
+      const data = await this.serviceDeliver.findOne({id_delivery : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -46,7 +46,7 @@ class DeliverController implements IController {
   async updateOne(request : NextRequest, params : Params) {
     try {
       let {data, id} = await this.serviceReq.getUpdateInt<DeliveryUpdate>(request, params)
-      data = await this.serviceDeliver.updateOne(data, id)
+      data = await this.serviceDeliver.updateOne(data, {id_delivery : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -56,7 +56,7 @@ class DeliverController implements IController {
   async deleteOne(req : NextRequest, params : Params) {
     try {
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceDeliver.deleteOne(id)
+      const data = await this.serviceDeliver.deleteOne({id_delivery : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)

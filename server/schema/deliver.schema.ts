@@ -1,7 +1,7 @@
 import prisma from '@/config/prisma'
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
-import { Prisma } from '@prisma/client'
+import { DeliveryDB, Prisma } from '@prisma/client'
 
 export type DeliveryCreate = Prisma.Args<
   typeof prisma.deliveryDB,
@@ -11,6 +11,8 @@ export type DeliveryUpdate = Prisma.Args<
   typeof prisma.deliveryDB,
   'update'
 >['data']
+export type DeliveryId = { id_delivery : DeliveryDB['id'] }
+
 
 export class DeliverSchema implements ISchema {
   id = z.number({required_error : 'ID is required'}).optional()
@@ -61,13 +63,13 @@ export class DeliverSchema implements ISchema {
     return data
   }
 
-  idValid(id : number | undefined) : number {
-    id = this.id.parse(id)
-    if (!id) {
-      throw new Error('id is not valid')
-    }
-    return id
-  }
+  // idValid(id : number | undefined) : number {
+  //   id = this.id.parse(id)
+  //   if (!id) {
+  //     throw new Error('id is not valid')
+  //   }
+  //   return id
+  // }
 }
 
 export const deliverySchema = new DeliverSchema()

@@ -2,6 +2,7 @@ import prisma from '@/config/prisma'
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
 import { Prisma } from '@prisma/client'
+import { ProductDB } from ".prisma/client";
 
 export class ProductSchema implements ISchema {
   id = z.number({required_error : 'ID is required'}).optional()
@@ -84,9 +85,11 @@ export const productSchema = new ProductSchema()
 
 export type ProductTransaction = {
   jumlah : number,
-  productId : number,
+  productId : ProductDB['id'],
 };
-
+export type ProductId = {
+  id_product : ProductDB['id'],
+}
 export type ProductCreate = Prisma.Args<
   typeof prisma.productDB,
   'create'

@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken'
+import { User } from "@prisma/client";
 
-type PayloadToken = {
-  email : string,
-  name : string,
-  id : string,
-};
-export type RefreshTokenPayload = Omit<PayloadToken, 'id'>
+// type PayloadToken = {
+//   email : string,
+//   name : string,
+//   id : string,
+//   trolleyId : string,
+// };
+type PayloadToken = Pick<User, 'id' | 'email' | 'name' | 'trolleyId'>
+export type RefreshTokenPayload = Omit<PayloadToken, 'id' | 'trolleyId'>
 export type AccessTokenPayload = PayloadToken
 
 export class JwtService {
@@ -17,11 +20,16 @@ export class JwtService {
   ) {
   }
 
-  accessToken({email, name, id} : PayloadToken) {
-    return jwt.sign({email, name, id},
-      this.accessSecret,
-      {expiresIn : this.accessExp}
-    )
+  static jwtPayloadStatic(token : string,
+                          // willThrow : boolean = true
+  ) {
+    const data = jwt.decode(
+      token,
+      {json : true})
+    if (!data) {
+      throw new Error("Token is not verified")
+    }
+    return data
   }
 
   refreshToken({email, name} : RefreshTokenPayload) {
@@ -49,15 +57,15 @@ export class JwtService {
     return data
   }
 
+  accessToken({email, name, id} : AccessTokenPayload) {
+    return jwt.sign({email, name, id},
+      this.accessSecret,
+      {expiresIn : this.accessExp}
+    )
+  }
+
   jwtPayload(token : string, willThrow : boolean = true) {
-    const data = jwt.decode(token,
-      {json : true,},)
-    if (willThrow) {
-      if (!data) {
-        throw new Error("Token is not verified")
-      }
-    }
-    return data
+    return JwtService.jwtPayloadStatic(token,)
   }
 
   testComplete(token : string) {

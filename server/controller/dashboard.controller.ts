@@ -1,5 +1,5 @@
 import { productService, ProductService } from "@/server/service/product.service";
-import { OrderService } from "@/server/service/order.service";
+import { orderService, OrderService } from "@/server/service/order.service";
 
 class DashboardController {
   constructor(
@@ -34,5 +34,5 @@ class DashboardController {
 
 export const dashboardController = new DashboardController(
   productService,
-  new OrderService(),
+  orderService
 )
