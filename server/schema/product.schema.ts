@@ -1,8 +1,6 @@
-import prisma from '@/config/prisma'
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
-import { Prisma } from '@prisma/client'
-import { ProductDB } from ".prisma/client";
+import { ProductDB, User } from ".prisma/client";
 
 export class ProductSchema implements ISchema {
   id = z.number({required_error : 'ID is required'}).optional()
@@ -21,7 +19,8 @@ export class ProductSchema implements ISchema {
       .string({required_error : 'Keterangan is required'})
       .min(1)
       .max(200),
-  }) satisfies z.Schema<ProductCreate>
+    userId : z.string({required_error : 'User is required'}).min(1).max(100),
+  }) //satisfies z.Schema<ProductCreate>
 
   update = z.object({
     id : this.id,
@@ -38,7 +37,8 @@ export class ProductSchema implements ISchema {
       .string({required_error : 'Keterangan is required'})
       .min(1)
       .max(200),
-  }) satisfies z.Schema<ProductUpdate>
+    userId : z.string().min(1)
+  }) //satisfies z.Schema<ProductUpdate>
 
   productTransactionSchema = z.object({
     jumlah : z
@@ -72,30 +72,33 @@ export class ProductSchema implements ISchema {
     return data
   }
 
-  idValid(id : number | undefined) : number {
-    id = this.id.parse(id)
-    if (!id) {
-      throw new Error('id is not valid')
-    }
-    return id
-  }
+  // idValid(id : number | undefined) : number {
+  //   id = this.id.parse(id)
+  //   if (!id) {
+  //     throw new Error('id is not valid')
+  //   }
+  //   return id
+  // }
 }
 
 export const productSchema = new ProductSchema()
 
+export type ProductCreate = z.output<typeof productSchema.create>
+export type ProductUpdate = z.output<typeof productSchema.update>
 export type ProductTransaction = {
   jumlah : number,
   productId : ProductDB['id'],
 };
 export type ProductId = {
   id_product : ProductDB['id'],
+  id_user? : User['id']
 }
-export type ProductCreate = Prisma.Args<
-  typeof prisma.productDB,
-  'create'
->['data']
+// export type ProductCreate = Prisma.Args<
+//   typeof prisma.productDB,
+//   'create'
+// >['data']
 
-export type ProductUpdate = Prisma.Args<
-  typeof prisma.productDB,
-  'update'
->['data']
+// export type ProductUpdate = Prisma.Args<
+//   typeof prisma.productDB,
+//   'update'
+// >['data']

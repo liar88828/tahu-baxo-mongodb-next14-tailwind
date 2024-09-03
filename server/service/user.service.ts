@@ -2,6 +2,7 @@ import { LoginUser, NewPassword, RegisterUser, ResetSchema, userSchema, UserSche
 import prisma from '../../config/prisma'
 import { bcryptService, BcryptService } from "@/server/service/bcrypt.service";
 import { UserId, UserPublic } from "@/interface/user/UserPublic";
+import { ErrorUser } from "@/lib/error/errorCustome";
 export type SelectPrisma<T> = Record<keyof T, true>
 
 export class UserService {
@@ -36,8 +37,7 @@ export class UserService {
   async register(data : RegisterUser, refreshToken : string) {
     data.password = await this.serviceBcrypt.hashPassword(data)
     return prisma.$transaction(async (tx) => {
-      const trolley = await tx.trolley.create({})
-      return prisma.user.create({
+      return tx.user.create({
         select : {
           name : true,
           email : true,
@@ -51,10 +51,11 @@ export class UserService {
           password : data.password,
           email : data.email,
           refresh_token : refreshToken,
-          trolleyId : trolley.id,
           address : data.address,
-          phone : data.phone
-
+          phone : data.phone,
+          Trolley : {
+            create : {}
+          }
         },
       })
     })
@@ -143,7 +144,7 @@ export class UserService {
       select : this.selectPrismaUserPublic
     })
     if (!data) {
-      throw new Error('User is not found')
+      throw new ErrorUser('notFound')
     }
     return data
   }

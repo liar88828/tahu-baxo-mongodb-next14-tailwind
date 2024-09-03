@@ -2,7 +2,7 @@ import { NewPassword } from '@/server/schema/user.schema'
 import { requestService, RequestService } from '@/server/service/request.service'
 import { userService, UserService } from '@/server/service/user.service'
 import { NextRequest } from 'next/server'
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { OtpSchema, OtpService } from "@/server/service/otp.service";
 import { EmailService } from "@/server/service/email.service";
 

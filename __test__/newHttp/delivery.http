@@ -1,49 +1,56 @@
+@api = http://localhost:3000/api
+@path = {{api}}/delivery
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbWV2anpoMDAwODE3Znp6bXB2NmN2YiIsImlhdCI6MTcyNTM2Njg1MiwiZXhwIjoxNzI1MzcwNDUyfQ.kl9fsKOxorSz58NuT5EdozySddWFML24rMIJhqAvNUs
+
+
 ### get data Form
-GET http://localhost:3000/api/delivery
+GET {{path}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 
 ### get data Form by id
-GET http://localhost:3000/api/delivery/1
+GET{{path}}/3
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
-{
-}
 
 ### create data Form
-POST http://localhost:3000/api/delivery/
+POST {{path}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "nama": "kosong",
-  "hp": "kosong",
-  "lokasi": "kosong",
-  "jenis": "kosong",
-  "harga": 0,
+  "nama": "jnt",
+  "hp": "1342342",
+  "lokasi": "semarang",
+  "jenis": "kargo",
+  "harga": 20000,
   "img": "kosong",
-  "keterangan": "kosong"
+  "keterangan": "biasanya lama"
 }
 
 
 ### create data Form Text Only
-PUT http://localhost:3000/api/delivery/1
+PUT {{path}}/3
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "nama": "kosong update",
-  "hp": "kosong",
-  "lokasi": "kosong",
-  "jenis": "kosong",
-  "harga": 0,
+  "nama": "jnt update",
+  "hp": "1342342",
+  "lokasi": "semarang",
+  "jenis": "kargo",
+  "harga": 20000,
   "img": "kosong",
-  "keterangan": "kosong"
+  "keterangan": "biasanya lama"
 }
 
 
-
 ### delete data Form
-DELETE http://localhost:3000/api/delivery/1
+DELETE {{path}}/3
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
 }

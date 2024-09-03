@@ -23,8 +23,16 @@ export class ServiceDeliver {
     })
   }
 
-  async findOne({id_delivery} : DeliveryId) : Promise<DeliveryDB> {
+  async findIdPublic({id_delivery} : Pick<DeliveryId, 'id_delivery'>) : Promise<DeliveryDB> {
     const data = await prisma.deliveryDB.findUnique({where : {id : id_delivery}})
+    if (!data) {
+      throw new Error("Data delivery is not found")
+    }
+    return data
+  }
+
+  async findIdPrivate({id_delivery, id_user} : DeliveryId) : Promise<DeliveryDB> {
+    const data = await prisma.deliveryDB.findUnique({where : {id : id_delivery, userId : id_user}})
     if (!data) {
       throw new Error("Data delivery is not found")
     }

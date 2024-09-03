@@ -1,7 +1,7 @@
 import { RequestService } from '@/server/service/request.service'
 import { userService, UserService } from '@/server/service/user.service'
 import { NextRequest, NextResponse } from 'next/server'
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { Params } from "@/interface/params";
 
 export class UserController {
@@ -14,7 +14,7 @@ export class UserController {
   async getUserId(_ : NextRequest, params : Params) {
     try {
       const {id} = this.serviceRequest.getId(params)
-      return NextResponse.json(this.serviceUser.findId({id_user : id}))
+      return NextResponse.json(await this.serviceUser.findId({id_user : id}))
     } catch (e : unknown) {
       return errorHanding(e)
     }
@@ -22,7 +22,7 @@ export class UserController {
 
   async getUserAll(_ : NextRequest,) {
     try {
-      return NextResponse.json(this.serviceUser.findAll())
+      return NextResponse.json(await this.serviceUser.findAll())
     } catch (e : unknown) {
       return errorHanding(e)
     }

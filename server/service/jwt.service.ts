@@ -7,9 +7,8 @@ import { User } from "@prisma/client";
 //   id : string,
 //   trolleyId : string,
 // };
-type PayloadToken = Pick<User, 'id' | 'email' | 'name' | 'trolleyId'>
-export type RefreshTokenPayload = Omit<PayloadToken, 'id' | 'trolleyId'>
-export type AccessTokenPayload = PayloadToken
+export type AccessTokenPayload = Pick<User, 'id' | 'email' | 'name' | 'trolleyId'>
+export type RefreshTokenPayload = Omit<AccessTokenPayload, 'id' | 'trolleyId'>
 
 export class JwtService {
   constructor(
@@ -57,8 +56,8 @@ export class JwtService {
     return data
   }
 
-  accessToken({email, name, id} : AccessTokenPayload) {
-    return jwt.sign({email, name, id},
+  accessToken({email, name, id, trolleyId} : AccessTokenPayload) {
+    return jwt.sign({email, name, id, trolleyId},
       this.accessSecret,
       {expiresIn : this.accessExp}
     )

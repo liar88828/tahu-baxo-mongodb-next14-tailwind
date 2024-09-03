@@ -1,11 +1,14 @@
 import prisma from "@/config/prisma";
 import { z } from 'zod'
 import { ISchema } from "@/interface/ISchema";
-import { BankDB, Prisma } from '@prisma/client'
+import { BankDB, Prisma, User } from '@prisma/client'
 
 export type BankUpdate = Prisma.Args<typeof prisma.bankDB, 'update'>[ 'data' ]
 export type BankCreate = Prisma.Args<typeof prisma.bankDB, 'create'>[ 'data' ]
-export type BankId = { id_bank : BankDB['id'] }
+export type BankId = {
+  id_bank : BankDB['id'],
+  id_user : User['id']
+}
 
 export class BankSchema implements ISchema {
   id = z.number({required_error : 'ID is required',}).optional()
@@ -29,6 +32,7 @@ export class BankSchema implements ISchema {
     lokasi : z.string({required_error : 'Lokasi is required',}).min(2).max(30),
     jenis : z.string({required_error : 'Jenis is required',}).min(2).max(30),
     keterangan : z.string({required_error : 'Keterangan is required',}).min(2).max(300),
+    userId : z.string().min(1)
   }) satisfies z.Schema<BankCreate>
 
   createValid(data : BankCreate) : BankCreate {

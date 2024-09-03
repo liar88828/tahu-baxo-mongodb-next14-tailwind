@@ -4,8 +4,7 @@ import { NextRequest } from 'next/server'
 import { bankService, BankService } from '@/server/service/bank.service'
 import { IController } from '@/interface/IController'
 import { Params } from "@/interface/params";
-import { auth } from "@/auth";
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 
 class BankController implements IController {
   constructor(
@@ -16,8 +15,7 @@ class BankController implements IController {
 
   async findAll(req : NextRequest) {
     try {
-      const session = await auth();
-      console.log(session?.user)
+      const user = this.serviceReq.getUserPayload(req)
       const {page, take} = this.serviceReq.getPage(req)
       const data = await this.serviceBank.findPaginate(page, take)
       return Response.json(data)
@@ -29,6 +27,7 @@ class BankController implements IController {
 
   async findId(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
       const data = await this.serviceBank.findId({id_bank : id})
       return Response.json(data)
@@ -37,8 +36,20 @@ class BankController implements IController {
     }
   }
 
+  async findIdPrivate(req : NextRequest, params : Params) {
+    try {
+      const user = this.serviceReq.getUserPayload(req)
+      let {id} = this.serviceReq.getIdInt(params)
+      const data = await this.serviceBank.findIdPrivate({id_bank : id, id_user : user.id})
+      return Response.json(data)
+    } catch (e : unknown) {
+      return errorHanding(e)
+    }
+  }
+
   async createOne(req : NextRequest) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {data} = await this.serviceReq.getData<BankCreate>(req)
       data = await this.serviceBank.createOne(data)
       return Response.json(data)
@@ -48,11 +59,13 @@ class BankController implements IController {
   }
 
   async updateOne(req : NextRequest, params : Params) {
-
-    console.log('test', params)
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {data, id} = await this.serviceReq.getUpdateInt<BankUpdate>(req, params)
-      data = await this.serviceBank.updateOne(data, {id_bank : id})
+      data = await this.serviceBank.updateOne(data, {
+        id_bank : id,
+        id_user : user.id
+      })
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -61,8 +74,12 @@ class BankController implements IController {
 
   async deleteOne(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceBank.deleteOne({id_bank : id})
+      const data = await this.serviceBank.deleteOne({
+        id_bank : id,
+        id_user : user.id
+      })
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)

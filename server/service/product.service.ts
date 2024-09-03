@@ -1,5 +1,6 @@
 import {
   ProductCreate,
+  ProductId,
   productSchema,
   ProductSchema,
   ProductTransaction,
@@ -28,9 +29,18 @@ export class ProductService {
   //   return prisma.bank.findAll()
   // }
 
-  async findId(id : number) : Promise<ProductDB> {
-    id = this.valid.idValid(id)
+  async findIdPublic(id : number) : Promise<ProductDB> {
     const data = await prisma.productDB.findUnique({where : {id}})
+    if (!data) {
+      throw new Error('Data Product is Not found ')
+    }
+    return data
+  }
+
+  async findIdPrivate({id_product, id_user} : ProductId) : Promise<ProductDB> {
+    const data = await prisma.productDB.findUnique({
+      where : {id : id_product, userId : id_user}
+    })
     if (!data) {
       throw new Error('Data Product is Not found ')
     }
@@ -49,26 +59,28 @@ export class ProductService {
         nama : data.nama,
         jumlah : data.jumlah,
         ...(id ? {id} : {}),
+        userId : data.userId,
       },
     })
   }
 
-  async updateOne(data : ProductUpdate, id : number) {
-    id = this.valid.idValid(id)
+  async updateOne(data : ProductUpdate, {id_product, id_user} : ProductId) {
     data = this.valid.updateValid(data)
-    return prisma.productDB.update({data : {...data}, where : {id : id}})
+    return prisma.productDB.update({
+      where : {id : id_product, userId : id_user},
+      data : {...data},
+    })
   }
 
-  async deleteOne(id : number) {
-    id = this.valid.idValid(id)
-    return prisma.productDB.delete({where : {id}})
+  async deleteOne({id_product, id_user} : ProductId,) {
+    return prisma.productDB.delete({where : {id : id_product, userId : id_user}})
   }
 
-  async addStock(data : ProductTransaction, id : number) {
+  async addStock(data : ProductTransaction, {id_product, id_user} : ProductId) {
     data = this.valid.addStockValid(data)
     return prisma.productDB.update({
+      where : {id : id_product, userId : id_user},
       data : {jumlah : data.jumlah},
-      where : {id : id}
     })
   }
 

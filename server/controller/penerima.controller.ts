@@ -1,6 +1,6 @@
 import { penerimaService, PenerimaService } from "@/server/service/penerima.service";
 import { NextRequest, NextResponse } from "next/server";
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { Params } from "@/interface/params";
 import { requestService, RequestService } from "@/server/service/request.service";
 import { PenerimaCreate } from "@/server/schema/penerima.schema";
@@ -12,9 +12,10 @@ export class PenerimaController {
   ) {
   }
 
-  async findAll(request : NextRequest) {
+  async findAll(req : NextRequest) {
     try {
-      const {page, take} = this.serviceReq.getPage(request)
+      const user = this.serviceReq.getUserPayload(req)
+      const {page, take} = this.serviceReq.getPage(req)
       let data = await this.servicePenerima.findAll(page, take)
       return NextResponse.json(data, {status : 200})
     } catch (e : unknown) {
@@ -22,8 +23,9 @@ export class PenerimaController {
     }
   }
 
-  async findId(request : NextRequest, params : Params) {
+  async findId(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
       const data = await this.servicePenerima.findOne(id)
       return Response.json(data)
@@ -32,9 +34,10 @@ export class PenerimaController {
     }
   }
 
-  async createOne(request : NextRequest) {
+  async createOne(req : NextRequest) {
     try {
-      let {data} = await this.serviceReq.getData<PenerimaCreate>(request)
+      const user = this.serviceReq.getUserPayload(req)
+      let {data} = await this.serviceReq.getData<PenerimaCreate>(req)
       data = await this.servicePenerima.createOne(data)
       return Response.json(data)
     } catch (e : unknown) {
@@ -42,9 +45,10 @@ export class PenerimaController {
     }
   }
 
-  async updateOne(request : NextRequest, params : Params) {
+  async updateOne(req : NextRequest, params : Params) {
     try {
-      let {data, id} = await this.serviceReq.getUpdateInt<PenerimaCreate>(request, params)
+      const user = this.serviceReq.getUserPayload(req)
+      let {data, id} = await this.serviceReq.getUpdateInt<PenerimaCreate>(req, params)
       data = await this.servicePenerima.updateOne(data, id)
       return Response.json(data)
     } catch (e : unknown) {
@@ -54,6 +58,7 @@ export class PenerimaController {
 
   async deleteOne(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
       const data = await this.servicePenerima.deleteOne(id)
       return Response.json(data)

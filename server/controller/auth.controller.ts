@@ -2,7 +2,7 @@ import { LoginUser, RegisterUser } from '@/server/schema/user.schema'
 import { RequestService } from '@/server/service/request.service'
 import { userService, UserService } from '@/server/service/user.service'
 import { NextRequest } from 'next/server'
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { JwtService, RefreshTokenPayload } from "@/server/service/jwt.service";
 import { UserController } from "@/server/controller/user.controller";
 

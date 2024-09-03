@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { productService, ProductService } from '@/server/service/product.service'
 import { IController } from '@/interface/IController'
 import { requestService, RequestService } from '@/server/service/request.service'
-import { errorHanding } from '@/lib/utils/errorHanding'
+import { errorHanding } from '@/lib/error/errorHanding'
 import { Params } from "@/interface/params";
 import { ProductCreate, ProductUpdate } from "@/server/schema/product.schema";
 
@@ -13,9 +13,10 @@ class ProductController implements IController {
   ) {
   }
 
-  async findAll(request : NextRequest) {
+  async findAll(req : NextRequest) {
     try {
-      const {page, take} = this.serviceReq.getPage(request)
+      const user = this.serviceReq.getUserPayload(req)
+      const {page, take} = this.serviceReq.getPage(req)
       const data = await this.serviceProduct.findAll(page, take)
       return Response.json(data)
     } catch (e : unknown) {
@@ -23,31 +24,36 @@ class ProductController implements IController {
     }
   }
 
-  async findId(request : NextRequest, params : Params) {
+  async findId(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceProduct.findId(id)
-      return Response.json(data)
+      return Response.json(await this.serviceProduct.findIdPublic(id))
     } catch (e : unknown) {
       return errorHanding(e)
     }
   }
 
-  async createOne(request : NextRequest) {
+  async createOne(req : NextRequest) {
     try {
-      let {data} = await this.serviceReq.getData<ProductCreate>(request)
-      data = await this.serviceProduct.createOne(data)
-      return Response.json(data)
+      const user = this.serviceReq.getUserPayload(req)
+      let {data} = await this.serviceReq.getData<ProductCreate>(req)
+      data.userId = user.id
+      return Response.json(await this.serviceProduct.createOne(data))
     } catch (e : unknown) {
       return errorHanding(e)
     }
   }
 
-  async updateOne(request : NextRequest, params : Params) {
+  async updateOne(req : NextRequest, params : Params) {
     try {
-      let {data, id} = await this.serviceReq.getUpdateInt<ProductUpdate>(request, params)
-      data = await this.serviceProduct.updateOne(data, id)
-      return Response.json(data)
+      const user = this.serviceReq.getUserPayload(req)
+      let {data, id} = await this.serviceReq.getUpdateInt<ProductUpdate>(req, params)
+      data.userId = user.id
+      return Response.json(await this.serviceProduct.updateOne(data, {
+        id_product : id,
+        id_user : user.id
+      }))
     } catch (e : unknown) {
       return errorHanding(e)
     }
@@ -55,9 +61,12 @@ class ProductController implements IController {
 
   async deleteOne(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceProduct.deleteOne(id)
-      return Response.json(data)
+      return Response.json(await this.serviceProduct.deleteOne({
+        id_product : id,
+        id_user : user.id
+      }))
     } catch (e : unknown) {
       return errorHanding(e)
     }

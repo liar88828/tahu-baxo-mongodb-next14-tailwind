@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 
 import { Params } from "@/interface/params";
+import { AccessTokenPayload } from "@/server/service/jwt.service";
 
 export type GetId = {
   id : string
@@ -25,8 +26,7 @@ export type GetUpdate<D, I> = {
 export interface IServiceRequest {
   getId(params : Params) : GetId
   getPage(request : NextRequest) : GetPage
-
   getData<T>(request : NextRequest) : Promise<GetData<T>>
-
   getUpdate<T, >(request : NextRequest, params : Params) : Promise<GetUpdate<T, string>>
+  getUserPayload(req : NextRequest) : AccessTokenPayload
 }

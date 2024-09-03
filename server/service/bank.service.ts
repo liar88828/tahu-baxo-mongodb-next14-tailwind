@@ -23,8 +23,16 @@ export class BankService {
     })
   }
 
-  async findId({id_bank} : BankId) : Promise<BankDB> {
+  async findId({id_bank} : Pick<BankId, 'id_bank'>) : Promise<BankDB> {
     const data = await prisma.bankDB.findUnique({where : {id : id_bank}})
+    if (!data) {
+      throw new Error('Data Bank Is Not Found')
+    }
+    return data
+  }
+
+  async findIdPrivate({id_bank, id_user} : BankId) : Promise<BankDB> {
+    const data = await prisma.bankDB.findUnique({where : {id : id_bank, userId : id_user}})
     if (!data) {
       throw new Error('Data Bank Is Not Found')
     }

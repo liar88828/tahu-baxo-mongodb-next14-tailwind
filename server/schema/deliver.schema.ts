@@ -1,7 +1,7 @@
 import prisma from '@/config/prisma'
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
-import { DeliveryDB, Prisma } from '@prisma/client'
+import { DeliveryDB, Prisma, User } from '@prisma/client'
 
 export type DeliveryCreate = Prisma.Args<
   typeof prisma.deliveryDB,
@@ -11,8 +11,10 @@ export type DeliveryUpdate = Prisma.Args<
   typeof prisma.deliveryDB,
   'update'
 >['data']
-export type DeliveryId = { id_delivery : DeliveryDB['id'] }
-
+export type DeliveryId = {
+  id_delivery : DeliveryDB['id'],
+  id_user : User['id']
+}
 
 export class DeliverSchema implements ISchema {
   id = z.number({required_error : 'ID is required'}).optional()
@@ -28,6 +30,8 @@ export class DeliverSchema implements ISchema {
       .number({required_error : 'Harga is required'})
       .int()
       .nonnegative(),
+    userId : z.string().min(1)
+
   }) satisfies z.Schema<DeliveryCreate>
 
   update = z.object({

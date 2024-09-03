@@ -1,8 +1,10 @@
-import { TrolleyData, trolleyService, TrolleyService } from "@/server/service/trolley.service";
+import { trolleyService, TrolleyService } from "@/server/service/trolley.service";
 import { requestService, RequestService } from "@/server/service/request.service";
 import { NextRequest, NextResponse } from "next/server";
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { Params } from "@/interface/params";
+import { TrolleyData } from "@/server/schema/trolley.schema";
+import { AccessTokenPayload } from "@/server/service/jwt.service";
 
 export class TrolleyController {
   constructor(
@@ -13,22 +15,45 @@ export class TrolleyController {
 
   async getAll(req : NextRequest) {
     try {
-      // this.serviceReq.getUserPayload(req)
-      const {data} = await this.serviceReq.getData<TrolleyData>(req)
-      return NextResponse.json(this.serviceTrolley.getAll(data))
+      const user = this.serviceReq.getUserPayload(req)
+      // const {data} = await this.serviceReq.getData<TrolleyData>(req)
+      return NextResponse.json(await this.serviceTrolley.getAll(user))
     } catch (e : unknown) {
       return errorHanding(e)
     }
   }
 
-  async add(req : NextRequest, params : Params) {
+  async increment(req : NextRequest, params : Params) {
     try {
-      // this.serviceReq.getUserPayload(req)
+      const user : AccessTokenPayload = this.serviceReq.getUserPayload(req)
       const {data} = await this.serviceReq.getData<TrolleyData>(req)
       const {id} = this.serviceReq.getIdInt(params)
-      return NextResponse.json(this.serviceTrolley.add(data, {
+      const res = await this.serviceTrolley.increment({
+        userId : user.id,
+        trolleyId : user.trolleyId,
+        productId : data.productId,
+        qty : data.qty,
         trolleyOnProductDBId : id
-      }))
+      },)
+      return NextResponse.json(res)
+    } catch (e : unknown) {
+      return errorHanding(e)
+    }
+  }
+
+  async decrement(req : NextRequest, params : Params) {
+    try {
+      const user : AccessTokenPayload = this.serviceReq.getUserPayload(req)
+      const {data} = await this.serviceReq.getData<TrolleyData>(req)
+      const {id} = this.serviceReq.getIdInt(params)
+      const res = await this.serviceTrolley.decrement({
+        userId : user.id,
+        trolleyId : user.trolleyId,
+        productId : data.productId,
+        qty : data.qty,
+        trolleyOnProductDBId : id
+      },)
+      return NextResponse.json(res)
     } catch (e : unknown) {
       return errorHanding(e)
     }
@@ -36,7 +61,7 @@ export class TrolleyController {
 
   async remove(req : NextRequest, params : Params) {
     try {
-      // this.serviceReq.getUserPayload(req)
+      const user = this.serviceReq.getUserPayload(req)
       const {id} = this.serviceReq.getIdInt(params)
       return NextResponse.json(this.serviceTrolley.remove({
         trolleyOnProductDBId : id

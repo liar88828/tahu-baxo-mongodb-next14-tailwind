@@ -3,7 +3,7 @@ import { deliveryService, ServiceDeliver } from '@/server/service/delivery.servi
 import { DeliveryCreate, DeliveryUpdate } from '@/server/schema/deliver.schema'
 import { IController } from '@/interface/IController'
 import { requestService, RequestService } from '@/server/service/request.service'
-import { errorHanding } from "@/lib/utils/errorHanding";
+import { errorHanding } from "@/lib/error/errorHanding";
 import { Params } from "@/interface/params";
 
 class DeliverController implements IController {
@@ -13,9 +13,10 @@ class DeliverController implements IController {
   ) {
   }
 
-  async findAll(request : NextRequest) {
+  async findAll(req : NextRequest) {
     try {
-      const {page, take} = this.serviceReq.getPage(request)
+      const user = this.serviceReq.getUserPayload(req)
+      const {page, take} = this.serviceReq.getPage(req)
       let data = await this.serviceDeliver.findAll(page, take)
       return NextResponse.json(data, {status : 200})
     } catch (e : unknown) {
@@ -23,19 +24,34 @@ class DeliverController implements IController {
     }
   }
 
-  async findId(request : NextRequest, params : Params) {
+  async findId(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceDeliver.findOne({id_delivery : id})
+      const data = await this.serviceDeliver.findIdPublic({id_delivery : id})
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
     }
   }
 
-  async createOne(request : NextRequest) {
+  async findIdPrivate(req : NextRequest, params : Params) {
     try {
-      let {data} = await this.serviceReq.getData<DeliveryCreate>(request)
+      const user = this.serviceReq.getUserPayload(req)
+      let {id} = this.serviceReq.getIdInt(params)
+      const data = await this.serviceDeliver.findIdPrivate({
+        id_delivery : id, id_user : user.id
+      })
+      return Response.json(data)
+    } catch (e : unknown) {
+      return errorHanding(e)
+    }
+  }
+
+  async createOne(req : NextRequest) {
+    try {
+      const user = this.serviceReq.getUserPayload(req)
+      let {data} = await this.serviceReq.getData<DeliveryCreate>(req)
       data = await this.serviceDeliver.createOne(data)
       return Response.json(data)
     } catch (e : unknown) {
@@ -43,10 +59,14 @@ class DeliverController implements IController {
     }
   }
 
-  async updateOne(request : NextRequest, params : Params) {
+  async updateOne(req : NextRequest, params : Params) {
     try {
-      let {data, id} = await this.serviceReq.getUpdateInt<DeliveryUpdate>(request, params)
-      data = await this.serviceDeliver.updateOne(data, {id_delivery : id})
+      const user = this.serviceReq.getUserPayload(req)
+      let {data, id} = await this.serviceReq.getUpdateInt<DeliveryUpdate>(req, params)
+      data = await this.serviceDeliver.updateOne(data, {
+        id_delivery : id,
+        id_user : user.id
+      })
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)
@@ -55,8 +75,12 @@ class DeliverController implements IController {
 
   async deleteOne(req : NextRequest, params : Params) {
     try {
+      const user = this.serviceReq.getUserPayload(req)
       let {id} = this.serviceReq.getIdInt(params)
-      const data = await this.serviceDeliver.deleteOne({id_delivery : id})
+      const data = await this.serviceDeliver.deleteOne({
+        id_delivery : id,
+        id_user : user.id
+      })
       return Response.json(data)
     } catch (e : unknown) {
       return errorHanding(e)

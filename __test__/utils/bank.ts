@@ -8,6 +8,8 @@ export const dataTestCreate : BankCreate = {
   lokasi : "semarang",
   jenis : "atm",
   keterangan : "atm kui di gesek",
+  userId : 'asda'
+
 }
 
 export const dataTestCreate2 : BankCreate = {
@@ -18,6 +20,7 @@ export const dataTestCreate2 : BankCreate = {
   lokasi : "semarang",
   jenis : "atm",
   keterangan : "atm kui di gesek",
+  userId : 'asda'
 }
 
 export const dataTestUpdate = structuredClone(dataTestCreate)
