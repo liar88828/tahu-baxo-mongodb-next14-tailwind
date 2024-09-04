@@ -10,8 +10,8 @@ export class UserSchema {
     email : z.string().email().min(1).max(50),
     password : z.string().min(8).max(50),
     confPass : z.string().min(8).max(50),
-    phone : z.string(),
-    address : z.string(),
+    phone : z.string().min(8).max(30),
+    address : z.string().min(8).max(200),
 
   }) satisfies z.Schema<RegisterUser>
   registerSchema = this.register

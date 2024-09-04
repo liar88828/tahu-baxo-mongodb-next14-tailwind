@@ -4,7 +4,6 @@
 
 ### get data Produk
 GET {{path}}
-Authorization: Bearer {{token}}
 
 ### get data Produk with param
 GET {{path}}?page=100&take=2

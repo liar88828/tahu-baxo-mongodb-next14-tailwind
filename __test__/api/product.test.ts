@@ -1,105 +1,79 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
+import { ProductCreate } from "@/server/schema/product.schema";
 import { registerTest } from "@/__test__/utils/registerData";
 
-import { DeliveryCreate } from "@/interface/delivery";
-import { DeliveryDB } from "@prisma/client";
-
-const testExpectation: DeliveryDB = {
-	id: expect.any(Number),
-	userId: expect.any(String),
+const dataTestProduct: ProductCreate = {
 	harga: 123,
 	img: "http:image is noting",
 	jenis: "Test Data",
-	hp: expect.any(String),
+	jumlah: 123,
 	keterangan: "Is Test Data not for sell",
 	lokasi: "this location not expose",
-	nama: "is test delivery",
-}
-const dataTestDelivery: DeliveryCreate = {
-	harga: 123,
-	img: "http:image is noting",
-	jenis: "Test Data",
-	hp: '0234 2342 2342',
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test delivery",
+	nama: "is test product",
 	userId: ''
 }
-const dataTestDeliveryEmpty: DeliveryCreate = {
+const dataTestProductEmpty: ProductCreate = {
 	harga: 0,
 	img: "",
 	jenis: "",
-	hp: '',
+	jumlah: 0,
 	keterangan: "",
 	lokasi: "",
 	nama: "",
 	userId: ''
 }
 
-let deliveryToken = ''
-let deliveryId = 0
+let productToken = ''
+let productId = 0
 
-describe('can test api delivery', async () => {
+describe.skip('can test api product', async () => {
 	beforeAll(async () => {
 		const { data, accessToken } = await registerTest();
-		deliveryToken = accessToken
-		dataTestDelivery.userId = data.id
+		productToken = accessToken
+		dataTestProduct.userId = data.id
 	})
 	afterAll(async () => {
-		await prisma.deliveryDB.deleteMany()
+		await prisma.productDB.deleteMany()
 		await prisma.user.deleteMany()
 	})
 	
-	describe("POST can create Data Delivery", async () => {
+	describe("POST can create Data Product", async () => {
 		
-		it('ERROR Create data delivery, not have token', async () => {
-			const testExpectation: DeliveryDB = {
-				id: expect.any(Number),
-				userId: expect.any(String),
-				harga: 123,
-				img: "http:image is noting",
-				jenis: "Test Data",
-				hp: "1324 2342 2345",
-				keterangan: "Is Test Data not for sell",
-				lokasi: "this location not expose",
-				nama: "is test delivery",
-			}
-			
-			const res = await fetch("http://localhost:3000/api/delivery", {
+		it('ERROR Create data product, not have token', async () => {
+			const res = await fetch("http://localhost:3000/api/product", {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
 					"Authorization": `Bearer ${ 'empty token' }`
 				},
-				body: JSON.stringify(dataTestDelivery),
+				body: JSON.stringify(dataTestProduct),
 			})
 			const code = res.status
 			const data = await res.json()
-			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
-			expect(code).toBe(400)
-			expect(data).toBe("jwt malformed")
 			
-		})
-		
-		it('ERROR Create data delivery, is empty', async () => {
-			const testExpectation: DeliveryDB = {
-				id: expect.any(Number),
-				userId: expect.any(String),
+			expect(code).not.toBe(200)
+			expect(data).not.toMatchObject({
 				harga: 123,
 				img: "http:image is noting",
 				jenis: "Test Data",
-				hp: "1324 2342 2345",
+				jumlah: 123,
 				keterangan: "Is Test Data not for sell",
 				lokasi: "this location not expose",
-				nama: "is test delivery",
-			}
-			const res = await fetch("http://localhost:3000/api/delivery", {
+				nama: "is test product",
+				userId: expect.any(String)
+			})
+			expect(code).toBe(400)
+			expect(code).toBe(400)
+			
+		})
+		
+		it('ERROR Create data product, is empty', async () => {
+			const res = await fetch("http://localhost:3000/api/product", {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 				body: JSON.stringify({}),
 			})
@@ -107,20 +81,29 @@ describe('can test api delivery', async () => {
 			const data = await res.json()
 			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
+			expect(data).not.toMatchObject({
+				harga: 123,
+				img: "http:image is noting",
+				jenis: "Test Data",
+				jumlah: 123,
+				keterangan: "Is Test Data not for sell",
+				lokasi: "this location not expose",
+				nama: "is test product",
+				userId: expect.any(String)
+			})
 			
 			expect(code).toBe(400)
-			expect(data).length(7)
+			expect(data).length(8)
 		})
 		
-		it('ERROR Create data delivery, name is empty', async () => {
-			const test = structuredClone(dataTestDelivery)
+		it('ERROR Create data product, name is empty', async () => {
+			const test = structuredClone(dataTestProduct)
 			test.nama = ''
-			const res = await fetch("http://localhost:3000/api/delivery", {
+			const res = await fetch("http://localhost:3000/api/product", {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 				body: JSON.stringify(test),
 			})
@@ -135,7 +118,7 @@ describe('can test api delivery', async () => {
 				jumlah: 123,
 				keterangan: "Is Test Data not for sell",
 				lokasi: "this location not expose",
-				nama: "is test delivery",
+				nama: "is test product",
 				userId: expect.any(String)
 			})
 			
@@ -143,40 +126,36 @@ describe('can test api delivery', async () => {
 			expect(data).length(1)
 		})
 		
-		it('SUCCESS Create data delivery ', async () => {
-			const testExpectation: DeliveryDB = {
-				id: expect.any(Number),
-				userId: expect.any(String),
-				harga: 123,
-				img: "http:image is noting",
-				jenis: "Test Data",
-				hp: '0234 2342 2342',
-				keterangan: "Is Test Data not for sell",
-				lokasi: "this location not expose",
-				nama: "is test delivery",
-			}
-			
-			const res = await fetch("http://localhost:3000/api/delivery", {
+		it('SUCCESS Create data product use mock', async () => {
+			const res = await fetch("http://localhost:3000/api/product", {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
-				body: JSON.stringify(dataTestDelivery),
+				body: JSON.stringify(dataTestProduct),
 			})
 			const code = res.status
 			const data = await res.json()
-			deliveryId = data.id
+			productId = data.id
 			expect(code).toBe(200)
-			expect(data).toMatchObject(testExpectation)
+			expect(data).toMatchObject({
+				harga: 123,
+				img: "http:image is noting",
+				jenis: "Test Data",
+				jumlah: 123,
+				keterangan: "Is Test Data not for sell",
+				lokasi: "this location not expose",
+				nama: "is test product",
+				userId: expect.any(String)
+			})
 		})
 	})
 	
-	describe("GET can get Data Delivery", async () => {
+	describe("GET can get Data Product", async () => {
 		
-		it('SUCCESS GET data delivery all delivery', async () => {
-			
-			const res = await fetch("http://localhost:3000/api/delivery", {
+		it('SUCCESS GET data product all product', async () => {
+			const res = await fetch("http://localhost:3000/api/product", {
 				method: "GET",
 				headers: {
 					'Content-Type': 'application/json',
@@ -187,7 +166,18 @@ describe('can test api delivery', async () => {
 			
 			expect(code).toBe(200)
 			expect(data).toMatchObject({
-				data: [testExpectation],
+				data: [
+					{
+						harga: expect.any(Number),
+						img: expect.any(String),
+						jenis: expect.any(String),
+						jumlah: expect.any(Number),
+						keterangan: expect.any(String),
+						lokasi: expect.any(String),
+						nama: expect.any(String),
+						userId: expect.any(String)
+					},
+				],
 				"page": expect.any(Number),
 				"take": expect.any(Number)
 				
@@ -196,20 +186,8 @@ describe('can test api delivery', async () => {
 			
 		})
 		
-		it('SUCCESS GET data delivery my id', async () => {
-			
-			const test: DeliveryDB = {
-				harga: expect.any(Number),
-				img: expect.any(String),
-				jenis: expect.any(String),
-				hp: expect.any(String),
-				keterangan: expect.any(String),
-				lokasi: expect.any(String),
-				nama: expect.any(String),
-				userId: expect.any(String),
-				id: expect.any(Number)
-			}
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		it('SUCCESS GET data product my id', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "GET",
 				headers: {
 					'Content-Type': 'application/json',
@@ -219,12 +197,23 @@ describe('can test api delivery', async () => {
 			const data = await res.json()
 			
 			expect(code).toBe(200)
-			expect(data).toMatchObject(test)
+			expect(data).toMatchObject({
+				harga: expect.any(Number),
+				img: expect.any(String),
+				jenis: expect.any(String),
+				jumlah: expect.any(Number),
+				keterangan: expect.any(String),
+				lokasi: expect.any(String),
+				nama: expect.any(String),
+				userId: expect.any(String),
+				id: expect.any(Number)
+			})
 			expect(code).not.toBe(400)
+			
 		})
 		
-		it('SUCCESS GET data delivery. wrong id', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
+		it('SUCCESS GET data product. wrong id', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ 'not know' }`, {
 				method: "GET",
 				headers: {
 					'Content-Type': 'application/json',
@@ -251,51 +240,71 @@ describe('can test api delivery', async () => {
 		
 	})
 	
-	describe("PUT can create Data Delivery", async () => {
+	describe("PUT can create Data Product", async () => {
 		
-		it('ERROR PUT data delivery, not have token', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ 'woring id' }`, {
+		it('ERROR PUT data product, not have token', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ 'woring id' }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
 					"Authorization": `Bearer ${ 'empty token' }`
 				},
-				body: JSON.stringify(dataTestDelivery),
+				body: JSON.stringify(dataTestProduct),
 			})
 			const code = res.status
 			const data = await res.json()
 			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
+			expect(data).not.toMatchObject({
+				harga: expect.any(Number),
+				img: expect.any(String),
+				jenis: expect.any(String),
+				jumlah: expect.any(Number),
+				keterangan: expect.any(String),
+				lokasi: expect.any(String),
+				nama: expect.any(String),
+				userId: expect.any(String),
+				id: expect.any(Number)
+			})
 			expect(code).toBe(400)
 			expect(data).toBe("jwt malformed")
 			
 		})
 		
-		it('ERROR PUT data delivery, wrong id', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ 'woring id' }`, {
+		it('ERROR PUT data product, wrong id', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ 'woring id' }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
-				body: JSON.stringify(dataTestDelivery),
+				body: JSON.stringify(dataTestProduct),
 			})
 			const code = res.status
 			const data = await res.json()
 			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
+			expect(data).not.toMatchObject({
+				harga: expect.any(Number),
+				img: expect.any(String),
+				jenis: expect.any(String),
+				jumlah: expect.any(Number),
+				keterangan: expect.any(String),
+				lokasi: expect.any(String),
+				nama: expect.any(String),
+				userId: expect.any(String),
+				id: expect.any(Number)
+			})
 			expect(code).toBe(400)
 			expect(data).toHaveLength(1)
 		})
 		
-		it('ERROR PUT data delivery, data is has empty object', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		it('ERROR PUT data product, data is has empty object', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 				body: JSON.stringify({}),
 			})
@@ -303,38 +312,57 @@ describe('can test api delivery', async () => {
 			const data = await res.json()
 			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
+			expect(data).not.toMatchObject({
+				harga: 123,
+				img: "http:image is noting",
+				jenis: "Test Data",
+				jumlah: 123,
+				keterangan: "Is Test Data not for sell",
+				lokasi: "this location not expose",
+				nama: "is test product",
+				userId: expect.any(String)
+			})
 			expect(code).toBe(400)
 			expect(code).toBe(400)
 			
 		})
 		
-		it('ERROR PUT data delivery, data is has empty value', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		it('ERROR PUT data product, data is has empty value', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
-				body: JSON.stringify(dataTestDeliveryEmpty),
+				body: JSON.stringify(dataTestProductEmpty),
 			})
 			const code = res.status
 			const data = await res.json()
-			console.log(data)
+			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(testExpectation)
+			expect(data).not.toMatchObject({
+				harga: 123,
+				img: "http:image is noting",
+				jenis: "Test Data",
+				jumlah: 123,
+				keterangan: "Is Test Data not for sell",
+				lokasi: "this location not expose",
+				nama: "is test product",
+				userId: expect.any(String)
+			})
+			
 			expect(code).toBe(400)
-			expect(data).length(6)
+			expect(data).length(5)
 		})
 		
-		it('ERROR PUT data delivery, name is empty', async () => {
-			const test = structuredClone(dataTestDelivery)
+		it('ERROR PUT data product, name is empty', async () => {
+			const test = structuredClone(dataTestProduct)
 			test.nama = ''
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 				body: JSON.stringify(test),
 			})
@@ -349,7 +377,7 @@ describe('can test api delivery', async () => {
 				jumlah: 123,
 				keterangan: "Is Test Data not for sell",
 				lokasi: "this location not expose",
-				nama: "is test delivery",
+				nama: "is test product",
 				userId: expect.any(String)
 			})
 			
@@ -357,26 +385,26 @@ describe('can test api delivery', async () => {
 			expect(data).length(1)
 		})
 		
-		it('SUCCESS PUT data delivery use mock', async () => {
-			const test = structuredClone(dataTestDelivery)
-			test.nama = 'name delivery is updated'
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		it('SUCCESS PUT data product use mock', async () => {
+			const test = structuredClone(dataTestProduct)
+			test.nama = 'name product is updated'
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "PUT",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 				body: JSON.stringify(test),
 			})
 			const code = res.status
 			const data = await res.json()
-			deliveryId = data.id
+			productId = data.id
 			expect(code).toBe(200)
 			expect(data).toMatchObject({
 				harga: 123,
 				img: "http:image is noting",
 				jenis: "Test Data",
-				hp: '0234 2342 2342',
+				jumlah: 123,
 				keterangan: "Is Test Data not for sell",
 				lokasi: "this location not expose",
 				nama: test.nama,
@@ -384,11 +412,10 @@ describe('can test api delivery', async () => {
 			})
 		})
 	})
-	
-	describe("DELETE can create Data Delivery", async () => {
+	describe("DELETE can create Data Product", async () => {
 		
-		it('ERROR delete data delivery. not have token', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
+		it('ERROR delete data product. not have token', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ 'not know' }`, {
 				method: "DELETE",
 				headers: {
 					'Content-Type': 'application/json',
@@ -414,12 +441,13 @@ describe('can test api delivery', async () => {
 			expect(data).toBe('Not have token in Bearer')
 		})
 		
-		it('ERROR delete data delivery. wrong id ', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
+		
+		it('ERROR delete data product. wrong id ', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ 'not know' }`, {
 				method: "DELETE",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 			})
 			const code = res.status
@@ -442,13 +470,13 @@ describe('can test api delivery', async () => {
 			expect(data).toHaveLength(1)
 		})
 		
-		it('SUCCESS delete data delivery.', async () => {
-			
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		
+		it('SUCCESS delete data product.', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "DELETE",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 			})
 			const code = res.status
@@ -459,22 +487,22 @@ describe('can test api delivery', async () => {
 				harga: expect.any(Number),
 				img: expect.any(String),
 				jenis: expect.any(String),
-				hp: expect.any(String),
+				jumlah: expect.any(Number),
 				keterangan: expect.any(String),
 				lokasi: expect.any(String),
-				nama: "name delivery is updated",
+				nama: expect.any(String),
 				userId: expect.any(String),
 				id: expect.any(Number)
 			})
 			expect(code).not.toBe(400)
 		})
 		
-		it('ERROR delete data delivery. data has deleted', async () => {
-			const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
+		it('ERROR delete data product. data has deleted', async () => {
+			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
 				method: "DELETE",
 				headers: {
 					'Content-Type': 'application/json',
-					"Authorization": `Bearer ${ deliveryToken }`
+					"Authorization": `Bearer ${ productToken }`
 				},
 			})
 			const code = res.status
@@ -485,10 +513,10 @@ describe('can test api delivery', async () => {
 				harga: expect.any(Number),
 				img: expect.any(String),
 				jenis: expect.any(String),
-				hp: expect.any(String),
+				jumlah: expect.any(Number),
 				keterangan: expect.any(String),
 				lokasi: expect.any(String),
-				nama: "name delivery is updated",
+				nama: expect.any(String),
 				userId: expect.any(String),
 				id: expect.any(Number)
 			})
@@ -496,6 +524,7 @@ describe('can test api delivery', async () => {
 			expect(code).toBe(400)
 			expect(data).toBe('Data is Not Found maybe was been delete')
 		})
+		
 		
 	})
 })

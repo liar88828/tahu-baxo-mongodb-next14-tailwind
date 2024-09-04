@@ -1,6 +1,6 @@
 @api = http://localhost:3000/api
 @path = {{api}}/bank
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbWV2anpoMDAwODE3Znp6bXB2NmN2YiIsImlhdCI6MTcyNTM2Njg1MiwiZXhwIjoxNzI1MzcwNDUyfQ.kl9fsKOxorSz58NuT5EdozySddWFML24rMIJhqAvNUs
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbjh0eGo3MDAwMXR3eWtoeWRneWFzYyIsInRyb2xsZXlJZCI6MSwiaWF0IjoxNzI1NDE3MTY1LCJleHAiOjE3MjU0MjA3NjV9.yVhHV2VnaPQoZxOMoq22QMTuzVDfe2USDrH2ujuWesM
 
 ### get data Bank
 GET {{path}}
@@ -10,7 +10,7 @@ Authorization: Bearer {{token}}
 ### get data Bank by id
 
 ### get data Bank
-GET {{path}}/6
+GET {{path}}/1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

@@ -5,32 +5,33 @@ import { errorHanding } from "@/lib/error/errorHanding";
 import { Params } from "@/interface/params";
 
 export class UserController {
-  constructor(
-    protected serviceUser : UserService,
-    protected serviceRequest : RequestService,
-  ) {
-  }
-
-  async getUserId(_ : NextRequest, params : Params) {
-    try {
-      const {id} = this.serviceRequest.getId(params)
-      return NextResponse.json(await this.serviceUser.findId({id_user : id}))
-    } catch (e : unknown) {
-      return errorHanding(e)
-    }
-  }
-
-  async getUserAll(_ : NextRequest,) {
-    try {
-      return NextResponse.json(await this.serviceUser.findAll())
-    } catch (e : unknown) {
-      return errorHanding(e)
-    }
-  }
-
+	constructor(
+		protected serviceUser: UserService,
+		protected serviceRequest: Pick<RequestService, 'getIdCuid'>,
+	) {
+	}
+	
+	async getUserId(_: NextRequest, params: Params) {
+		try {
+			const { id } = this.serviceRequest.getIdCuid(params)
+			console.log(id, 'user id ')
+			return NextResponse.json(await this.serviceUser.findId({ id_user: id }))
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async getUserAll(_: NextRequest,) {
+		try {
+			return NextResponse.json(await this.serviceUser.findAll())
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
 }
 
 export const userController = new UserController(
-  userService,
-  new RequestService(),
+	userService,
+	new RequestService(),
 )

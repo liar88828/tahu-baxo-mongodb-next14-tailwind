@@ -57,7 +57,6 @@ model User {
   password      String?
   otp           Int?
   expiresOtp    DateTime?
-  refresh_token String?
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   accounts      Account[]

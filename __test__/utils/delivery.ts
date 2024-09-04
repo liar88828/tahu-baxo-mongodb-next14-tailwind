@@ -1,4 +1,4 @@
-import { DeliveryCreate } from "@/server/schema/deliver.schema";
+import { DeliveryCreate } from "@/interface/delivery";
 
 export const dataTestCreate : DeliveryCreate = {
   "id" : 1,
