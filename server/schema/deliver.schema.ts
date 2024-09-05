@@ -1,17 +1,18 @@
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
 import { DeliveryCreate, DeliveryUpdate } from "@/interface/delivery";
+import { addressInit, descriptionInit, imageInit, nameInit, phoneInit } from "@/server/schema/init.schema";
 
 export class DeliverSchema implements ISchema {
 	id = z.number({ required_error: 'ID is required' }).optional()
 	create = z.object({
 		id: this.id,
-		nama: z.string({ required_error: 'Nama is required' }).min(1).max(100),
-		hp: z.string({ required_error: 'Hp is required' }).min(1).max(100),
-		lokasi: z.string({ required_error: 'Lokasi is required' }).min(1).max(100),
+		nama: nameInit,
+		hp: phoneInit,
+		lokasi: addressInit,
+		img: imageInit,
+		keterangan: descriptionInit,
 		jenis: z.string({ required_error: 'Jenis is required' }).min(1).max(100),
-		img: z.string({ required_error: 'Img is required' }).min(1).max(300),
-		keterangan: z.string({ required_error: 'Keterangan is required' }).min(1),
 		harga: z
 			.number({ required_error: 'Harga is required' })
 			.int()
@@ -22,15 +23,12 @@ export class DeliverSchema implements ISchema {
 	
 	update = z.object({
 		id: this.id,
-		nama: z.string({ required_error: 'Nama is required' }).min(1).max(100),
-		hp: z.string({ required_error: 'Hp is required' }).min(1).max(100),
-		lokasi: z.string({ required_error: 'Lokasi is required' }).min(1).max(100),
+		nama: nameInit,
+		hp: phoneInit,
+		lokasi: addressInit,
 		jenis: z.string({ required_error: 'Jenis is required' }).min(1).max(100),
-		img: z.string({ required_error: 'Img is required' }).min(1).max(300),
-		keterangan: z
-			.string({ required_error: 'Keterangan is required' })
-			.min(1)
-			.optional(),
+		img: imageInit,
+		keterangan: descriptionInit,
 		harga: z
 			.number({ required_error: 'Harga is required' })
 			.int()

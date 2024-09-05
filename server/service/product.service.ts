@@ -11,13 +11,17 @@ import prisma from "@/config/prisma";
 import { IService } from "@/interface/IService";
 import { AccessTokenPayload } from "@/server/service/jwt.service";
 
+export type PaginationDB<T> = {
+	data: T[], page: number, take: number
+};
+
 export class ProductService implements IService<ProductDB> {
 	constructor(
 		private valid: ProductSchema,
 	) {
 	}
 	
-	async findAll(page: number, take: number = 100) {
+	async findAllStock(page: number, take: number = 100, stock: string): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				take: take,
@@ -27,7 +31,17 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async findAllPrivate(page: number, take: number = 100, user: AccessTokenPayload) {
+	async findAll(page: number, take: number = 100): Promise<PaginationDB<ProductDB>> {
+		return prisma.$transaction(async (tx) => {
+			const data = await tx.productDB.findMany({
+				take: take,
+				skip: (page - 1) * take,
+			})
+			return { data, page, take }
+		})
+	}
+	
+	async findAllPrivate(page: number, take: number = 100, user: AccessTokenPayload): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				where: { userId: user.id },
@@ -56,7 +70,7 @@ export class ProductService implements IService<ProductDB> {
 		return data
 	}
 	
-	async createOne({ id, ...data }: ProductCreate) {
+	async createOne({ id, ...data }: ProductCreate): Promise<ProductDB> {
 		data = this.valid.createValid(data)
 		return prisma.productDB.create({
 			data: {
@@ -67,13 +81,13 @@ export class ProductService implements IService<ProductDB> {
 				keterangan: data.keterangan,
 				nama: data.nama,
 				jumlah: data.jumlah,
-				...(id ? { id } : {}),
+				// ...(id ? { id } : {}),
 				userId: data.userId,
 			},
 		})
 	}
 	
-	async updateOne(data: ProductUpdate, { id_product, id_user }: ProductId) {
+	async updateOne(data: ProductUpdate, { id_product, id_user }: ProductId): Promise<ProductDB> {
 		data = this.valid.updateValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },
@@ -81,11 +95,11 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async deleteOne({ id_product, id_user }: ProductId,) {
+	async deleteOne({ id_product, id_user }: ProductId,): Promise<ProductDB> {
 		return prisma.productDB.delete({ where: { id: id_product, userId: id_user } })
 	}
 	
-	async addStock(data: ProductTransaction, { id_product, id_user }: ProductId) {
+	async addStock(data: ProductTransaction, { id_product, id_user }: ProductId): Promise<ProductDB> {
 		data = this.valid.addStockValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },

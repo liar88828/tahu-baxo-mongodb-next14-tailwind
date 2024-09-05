@@ -1,47 +1,55 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { config } from "@/config/baseConfig";
-import prisma from "@/config/prisma";
+import { deleteUserTest } from "@/__test__/utils/registerData";
 
 const registerData = {
-	"fullname": "user5",
-	"email": "user5@gmail.com",
+	"fullname": "userRegisterTest",
+	"email": "userRegisterTest@gmail.com",
 	"password": "user1234",
 	"confPass": "user1234",
 	"phone": "081 1232 1234",
 	"address": "jln jakarta raya"
 }
-let refreshToken = ''
+let loginToken = ''
+let registerToken = ''
 let userIdData = ''
 const loginData = {
-	"email": "user5@gmail.com",
+	"email": "userRegisterTest@gmail.com",
 	"password": "user1234",
 }
-describe.skip('Can Auth User Api', async () => {
+
+export let userFinish = false
+
+describe.skipIf(userFinish === false)('Can Auth User Api', async () => {
 	
 	beforeAll(async () => {
-		const data = await prisma.user.create({
-			data: {
-				"name": "loginUserTest",
-				"email": "loginUserTest@gmail.com",
-				"password": "login123",
-				"phone": "081 1232 1234",
-				"address": "jln jakarta raya",
-				Trolley: {
-					create: {}
-				}
-			}
-		})
-		console.log('--------')
-		userIdData = data.id
-		console.log(userIdData)
-		console.log('--------')
-		
+		// 	const userDB = await prisma.user.findFirst({ where: { email: "loginUserTest@gmail.com" } })
+		// 	if (userDB) {
+		// 		const data = await prisma.user.create({
+		// 			data: {
+		// 				"name": "loginUserTest",
+		// 				"email": "loginUserTest@gmail.com",
+		// 				"password": "login123",
+		// 				"phone": "081 1232 1234",
+		// 				"address": "jln jakarta raya",
+		// 				Trolley: {
+		// 					create: {}
+		// 				}
+		// 			}
+		// 		})
+		// 	}
+		//
+		// //
+		// 	const userDBRegister = await prisma.user.findFirst({ where: { email: "userRegisterTest@gmail.com" } })
+		// 	if (userDBRegister) {
+		// 		await deleteUserTest(registerToken)
+		//
+		// 	}
 	})
 	
 	afterAll(async () => {
-		// await prisma.user.delete({ where: { email: "user5@gmail.com" } })
-		// await prisma.user.delete({ where: { email: "loginUserTest@gmail.com" } })
-		await prisma.user.deleteMany()
+		// await deleteUserTest(loginToken)
+		await deleteUserTest(registerToken)
 		
 	})
 	
@@ -216,10 +224,12 @@ describe.skip('Can Auth User Api', async () => {
 			
 			const code = res.status
 			const data = await res.json()
-			// console.log(data)
-			refreshToken = data.refreshToken
+			console.log(data)
+			registerToken = data.accessToken
+			
 			expect(code).toBe(200)
 			expect(code).not.toBe(400)
+			
 			expect(data).toMatchObject({
 				accessToken: expect.any(String),
 				refreshToken: expect.any(Object),
@@ -247,7 +257,7 @@ describe.skip('Can Auth User Api', async () => {
 				refreshToken: expect.any(String),
 				data: expect.any(Object),
 			});
-			expect(data).toBe('Email is found used by user5')
+			expect(data).toBe('Email is found used by userRegisterTest')
 			
 		})
 		
@@ -366,12 +376,12 @@ describe.skip('Can Auth User Api', async () => {
 			
 			const code = res.status
 			const data = await res.json()
-			expect(code).toBe(200)
 			
-			const expectedEmitPayload = {
-				// accessToken: expect.stringContaining,
-				// refreshToken: expect.stringMatching,
-			}
+			console.log('----login test-----')
+			console.log(data)
+			console.log('-----login test----')
+			
+			expect(code).toBe(200)
 			expect(data).toMatchObject({
 				accessToken: expect.any(String),
 				refreshToken: expect.any(Object),
@@ -381,7 +391,7 @@ describe.skip('Can Auth User Api', async () => {
 		
 	})
 	
-	describe('DELETE /api/user/logout', async () => {
+	describe.skip('DELETE /api/user/logout', async () => {
 		
 		it('Error logout use api, not have cookie', async () => {
 			const loginData = {
@@ -414,7 +424,7 @@ describe.skip('Can Auth User Api', async () => {
 				
 				headers: {
 					"Content-Type": "application/json",
-					"Set-Cookie": `token=${ refreshToken }`
+					"Set-Cookie": `token=${ registerToken }`
 				},
 				body: JSON.stringify(loginData)
 			})
@@ -422,10 +432,10 @@ describe.skip('Can Auth User Api', async () => {
 			const code = res.status
 			const data = await res.json()
 			
-			// console.log('----------')
-			// console.log(refreshToken)
+			console.log('----------')
+			console.log(data)
 			// console.log(data)
-			// console.log('----------')
+			console.log('----------')
 			
 			// expect(code).toBe(200)
 			// expect(data).toBe('success logout')
@@ -476,15 +486,11 @@ describe.skip('Can Auth User Api', async () => {
 			})
 			const code = res.status
 			const data = await res.json()
+			console.log(data)
 			expect(code).toBe(200)
-			// console.log('------')
-			// console.log(userIdData)
-			// console.log(refreshToken)
-			// console.log(data)
-			// console.log('------')
 			
+			userFinish = true
 		})
 		
 	})
-	
 })

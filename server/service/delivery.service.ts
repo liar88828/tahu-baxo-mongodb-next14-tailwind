@@ -49,6 +49,7 @@ export class ServiceDeliver implements IService<DeliveryDB> {
 	}
 	
 	async createOne(data: DeliveryCreate): Promise<DeliveryDB> {
+		
 		data = this.valid.createValid(data)
 		return prisma.deliveryDB.create({ data: { ...data } })
 	}

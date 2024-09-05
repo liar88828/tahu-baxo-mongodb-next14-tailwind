@@ -15,7 +15,7 @@ export class TrolleyController {
 
   async getAll(req : NextRequest) {
     try {
-      const user = this.serviceReq.getUserPayload(req)
+      const user = await this.serviceReq.getUserPayload(req)
       // const {data} = await this.serviceReq.getData<TrolleyData>(req)
       return NextResponse.json(await this.serviceTrolley.getAll(user))
     } catch (e : unknown) {
@@ -25,7 +25,7 @@ export class TrolleyController {
 
   async increment(req : NextRequest, params : Params) {
     try {
-      const user : AccessTokenPayload = this.serviceReq.getUserPayload(req)
+      const user : AccessTokenPayload = await this.serviceReq.getUserPayload(req)
       const {data} = await this.serviceReq.getData<TrolleyData>(req)
       const {id} = this.serviceReq.getIdInt(params)
       const res = await this.serviceTrolley.increment({
@@ -43,7 +43,7 @@ export class TrolleyController {
 
   async decrement(req : NextRequest, params : Params) {
     try {
-      const user : AccessTokenPayload = this.serviceReq.getUserPayload(req)
+      const user : AccessTokenPayload = await this.serviceReq.getUserPayload(req)
       const {data} = await this.serviceReq.getData<TrolleyData>(req)
       const {id} = this.serviceReq.getIdInt(params)
       const res = await this.serviceTrolley.decrement({

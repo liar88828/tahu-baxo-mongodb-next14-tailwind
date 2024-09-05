@@ -14,7 +14,7 @@ describe.skip('can test controller bank', async () => {
     await prisma.bankDB.deleteMany()
   })
   describe.sequential("POST can create Data Bank", async () => {
-    it('SUCCESS Create data bank use mock', async () => {
+    it('SUCCESS Create data bank ', async () => {
       const res = await fetch("http://localhost:3000/api/bank", {
         method : "POST",
         headers : {'Content-Type' : 'application/json'},

@@ -1,43 +1,39 @@
 import { z } from 'zod'
 import { ISchema } from '@/interface/ISchema'
 import { ProductDB, User } from ".prisma/client";
+import { addressInit, descriptionInit, imageInit, nameInit, userId } from "@/server/schema/init.schema";
 
 export class ProductSchema implements ISchema {
   id = z.number({required_error : 'ID is required'}).optional()
   create = z.object({
     id : this.id,
-    lokasi : z.string({required_error : 'Lokasi is required'}).min(1).max(100),
-    nama : z.string({required_error : 'Nama is required'}).min(1).max(100),
+    lokasi : addressInit,
+    nama : nameInit,
+    img : imageInit,
+    keterangan : descriptionInit,
     harga : z.number({required_error : 'Harga is required'}).nonnegative(),
-    img : z.string({required_error : 'Img is required'}).min(1).max(300),
     jenis : z.string({required_error : 'Jenis is required'}).min(1).max(100),
     jumlah : z
       .number({required_error : 'Jumlah is required'})
       .int()
       .nonnegative(),
-    keterangan : z
-      .string({required_error : 'Keterangan is required'})
-      .min(1)
-      .max(200),
-    userId : z.string({required_error : 'User is required'}).min(1).max(100),
+    userId : userId
   }) //satisfies z.Schema<ProductCreate>
 
   update = z.object({
     id : this.id,
-    lokasi : z.string({required_error : 'Lokasi is required'}).min(1).max(100),
-    nama : z.string({required_error : 'Nama is required'}).min(1).max(100),
+		lokasi: addressInit,
+		nama: nameInit,
+		img: imageInit,
+		keterangan: descriptionInit,
     harga : z.number({required_error : 'Harga is required'}).nonnegative(),
-    img : z.string({required_error : 'Img is required'}).min(1).max(300),
     jenis : z.string({required_error : 'Jenis is required'}).min(1).max(100),
     jumlah : z
       .number({required_error : 'Jumlah is required'})
       .int()
       .nonnegative(),
-    keterangan : z
-      .string({required_error : 'Keterangan is required'})
-      .min(1)
-      .max(200),
-    userId : z.string().min(1)
+    userId : userId
+ 
   }) //satisfies z.Schema<ProductUpdate>
 
   productTransactionSchema = z.object({

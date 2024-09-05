@@ -34,11 +34,11 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
+  id           String    @id @default(cuid())
+  sessionToken String?   @unique
   userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,27 +104,27 @@ model PenerimaDB {
 }
 
 model OrderanDB {
-  id             String   @id @default(uuid())
+  id         String   @id @default(uuid())
   // orang
-  dari           String
-  pengirim       String
-  hp             String
+  dari       String
+  pengirim   String
+  hp         String
   // tanggal
-  pesan          DateTime
-  waktuKirim     DateTime
+  // pesan          DateTime
+  // waktuKirim     DateTime
   // keterangan
-  guna           String
-  lokasi         String
-  ongkir         Int
+  guna       String
+  lokasi     String
+  ongkir     Int
   // total
-  typePembayaran String
-  totalBayar     Int
-  totalPenjualan Int
-  status         String
+  // typePembayaran String
+  // totalBayar     Int
+  // totalPenjualan Int
+  status     String
   // semua
   // at update / create
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   TransactionDB TransactionDB[]
 }

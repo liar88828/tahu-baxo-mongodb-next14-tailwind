@@ -14,7 +14,6 @@ export class UserController {
 	async getUserId(_: NextRequest, params: Params) {
 		try {
 			const { id } = this.serviceRequest.getIdCuid(params)
-			console.log(id, 'user id ')
 			return NextResponse.json(await this.serviceUser.findId({ id_user: id }))
 		} catch (e: unknown) {
 			return errorHanding(e)

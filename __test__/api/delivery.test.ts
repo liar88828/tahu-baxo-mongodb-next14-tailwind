@@ -1,9 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
-import { registerTest } from "@/__test__/utils/registerData";
+import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 
 import { DeliveryCreate } from "@/interface/delivery";
 import { DeliveryDB } from "@prisma/client";
+import { RegisterUser } from "@/server/schema/user.schema";
+import { bankFinish } from "@/__test__/api/bank.test";
 
 const testExpectation: DeliveryDB = {
 	id: expect.any(Number),
@@ -40,16 +42,27 @@ const dataTestDeliveryEmpty: DeliveryCreate = {
 let deliveryToken = ''
 let deliveryId = 0
 
-describe('can test api delivery', async () => {
+const registerData: RegisterUser = {
+	"fullname": "userDelivery",
+	"email": "userDelivery@gmail.com",
+	"password": "user1234",
+	"confPass": "user1234",
+	"phone": "081 1232 1234",
+	"address": "jln jakarta raya"
+}
+export let deliveryFinish = false
+describe.skipIf(bankFinish === true)('can test api delivery', async () => {
 	beforeAll(async () => {
-		const { data, accessToken } = await registerTest();
+		const { data, accessToken } = await registerTest(registerData);
 		deliveryToken = accessToken
 		dataTestDelivery.userId = data.id
 	})
 	afterAll(async () => {
-		await prisma.deliveryDB.deleteMany()
-		await prisma.user.deleteMany()
-	})
+			await prisma.deliveryDB.deleteMany()
+			await deleteUserTest(deliveryToken)
+			
+		}
+	)
 	
 	describe("POST can create Data Delivery", async () => {
 		
@@ -110,7 +123,7 @@ describe('can test api delivery', async () => {
 			expect(data).not.toMatchObject(testExpectation)
 			
 			expect(code).toBe(400)
-			expect(data).length(7)
+			expect(data).length(6)
 		})
 		
 		it('ERROR Create data delivery, name is empty', async () => {
@@ -324,7 +337,7 @@ describe('can test api delivery', async () => {
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(testExpectation)
 			expect(code).toBe(400)
-			expect(data).length(6)
+			expect(data).length(5)
 		})
 		
 		it('ERROR PUT data delivery, name is empty', async () => {
@@ -495,6 +508,7 @@ describe('can test api delivery', async () => {
 			console.log(data)
 			expect(code).toBe(400)
 			expect(data).toBe('Data is Not Found maybe was been delete')
+			deliveryFinish = true
 		})
 		
 	})

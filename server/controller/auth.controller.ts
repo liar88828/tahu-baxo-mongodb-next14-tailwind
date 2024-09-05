@@ -32,7 +32,10 @@ class AuthController extends UserController {
 			// token
 			const { password, ...userDb } = await this.serviceUser.register(data,)
 			const refreshToken = await this.serviceJwt.createRefreshToken({ userId: userDb.id })
-			const accessToken = await this.serviceJwt.createAccessToken({ idToken: refreshToken.data.id, ...userDb, })
+			// console.log('-------- refresh token ---register')
+			const accessToken = await this.serviceJwt.createAccessToken({ idToken: refreshToken.id, ...userDb, })
+			// console.log('-------- access token ---register')
+			
 			const sendData: ResponseRegister = {
 				accessToken,
 				refreshToken,
@@ -51,7 +54,9 @@ class AuthController extends UserController {
 			const { password, ...userDb } = await this.serviceUser.findEmail(data)
 			// token
 			const refreshToken = await this.serviceJwt.createRefreshToken({ userId: userDb.id })
-			const accessToken = await this.serviceJwt.createAccessToken({ ...userDb, idToken: refreshToken.data.id })
+			console.log('---------- refresh token')
+			const accessToken = await this.serviceJwt.createAccessToken({ ...userDb, idToken: refreshToken.id })
+			console.log('---------- access token')
 			// send
 			await createSession(accessToken)
 			return Response.json({

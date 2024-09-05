@@ -3,18 +3,18 @@ import { GetData, GetPage, GetUpdate, IServiceRequest, } from '../../interface/I
 
 import { Params } from "@/interface/params";
 import { z } from "zod";
-import { AccessTokenPayload, jwtService, JwtService } from "@/server/service/jwt.service";
+import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service";
 
 export class RequestService implements IServiceRequest {
 	
 	getTokenCookie(req: NextRequest) {
 		const token = req.cookies.get('token')
 		const test = req.cookies.getAll()
-		console.log('--------')
-		console.log(req.cookies)
-		console.log(token)
-		console.log(test)
-		console.log('--------')
+		// console.log('--------')
+		// console.log(req.cookies)
+		// console.log(token)
+		// console.log(test)
+		// console.log('--------')
 		if (!token) {
 			throw new Error("Not have token in Cookie",)
 		}
@@ -85,7 +85,9 @@ export class RequestService implements IServiceRequest {
 	
 	async getUserPayload(req: NextRequest) {
 		const bearer = this.getTokenBearer(req)
+		// console.log('bearer------')
 		const user = await jwtService.verifyAccessToken(bearer,)
+		// console.log('user------',user)
 		return user as AccessTokenPayload
 	}
 }

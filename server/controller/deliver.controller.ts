@@ -23,6 +23,16 @@ class DeliverController implements IController {
 		}
 	}
 	
+	async findAllPrivate(req: NextRequest) {
+		try {
+			const user = await this.serviceReq.getUserPayload(req)
+			const { page, take } = this.serviceReq.getPage(req)
+			let data = await this.serviceDeliver.findAllPrivate(page, take,user)
+			return NextResponse.json(data, { status: 200 })
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
 	async findId(req: NextRequest, params: Params) {
 		try {
 			let { id } = this.serviceReq.getIdInt(params)

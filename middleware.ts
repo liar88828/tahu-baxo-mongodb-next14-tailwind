@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
 	
 	// 3. Decrypt the session from the cookie
 	const cookie = cookies().get('session')?.value
-	const session = jwtService.verifyAccess(cookie)
+	const session =await  jwtService.verifyAccessToken(cookie)
 	
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session?.userId) {

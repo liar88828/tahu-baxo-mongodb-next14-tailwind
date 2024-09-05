@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { ProductCreate } from "@/server/schema/product.schema";
-import { registerTest } from "@/__test__/utils/registerData";
+import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
+import { RegisterUser } from "@/server/schema/user.schema";
 
 const dataTestProduct: ProductCreate = {
 	harga: 123,
@@ -27,15 +28,25 @@ const dataTestProductEmpty: ProductCreate = {
 let productToken = ''
 let productId = 0
 
+const registerData: RegisterUser = {
+	"fullname": "userProduct",
+	"email": "userProduct@gmail.com",
+	"password": "user1234",
+	"confPass": "user1234",
+	"phone": "081 1232 1234",
+	"address": "jln jakarta raya"
+}
+
 describe.skip('can test api product', async () => {
 	beforeAll(async () => {
-		const { data, accessToken } = await registerTest();
+		const { data, accessToken } = await registerTest(registerData);
 		productToken = accessToken
 		dataTestProduct.userId = data.id
 	})
 	afterAll(async () => {
 		await prisma.productDB.deleteMany()
-		await prisma.user.deleteMany()
+		await deleteUserTest(productToken)
+ 
 	})
 	
 	describe("POST can create Data Product", async () => {
@@ -93,7 +104,7 @@ describe.skip('can test api product', async () => {
 			})
 			
 			expect(code).toBe(400)
-			expect(data).length(8)
+			expect(data).length(7)
 		})
 		
 		it('ERROR Create data product, name is empty', async () => {
@@ -352,7 +363,7 @@ describe.skip('can test api product', async () => {
 			})
 			
 			expect(code).toBe(400)
-			expect(data).length(5)
+			expect(data).length(4)
 		})
 		
 		it('ERROR PUT data product, name is empty', async () => {
@@ -441,7 +452,6 @@ describe.skip('can test api product', async () => {
 			expect(data).toBe('Not have token in Bearer')
 		})
 		
-		
 		it('ERROR delete data product. wrong id ', async () => {
 			const res = await fetch(`http://localhost:3000/api/product/${ 'not know' }`, {
 				method: "DELETE",
@@ -469,7 +479,6 @@ describe.skip('can test api product', async () => {
 			expect(code).toBe(400)
 			expect(data).toHaveLength(1)
 		})
-		
 		
 		it('SUCCESS delete data product.', async () => {
 			const res = await fetch(`http://localhost:3000/api/product/${ productId }`, {
@@ -524,7 +533,6 @@ describe.skip('can test api product', async () => {
 			expect(code).toBe(400)
 			expect(data).toBe('Data is Not Found maybe was been delete')
 		})
-		
 		
 	})
 })

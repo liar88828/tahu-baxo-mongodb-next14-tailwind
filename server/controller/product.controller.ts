@@ -22,9 +22,9 @@ class ProductController implements IController {
 			return errorHanding(e)
 		}
 	}
+	
 	async findAllPrivate(req: NextRequest) {
 		const user = this.serviceReq.getUserPayload(req)
-		
 		try {
 			const { page, take } = this.serviceReq.getPage(req,)
 			const data = await this.serviceProduct.findAll(page, take)
@@ -34,11 +34,19 @@ class ProductController implements IController {
 		}
 	}
 	
-	
 	async findId(req: NextRequest, params: Params) {
 		try {
 			let { id } = this.serviceReq.getIdInt(params)
 			return Response.json(await this.serviceProduct.findIdPublic(id))
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async findStock(req: NextRequest, params: Params) {
+		try {
+			const { page, take } = this.serviceReq.getPage(req)
+			return Response.json(await this.serviceProduct.findAllStock(page, take, ''))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}
@@ -54,12 +62,12 @@ class ProductController implements IController {
 		}
 	}
 	
-	
 	async createOne(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<ProductCreate>(req)
-			return Response.json(await this.serviceProduct.createOne(data))
+			data.userId = user.id
+			return Response.json(await this.serviceProduct.createOne(data,))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}

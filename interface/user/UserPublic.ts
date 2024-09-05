@@ -6,7 +6,7 @@ export type UserId = { id_user: UserPublic['id'] }
 
 export type ResponseRegister = {
 	accessToken: string
-	refreshToken: { data: { id: string } }
+	refreshToken: { id: string }
 	data: {
 		name: string
 		id: string

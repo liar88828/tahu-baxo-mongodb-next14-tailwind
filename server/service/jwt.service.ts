@@ -51,17 +51,32 @@ export class JwtService {
 			this.refreshSecret,
 			{ expiresIn: this.refreshExp }
 		)
-		
-		const data = await prisma.session.create({
-			select: { id: true },
-			data: {
-				sessionToken: token,
-				expires: this.expiresAt,
-				userId: userId,
+		const findToken = await prisma.session.findFirst({
+			where: {
+				userId: userId
 			}
 		})
-		return {
-			data,
+		if (!findToken?.sessionToken) {
+			return prisma.session.create({
+				select: { id: true },
+				data: {
+					userId: userId,
+					sessionToken: token,
+					expires: this.expiresAt,
+				}
+			})
+		} else {
+			return prisma.session.update({
+				where: {
+					userId: userId,
+					id: findToken.id
+				},
+				select: { id: true },
+				data: {
+					sessionToken: token,
+					expires: this.expiresAt,
+				}
+			})
 		}
 	}
 	
