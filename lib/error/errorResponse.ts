@@ -1,42 +1,44 @@
-import { TMethod } from '@/interface/model';
+import type { TMethod } from "../../interface/model/model"
 
-export const errorEmptyID = ( method: TMethod ) => {
+export const errorEmptyID = (method: TMethod) => {
   return {
-    msg    : `Error ${ method }`,
+    msg: `Error ${method}`,
     success: false,
-    error: "Cannot empty ID / Wrong Id"
+    error: "Cannot empty ID / Wrong Id",
   }
 }
 
-export const errorEmptyData = ( method: TMethod ) => {
+export const errorEmptyData = (method: TMethod) => {
   return {
-    msg    : `Error ${ method }`,
+    msg: `Error ${method}`,
     success: false,
-    error  : "Cannot empty Data"
+    error: "Cannot empty Data",
   }
 }
 
-export const errorData = ( method: TMethod, data: any ) => {
+export const errorData = (method: TMethod, data: any) => {
   return {
-    data   : data,
-    msg    : `Error ${ method }`,
+    data: data,
+    msg: `Error ${method}`,
     success: false,
-    error  : "Cannot empty Data"
+    error: "Cannot empty Data",
   }
 }
 
-export const errorDataZod    = ( data: any, from: "client" | "server" = "server" ) => {
+export const errorDataZod = (
+  data: any,
+  from: "client" | "server" = "server"
+) => {
   return {
-    data   : data,
-    msg    : `${ from } Data not Valid`,
+    data: data,
+    msg: `${from} Data not Valid`,
     success: false,
   }
 }
-export const errorEmptyIDZod = ( id: string[] | string ) => {
+export const errorEmptyIDZod = (id: string[] | string) => {
   return {
-    data   : id,
-    msg    : `Id Is not valid`,
+    data: id,
+    msg: `Id Is not valid`,
     success: false,
-
   }
 }

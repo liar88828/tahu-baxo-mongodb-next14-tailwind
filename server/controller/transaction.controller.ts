@@ -1,15 +1,15 @@
-import { orderService, OrderService } from "@/server/service/order.service";
-import { productService, ProductService } from "@/server/service/product.service";
-import { userService, UserService } from "@/server/service/user.service";
-import { bankService, BankService } from "@/server/service/bank.service";
-import { NextRequest, NextResponse } from "next/server";
-import { errorHanding } from "@/lib/error/errorHanding";
-import { Params } from "@/interface/params";
-import { requestService, RequestService } from "@/server/service/request.service";
-import { transactionService, TransactionService } from "@/server/service/transaction.service";
-import { ProductTransaction } from "@/server/schema/product.schema";
-import { TransactionCreate } from "@/interface/transaction";
-import prisma from "@/config/prisma";
+import { orderService, OrderService } from "@/server/service/order.service"
+import { productService, ProductService, } from "@/server/service/product.service"
+import { userService, UserService } from "@/server/service/user.service"
+import { bankService, BankService } from "@/server/service/bank.service"
+import { NextRequest, NextResponse } from "next/server"
+import { errorHanding } from "@/lib/error/errorHanding"
+import { requestService, RequestService, } from "@/server/service/request.service"
+import { transactionService, TransactionService, } from "@/server/service/transaction.service"
+import prisma from "@/config/prisma"
+import { CheckoutCreateSchema } from "@/interface/model/transaction.type"
+import type { Params } from "@/interface/server/param"
+import type { ProductTransaction } from "@/interface/model/product.type"
 
 class TransactionController {
 	constructor(
@@ -18,15 +18,17 @@ class TransactionController {
 		private serviceProduct: ProductService,
 		private serviceUser: UserService,
 		private serviceBank: BankService,
-		private serviceTransaction: TransactionService,
+		private serviceTransaction: TransactionService
 	) {
 	}
 	
 	async createCheckoutPrivate(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data } = await this.serviceReq.getData<TransactionCreate>(req)
+			let { data } = await this.serviceReq.getData<CheckoutCreateSchema>(req)
+			console.log('valid data')
 			const res = await this.serviceTransaction.createOne(data, user)
+			console.log('valid request')
 			return Response.json(res)
 		} catch (e) {
 			return errorHanding(e)
@@ -69,9 +71,9 @@ class TransactionController {
 	async deleteOne(req: NextRequest, param: Params) {
 		let { id } = this.serviceReq.getIdInt(param)
 		
-		const res=await prisma.$transaction(async (tx) => {
+		const res = await prisma.$transaction(async (tx) => {
 			const transactionDB = await tx.transactionDB.delete({
-				where: { id: id }
+				where: { id: id },
 			})
 			return transactionDB
 		})
@@ -79,14 +81,20 @@ class TransactionController {
 	}
 	
 	updateOne(req: NextRequest, param: Params) {
-		return NextResponse.json('not implemented')
+		return NextResponse.json("not implemented")
 	}
 	
 	async addStockProduct(req: NextRequest, param: Params) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data, id } = await this.serviceReq.getUpdateInt<ProductTransaction>(req, param)
-			const res = await this.serviceProduct.addStock(data, { id_product: id, id_user: user.id })
+			let { data, id } = await this.serviceReq.getUpdateInt<ProductTransaction>(
+				req,
+				param
+			)
+			const res = await this.serviceProduct.addStock(data, {
+				id_product: id,
+				id_user: user.id,
+			})
 			return Response.json(res)
 		} catch (e) {
 			return errorHanding(e)
@@ -105,7 +113,7 @@ class TransactionController {
 	}
 	
 	addTrolley(request: NextRequest, param: Params) {
-		return NextResponse.json('not implemented')
+		return NextResponse.json("not implemented")
 	}
 }
 
@@ -115,5 +123,5 @@ export const transactionController = new TransactionController(
 	productService,
 	userService,
 	bankService,
-	transactionService,
+	transactionService
 )

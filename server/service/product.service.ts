@@ -1,27 +1,25 @@
-import {
-	ProductCreate,
-	ProductId,
-	productSchema,
-	ProductSchema,
-	ProductTransaction,
-	ProductUpdate
-} from "@/server/schema/product.schema";
-import { ProductDB } from ".prisma/client";
-import prisma from "@/config/prisma";
-import { IService } from "@/interface/IService";
-import { AccessTokenPayload } from "@/server/service/jwt.service";
+import { productSchema, ProductSchema } from "@/server/schema/product.schema"
+import prisma from "@/config/prisma"
+import { AccessTokenPayload } from "@/server/service/jwt.service"
+import type { ProductDB } from "@prisma/client"
+import type { IService } from "../../interface/server/IService"
+import type { ProductCreate, ProductId, ProductTransaction, ProductUpdate, } from "../../interface/model/product.type"
 
 export type PaginationDB<T> = {
-	data: T[], page: number, take: number
-};
+	data: T[]
+	page: number
+	take: number
+}
 
 export class ProductService implements IService<ProductDB> {
-	constructor(
-		private valid: ProductSchema,
-	) {
+	constructor(private valid: ProductSchema) {
 	}
 	
-	async findAllStock(page: number, take: number = 100, stock: string): Promise<PaginationDB<ProductDB>> {
+	async findAllStock(
+		page: number,
+		take: number = 100,
+		stock: string
+	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				take: take,
@@ -31,7 +29,10 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async findAll(page: number, take: number = 100): Promise<PaginationDB<ProductDB>> {
+	async findAll(
+		page: number,
+		take: number = 100
+	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				take: take,
@@ -41,7 +42,11 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async findAllPrivate(page: number, take: number = 100, user: AccessTokenPayload): Promise<PaginationDB<ProductDB>> {
+	async findAllPrivate(
+		page: number,
+		take: number = 100,
+		user: AccessTokenPayload
+	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				where: { userId: user.id },
@@ -55,22 +60,22 @@ export class ProductService implements IService<ProductDB> {
 	async findIdPublic(id: number): Promise<ProductDB> {
 		const data = await prisma.productDB.findUnique({ where: { id } })
 		if (!data) {
-			throw new Error('Data Product is Not found ')
+			throw new Error("Data Product is Not found ")
 		}
 		return data
 	}
 	
 	async findIdPrivate({ id_product, id_user }: ProductId): Promise<ProductDB> {
 		const data = await prisma.productDB.findUnique({
-			where: { id: id_product, userId: id_user }
+			where: { id: id_product, userId: id_user },
 		})
 		if (!data) {
-			throw new Error('Data Product is Not found ')
+			throw new Error("Data Product is Not found ")
 		}
 		return data
 	}
 	
-	async createOne({ id, ...data }: ProductCreate): Promise<ProductDB> {
+	async createOne(data: ProductCreate): Promise<ProductDB> {
 		data = this.valid.createValid(data)
 		return prisma.productDB.create({
 			data: {
@@ -87,7 +92,10 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async updateOne(data: ProductUpdate, { id_product, id_user }: ProductId): Promise<ProductDB> {
+	async updateOne(
+		data: ProductUpdate,
+		{ id_product, id_user }: ProductId
+	): Promise<ProductDB> {
 		data = this.valid.updateValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },
@@ -95,20 +103,22 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async deleteOne({ id_product, id_user }: ProductId,): Promise<ProductDB> {
-		return prisma.productDB.delete({ where: { id: id_product, userId: id_user } })
+	async deleteOne({ id_product, id_user }: ProductId): Promise<ProductDB> {
+		return prisma.productDB.delete({
+			where: { id: id_product, userId: id_user },
+		})
 	}
 	
-	async addStock(data: ProductTransaction, { id_product, id_user }: ProductId): Promise<ProductDB> {
+	async addStock(
+		data: ProductTransaction,
+		{ id_product, id_user }: ProductId
+	): Promise<ProductDB> {
 		data = this.valid.addStockValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },
 			data: { jumlah: data.jumlah },
 		})
 	}
-	
 }
 
-export const productService = new ProductService(
-	productSchema
-)
+export const productService = new ProductService(productSchema)

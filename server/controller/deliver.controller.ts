@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { deliveryService, ServiceDeliver } from '@/server/service/delivery.service'
-import { IController } from '@/interface/IController'
-import { requestService, RequestService } from '@/server/service/request.service'
-import { errorHanding } from "@/lib/error/errorHanding";
-import { Params } from "@/interface/params";
-import { DeliveryCreate, DeliveryUpdate } from "@/interface/delivery";
+import { NextRequest, NextResponse } from "next/server"
+import { deliveryService, ServiceDeliver, } from "@/server/service/delivery.service"
+import { IController } from "@/interface/server/IController"
+import { requestService, RequestService, } from "@/server/service/request.service"
+import { errorHanding } from "@/lib/error/errorHanding"
+import type { Params } from "../../interface/server/param"
+import type { DeliveryCreate, DeliveryUpdate, } from "../../interface/model/delivery.type"
 
 class DeliverController implements IController {
 	constructor(
 		private serviceDeliver: ServiceDeliver,
-		private serviceReq: RequestService,
+		private serviceReq: RequestService
 	) {
 	}
 	
@@ -27,12 +27,13 @@ class DeliverController implements IController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			const { page, take } = this.serviceReq.getPage(req)
-			let data = await this.serviceDeliver.findAllPrivate(page, take,user)
+			let data = await this.serviceDeliver.findAllPrivate(page, take, user)
 			return NextResponse.json(data, { status: 200 })
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}
 	}
+	
 	async findId(req: NextRequest, params: Params) {
 		try {
 			let { id } = this.serviceReq.getIdInt(params)
@@ -48,7 +49,8 @@ class DeliverController implements IController {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
 			const data = await this.serviceDeliver.findIdPrivate({
-				id_delivery: id, id_user: user.id
+				id_delivery: id,
+				id_user: user.id,
 			})
 			return Response.json(data)
 		} catch (e: unknown) {
@@ -61,8 +63,7 @@ class DeliverController implements IController {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<DeliveryCreate>(req)
 			data.userId = user.id
-			data = await this.serviceDeliver.createOne(data)
-			return Response.json(data)
+			return Response.json(await this.serviceDeliver.createOne(data))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}
@@ -71,12 +72,14 @@ class DeliverController implements IController {
 	async updateOne(req: NextRequest, params: Params) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data, id } = await this.serviceReq.getUpdateInt<DeliveryUpdate>(req, params)
-			data = await this.serviceDeliver.updateOne(data, {
+			let { data, id } = await this.serviceReq.getUpdateInt<DeliveryUpdate>(
+				req,
+				params
+			)
+			return Response.json(await this.serviceDeliver.updateOne(data, {
 				id_delivery: id,
-				id_user: user.id
-			})
-			return Response.json(data)
+				id_user: user.id,
+			}))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}
@@ -88,7 +91,7 @@ class DeliverController implements IController {
 			let { id } = this.serviceReq.getIdInt(params)
 			const data = await this.serviceDeliver.deleteOne({
 				id_delivery: id,
-				id_user: user.id
+				id_user: user.id,
 			})
 			return Response.json(data)
 		} catch (e: unknown) {
@@ -99,5 +102,5 @@ class DeliverController implements IController {
 
 export const deliveryController = new DeliverController(
 	deliveryService,
-	requestService,
+	requestService
 )

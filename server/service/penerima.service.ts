@@ -1,12 +1,12 @@
-import { PenerimaCreate, penerimaSchema, PenerimaSchema } from "@/server/schema/penerima.schema";
-import prisma from "@/config/prisma";
-import { IService } from "@/interface/IService";
-import { PenerimaDB } from "@prisma/client";
+import { penerimaSchema, PenerimaSchema } from "@/server/schema/penerima.schema"
+import prisma from "@/config/prisma"
+import { PenerimaDB } from "@prisma/client"
+import type { AccessTokenPayload } from "./jwt.service"
+import type { IService } from "../../interface/server/IService"
+import type { PenerimaCreate } from "../../interface/model/penerima.type"
 
 export class PenerimaService implements IService<PenerimaDB> {
-	constructor(
-		private valid: PenerimaSchema
-	) {
+	constructor(private valid: PenerimaSchema) {
 	}
 	
 	async findAll(page: number, take: number) {
@@ -15,10 +15,9 @@ export class PenerimaService implements IService<PenerimaDB> {
 			skip: (page - 1) * take,
 		})
 		return { data, page, take }
-		
 	}
 	
-	async findAllPrivate(page: number, take: number,) {
+	async findAllPrivate(page: number, take: number) {
 		const data = await prisma.penerimaDB.findMany({
 			take: take,
 			skip: (page - 1) * take,
@@ -29,19 +28,20 @@ export class PenerimaService implements IService<PenerimaDB> {
 	async findOne(id: number) {
 		const data = await prisma.penerimaDB.findUnique({ where: { id } })
 		if (!data) {
-			throw new Error('Data Penerima is not found')
+			throw new Error("Data Penerima is not found")
 		}
 		return data
 	}
 	
-	async createOne(data: PenerimaCreate) {
+	async createOne(data: PenerimaCreate, user: AccessTokenPayload) {
 		data = this.valid.validCreate(data)
 		return prisma.penerimaDB.create({
 			data: {
 				nama: data.nama,
 				alamat: data.alamat,
 				hp: data.hp,
-			}
+				userId: user.id,
+			},
 		})
 	}
 	
@@ -53,22 +53,17 @@ export class PenerimaService implements IService<PenerimaDB> {
 				nama: data.nama,
 				alamat: data.alamat,
 				hp: data.hp,
-			}
+			},
 		})
-		
 	}
 	
 	async deleteOne(id: number) {
-		
 		const data = await prisma.penerimaDB.delete({ where: { id } })
 		if (!data) {
-			throw new Error('Data Penerima is not found')
+			throw new Error("Data Penerima is not found")
 		}
 		return data
 	}
-	
 }
 
-export const penerimaService = new PenerimaService(
-	penerimaSchema
-)
+export const penerimaService = new PenerimaService(penerimaSchema)

@@ -2,10 +2,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 
-import { DeliveryCreate } from "@/interface/delivery";
 import { DeliveryDB } from "@prisma/client";
-import { RegisterUser } from "@/server/schema/user.schema";
 import { bankFinish } from "@/__test__/api/bank.test";
+import { DeliveryCreate } from "@/interface/model/delivery.type";
+import { RegisterUser } from "@/interface/model/auth.type";
 
 const testExpectation: DeliveryDB = {
 	id: expect.any(Number),
@@ -51,9 +51,11 @@ const registerData: RegisterUser = {
 	"address": "jln jakarta raya"
 }
 export let deliveryFinish = false
-describe.skipIf(bankFinish === true)('can test api delivery', async () => {
+describe
+	//.skipIf(bankFinish === true)
+('can test api delivery', async () => {
 	beforeAll(async () => {
-		const { data, accessToken } = await registerTest(registerData);
+		const { data, accessToken } = await registerTest('delivery');
 		deliveryToken = accessToken
 		dataTestDelivery.userId = data.id
 	})
@@ -123,7 +125,7 @@ describe.skipIf(bankFinish === true)('can test api delivery', async () => {
 			expect(data).not.toMatchObject(testExpectation)
 			
 			expect(code).toBe(400)
-			expect(data).length(6)
+			expect(data).length(7)
 		})
 		
 		it('ERROR Create data delivery, name is empty', async () => {

@@ -3,7 +3,6 @@ import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 import { BankCreate } from "@/server/schema/bank.schema";
 import { BankDB } from "@prisma/client";
-import { RegisterUser } from "@/server/schema/user.schema";
 import { userFinish } from "@/__test__/api/user.test";
 
 const dataTestBank = {
@@ -53,19 +52,12 @@ const dataExpectType: BankCreate = {
 	id: expect.any(Number)
 	
 }
-const registerData: RegisterUser = {
-	"fullname": "bankRegister",
-	"email": "bankRegister@gmail.com",
-	"password": "user1234",
-	"confPass": "user1234",
-	"phone": "081 1232 1234",
-	"address": "jln jakarta raya"
-}
+
 export let bankFinish = false
 
 describe('can test api bank', async () => {
 	beforeAll(async () => {
-		const { data, accessToken } = await registerTest();
+		const { data, accessToken } = await registerTest('bank');
 		bankToken = accessToken
 		dataTestBank.userId = data.id
 	})
@@ -119,7 +111,7 @@ describe('can test api bank', async () => {
 			expect(data).not.toMatchObject(dataExpect)
 			
 			expect(code).toBe(400)
-			expect(data).length(6)
+			expect(data).length(7)
 		})
 		
 		it('ERROR Create data bank, name is empty', async () => {

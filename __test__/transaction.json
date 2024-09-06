@@ -1,0 +1,59 @@
+{
+  "transaction": {
+    "checkout": {
+      "req": {
+        "transaction": {
+          "jumlah": "number",
+          "penerimaDBId": "number",
+          "deliveryDBId": "number",
+          "bankDBId": "number"
+        },
+        "order": {
+          "nama": "string",
+          "hp": "string",
+          "lokasi": "string",
+          "status": "string",
+          "dari": "string",
+          "pengirim": "string",
+          "guna": "string",
+          "ongkir": "number"
+        }
+      },
+      "res": {
+        "orderanDB": {
+          "id": "string",
+          "dari": "string",
+          "pengirim": "string",
+          "hp": "string",
+          "guna": "string",
+          "lokasi": "string",
+          "ongkir": "number",
+          "status": "string",
+          "created_at": "Date",
+          "updated_at": "Date"
+        },
+        "productDB": {
+          "id": "number",
+          "nama": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": " string |null",
+          "harga": "number",
+          "jumlah": "number",
+          "keterangan": "string",
+          "created_at": "Date",
+          "updated_at": "Date",
+          "userId": "string"
+        },
+        "TransactionDB": {
+          "id": "number",
+          "jumlah": "number",
+          "orderanDBId": "string",
+          "penerimaDBId": "number",
+          "deliveryDBId": "number",
+          "bankDBId": "number"
+        }
+      }
+    }
+  }
+}

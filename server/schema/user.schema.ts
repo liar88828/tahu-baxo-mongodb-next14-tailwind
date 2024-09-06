@@ -1,7 +1,6 @@
-import prisma from '@/config/prisma'
 import { z } from 'zod'
-import { Prisma } from '@prisma/client'
 import { addressInit, nameInit, phoneInit } from "@/server/schema/init.schema";
+import { LoginUser, RegisterUser, UserUpdate } from "@/interface/model/auth.type";
 
 export class UserSchema {
 	
@@ -61,7 +60,7 @@ export class UserSchema {
 		password: z.string().min(8).max(50),
 	}) satisfies z.Schema<LoginUser>
 	
-	createValid(data: RegisterUser) {
+	registerValid(data: RegisterUser) {
 		data = this.register.parse(data)
 		if (!data) {
 			throw new Error('data is not valid')
@@ -94,42 +93,5 @@ export class UserSchema {
 	// }
 }
 
-export type LoginUser = {
-	email: string
-	password: string
-}
-export type RegisterUser = {
-	email: string
-	password: string
-	confPass: string
-	fullname: string
-	phone: string
-	address: string
-	
-}
-
-export type NewPassword = {
-	email: string
-	password: string
-	confPass: string
-}
-
-export type DeleteUser = {
-	name: string
-	email: string
-	password: string
-	confPass: string
-}
-
 export const userSchema = new UserSchema()
 
-export type UserCreate = Prisma.Args<typeof prisma.user, 'create'>['data']
-export type UserUpdate = Prisma.Args<typeof prisma.user, 'update'>['data']
-export type ResetSchema = z.output<typeof userSchema.resetSchema>
-export type otpError = z.inferFlattenedErrors<typeof userSchema.otpSchema>
-type InitialFormState = {
-	message: string[]
-}
-export const initialState: InitialFormState = {
-	message: [''],
-}

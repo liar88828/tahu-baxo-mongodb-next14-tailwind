@@ -1,14 +1,13 @@
-import { NextRequest } from 'next/server'
-import { GetData, GetPage, GetUpdate, IServiceRequest, } from '../../interface/IServiceRequest'
+import { NextRequest } from "next/server"
+import { GetData, GetPage, GetUpdate, IServiceRequest, } from "../../interface/server/IServiceRequest"
 
-import { Params } from "@/interface/params";
-import { z } from "zod";
-import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service";
+import { z } from "zod"
+import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service"
+import type { Params } from "../../interface/server/param"
 
 export class RequestService implements IServiceRequest {
-	
 	getTokenCookie(req: NextRequest) {
-		const token = req.cookies.get('token')
+		const token = req.cookies.get("token")
 		const test = req.cookies.getAll()
 		// console.log('--------')
 		// console.log(req.cookies)
@@ -16,20 +15,23 @@ export class RequestService implements IServiceRequest {
 		// console.log(test)
 		// console.log('--------')
 		if (!token) {
-			throw new Error("Not have token in Cookie",)
+			throw new Error("Not have token in Cookie")
 		}
 		return token.value
 	}
 	
 	getTokenBearer(req: NextRequest) {
-		const Bearer = req.headers.get('Authorization')
+		const Bearer = req.headers.get("Authorization")
 		if (!Bearer) {
-			throw new Error("Not have token in Bearer",)
+			throw new Error("Not have token in Bearer")
 		}
-		return Bearer.split(' ')[1]
+		return Bearer.split(" ")[1]
 	}
 	
-	async getUpdate<D, >(request: NextRequest, params: Params): Promise<GetUpdate<D, string>> {
+	async getUpdate<D>(
+		request: NextRequest,
+		params: Params
+	): Promise<GetUpdate<D, string>> {
 		// console.log(params)
 		return {
 			data: await this.getData<D>(request).then((res) => res.data),
@@ -37,7 +39,10 @@ export class RequestService implements IServiceRequest {
 		}
 	}
 	
-	async getUpdateInt<D>(request: NextRequest, params: Params): Promise<GetUpdate<D, number>> {
+	async getUpdateInt<D>(
+		request: NextRequest,
+		params: Params
+	): Promise<GetUpdate<D, number>> {
 		return {
 			data: await this.getData<D>(request).then((res) => res.data),
 			id: this.getIdInt(params).id,
@@ -56,10 +61,14 @@ export class RequestService implements IServiceRequest {
 		return { id: z.number().min(1).parse(Number(params.id)) }
 	}
 	
+	getIdIntEx({ params }: Params): { id: number } {
+		return { id: Number(params.id) }
+	}
+	
 	getPage(request: NextRequest): GetPage {
 		const searchParams = request.nextUrl.searchParams
-		let page = Number(searchParams.get('page') ?? 1)
-		const take = Number(searchParams.get('take') ?? 100)
+		let page = Number(searchParams.get("page") ?? 1)
+		const take = Number(searchParams.get("take") ?? 100)
 		page = page < 0 ? 1 : page
 		return {
 			page,
@@ -69,7 +78,7 @@ export class RequestService implements IServiceRequest {
 	
 	getEmail(request: NextRequest): { email: string } {
 		const searchParams = request.nextUrl.searchParams
-		let email = searchParams.get('email')
+		let email = searchParams.get("email")
 		if (!email) {
 			throw new Error("please add email, this email empty")
 		}
@@ -79,14 +88,14 @@ export class RequestService implements IServiceRequest {
 	
 	async getData<T>(request: NextRequest): Promise<GetData<T>> {
 		return {
-			data: await request.json()
+			data: await request.json(),
 		}
 	}
 	
 	async getUserPayload(req: NextRequest) {
 		const bearer = this.getTokenBearer(req)
 		// console.log('bearer------')
-		const user = await jwtService.verifyAccessToken(bearer,)
+		const user = await jwtService.verifyAccessToken(bearer)
 		// console.log('user------',user)
 		return user as AccessTokenPayload
 	}

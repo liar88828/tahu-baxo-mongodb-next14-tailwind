@@ -1,0 +1,415 @@
+{
+  "app": {
+    "auth": {
+      "login": {
+        "req": {
+          "email": "string",
+          "password": "string"
+        },
+        "res": {
+          "refresh": "string",
+          "access": "string",
+          "data": {
+            "name": "string",
+            "email": "string",
+            "image": "string",
+            "id": "string"
+          }
+        }
+      },
+      "register": {
+        "req": {
+          "email": "string",
+          "password": "string",
+          "confPass": "string",
+          "fullname": "string",
+          "phone": "string",
+          "address": "string"
+        },
+        "res": {
+          "refresh": "string",
+          "access": "string",
+          "data": {
+            "name": "string",
+            "email": "string",
+            "image": "string",
+            "id": "string"
+          }
+        }
+      },
+
+      "logout": {
+        "req": {
+          "cookie": "token"
+        },
+        "res": {
+          "refresh": "string",
+          "access": "string",
+          "data": "success logout"
+        }
+      },
+      "refreshToken": {
+        "req": {
+          "cookie": "token"
+        },
+        "res": {
+          "refresh": "string",
+          "access": "string",
+          "data": "success logout"
+        }
+      }
+    },
+    "bank": {
+      "get": {
+        "req": {
+          "page": "number",
+          "take": "number",
+          "header": "access token"
+        },
+        "res": {
+          "page": "number",
+          "take": "number",
+          "data": [
+            {
+              "id": "number",
+              "nama": "string",
+              "hp": "string",
+              "no": "string",
+              "lokasi": "string",
+              "jenis": "string",
+              "img": "string | null",
+              "keterangan": "string",
+              "userId": "string"
+            }
+          ]
+        }
+      },
+      "getID": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "no": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "create": {
+        "req": {
+          "header": "access token",
+          "body": {
+            "hp": "string",
+            "img": "string",
+            "no": "string",
+            "nama": "string",
+            "lokasi": "string",
+            "jenis": "string",
+            "keterangan": "string",
+            "userId": "string"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "no": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "update": {
+        "req": {
+          "id": "number",
+          "header": "access token",
+          "body": {
+            "hp": "string",
+            "img": "string",
+            "no": "string",
+            "nama": "string",
+            "lokasi": "string",
+            "jenis": "string",
+            "keterangan": "string",
+            "userId": "string"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "no": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "delete": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "no": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      }
+    },
+    "product": {
+      "get": {
+        "req": {
+          "page": "number",
+          "take": "number",
+          "header": "access token"
+        },
+        "res": {
+          "page": "number",
+          "take": "number",
+          "data": [
+            {
+              "id": "number",
+              "nama": "string",
+              "lokasi": "string",
+              "jenis": "string",
+              "img": "string | null",
+              "harga": "number",
+              "jumlah": "number",
+              "keterangan": "string",
+              "created_at": "Date",
+              "updated_at": "Date",
+              "userId": "string"
+            }
+          ]
+        }
+      },
+      "getID": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "harga": "number",
+          "jumlah": "number",
+          "keterangan": "string",
+          "created_at": "Date",
+          "updated_at": "Date",
+          "userId": "string"
+        }
+      },
+      "create": {
+        "req": {
+          "header": "access token",
+          "body": {
+            "nama": "string",
+            "lokasi": "string",
+            "jenis": "string",
+            "keterangan": "string",
+            "userId": "string",
+            "harga": "number",
+            "jumlah": "number",
+            "id": "number | undefined",
+            "img": "string | undefined"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "harga": "number",
+          "jumlah": "number",
+          "keterangan": "string",
+          "created_at": "Date",
+          "updated_at": "Date",
+          "userId": "string"
+        }
+      },
+      "update": {
+        "req": {
+          "id": "number",
+          "header": "access token",
+          "body": {
+            "nama": "string",
+            "lokasi": "string",
+            "jenis": "string",
+            "keterangan": "string",
+            "userId": "string",
+            "harga": "number",
+            "jumlah": "number",
+            "id": "number | undefined",
+            "img": "string | undefined"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "harga": "number",
+          "jumlah": "number",
+          "keterangan": "string",
+          "created_at": "Date",
+          "updated_at": "Date",
+          "userId": "string"
+        }
+      },
+      "delete": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "img": "string | null",
+          "harga": "number",
+          "jumlah": "number",
+          "keterangan": "string",
+          "created_at": "Date",
+          "updated_at": "Date",
+          "userId": "string"
+        }
+      }
+    },
+    "delivery": {
+      "get": {
+        "req": {
+          "page": "number",
+          "take": "number",
+          "header": "access token"
+        },
+        "res": {
+          "page": "number",
+          "take": "number",
+          "data": [
+            {
+              "id": "number",
+              "nama": "string",
+              "hp": "string",
+              "lokasi": "string",
+              "jenis": "string",
+              "harga": "number",
+              "img": "string | null",
+              "keterangan": "string",
+              "userId": "string"
+            }
+          ]
+        }
+      },
+      "getID": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "harga": "number",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "create": {
+        "req": {
+          "header": "access token",
+          "body": {
+            "id": "number",
+            "nama": "string",
+            "hp": "string",
+            "lokasi": "string",
+            "img": "string | undefined",
+            "keterangan": "string",
+            "jenis": "string",
+            "harga": "number",
+            "userId": "string"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "harga": "number",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "update": {
+        "req": {
+          "id": "number",
+          "header": "access token",
+          "body": {
+            "nama": "string",
+            "hp": "string",
+            "lokasi": "string",
+            "img": "string | undefined",
+            "keterangan": "string",
+            "jenis": "string",
+            "harga": "number",
+            "userId": "string"
+          }
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "harga": "number",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      },
+      "delete": {
+        "req": {
+          "id": "number",
+          "header": "access token"
+        },
+        "res": {
+          "id": "number",
+          "nama": "string",
+          "hp": "string",
+          "lokasi": "string",
+          "jenis": "string",
+          "harga": "number",
+          "img": "string | null",
+          "keterangan": "string",
+          "userId": "string"
+        }
+      }
+    }
+  }
+}
