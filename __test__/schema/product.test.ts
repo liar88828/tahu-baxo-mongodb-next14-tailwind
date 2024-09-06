@@ -23,6 +23,7 @@ const ProductUpdate: ProductUpdate = {
 	nama: "is test product",
 	userId: '12'
 }
+
 describe('test zod schema product', () => {
 	it('can validate create data product', async () => {
 		function testFun() {

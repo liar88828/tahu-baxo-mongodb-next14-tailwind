@@ -3,8 +3,8 @@ import prisma from "@/config/prisma"
 import { ErrorProduct, ErrorTrolley } from "@/lib/error/errorCustome"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import { trolleySchema, type TrolleySchema } from "../schema/trolley.schema"
-import type { GetAllTrolley, TrolleyCreate as TrolleyCreate, TrolleyDataId, } from "../../interface/model/trolley.type"
 import { TrolleyDB } from "@prisma/client";
+import { GetAllTrolley, TrolleyCreate, TrolleyDataId, TrolleyUpdate } from "@/interface/model/trolley.type";
 
 export type ResponseTrolley = { data: Omit<TrolleyDB, 'transactionId'>, status: string };
 
@@ -13,15 +13,43 @@ export class TrolleyService {
 	}
 	
 	async getAll(user: AccessTokenPayload): Promise<GetAllTrolley[]> {
-		const trolleyDB = await prisma.trolleyDB.count({})
 		return prisma.trolleyDB.findMany({
 			include: { Product: true },
-			where: { userId: user.id },
+			where: {
+				userId: user.id,
+			},
+		})
+		
+	}
+	
+	async create(data: TrolleyCreate): Promise<ResponseTrolley> {
+		data = this.serviceSchema.validCreate(data)
+		return prisma.$transaction(async (tx) => {
+			
+			const trolleyDB = await tx.trolleyDB.count({
+				where: { userId: data.userId },
+			})
+			
+			if (trolleyDB >= 200) {
+				throw new ErrorTrolley("conflict")
+			}
+			console.log(data)
+			const res = await tx.trolleyDB.create({
+				data: {
+					userId: data.userId,
+					productId: data.productId,
+					qty: data.qty,
+				},
+			})
+			return { data: res, status: "create data" }
+			
 		})
 	}
 	
-	async increment(data: TrolleyCreate, user: AccessTokenPayload): Promise<ResponseTrolley> {
-		data = this.serviceSchema.validCreate(data)
+	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		
+		console.log(data)
+		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			// check stock trolley
 			const trolleyDB = await tx.trolleyDB.count({
@@ -41,14 +69,7 @@ export class TrolleyService {
 			
 			if (!trolley) {
 				// create trolley
-				const res = await tx.trolleyDB.create({
-					data: {
-						userId: user.id,
-						productId: data.productId,
-						qty: data.qty,
-					},
-				})
-				return { data: res, status: "create data" }
+				throw new ErrorTrolley("notFound")
 			} else {
 				// update trolley
 				const res = await tx.trolleyDB.update({
@@ -68,8 +89,8 @@ export class TrolleyService {
 		})
 	}
 	
-	async decrement(data: TrolleyCreate, user: AccessTokenPayload): Promise<ResponseTrolley> {
-		data = this.serviceSchema.validCreate(data)
+	async decrement(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			const trolley = await tx.trolleyDB.findUnique({
 				where: {
@@ -99,12 +120,18 @@ export class TrolleyService {
 		})
 	}
 	
+	async remove({ id }: TrolleyDataId, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		return {
+			data: await prisma.trolleyDB.delete({ where: { id, userId: user.id } }),
+			status: 'success Delete Data'
+		}
+	}
+	
 	protected async addxx2(
-		data: TrolleyCreate,
-		id: TrolleyDataId,
+		data: TrolleyUpdate,
 		user: AccessTokenPayload
 	) {
-		this.serviceSchema.validCreate(data)
+		this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			const trolleyDB = await prisma.trolleyDB.count({
 				where: { userId: user.id },
@@ -134,11 +161,11 @@ export class TrolleyService {
 	}
 	
 	protected async addxxx(
-		data: TrolleyCreate,
+		data: TrolleyUpdate,
 		{ id }: TrolleyDataId,
 		user: AccessTokenPayload
 	) {
-		this.serviceSchema.validCreate(data)
+		this.serviceSchema.validUpdate(data)
 		const trolleyDB = await prisma.trolleyDB.findFirst({
 			where: { userId: user.id },
 		})
@@ -202,12 +229,6 @@ export class TrolleyService {
 			//     qty : data.qty
 			//   }
 			// })
-		})
-	}
-	
-	async remove({ id }: TrolleyDataId) {
-		return prisma.trolleyDB.delete({
-			where: { id },
 		})
 	}
 }

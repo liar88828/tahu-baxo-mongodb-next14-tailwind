@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import type { Params } from "@/interface/server/param"
-import type { TrolleyCreate } from "@/interface/model/trolley.type"
+import type { TrolleyCreate, TrolleyUpdate } from "@/interface/model/trolley.type"
 
 export class TrolleyController {
 	constructor(
@@ -23,10 +23,22 @@ export class TrolleyController {
 		}
 	}
 	
-	async increment(req: NextRequest, params: Params) {
+	async create(req: NextRequest,) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
 			const { data } = await this.serviceReq.getData<TrolleyCreate>(req)
+			data.userId = user.id
+			const res = await this.serviceTrolley.create(data,)
+			return NextResponse.json(res)
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async increment(req: NextRequest, params: Params) {
+		try {
+			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
+			const { data } = await this.serviceReq.getData<TrolleyUpdate>(req)
 			const { id } = this.serviceReq.getIdIntEx(params)
 			data.id = id
 			data.userId = user.id
@@ -40,7 +52,7 @@ export class TrolleyController {
 	async decrement(req: NextRequest, params: Params) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
-			const { data } = await this.serviceReq.getData<TrolleyCreate>(req)
+			const { data } = await this.serviceReq.getData<TrolleyUpdate>(req)
 			const { id } = this.serviceReq.getIdInt(params)
 			data.id = id
 			data.userId = user.id
@@ -53,13 +65,12 @@ export class TrolleyController {
 	
 	async remove(req: NextRequest, params: Params) {
 		try {
-			const user = this.serviceReq.getUserPayload(req)
+			const user = await this.serviceReq.getUserPayload(req)
 			const { id } = this.serviceReq.getIdInt(params)
-			return NextResponse.json(
-				this.serviceTrolley.remove({
-					id: id,
-				})
-			)
+			
+			let res = await this.serviceTrolley.remove({ id, }, user)
+			return NextResponse.json(res)
+			
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}
