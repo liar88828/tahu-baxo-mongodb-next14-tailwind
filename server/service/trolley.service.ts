@@ -1,50 +1,236 @@
-import prisma from "@/config/prisma";
-import { TrolleyOnProductDB } from "@prisma/client";
-import { ProductDB } from ".prisma/client";
+import prisma from "@/config/prisma"
 
-export type TrolleyData = {
-  userId : string,
-  trolleyId : number,
-  productId : number,
-  trolleyOnProductDBId : number,
-  qty : number
-}
-export type TrolleyDataAll = Pick<TrolleyData, 'trolleyId'>
-export type TrolleyDataId = Pick<TrolleyData, 'trolleyOnProductDBId'>
+import { ErrorProduct, ErrorTrolley } from "@/lib/error/errorCustome"
+import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { trolleySchema, type TrolleySchema } from "../schema/trolley.schema"
+import { TrolleyDB } from "@prisma/client";
+import { GetAllTrolley, TrolleyCreate, TrolleyDataId, TrolleyUpdate } from "@/interface/model/trolley.type";
 
-export type GetAllTrolley = TrolleyOnProductDB & { ProductDB : ProductDB | null }
+export type ResponseTrolley = { data: Omit<TrolleyDB, 'transactionId'>, status: string };
 
 export class TrolleyService {
-  async getAll({trolleyId} : TrolleyDataAll) : Promise<GetAllTrolley[]> {
-    return prisma.trolleyOnProductDB.findMany(
-      {
-        include : {ProductDB : true,},
-        where : {id : trolleyId}
-      })
-  }
-
-  async add(data : TrolleyData, id : TrolleyDataId) {
-    return prisma.$transaction(async (tx) => {
-      return tx.trolleyOnProductDB.upsert({
-        where : {id : id.trolleyOnProductDBId},
-        update : {
-          trolleyId : data.trolleyId,
-          productDBId : data.productId,
-          qty : {increment : data.qty},
-        },
-        create : {
-          trolleyId : data.trolleyId,
-          productDBId : data.productId,
-          qty : data.qty
-        }
-      })
-    })
-
-  }
-
-  async remove({trolleyOnProductDBId} : TrolleyDataId) {
-    return prisma.trolleyOnProductDB.delete({where : {id : trolleyOnProductDBId},})
-  }
+	constructor(private serviceSchema: TrolleySchema) {
+	}
+	
+	async getAll(user: AccessTokenPayload): Promise<GetAllTrolley[]> {
+		return prisma.trolleyDB.findMany({
+			include: { Product: true },
+			where: {
+				userId: user.id,
+			},
+		})
+		
+	}
+	
+	async create(data: TrolleyCreate): Promise<ResponseTrolley> {
+		data = this.serviceSchema.validCreate(data)
+		return prisma.$transaction(async (tx) => {
+			
+			const trolleyDB = await tx.trolleyDB.count({
+				where: { userId: data.userId },
+			})
+			
+			if (trolleyDB >= 200) {
+				throw new ErrorTrolley("conflict")
+			}
+			console.log(data)
+			const res = await tx.trolleyDB.create({
+				data: {
+					userId: data.userId,
+					productId: data.productId,
+					qty: data.qty,
+				},
+			})
+			return { data: res, status: "create data" }
+			
+		})
+	}
+	
+	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		
+		console.log(data)
+		data = this.serviceSchema.validUpdate(data)
+		return prisma.$transaction(async (tx) => {
+			// check stock trolley
+			const trolleyDB = await tx.trolleyDB.count({
+				where: { userId: user.id },
+			})
+			if (trolleyDB >= 200) {
+				throw new ErrorTrolley("conflict")
+			}
+			// find trolley
+			const trolley = await tx.trolleyDB.findUnique({
+				where: {
+					id: data.id,
+					userId: user.id,
+					productId: data.productId,
+				},
+			})
+			
+			if (!trolley) {
+				// create trolley
+				throw new ErrorTrolley("notFound")
+			} else {
+				// update trolley
+				const res = await tx.trolleyDB.update({
+					where: {
+						id: data.id,
+						userId: user.id,
+						productId: data.productId,
+					},
+					data: {
+						userId: user.id,
+						productId: data.productId,
+						qty: { increment: data.qty },
+					},
+				})
+				return { data: res, status: "update data" }
+			}
+		})
+	}
+	
+	async decrement(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		data = this.serviceSchema.validUpdate(data)
+		return prisma.$transaction(async (tx) => {
+			const trolley = await tx.trolleyDB.findUnique({
+				where: {
+					id: data.id,
+					userId: user.id,
+					productId: data.productId,
+				},
+			})
+			
+			if (!trolley) {
+				throw new ErrorTrolley("notFound")
+			} else {
+				const res = await tx.trolleyDB.update({
+					where: {
+						id: data.id,
+						userId: user.id,
+						productId: data.productId,
+					},
+					data: {
+						userId: user.id,
+						productId: data.productId,
+						qty: { decrement: data.qty },
+					},
+				})
+				return { data: res, status: "update data" }
+			}
+		})
+	}
+	
+	async remove({ id }: TrolleyDataId, user: AccessTokenPayload): Promise<ResponseTrolley> {
+		return {
+			data: await prisma.trolleyDB.delete({ where: { id, userId: user.id } }),
+			status: 'success Delete Data'
+		}
+	}
+	
+	protected async addxx2(
+		data: TrolleyUpdate,
+		user: AccessTokenPayload
+	) {
+		this.serviceSchema.validUpdate(data)
+		return prisma.$transaction(async (tx) => {
+			const trolleyDB = await prisma.trolleyDB.count({
+				where: { userId: user.id },
+			})
+			console.log(trolleyDB)
+			return tx.trolleyDB.upsert({
+				where: {
+					id: data.id,
+					userId: user.id,
+					
+					productId: data.productId,
+				},
+				update: {
+					userId: user.id,
+					
+					productId: data.productId,
+					qty: { increment: data.qty },
+				},
+				create: {
+					userId: user.id,
+					
+					productId: data.productId,
+					qty: data.qty,
+				},
+			})
+		})
+	}
+	
+	protected async addxxx(
+		data: TrolleyUpdate,
+		{ id }: TrolleyDataId,
+		user: AccessTokenPayload
+	) {
+		this.serviceSchema.validUpdate(data)
+		const trolleyDB = await prisma.trolleyDB.findFirst({
+			where: { userId: user.id },
+		})
+		if (!trolleyDB) {
+			throw new ErrorTrolley("notFound")
+		}
+		const productDB = await prisma.productDB.findUnique({
+			where: { id: data.id },
+		})
+		if (!productDB) {
+			throw new ErrorProduct("notFound")
+		}
+		return prisma.$transaction(async (tx) => {
+			const trolley = await tx.trolleyDB.findUnique({
+				where: { id: data.id },
+			})
+			if (trolley) {
+				console.log("will update")
+				return tx.trolleyDB.update({
+					where: { id: id },
+					data: {
+						userId: user.id,
+						productId: productDB.id,
+						qty: { increment: data.qty },
+					},
+				})
+			} else {
+				console.log("will create")
+				return tx.trolleyDB.create({
+					data: {
+						userId: user.id,
+						productId: productDB.id,
+						qty: data.qty,
+					},
+				})
+			}
+			
+			// return tx.trolleyDB.upsert({
+			//   where : {id : id.trolleyId},
+			//   update : {
+			//     trolleyId : trolleyDB.id,
+			//     productId : productDB.id,
+			//     qty : {increment : data.qty},
+			//   },
+			//   create : {
+			//     trolleyId : trolleyDB.id,
+			//     productId : productDB.id,
+			//     qty : data.qty
+			//   }
+			// })
+			// return tx.trolleyDB.upsert({
+			//   where : {id : id.trolleyId},
+			//   update : {
+			//     trolleyId : data.trolleyId,
+			//     productId : data.productId,
+			//     qty : {increment : data.qty},
+			//   },
+			//   create : {
+			//     trolleyId : data.trolleyId,
+			//     productId : data.productId,
+			//     qty : data.qty
+			//   }
+			// })
+		})
+	}
 }
 
-export const trolleyService = new TrolleyService();
+export const trolleyService = new TrolleyService(trolleySchema)

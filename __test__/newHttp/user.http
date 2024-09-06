@@ -1,6 +1,6 @@
 @api = http://localhost:3000/api
 @path = {{api}}/user
-@token = xxxeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMSIsImlkIjoiY20wZWM1YmFlMDAwMHhqdm93c3U5cHV3MSIsImlhdCI6MTcyNDg4MDEyNSwiZXhwIjoxNzI0ODgzNzI1fQ.ziHrHX0yc9J9bhrGGU8TnjReqdeac3zPeRyULFhrhUY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbWV2anpoMDAwODE3Znp6bXB2NmN2YiIsImlhdCI6MTcyNTM2Njg1MiwiZXhwIjoxNzI1MzcwNDUyfQ.kl9fsKOxorSz58NuT5EdozySddWFML24rMIJhqAvNUs
 
 ###
 POST {{path}}/login
@@ -16,10 +16,12 @@ POST {{path}}/register
 Content-Type: application/json
 
 {
-  "name": "user1",
-  "email": "user1@gmail.com",
+  "fullname": "user3",
+  "email": "user3@gmail.com",
   "password": "user1234",
-  "confPass": "user1234"
+  "confPass": "user1234",
+  "phone": "081 1232 1234",
+  "address": "jln jakarta raya"
 }
 
 ###
@@ -33,6 +35,8 @@ Content-Type: application/json
 Authorization: "Bearer {{token}}"
 
 ###
-GET {{path}}/logout
+GET {{path}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+###

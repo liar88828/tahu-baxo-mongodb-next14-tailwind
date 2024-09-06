@@ -34,11 +34,11 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
+  id           String    @id @default(cuid())
+  sessionToken String?   @unique
   userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,15 +57,19 @@ model User {
   password      String?
   otp           Int?
   expiresOtp    DateTime?
-  refresh_token String?
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   accounts      Account[]
   sessions      Session[]
-  Trolley       Trolley         @relation(fields: [trolleyId], references: [id])
-  trolleyId     Int             @unique
+  // Trolley       Trolley         @relation(fields: [trolleyId], references: [id])
+  // trolleyId     Int             @unique
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  ProductDB     ProductDB[]
+  DeliveryDB    DeliveryDB[]
+  BankDB        BankDB[]
+  TrolleyDB     TrolleyDB[]
+  PenerimaDB    PenerimaDB[]
 }
 
 model VerificationToken {
@@ -99,49 +103,53 @@ model PenerimaDB {
   alamat        String
   hp            String
   TransactionDB TransactionDB[]
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 model OrderanDB {
-  id             String   @id @default(uuid())
+  id         String   @id @default(uuid())
   // orang
-  dari           String
-  pengirim       String
-  hp             String
+  dari       String
+  pengirim   String
+  hp         String
   // tanggal
-  pesan          DateTime
-  waktuKirim     DateTime
+  // pesan          DateTime
+  // waktuKirim     DateTime
   // keterangan
-  guna           String
-  lokasi         String
-  ongkir         Int
+  guna       String
+  lokasi     String
+  ongkir     Int
   // total
-  typePembayaran String
-  totalBayar     Int
-  totalPenjualan Int
-  status         String
+  // typePembayaran String
+  // totalBayar     Int
+  // totalPenjualan Int
+  status     String
   // semua
   // at update / create
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   TransactionDB TransactionDB[]
 }
 
 model ProductDB {
-  id                     Int                      @id @default(autoincrement())
-  nama                   String                   @unique
-  lokasi                 String
-  jenis                  String
-  img                    String?                  @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  harga                  Int
-  jumlah                 Int
-  keterangan             String
+  id         Int         @id @default(autoincrement())
+  nama       String      @unique
+  lokasi     String
+  jenis      String
+  img        String?     @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  harga      Int
+  jumlah     Int
+  keterangan String
   // at update / create
-  created_at             DateTime                 @default(now())
-  updated_at             DateTime                 @updatedAt
-  TransactionDB          TransactionDB[]
-  TrolleyOnProduct       TrolleyOnProductDB[]
-  TransactionOnProductDB TransactionOnProductDB[]
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  // TransactionDB          TransactionDB[]
+  TrolleyDB  TrolleyDB[]
+  User       User        @relation(fields: [userId], references: [id])
+  userId     String
 }
 
 model DeliveryDB {
@@ -154,6 +162,8 @@ model DeliveryDB {
   img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
   keterangan    String
   TransactionDB TransactionDB[]
+  User          User            @relation(fields: [userId], references: [id])
+  userId        String
 }
 
 model BankDB {
@@ -166,43 +176,41 @@ model BankDB {
   img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
   keterangan    String
   TransactionDB TransactionDB[]
+  User          User            @relation(fields: [userId], references: [id])
+  userId        String
 }
 
 model TransactionDB {
-  id                     Int                      @id @default(autoincrement())
-  jumlah                 Int
-  ProductDB              ProductDB?               @relation(fields: [productDBId], references: [id])
-  productDBId            Int
-  OrderanDB              OrderanDB?               @relation(fields: [orderanDBId], references: [id])
-  orderanDBId            String
-  PenerimaDB             PenerimaDB?              @relation(fields: [penerimaDBId], references: [id])
-  penerimaDBId           Int
-  DeliveryDB             DeliveryDB?              @relation(fields: [deliveryDBId], references: [id])
-  deliveryDBId           Int
-  BankDB                 BankDB?                  @relation(fields: [bankDBId], references: [id])
-  bankDBId               Int
-  TransactionOnProductDB TransactionOnProductDB[]
+  id           Int         @id @default(autoincrement())
+  jumlah       Int
+  // ProductDB              ProductDB?               @relation(fields: [productDBId], references: [id])
+  // productDBId            Int
+  OrderanDB    OrderanDB?  @relation(fields: [orderanDBId], references: [id])
+  orderanDBId  String
+  PenerimaDB   PenerimaDB? @relation(fields: [penerimaDBId], references: [id])
+  penerimaDBId Int
+  DeliveryDB   DeliveryDB? @relation(fields: [deliveryDBId], references: [id])
+  deliveryDBId Int
+  BankDB       BankDB?     @relation(fields: [bankDBId], references: [id])
+  bankDBId     Int
+  TrolleyDB    TrolleyDB[]
 }
 
-model Trolley {
-  id               Int                  @id @default(autoincrement())
-  TrolleyOnProduct TrolleyOnProductDB[]
-  User             User?
-}
+// model Trolley {
+//   id               Int                  @id @default(autoincrement())
+//   TrolleyOnProduct TrolleyOnProductDB[]
+//   User             User?
+// }
 
-model TrolleyOnProductDB {
-  id          Int        @id @default(autoincrement())
-  Trolley     Trolley?   @relation(fields: [trolleyId], references: [id])
-  trolleyId   Int?
-  ProductDB   ProductDB? @relation(fields: [productDBId], references: [id])
-  productDBId Int?
-  qty         Int
-}
-
-model TransactionOnProductDB {
-  id              Int            @id @default(autoincrement())
-  ProductDB       ProductDB?     @relation(fields: [productDBId], references: [id])
-  productDBId     Int?
-  TransactionDB   TransactionDB? @relation(fields: [transactionDBId], references: [id])
-  transactionDBId Int?
+model TrolleyDB {
+  id            Int            @id @default(autoincrement())
+  // Trolley     Trolley?   @relation(fields: [trolleyId], references: [id])
+  // trolleyId   Int?
+  User          User           @relation(fields: [userId], references: [id])
+  userId        String
+  Product       ProductDB?     @relation(fields: [productId], references: [id])
+  productId     Int?
+  Transaction   TransactionDB? @relation(fields: [transactionId], references: [id])
+  transactionId Int?
+  qty           Int
 }

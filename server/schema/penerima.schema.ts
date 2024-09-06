@@ -1,40 +1,37 @@
-import { z } from "zod";
-import { Prisma } from "@prisma/client";
-import prisma from "@/config/prisma";
+import { z } from "zod"
+import { addressInit, nameInit, phoneInit } from "@/server/schema/init.schema"
+import { PenerimaCreate, PenerimaCreatePrisma } from "@/interface/model/penerima.type"
 
 export class PenerimaSchema {
-  id = z.number().optional()
-  create = z.object({
-    id : this.id,
-    nama : z.string().min(1).max(50),
-    alamat : z.string().min(1).max(50),
-    hp : z.string().min(1).max(20),
-
-  }) satisfies z.Schema<PenerimaCreate>
-
-  update = z.object({
-    nama : z.string().min(1).max(50),
-    alamat : z.string().min(1).max(50),
-    hp : z.string().min(1).max(20),
-  })satisfies z.Schema<PenerimaCreate>
-
-  validCreate(data : PenerimaCreate) : PenerimaCreate {
-    data = this.create.parse(data)
-    if (!data) {
-      throw new Error('Data penerima is not valid')
-    }
-    return data
-  }
-
-  validId(id : number | undefined) {
-    id = this.id.parse(id)
-    if (!id) {
-      throw new Error('id penerima is not valid')
-    }
-    return id
-  }
+	id = z.number().optional()
+	create = z.object({
+		nama: nameInit,
+		alamat: addressInit,
+		hp: phoneInit,
+	})satisfies z.Schema<PenerimaCreatePrisma>
+	
+	update = z.object({
+		nama: nameInit,
+		alamat: addressInit,
+		hp: phoneInit,
+	})satisfies z.Schema<PenerimaCreatePrisma>
+	
+	validCreate(data: PenerimaCreate): PenerimaCreate {
+		data = this.create.parse(data)
+		if (!data) {
+			throw new Error("Data penerima is not valid")
+		}
+		return data
+	}
+	
+	// validId(id: number | undefined) {
+	// 	id = this.id.parse(id)
+	// 	if (!id) {
+	// 		throw new Error('id penerima is not valid')
+	// 	}
+	// 	return id
+	// }
 }
 
-export type PenerimaCreate = Prisma.Args<typeof prisma.penerimaDB, 'create'>['data']
-
 export const penerimaSchema = new PenerimaSchema()
+// export type PenerimaCreate = Prisma.Args<typeof prisma.penerimaDB, 'create'>['data']

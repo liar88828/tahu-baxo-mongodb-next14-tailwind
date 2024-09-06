@@ -38,7 +38,7 @@
     "@vitest/coverage-istanbul": "^2.0.5",
     "autoprefixer": "^10.4.20",
     "daisyui": "4.12.10",
-    "eslint": "^8.57.0",
+    "eslint": "^9.9.0",
     "eslint-config-next": "14.2.7",
     "jsdom": "^25.0.0",
     "next-test-api-route-handler": "^4.0.8",

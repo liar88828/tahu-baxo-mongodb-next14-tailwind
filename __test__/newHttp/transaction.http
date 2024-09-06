@@ -1,0 +1,34 @@
+@api = http://localhost:3000/api
+@path = {{api}}/transactions
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbjh0eGo3MDAwMXR3eWtoeWRneWFzYyIsInRyb2xsZXlJZCI6MSwiaWF0IjoxNzI1NDE3MTY1LCJleHAiOjE3MjU0MjA3NjV9.yVhHV2VnaPQoZxOMoq22QMTuzVDfe2USDrH2ujuWesM
+
+### get data Bank
+POST {{path}}/checkout
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+"order":{
+  "dari": "John Doe",
+  "pengirim": "Doe Delivery",
+  "nama": "Jane Smith",
+  "hp": "081234567890",
+  "pesan": {{$timestamp}},
+  "waktuKirim": {{$timestamp}},
+  "guna": "Personal Use",
+  "lokasi": "Jakarta",
+  "ongkir": 15000,
+  "typePembayaran": "Bank Transfer",
+  "totalBayar": 500000,
+  "totalPenjualan": 450000,
+  "status": "Shipped"
+},
+"transaction":{
+ "jumlah": 2   ,
+ "productDBId": 2,
+ "penerimaDBId": 2,
+    "deliveryDBId": 2,
+       "bankDBId": 2
+  }
+
+}

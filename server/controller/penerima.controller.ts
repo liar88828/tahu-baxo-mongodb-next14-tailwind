@@ -1,63 +1,98 @@
-import { penerimaService, PenerimaService } from "@/server/service/penerima.service";
-import { NextRequest, NextResponse } from "next/server";
-import { errorHanding } from "@/lib/utils/errorHanding";
-import { Params } from "@/interface/params";
-import { requestService, RequestService } from "@/server/service/request.service";
-import { PenerimaCreate } from "@/server/schema/penerima.schema";
+import { penerimaService, PenerimaService, } from "@/server/service/penerima.service"
+import { NextRequest, NextResponse } from "next/server"
+import { errorHanding } from "@/lib/error/errorHanding"
+import { requestService, RequestService, } from "@/server/service/request.service"
+import { IController } from "@/interface/server/IController"
+import type { Params } from "@/interface/server/param"
+import type { PenerimaCreate } from "@/interface/model/penerima.type"
 
-export class PenerimaController {
+export class PenerimaController implements IController {
   constructor(
-    private serviceReq : RequestService,
-    private servicePenerima : PenerimaService
-  ) {
-  }
-
-  async findAll(request : NextRequest) {
+		private serviceReq: RequestService,
+		private servicePenerima: PenerimaService
+	) {
+	}
+	
+	async findAll(req: NextRequest) {
+		try {
+			const { page, take } = this.serviceReq.getPage(req)
+			let data = await this.servicePenerima.findAll(page, take)
+			return NextResponse.json(data, { status: 200 })
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async findAllPrivate(req: NextRequest) {
     try {
-      const {page, take} = this.serviceReq.getPage(request)
+			const user = await this.serviceReq.getUserPayload(req)
+			const { page, take } = this.serviceReq.getPage(req)
       let data = await this.servicePenerima.findAll(page, take)
-      return NextResponse.json(data, {status : 200})
-    } catch (e : unknown) {
+			return NextResponse.json(data, { status: 200 })
+		} catch (e: unknown) {
       return errorHanding(e)
     }
   }
-
-  async findId(request : NextRequest, params : Params) {
+	
+	async findId(req: NextRequest, params: Params) {
     try {
-      let {id} = this.serviceReq.getIdInt(params)
+			let { id } = this.serviceReq.getIdInt(params)
       const data = await this.servicePenerima.findOne(id)
       return Response.json(data)
-    } catch (e : unknown) {
+		} catch (e: unknown) {
       return errorHanding(e)
     }
   }
-
-  async createOne(request : NextRequest) {
+	
+	async findIdPrivate(req: NextRequest, params: Params) {
     try {
-      let {data} = await this.serviceReq.getData<PenerimaCreate>(request)
-      data = await this.servicePenerima.createOne(data)
+			const user = await this.serviceReq.getUserPayload(req)
+			let { id } = this.serviceReq.getIdInt(params)
+			const data = await this.servicePenerima.findOne(id)
       return Response.json(data)
-    } catch (e : unknown) {
+		} catch (e: unknown) {
       return errorHanding(e)
     }
   }
-
-  async updateOne(request : NextRequest, params : Params) {
+	
+	async createOne(req: NextRequest) {
     try {
-      let {data, id} = await this.serviceReq.getUpdateInt<PenerimaCreate>(request, params)
+			const user = await this.serviceReq.getUserPayload(req)
+			let { data } = await this.serviceReq.getData<PenerimaCreate>(req)
+			data = await this.servicePenerima.createOne(data, user)
+			return Response.json(data)
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async updateOne(req: NextRequest, params: Params) {
+		try {
+			const user = await this.serviceReq.getUserPayload(req)
+			let { data, id } = await this.serviceReq.getUpdateInt<PenerimaCreate>(
+				req,
+				params
+			)
       data = await this.servicePenerima.updateOne(data, id)
       return Response.json(data)
-    } catch (e : unknown) {
+		} catch (e: unknown) {
       return errorHanding(e)
     }
   }
-
-  async deleteOne(req : NextRequest, params : Params) {
+	
+	async deleteOne(req: NextRequest, params: Params) {
+		// console.log('delete penerima')
     try {
-      let {id} = this.serviceReq.getIdInt(params)
+			const user = await this.serviceReq.getUserPayload(req)
+			// console.log('-----delete-')
+			// console.log(user)
+			let { id } = this.serviceReq.getIdInt(params)
+			// console.log('-----delete-')
+			// console.log(id)
+			// console.log('-----delete-')
       const data = await this.servicePenerima.deleteOne(id)
       return Response.json(data)
-    } catch (e : unknown) {
+		} catch (e: unknown) {
       return errorHanding(e)
     }
   }

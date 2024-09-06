@@ -1,45 +1,50 @@
-import prisma from "@/config/prisma";
-import { z } from 'zod'
-import { ISchema } from "@/interface/ISchema";
-import { BankDB, Prisma } from '@prisma/client'
+import prisma from "@/config/prisma"
+import { z } from "zod"
+import { BankDB, Prisma, User } from "@prisma/client"
+import { addressInit, descriptionInit, imageInit, nameInit, phoneInit, } from "@/server/schema/init.schema"
+import type { ISchema } from "../../interface/server/ISchema"
 
-export type BankUpdate = Prisma.Args<typeof prisma.bankDB, 'update'>[ 'data' ]
-export type BankCreate = Prisma.Args<typeof prisma.bankDB, 'create'>[ 'data' ]
-export type BankId = { id_bank : BankDB['id'] }
+export type BankUpdate = Prisma.Args<typeof prisma.bankDB, "update">["data"]
+export type BankCreate = Prisma.Args<typeof prisma.bankDB, "create">["data"]
+export type BankId = {
+	id_bank: BankDB["id"]
+	id_user: User["id"]
+}
 
 export class BankSchema implements ISchema {
-  id = z.number({required_error : 'ID is required',}).optional()
+	id = z.number({ required_error: "ID is required" }).optional()
   update = z.object({
-    id : this.id,
-    hp : z.string({required_error : 'Hp is required',}).min(2).max(30),
-    img : z.string({required_error : 'Img is required',}).optional(),
-    no : z.string({required_error : 'No is required',}).min(2).max(30),
-    nama : z.string({required_error : 'nama is required',}).min(2).max(30),
-    lokasi : z.string({required_error : 'Lokasi is required',}).min(2).max(30),
-    jenis : z.string({required_error : 'Jenis is required',}).min(2).max(30),
-    keterangan : z.string({required_error : 'Keterangan is required',}).min(2).max(300),
+		id: this.id,
+		hp: phoneInit,
+		img: imageInit,
+		no: z.string({ required_error: "No is required" }).min(2).max(30),
+		nama: nameInit,
+		lokasi: addressInit,
+		jenis: z.string({ required_error: "Jenis is required" }).min(2).max(30),
+		keterangan: descriptionInit,
   }) satisfies z.Schema<BankUpdate>
 
   create = z.object({
-    id : this.id,
-    hp : z.string({required_error : 'Hp is required',}).min(2).max(18),
-    img : z.string({required_error : 'Img is required',}).optional(),
-    no : z.string({required_error : 'No is required',}).min(2).max(30),
-    nama : z.string({required_error : 'nama is required',}).min(2).max(30),
-    lokasi : z.string({required_error : 'Lokasi is required',}).min(2).max(30),
-    jenis : z.string({required_error : 'Jenis is required',}).min(2).max(30),
-    keterangan : z.string({required_error : 'Keterangan is required',}).min(2).max(300),
+		id: this.id,
+		hp: phoneInit,
+		img: imageInit,
+		no: z.string({ required_error: "No is required" }).min(2).max(30),
+		nama: nameInit,
+		lokasi: addressInit,
+		jenis: z.string({ required_error: "Jenis is required" }).min(2).max(30),
+		keterangan: descriptionInit,
+		userId: z.string().min(1),
   }) satisfies z.Schema<BankCreate>
-
-  createValid(data : BankCreate) : BankCreate {
+	
+	createValid(data: BankCreate): BankCreate {
     data = this.create.parse(data)
     if (!data) {
       throw new Error("data is not valid")
     }
     return data
   }
-
-  updateValid(data : BankUpdate) : BankUpdate {
+	
+	updateValid(data: BankUpdate): BankUpdate {
     data = this.update.parse(data)
     if (!data) {
       throw new Error("data is not valid")
