@@ -1,6 +1,6 @@
 export function CarouselImageDetail() {
   return (
-    <div className='carousel carousel-center bg-neutral rounded-box max-w-md space-x-4 p-4'>
+    <div className='carousel carousel-center bg-base-300 rounded-box max-w-md space-x-1 p-1'>
       <div className='carousel-item'>
         <img
           src='https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp'

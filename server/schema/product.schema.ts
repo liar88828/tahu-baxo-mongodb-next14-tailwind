@@ -1,17 +1,17 @@
 import { z } from "zod"
 import { addressInit, descriptionInit, imageInit, nameInit, userId, } from "@/server/schema/init.schema"
-import type { ISchema } from "../../interface/server/ISchema"
+import type { ISchema } from "@/interface/server/ISchema"
 import type {
 	ProductCreate,
 	ProductCreatePrisma,
 	ProductTransaction,
 	ProductUpdate,
 	ProductUpdatePrisma,
-} from "../../interface/model/product.type"
+} from "@/interface/model/product.type"
 
 export class ProductSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()
-  create = z.object({
+	create = z.object({
 		// id: this.id,
 		lokasi: addressInit,
 		nama: nameInit,
@@ -21,12 +21,12 @@ export class ProductSchema implements ISchema {
 		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
 		jumlah: z
 			.number({ required_error: "Jumlah is required" })
-      .int()
-      .nonnegative(),
+			.int()
+			.nonnegative(),
 		userId: userId,
 	}) satisfies z.Schema<ProductCreatePrisma>
-
-  update = z.object({
+	
+	update = z.object({
 		// id: this.id,
 		lokasi: addressInit,
 		nama: nameInit,
@@ -36,60 +36,44 @@ export class ProductSchema implements ISchema {
 		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
 		jumlah: z
 			.number({ required_error: "Jumlah is required" })
-      .int()
-      .nonnegative(),
+			.int()
+			.nonnegative(),
 		userId: userId,
 	}) satisfies z.Schema<ProductUpdatePrisma>
-
-  productTransactionSchema = z.object({
+	
+	productTransactionSchema = z.object({
 		jumlah: z
 			.number({ required_error: "Jumlah is required" })
-      .int()
-      .nonnegative(),
+			.int()
+			.nonnegative(),
 		productId: z.number(),
-  }) satisfies z.Schema<ProductTransaction>
+	}) satisfies z.Schema<ProductTransaction>
 	
 	addStockValid(data: ProductTransaction) {
-    data = this.productTransactionSchema.parse(data)
-    if (!data) {
-      throw new Error("data is Not valid")
-    }
-    return data
-  }
+		data = this.productTransactionSchema.parse(data)
+		if (!data) {
+			throw new Error("data is Not valid")
+		}
+		return data
+	}
 	
 	createValid(data: ProductCreate): ProductCreate {
-    data = this.create.parse(data)
-    if (!data) {
+		data = this.create.parse(data)
+		if (!data) {
 			throw new Error("data is not valid")
-    }
-    return data
-  }
+		}
+		return data
+	}
 	
 	updateValid(data: ProductUpdate): ProductUpdate {
-    data = this.update.parse(data)
-    if (!data) {
+		data = this.update.parse(data)
+		if (!data) {
 			throw new Error("data is not valid")
-    }
-    return data
-  }
+		}
+		return data
+	}
 	
-	// idValid(id : number | undefined) : number {
-	//   id = this.id.parse(id)
-	//   if (!id) {
-	//     throw new Error('id is not valid')
-	//   }
-	//   return id
-	// }
 }
 
 export const productSchema = new ProductSchema()
 
-// export type ProductCreate = Prisma.Args<
-//   typeof prisma.productDB,
-//   'create'
-// >['data']
-
-// export type ProductUpdate = Prisma.Args<
-//   typeof prisma.productDB,
-//   'update'
-// >['data']

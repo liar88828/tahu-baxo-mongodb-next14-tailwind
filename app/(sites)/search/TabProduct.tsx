@@ -1,32 +1,39 @@
-import { ParamsProfile } from "@/interface/ParamsProfile";
-import Link from "next/link";
+'use client'
+import { ParamsProfile } from "@/interface/server/param";
+import { usePageSearch } from "@/hook/usePageSearch";
 
-export function TabProduct({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
-  tab = tab === undefined ? 'new-product' : tab;
-  return (
-    <div role="tablist" className="tabs tabs-boxed">
-      <Link
-        href={'/search?tab=new-product'}
-        role='tab'
-        className={`tab ${tab === 'new-product' ? 'tab-active' : ''}`}
-      >
-        New Product
-      </Link>
-      <Link
-        href={'/search?tab=best-selling'}
-        role='tab'
-        className={`tab ${tab === 'best-selling' ? 'tab-active' : ''}`}
-      >
-        Best Selling
-      </Link>
-      <Link
-        href={'/search?tab=discount'}
-        role='tab'
-        className={`tab ${tab === 'discount' ? 'tab-active' : ''}`}
+const loopTabBar = [
+	{
+		link: '/search?tab=new-product',
+		key: 'new-product',
+		title: "New Product"
+	}, {
+		link: '/search?tab=best-selling',
+		key: 'best-selling',
+		title: "Best Selling"
+	}, {
+		link: '/search?tab=discount',
+		key: 'discount',
+		title: "Discount"
+	}
+]
 
-      >
-        Discount
-      </Link>
-    </div>
-  )
+export function TabProduct({ params: { searchParams: { tab } } }: { params: ParamsProfile }) {
+	const { addQueryParam, updateQueryParams } = usePageSearch()
+	
+	tab = tab === undefined ? 'new-product' : tab;
+	return (
+		<div role="tablist" className="tabs  tabs-bordered">
+			{ loopTabBar.map(item => (
+				<button
+					key={ item.key }
+					// href={ item.link }
+					role='tab'
+					onClick={ () => updateQueryParams("tab", item.key) }
+					className={ `tab ${ tab === item.key ? 'tab-active' : '' }` }>
+					{ item.title }
+				</button>)) }
+		
+		</div>
+	)
 }

@@ -7,10 +7,14 @@ export default async function page() {
   if (!data) {
     return <h1>Trolley is not found</h1>
   }
+  console.log(data)
   return (
     <>
       <div className='p-5 space-y-2 pb-52'>
-        <ProductList id_trolley={data.id} />
+        <ProductList
+          userId={ data.userId }
+          id={ 0 }
+        />
         <NavBottom />
       </div>
     </>

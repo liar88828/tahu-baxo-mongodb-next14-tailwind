@@ -1,7 +1,7 @@
 import prisma from "@/config/prisma"
 import { orderSchema, OrderSchema } from "@/server/schema/order.schema"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
-import type { OrderCreate } from "../../interface/model/order.type"
+import type { OrderCreate } from "@/interface/model/order.type"
 
 export class OrderService {
 	constructor(private valid: OrderSchema) {

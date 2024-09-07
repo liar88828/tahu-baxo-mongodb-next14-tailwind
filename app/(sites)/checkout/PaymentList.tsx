@@ -15,7 +15,7 @@ export async function PaymentList() {
       </div>
       {/*// example*/}
       <div className="w-full flex overflow-x-scroll">
-        {data.map((item : BankDB, i) => (<PaymentListItem item={item} key={item.id} />))}
+        { data.data.map((item: BankDB, i) => (<PaymentListItem item={ item } key={ item.id }/>)) }
       </div>
     </div>
   )

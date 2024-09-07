@@ -2,7 +2,7 @@ import { BankCreate, BankId, bankSchema, BankSchema, BankUpdate, } from "@/serve
 import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
-import type { IService } from "../../interface/server/IService"
+import type { IService } from "@/interface/server/IService"
 
 export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {

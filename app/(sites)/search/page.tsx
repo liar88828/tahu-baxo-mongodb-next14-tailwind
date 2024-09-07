@@ -2,7 +2,7 @@ import React from 'react'
 import Product from './Product'
 import { TabProduct } from './TabProduct'
 import CategoryWrap from "@/app/(sites)/search/CategoryWrap";
-import { ParamsProfile } from "@/interface/ParamsProfile";
+import { ParamsProfile } from "@/interface/server/param";
 
 export default function page(params : ParamsProfile) {
   return (<>

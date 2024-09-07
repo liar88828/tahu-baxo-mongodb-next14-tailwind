@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
 import { OtpSchema, OtpService } from "@/server/service/otp.service"
 import { EmailService } from "@/server/service/email.service"
-import prisma from "@/config/prisma"
 import { NewPassword } from "@/interface/model/auth.type"
+import prisma from "@/config/prisma"
 
 class ForgetController {
-  constructor(
+	constructor(
 		private serviceRequest: RequestService,
 		private serviceUser: UserService,
 		private serviceOtp: OtpService,
@@ -18,51 +18,52 @@ class ForgetController {
 	
 	// forgot
 	async forgot(req: NextRequest) {
-    //send forget to email or phone
-  }
+		//send forget to email or phone
+	}
 	
 	async validOtp(req: NextRequest) {
-    try {
+		try {
 			const { data } = await this.serviceRequest.getData<OtpSchema>(req)
-      const userDb = await this.serviceUser.findEmailOnly(data)
-      this.serviceOtp.validOtp(data.otp, userDb.email)
-    } catch (e) {
-      errorHanding(e)
-    }
-  }
+			const userDb = await this.serviceUser.findEmailOnly(data)
+			this.serviceOtp.validOtp(data.otp, userDb.email)
+		} catch (e) {
+			errorHanding(e)
+		}
+	}
 	
 	getOtp(req: NextRequest) {
-    try {
-      const data = this.serviceOtp.generate()
-      return Response.json(data)
-    } catch (e) {
-      errorHanding(e)
-    }
-  }
+		try {
+			const data = this.serviceOtp.generate()
+			return Response.json(data)
+		} catch (e) {
+			errorHanding(e)
+		}
+		
+	}
 	
 	getAgain(req: NextRequest) {
-    throw new Error("not implemented")
-  }
+		throw new Error("not implemented")
+	}
 	
 	sendEmail(req: NextRequest) {
-    try {
-      const data = this.serviceOtp.sendEmail()
-      return Response.json(data)
-    } catch (e) {
-      errorHanding(e)
-    }
-  }
+		try {
+			const data = this.serviceOtp.sendEmail()
+			return Response.json(data)
+		} catch (e) {
+			errorHanding(e)
+		}
+	}
 	
 	async newPassword(req: NextRequest) {
-    try {
+		try {
 			const { data } = await this.serviceRequest.getData<NewPassword>(req)
-      this.serviceUser.validPassword(data)
-      const res = await this.serviceUser.newPassword(data)
-      return Response.json(res)
+			this.serviceUser.validPassword(data)
+			const res = await this.serviceUser.newPassword(data)
+			return Response.json(res)
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 	
 	async remove(req: NextRequest) {
 		try {
@@ -75,17 +76,6 @@ class ForgetController {
 					},
 				})
 				console.log("---------success delete ------")
-				// console.log(userDB)
-				// console.log('------- === --------')
-				// console.log(user)
-				// console.log('---------------')
-				
-				// const sessionDB = await tx.session.deleteMany({
-				// 	where: { userId: userDB.id }
-				// })
-				// const trolleyDB = await tx.trolley.delete({
-				// 	where: { id: userDB.trolleyId }
-				// })
 				return userDB
 			})
 			
@@ -97,8 +87,8 @@ class ForgetController {
 }
 
 export const forgetController = new ForgetController(
-  requestService,
-  userService,
-  new OtpService(),
-  new EmailService()
+	requestService,
+	userService,
+	new OtpService(),
+	new EmailService()
 )

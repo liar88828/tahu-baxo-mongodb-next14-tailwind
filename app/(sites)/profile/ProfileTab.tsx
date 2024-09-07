@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { ParamsProfile } from "@/interface/server/param";
 
-import { ParamsProfile } from "@/interface/ParamsProfile";
 
 export function ProfileTab({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
   return (

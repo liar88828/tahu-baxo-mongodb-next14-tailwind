@@ -120,6 +120,18 @@ export class JwtService {
 		return data
 	}
 	
+	async checkToken(token: string | undefined) {
+		if (!token) {
+			throw false
+		}
+		// will return invalid not throw
+		const data = await jwt.verify(token, this.accessSecret)
+		if (!data || typeof data === "string") {
+			throw false
+		}
+		return true
+	}
+	
 	async verifyAccessToken(token: string | undefined): Promise<jwt.JwtPayload> {
 		if (!token) {
 			throw new ErrorUser("unauthorized")

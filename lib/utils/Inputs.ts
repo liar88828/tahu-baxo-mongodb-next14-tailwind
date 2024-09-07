@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server"
-import type { TMethod } from "../../interface/model/model"
+import type { TMethod } from "@/interface/model/model"
 
 export async function Inputs(request: NextRequest): Promise<{
 	json?: any

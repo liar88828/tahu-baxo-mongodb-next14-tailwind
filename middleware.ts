@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { jwtService } from "@/server/service/jwt.service";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ['/dashboard']
@@ -13,17 +12,17 @@ export default async function middleware(req: NextRequest) {
 	
 	// 3. Decrypt the session from the cookie
 	const cookie = cookies().get('session')?.value
-	const session = await jwtService.verifyAccessToken(cookie)
-	
+	// const session = await jwtService.checkToken(cookie)
+	const session = false
 	// 5. Redirect to /login if the user is not authenticated
-	if (isProtectedRoute && !session?.userId) {
-		return NextResponse.redirect(new URL('/login', req.nextUrl))
+	if (isProtectedRoute && !session) {
+		return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
 	}
 	
 	// 6. Redirect to /dashboard if the user is authenticated
 	if (
 		isPublicRoute &&
-		session?.userId &&
+		session &&
 		!req.nextUrl.pathname.startsWith('/dashboard')
 	) {
 		return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
@@ -32,7 +31,6 @@ export default async function middleware(req: NextRequest) {
 	return NextResponse.next()
 }
 
-// Routes Middleware should not run on
 export const config = {
 	matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

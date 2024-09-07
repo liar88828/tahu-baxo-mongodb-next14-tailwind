@@ -10,7 +10,7 @@ import {
 
 export class DeliverSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()
-  create = z.object({
+	create = z.object({
 		id: this.id,
 		nama: nameInit,
 		hp: phoneInit,
@@ -20,12 +20,12 @@ export class DeliverSchema implements ISchema {
 		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
 		harga: z
 			.number({ required_error: "Harga is required" })
-      .int()
-      .nonnegative(),
+			.int()
+			.nonnegative(),
 		userId: userId,
 	}) satisfies z.Schema<DeliveryCreatePrisma>
-
-  update = z.object({
+	
+	update = z.object({
 		// id: this.id,
 		nama: nameInit,
 		hp: phoneInit,
@@ -35,33 +35,26 @@ export class DeliverSchema implements ISchema {
 		keterangan: descriptionInit,
 		harga: z
 			.number({ required_error: "Harga is required" })
-      .int()
-      .nonnegative(),
+			.int()
+			.nonnegative(),
 	}) satisfies z.Schema<DeliveryUpdatePrisma>
 	
 	createValid(data: DeliveryCreate) {
-    data = this.create.parse(data)
-    if (!data) {
+		data = this.create.parse(data)
+		if (!data) {
 			throw new Error("data is not valid")
-    }
-    return data
-  }
+		}
+		return data
+	}
 	
 	updateValid(data: DeliveryUpdate) {
-    data = this.update.parse(data)
-    if (!data) {
+		data = this.update.parse(data)
+		if (!data) {
 			throw new Error("data is not valid")
-    }
-    return data
-  }
-
-  // idValid(id : number | undefined) : number {
-  //   id = this.id.parse(id)
-  //   if (!id) {
-  //     throw new Error('id is not valid')
-  //   }
-  //   return id
-  // }
+		}
+		return data
+	}
+	
 }
 
 export const deliverySchema = new DeliverSchema()

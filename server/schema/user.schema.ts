@@ -84,13 +84,6 @@ export class UserSchema {
 		return data
 	}
 	
-	// idValid<T>(id : any) : T {
-	//   id = this.id.parse(id)
-	//   if (!id) {
-	//     throw new Error('data is not valid')
-	//   }
-	//   return id
-	// }
 }
 
 export const userSchema = new UserSchema()

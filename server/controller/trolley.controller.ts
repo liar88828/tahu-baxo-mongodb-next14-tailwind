@@ -23,6 +23,13 @@ export class TrolleyController {
 		}
 	}
 	
+	async getAllPublic(req: NextRequest) {
+		try {
+			return NextResponse.json(await this.serviceTrolley.getAllPublic())
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
 	async create(req: NextRequest,) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
@@ -68,7 +75,7 @@ export class TrolleyController {
 			const user = await this.serviceReq.getUserPayload(req)
 			const { id } = this.serviceReq.getIdInt(params)
 			
-			let res = await this.serviceTrolley.remove({ id, }, user)
+			let res = await this.serviceTrolley.remove({ id, userId: user.id }, user)
 			return NextResponse.json(res)
 			
 		} catch (e: unknown) {

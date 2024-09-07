@@ -3,10 +3,13 @@ import prisma from "@/config/prisma"
 import { ErrorProduct, ErrorTrolley } from "@/lib/error/errorCustome"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import { trolleySchema, type TrolleySchema } from "../schema/trolley.schema"
-import { TrolleyDB } from "@prisma/client";
-import { GetAllTrolley, TrolleyCreate, TrolleyDataId, TrolleyUpdate } from "@/interface/model/trolley.type";
-
-export type ResponseTrolley = { data: Omit<TrolleyDB, 'transactionId'>, status: string };
+import {
+	GetAllTrolley,
+	TrolleyCreate,
+	TrolleyDataId,
+	TrolleyResponse,
+	TrolleyUpdate
+} from "@/interface/model/trolley.type";
 
 export class TrolleyService {
 	constructor(private serviceSchema: TrolleySchema) {
@@ -22,7 +25,15 @@ export class TrolleyService {
 		
 	}
 	
-	async create(data: TrolleyCreate): Promise<ResponseTrolley> {
+	async getAllPublic(): Promise<GetAllTrolley[]> {
+		return prisma.trolleyDB.findMany({
+			include: { Product: true },
+			where: {},
+		})
+		
+	}
+	
+	async create(data: TrolleyCreate): Promise<TrolleyResponse> {
 		data = this.serviceSchema.validCreate(data)
 		return prisma.$transaction(async (tx) => {
 			
@@ -46,7 +57,7 @@ export class TrolleyService {
 		})
 	}
 	
-	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<TrolleyResponse> {
 		
 		console.log(data)
 		data = this.serviceSchema.validUpdate(data)
@@ -89,7 +100,7 @@ export class TrolleyService {
 		})
 	}
 	
-	async decrement(data: TrolleyUpdate, user: AccessTokenPayload): Promise<ResponseTrolley> {
+	async decrement(data: TrolleyUpdate, user: AccessTokenPayload): Promise<TrolleyResponse> {
 		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			const trolley = await tx.trolleyDB.findUnique({
@@ -120,7 +131,7 @@ export class TrolleyService {
 		})
 	}
 	
-	async remove({ id }: TrolleyDataId, user: AccessTokenPayload): Promise<ResponseTrolley> {
+	async remove({ id }: TrolleyDataId, user: AccessTokenPayload): Promise<TrolleyResponse> {
 		return {
 			data: await prisma.trolleyDB.delete({ where: { id, userId: user.id } }),
 			status: 'success Delete Data'

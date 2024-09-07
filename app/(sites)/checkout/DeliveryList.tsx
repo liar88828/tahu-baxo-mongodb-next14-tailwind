@@ -15,7 +15,7 @@ export async function DeliveryList() {
       </div>
       <div className=' space-y-2 '>
         <div className="flex w-full overflow-x-scroll">
-          {data.map(item => (
+          { data.data.map(item => (
 
             <DeliveryListItem item={item} key={item.id} />
           ))}
@@ -26,10 +26,9 @@ export async function DeliveryList() {
             <input type="text" className={'input  input-bordered'} placeholder={'Long'} />
           </div>
           <div className="mt-2">
-            <select className="select select-bordered w-full ">
-              <option disabled selected>Select Packing</option>
-              <option>Kargo</option>
-              <option>Send</option>
+            <select className="select select-bordered w-full " defaultValue={ 'Select Packing' }>
+              <option value={ "Kargo" }>Kargo</option>
+              <option value={ "Send" }>Send</option>
             </select>
           </div>
         </div>

@@ -57,8 +57,8 @@ export class PenerimaService implements IService<PenerimaDB> {
 		})
 	}
 	
-	async deleteOne(id: number) {
-		const data = await prisma.penerimaDB.delete({ where: { id } })
+	async deleteOne(id: number, user: AccessTokenPayload) {
+		const data = await prisma.penerimaDB.delete({ where: { id, userId: user.id } })
 		if (!data) {
 			throw new Error("Data Penerima is not found")
 		}

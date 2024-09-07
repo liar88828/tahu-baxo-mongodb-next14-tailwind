@@ -1,6 +1,7 @@
 import { config } from "@/config/baseConfig";
 import { BankDB, DeliveryDB } from "@prisma/client";
-import { DeliveryId } from "@/server/schema/deliver.schema";
+import { DeliveryId } from "@/interface/model/delivery.type";
+import { ResponseData } from "@/interface/server/IService";
 
 export async function getDeliveryAll() {
   try {
@@ -14,7 +15,7 @@ export async function getDeliveryAll() {
     if (!res.ok) {
       throw new Error('api error');
     }
-    const data : DeliveryDB[] = await res.json()
+    const data: ResponseData<DeliveryDB> = await res.json()
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {

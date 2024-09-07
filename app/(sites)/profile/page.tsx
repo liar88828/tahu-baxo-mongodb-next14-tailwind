@@ -4,8 +4,9 @@ import { ProfileTab } from './ProfileTab'
 import { ProfileInfo } from './ProfileInfo'
 import { Suspense } from "react";
 import { Loading } from "@/components/loading";
-import { ParamsProfile } from "@/interface/ParamsProfile";
 import { getUserIdPrisma } from "@/server/action/test";
+import { ParamsProfile } from "@/interface/server/param";
+
 export default async function page(params : ParamsProfile) {
   const data = await getUserIdPrisma()
   if (!data) {

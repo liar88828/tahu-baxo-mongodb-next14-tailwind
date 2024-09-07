@@ -1,6 +1,6 @@
-import { ParamsProfile } from "@/interface/ParamsProfile";
 import { IconAdd } from "@/components/icon/IconMore";
 import Link from "next/link";
+import { ParamsProfile } from "@/interface/server/param";
 
 export function ProfileStatus({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
   tab = tab === undefined ? 'product' : tab;

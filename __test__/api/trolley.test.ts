@@ -1,9 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { TrolleyUpdate } from "@/interface/model/trolley.type";
+import { TrolleyResponse, TrolleyUpdate } from "@/interface/model/trolley.type";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 import prisma from "@/config/prisma";
 import { createProduct, productTransaction } from "@/__test__/utils/product";
-import { ResponseTrolley } from "@/server/service/trolley.service";
 import { sendTrolleyCreate } from "@/__test__/schema/trolley.test";
 
 const sendTrolley: TrolleyUpdate = {
@@ -15,7 +14,7 @@ const sendTrolley: TrolleyUpdate = {
 
 let idTrolley: TrolleyUpdate["id"] = 0
 
-const testTrolleyExpect: ResponseTrolley = {
+const testTrolleyExpect: TrolleyResponse = {
 	data: {
 		id: expect.any(Number),
 		qty: expect.any(Number),
@@ -56,7 +55,7 @@ describe('can test api trolley', async () => {
 			})
 			
 			const code = res.status
-			const data: ResponseTrolley = await res.json()
+			const data: TrolleyResponse = await res.json()
 			idTrolley = data.data.id
 			expect(code).toBe(200)
 			expect(data).toMatchObject(data)
@@ -76,7 +75,7 @@ describe('can test api trolley', async () => {
 			})
 			
 			const code = res.status
-			const data: ResponseTrolley = await res.json()
+			const data: TrolleyResponse = await res.json()
 			
 			idTrolley = data.data.id
 			expect(code).toBe(200)
@@ -120,7 +119,7 @@ describe('can test api trolley', async () => {
 			})
 			
 			const code = res.status
-			const data: ResponseTrolley = await res.json()
+			const data: TrolleyResponse = await res.json()
 			
 			idTrolley = data.data.id
 			expect(code).toBe(200)

@@ -88,3 +88,12 @@ export function IconFilter() {
     />
   );
 }
+
+export function IconTrolley() {
+  return (
+    <Icon icon={ 'mdi:trolley-outline' }
+          className={ 'size-5' }
+    />
+  );
+}
+

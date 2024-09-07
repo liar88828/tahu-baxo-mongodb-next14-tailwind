@@ -7,7 +7,7 @@ import type { Params } from "@/interface/server/param"
 import type { PenerimaCreate } from "@/interface/model/penerima.type"
 
 export class PenerimaController implements IController {
-  constructor(
+	constructor(
 		private serviceReq: RequestService,
 		private servicePenerima: PenerimaService
 	) {
@@ -24,39 +24,39 @@ export class PenerimaController implements IController {
 	}
 	
 	async findAllPrivate(req: NextRequest) {
-    try {
+		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			const { page, take } = this.serviceReq.getPage(req)
-      let data = await this.servicePenerima.findAll(page, take)
+			let data = await this.servicePenerima.findAll(page, take)
 			return NextResponse.json(data, { status: 200 })
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 	
 	async findId(req: NextRequest, params: Params) {
-    try {
+		try {
 			let { id } = this.serviceReq.getIdInt(params)
-      const data = await this.servicePenerima.findOne(id)
-      return Response.json(data)
+			const data = await this.servicePenerima.findOne(id)
+			return Response.json(data)
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 	
 	async findIdPrivate(req: NextRequest, params: Params) {
-    try {
+		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
 			const data = await this.servicePenerima.findOne(id)
-      return Response.json(data)
+			return Response.json(data)
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 	
 	async createOne(req: NextRequest) {
-    try {
+		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<PenerimaCreate>(req)
 			data = await this.servicePenerima.createOne(data, user)
@@ -73,32 +73,26 @@ export class PenerimaController implements IController {
 				req,
 				params
 			)
-      data = await this.servicePenerima.updateOne(data, id)
-      return Response.json(data)
+			data = await this.servicePenerima.updateOne(data, id)
+			return Response.json(data)
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 	
 	async deleteOne(req: NextRequest, params: Params) {
-		// console.log('delete penerima')
-    try {
+		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			// console.log('-----delete-')
-			// console.log(user)
 			let { id } = this.serviceReq.getIdInt(params)
-			// console.log('-----delete-')
-			// console.log(id)
-			// console.log('-----delete-')
-      const data = await this.servicePenerima.deleteOne(id)
-      return Response.json(data)
+			const data = await this.servicePenerima.deleteOne(id, user)
+			return Response.json(data)
 		} catch (e: unknown) {
-      return errorHanding(e)
-    }
-  }
+			return errorHanding(e)
+		}
+	}
 }
 
 export const penerimaController = new PenerimaController(
-  requestService,
-  penerimaService
+	requestService,
+	penerimaService
 )

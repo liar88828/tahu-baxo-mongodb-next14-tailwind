@@ -5,6 +5,13 @@ import { orderSchema, OrderSchema } from "@/server/schema/order.schema"
 import type { OrderCreate } from "@/interface/model/order.type"
 
 export class TransactionSchema {
+	constructor(
+		private productSchema: ProductSchema,
+		private penerimaSchema: PenerimaSchema,
+		private orderSchema: OrderSchema
+	) {
+	}
+	
 	create = z.object({
 		// id: z.number(),
 		// orderanDBId: z.string(),// because will add in transaction db
@@ -14,6 +21,7 @@ export class TransactionSchema {
 		deliveryDBId: z.number(),
 		bankDBId: z.number(),
 	}) //satisfies z.Schema<TransactionDB>
+	
 	createForMany = z.object({
 		jumlah: z.number(),
 		// productDBId: z.number(),
@@ -21,13 +29,6 @@ export class TransactionSchema {
 		deliveryDBId: z.number(),
 		bankDBId: z.number(),
 	}) //satisfies z.Schema<TransactionDB>
-	
-	constructor(
-		private productSchema: ProductSchema,
-		private penerimaSchema: PenerimaSchema,
-		private orderSchema: OrderSchema
-	) {
-	}
 	
 	idProduct(id: number) {
 		id = z.number().parse(id)

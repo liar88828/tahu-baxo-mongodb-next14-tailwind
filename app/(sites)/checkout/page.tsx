@@ -4,10 +4,9 @@ import { ProductList } from "@/app/(sites)/checkout/ProductList";
 import { PaymentList } from "@/app/(sites)/checkout/PaymentList";
 import { DeliveryList } from "@/app/(sites)/checkout/DeliveryList";
 import { TotalPay } from "@/app/(sites)/checkout/TotalPay";
-import { SkeletonCard } from "@/components/Skeleton";
-import prisma from "@/config/prisma";
+import { SkeletonCard, SkeletonCardLong } from "@/components/Skeleton";
+import { getTrolley } from "@/server/action/test";
 
-const getTrolley = async () => await prisma.user.findFirst()
 export default async function page() {
   const data = await getTrolley()
   if (!data) {
@@ -18,8 +17,8 @@ export default async function page() {
         <Suspense fallback={<SkeletonCard />}>
           <ProfileInfo />
         </Suspense>
-        <Suspense fallback={<SkeletonCard />}>
-          <ProductList trolleyId={data.trolleyId} />
+        <Suspense fallback={ <SkeletonCardLong/> }>
+          <ProductList itemProps={ data }/>
         </Suspense>
         <Suspense fallback={<SkeletonCard />}>
           <DeliveryList />

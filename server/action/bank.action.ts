@@ -1,6 +1,7 @@
 import { config } from "@/config/baseConfig";
 import { BankDB } from "@prisma/client";
 import { BankId, } from "@/server/schema/bank.schema";
+import { ResponseData } from "@/interface/server/IService";
 
 export async function getBankAll() {
   try {
@@ -14,7 +15,7 @@ export async function getBankAll() {
     if (!res.ok) {
       throw new Error('api error');
     }
-    const data : BankDB[] = await res.json()
+    const data: ResponseData<BankDB> = await res.json()
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {

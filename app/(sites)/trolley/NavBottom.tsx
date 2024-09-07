@@ -19,7 +19,7 @@ export default function NavBottom() {
         <h1 className='text-lg font-bold'>Rp21312.23</h1>
       </div>
       <button
-        onClick={() => route.push('/checkout')}
+        onClick={ () => route.push('/checkout') }
         className='btn btn-primary w-full font-bold text-lg'
       >
         Checkout (Rp1231.23)

@@ -1,10 +1,9 @@
 import { config } from "@/config/baseConfig";
-import { GetAllTrolley, TrolleyData, TrolleyDataAll, TrolleyDataId } from "@/server/service/trolley.service";
-import { TrolleyOnProductDB } from "@prisma/client";
+import { GetAllTrolley, TrolleyDataId, TrolleyResponse } from "@/interface/model/trolley.type";
 
-export async function getTrolleyAll({trolleyId} : TrolleyDataAll) {
+export async function getTrolleyAll({ id }: TrolleyDataId) {
   try {
-    const res = await fetch(`${config.url}/api/trolley?id=${trolleyId}`, {
+    const res = await fetch(`${ config.url }/api/trolley`, {
       method : "GET",
       headers : {
         'Accept' : 'application/json',
@@ -14,7 +13,7 @@ export async function getTrolleyAll({trolleyId} : TrolleyDataAll) {
     if (!res.ok) {
       throw new Error('api error');
     }
-    const data : GetAllTrolley[] = await res.json()
+    const data: GetAllTrolley[] = await res.json()
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {
@@ -25,9 +24,9 @@ export async function getTrolleyAll({trolleyId} : TrolleyDataAll) {
   }
 }
 
-export async function addTrolley(item : TrolleyData, id : TrolleyDataId) {
+export async function addTrolley(item: TrolleyDataId, id: TrolleyDataId) {
   try {
-    const res = await fetch(`${config.url}/api/products/${id.trolleyOnProductDBId}`, {
+    const res = await fetch(`${ config.url }/api/products/${ id.id }`, {
       method : "POST",
       headers : {
         'Accept' : 'application/json',
@@ -37,7 +36,7 @@ export async function addTrolley(item : TrolleyData, id : TrolleyDataId) {
     if (!res.ok) {
       throw new Error('api error');
     }
-    const data : TrolleyOnProductDB = await res.json()
+    const data: TrolleyResponse = await res.json()
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {
@@ -59,7 +58,7 @@ export async function removeTrolley(id : number) {
     if (!res.ok) {
       throw new Error('api error');
     }
-    const data : TrolleyOnProductDB = await res.json()
+    const data: TrolleyResponse = await res.json()
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {

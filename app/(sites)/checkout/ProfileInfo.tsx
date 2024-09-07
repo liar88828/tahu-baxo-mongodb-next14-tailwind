@@ -1,10 +1,7 @@
-'use client'
-import { Icon } from '@iconify/react'
-
 import React from 'react';
 import { getUserAll } from "@/server/action/user.action";
-import { UserPublic } from "@/interface/user/UserPublic";
 import { TitleCardProfile } from "@/app/(sites)/checkout/TitleCardProfile";
+import { ProfileInfoItem } from "@/app/(sites)/checkout/ProfileInfoItem";
 
 export async function ProfileInfo() {
   const data = await getUserAll()
@@ -29,33 +26,6 @@ export async function ProfileInfo() {
       </div>
     </div>
   )
-}
-
-interface ProfileInfoItemProps {
-  item : UserPublic
-}
-
-function ProfileInfoItem({item} : ProfileInfoItemProps) {
-  return (
-    <div className='flex justify-between w-full'>
-      <div className='space-y-2'>
-        <h1 className='text-lg font-bold'>{item.name}</h1>
-        <div className=''>
-          <div className='flex space-x-3'>
-            <h1 className='text-sm'>{item.email}</h1>
-            <h1 className='text-sm'>{item.phone}</h1>
-          </div>
-          <h1 className='text-xs font-light'>
-            {item.address}
-          </h1>
-        </div>
-      </div>
-      <button className='btn btn-circle btn-outline btn-sm'>
-        {/* edit */}
-        <Icon icon='material-symbols:edit' />
-      </button>
-    </div>
-  );
 }
 
 export default ProfileInfo;
