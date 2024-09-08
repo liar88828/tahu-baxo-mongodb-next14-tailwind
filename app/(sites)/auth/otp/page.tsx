@@ -3,7 +3,8 @@ import React, { ChangeEvent, FormEvent, KeyboardEvent, useRef, useState } from '
 import Link from "next/link";
 import { ZodError } from "zod";
 import { useRouter } from "next/navigation";
-import { otpError, userSchema } from "@/server/schema/user.schema";
+import { userSchema } from "@/server/schema/user.schema";
+import { otpError } from "@/interface/model/auth.type";
 
 export default function Page() {
   const route = useRouter()

@@ -13,7 +13,7 @@ export async function getDeliveryAll() {
       cache : "no-cache",
     })
     if (!res.ok) {
-      throw new Error('api error');
+      throw new Error('delivery api error');
     }
     const data: ResponseData<DeliveryDB> = await res.json()
     return data

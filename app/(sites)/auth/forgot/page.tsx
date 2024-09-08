@@ -3,7 +3,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import Link from "next/link";
 import { onForgot } from "@/server/action/auth.action";
 import { redirect } from "next/navigation";
-import { initialState } from "@/server/schema/user.schema";
+import { initialState } from "@/interface/model/auth.type";
 
 function Page() {
   const [state, formAction,] = useFormState(onForgot, initialState)

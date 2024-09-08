@@ -16,6 +16,14 @@ export function IconMenu() {
     />
   );
 }
+
+export function IconPerson() {
+	return (
+		<Icon icon="mdi:person-outline"
+					className='size-6'
+		/>
+	);
+}
 export function IconBack() {
   return (
     <Icon

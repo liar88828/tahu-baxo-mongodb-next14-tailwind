@@ -1,9 +1,14 @@
 @api = http://localhost:3000/api
 @path = {{api}}/product
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbWV2anpoMDAwODE3Znp6bXB2NmN2YiIsImlhdCI6MTcyNTM2Njg1MiwiZXhwIjoxNzI1MzcwNDUyfQ.kl9fsKOxorSz58NuT5EdozySddWFML24rMIJhqAvNUs
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFRva2VuIjoiY20wdDA5NDF2MDAwMW41cjYydmxkdG84NSIsImVtYWlsIjoidXNlcjRUZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyNFRlc3QiLCJpZCI6ImNtMHNua2d0MDAwMDM0NWVnZmRkaXZ2cHEiLCJpbWFnZSI6Imh0dHBzOi8vdDQuZnRjZG4ubmV0L2pwZy8wNC83My8yNS80OS8zNjBfRl80NzMyNTQ5NTdfYnhHOXlmNGx5N09CTzVJME81S0FCbE45MzBHd2FNUXouanBnIiwiaWF0IjoxNzI1NzY5MzAyLCJleHAiOjE3MjU3NzI5MDJ9.JOE6CAN9TYkeVPoHAk1pSxF3yECI7CYkNHy3kjHfIrE
 
 ### get data Produk
 GET {{path}}
+
+### get data Produk with param
+GET {{path}}/user?search=Organic Coffee Beans
+Authorization: Bearer {{token}}
+
 
 ### get data Produk with param
 GET {{path}}?page=100&take=2

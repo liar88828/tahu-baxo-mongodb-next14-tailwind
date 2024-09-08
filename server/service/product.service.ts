@@ -3,7 +3,8 @@ import prisma from "@/config/prisma"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import type { ProductDB } from "@prisma/client"
 import type { IService } from "@/interface/server/IService"
-import type { ProductCreate, ProductId, ProductTransaction, ProductUpdate, } from "../../interface/model/product.type"
+import type { ProductCreate, ProductId, ProductTransaction, ProductUpdate, } from "@/interface/model/product.type"
+import { GetPage } from "@/interface/server/IServiceRequest";
 
 export type PaginationDB<T> = {
 	data: T[]
@@ -43,16 +44,23 @@ export class ProductService implements IService<ProductDB> {
 	}
 	
 	async findAllPrivate(
-		page: number,
-		take: number = 100,
+		{ page, take, search }: GetPage,
 		user: AccessTokenPayload
 	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
-				where: { userId: user.id },
+				where: {
+					// userId: user.id,
+					...(search ? { nama: { contains: search } } : {})
+					
+				},
 				take: take,
 				skip: (page - 1) * take,
+				include: {
+					_count: true
+				}
 			})
+			console.log(data)
 			return { data, page, take }
 		})
 	}

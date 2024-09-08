@@ -1,30 +1,9 @@
-import 'server-only'
 import { cookies } from 'next/headers'
-import { jwtService } from "@/server/service/jwt.service";
-import { ErrorUser } from "@/lib/error/errorCustome";
+import { ErrorAuth } from "@/lib/error/errorCustome";
+import prisma from "@/config/prisma";
 
-export async function createSession(data: string) {
-	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-	
-	cookies().set('session', data, {
-		httpOnly: true,
-		secure: true,
-		expires: expiresAt,
-		sameSite: 'lax',
-		path: '/',
-	})
-}
-
-export async function updateSession() {
-	const session = cookies().get('session')?.value
-	const payload = jwtService.verifyAccessToken(session)
-	
-	if (!session || !payload) {
-		throw new ErrorUser('unauthorized')
-	}
-	
-	const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-	cookies().set('session', session, {
+export async function setSession(token: string, expires: Date) {
+	return cookies().set('session', token, {
 		httpOnly: true,
 		secure: true,
 		expires: expires,
@@ -33,14 +12,49 @@ export async function updateSession() {
 	})
 }
 
-export async function deleteSession() {
-	cookies().delete('session')
-}
-
 export async function getSession() {
+	console.log()
 	const cookie = cookies().get('session')?.value
 	if (!cookie) {
-		throw new ErrorUser('unauthorized')
+		throw new ErrorAuth("cookie is not stored")
 	}
 	return cookie
 }
+
+export async function deleteSession() {
+	const data = await getSession()
+	cookies().delete('session')
+	return data
+}
+
+export async function createSession(token: string) {
+	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+	return setSession(token, expiresAt)
+}
+
+// export async function updateSession(token) {
+// 	const session = cookies().get('session')?.value
+// 	console.log("session")
+// 	if (!session) {
+// 		throw new ErrorAuth('Session is not store')
+// 	}
+// 	console.log("payload")
+// 	const payload = await jwtService.verifyRefreshToken(session)
+// 	if (!payload) {
+// 		throw new ErrorAuth('token is not valid')
+// 	}
+//
+// 	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+// 	const sessionDB = await findSessionByUserId(payload.userId)
+//
+// 	// return setSession(sessionDB?.sessionToken, expiresAt)
+// }
+
+export async function findSessionByUserId(userId: string) {
+	const sessionDB = await prisma.session.findUnique({ where: { userId } })
+	if (!sessionDB) {
+		throw new ErrorAuth('session db is not found')
+	}
+	return sessionDB
+}
+

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import React from "react";
+import ProviderAuth from "@/components/provider/ProviderAuth";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,8 +24,10 @@ export default function RootLayout(
 		>
 		<body className={ ' min-h-screen   ' }>
 		<div className="container">
+			<ProviderAuth>
 			{ navbar }
 			{ children }
+			</ProviderAuth>
 		</div>
 		</body>
 		</html>

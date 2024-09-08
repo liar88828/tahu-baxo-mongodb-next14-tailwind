@@ -1,8 +1,9 @@
 import { requestService, RequestService, } from "@/server/service/request.service"
-import { NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
 import { authService, type AuthService } from "../schema/auth.service"
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
+import { Params } from "@/interface/server/param";
 
 class AuthController {
 	constructor(
@@ -37,11 +38,11 @@ class AuthController {
 	
 	async logout(req: NextRequest) {
 		try {
-			// const token = req.cookies.get('token')
-			// if (!token) {
-			//   return Response.json("user has logout", {status: 204})
-			// }
+			
 			const token = this.serviceRequest.getTokenCookie(req)
+			console.log('---logout----')
+			console.log(token)
+			console.log('-------')
 			const sendData = await this.serviceAuth.logout(token)
 			return Response.json(sendData)
 		} catch (e) {
@@ -49,18 +50,35 @@ class AuthController {
 		}
 	}
 	
-	async refreshToken(req: NextRequest) {
+	async refresh(_: NextRequest, params: Params) {
 		try {
-			// valid
-			const token = this.serviceRequest.getTokenCookie(req)
-			// const refreshToken = this.serviceJwt.verifyRefresh(token)
-			//
-			this.serviceAuth.refreshToken(token)
-			return Response.json("test")
-		} catch (e) {
+			const { id } = this.serviceRequest.getIdCuid(params)
+			return NextResponse.json(await this.serviceAuth.refresh(id))
+		} catch (e: unknown) {
 			return errorHanding(e)
 		}
 	}
+	
+	async rotateToken(req: NextRequest) {
+		
+		try {
+			const tokenCookie = this.serviceRequest.getTokenCookie(req)
+			const data = await this.serviceAuth.refreshByUserId(tokenCookie)
+			return NextResponse.json(data)
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
+	async getUserByToken(req: NextRequest) {
+		try {
+			const user = await this.serviceRequest.getUserPayload(req)
+			return NextResponse.json(await this.serviceAuth.findByToken(user))
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
 }
 
 export const authController = new AuthController(requestService, authService)

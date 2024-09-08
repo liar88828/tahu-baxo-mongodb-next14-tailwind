@@ -35,8 +35,8 @@ model Account {
 
 model Session {
   id           String    @id @default(cuid())
-  sessionToken String?   @unique
-  userId       String
+  sessionToken String    @unique
+  userId       String    @unique
   expires      DateTime?
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -54,6 +54,7 @@ model User {
   address       String
   //
   role          String          @default("USER")
+  token         String?         @unique
   password      String?
   otp           Int?
   expiresOtp    DateTime?

@@ -2,7 +2,7 @@ import type { User } from "@prisma/client"
 
 export type UserPublic = Omit<
 	User,
-	"password" | "otp" | "updatedAt" | "expiresOtp" | "refresh_token"
+	"password" | "otp" | "updatedAt" | "expiresOtp" | "refresh_token" | 'token'
 >
 export type UserPublicGeneric<T> = Omit<
 	T,

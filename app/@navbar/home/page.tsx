@@ -1,6 +1,12 @@
 import React from "react";
-import { IconBell } from "@/components/icon/IconMore";
+import { IconBell, IconMenu, IconPerson } from "@/components/icon/IconMore";
+import Link from "next/link";
+import { authCookie } from "@/server/api/auth";
+
 export default function page() {
+	const auth = authCookie().getAuth()
+	
+	console.log(auth)
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -10,20 +16,7 @@ export default function page() {
             role='button'
             className='btn btn-ghost btn-circle'
           >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M4 6h16M4 12h16M4 18h7'
-              />
-            </svg>
+            <IconMenu/>
           </div>
           <ul
             tabIndex={0}
@@ -47,10 +40,43 @@ export default function page() {
       <div className='navbar-end'>
         <button className='btn btn-ghost btn-circle'>
           <div className='indicator'>
-            <IconBell />
+            <IconBell/>
             <span className='badge badge-xs badge-primary indicator-item'></span>
           </div>
         </button>
+        <div className='dropdown  dropdown-end'>
+          <div
+            tabIndex={ 0 }
+            role='button'
+            className='btn btn-ghost btn-circle'
+          >
+            <IconPerson/>
+          </div>
+          <ul
+            tabIndex={ 0 }
+            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3  p-2 shadow'
+					>{ auth ? (<>
+							<li>
+								<Link href={ '/profile' }>Info</Link>
+							</li>
+							<li>
+								<Link href={ '/auth/logout' }>Logout</Link>
+							</li>
+						</>
+					) : (
+						<>
+            <li>
+							<Link href={ '/auth/login' }>Login</Link>
+            </li>
+            <li>
+							<Link href={ '/auth/register' }>Register</Link>
+            </li>
+						</>
+					) }
+     
+          </ul>
+        </div>
+      
       </div>
     </div>
   )

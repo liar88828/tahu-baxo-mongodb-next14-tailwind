@@ -7,7 +7,7 @@ import { Params } from "@/interface/server/param";
 export class UserController {
 	constructor(
 		protected serviceUser: UserService,
-		protected serviceRequest: Pick<RequestService, "getIdCuid">
+		protected serviceRequest: Pick<RequestService, "getIdCuid" | 'getTokenBearer'>
 	) {
 	}
 	
@@ -27,6 +27,7 @@ export class UserController {
 			return errorHanding(e)
 		}
 	}
+	
 }
 
 export const userController = new UserController(

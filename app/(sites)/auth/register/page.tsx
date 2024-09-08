@@ -4,7 +4,7 @@ import Link from "next/link";
 import { onRegister } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
-import { initialState } from "@/server/schema/user.schema";
+import { initialState } from "@/interface/model/auth.type";
 
 function Page() {
   const [state, formAction,] = useFormState(onRegister, initialState)

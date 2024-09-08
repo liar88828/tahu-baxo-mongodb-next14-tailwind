@@ -7,7 +7,8 @@ export default function ErrorBoundary( {
   error: Error & { digest?: string }
   reset: () => void
 } ) {
-
+  console.log('error.ts')
+  console.log(error)
   return (
     <div>
       <h2 className={ 'font-bold' }>Something went wrong!</h2>

@@ -24,10 +24,10 @@ class ProductController implements IController {
   }
   
   async findAllPrivate(req: NextRequest) {
-    const user = this.serviceReq.getUserPayload(req)
     try {
-      const { page, take } = this.serviceReq.getPage(req)
-      const data = await this.serviceProduct.findAll(page, take)
+      const user = await this.serviceReq.getUserPayload(req)
+      const page = this.serviceReq.getPage(req)
+      const data = await this.serviceProduct.findAllPrivate(page, user)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)

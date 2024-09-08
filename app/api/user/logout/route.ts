@@ -6,7 +6,3 @@ export async function DELETE(req : NextRequest) {
   return authController.logout(req)
 }
 
-// logout
-// export async function GET(req: NextRequest) {
-//   return userController.test(req)
-// }

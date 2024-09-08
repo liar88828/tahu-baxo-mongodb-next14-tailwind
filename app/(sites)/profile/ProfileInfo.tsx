@@ -6,6 +6,7 @@ export async function ProfileInfo({id} : { id : string }) {
   if (!data) {
     return <h1>User is Not found</h1>
   }
+  // console.log(data)
   return (
     <div>
       <div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 bg-base-200/20 shadow'>
@@ -16,14 +17,14 @@ export async function ProfileInfo({id} : { id : string }) {
         />
         <div className='flex  justify-between w-full'>
           <div className='space-y-2'>
-            <h1 className='text-lg font-bold'>Username Jhon Doe</h1>
+            <h1 className='text-lg font-bold'>{ data.name }</h1>
             <div className=''>
               <div className='flex space-x-3'>
-                <h1 className='text-sm'>@johndoe</h1>
-                <h1 className='text-sm'>012 1232 2133</h1>
+                <h1 className='text-sm'>{ data.email }</h1>
+                <h1 className='text-sm'>{ data.phone }</h1>
               </div>
               <h1 className='text-xs font-light'>
-                Jl Merpati II 42 RT 003/06, Dki Jakarta
+                { data.address }
               </h1>
             </div>
           </div>

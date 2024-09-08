@@ -3,8 +3,8 @@ import { deliveryService, ServiceDeliver, } from "@/server/service/delivery.serv
 import { IController } from "@/interface/server/IController"
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { errorHanding } from "@/lib/error/errorHanding"
-import type { Params } from "../../interface/server/param"
-import type { DeliveryCreate, DeliveryUpdate, } from "../../interface/model/delivery.type"
+import type { Params } from "@/interface/server/param"
+import type { DeliveryCreate, DeliveryUpdate, } from "@/interface/model/delivery.type"
 
 class DeliverController implements IController {
 	constructor(
@@ -26,8 +26,8 @@ class DeliverController implements IController {
 	async findAllPrivate(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			const { page, take } = this.serviceReq.getPage(req)
-			let data = await this.serviceDeliver.findAllPrivate(page, take, user)
+			const page = this.serviceReq.getPage(req)
+			let data = await this.serviceDeliver.findAllPrivate(page, user)
 			return NextResponse.json(data, { status: 200 })
 		} catch (e: unknown) {
 			return errorHanding(e)

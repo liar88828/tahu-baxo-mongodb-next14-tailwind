@@ -13,9 +13,9 @@ export default async function middleware(req: NextRequest) {
 	// 3. Decrypt the session from the cookie
 	const cookie = cookies().get('session')?.value
 	// const session = await jwtService.checkToken(cookie)
-	const session = false
+	const session = true
 	// 5. Redirect to /login if the user is not authenticated
-	if (isProtectedRoute && !session) {
+	if (isProtectedRoute && session) {
 		return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
 	}
 	
@@ -27,6 +27,7 @@ export default async function middleware(req: NextRequest) {
 	) {
 		return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
 	}
+	console.log('this middleware')
 	
 	return NextResponse.next()
 }

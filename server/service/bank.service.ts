@@ -3,6 +3,7 @@ import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import type { IService } from "@/interface/server/IService"
+import { GetPage } from "@/interface/server/IServiceRequest";
 
 export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {
@@ -17,8 +18,7 @@ export class BankService implements IService<BankDB> {
   }
 	
 	async findAllPrivate(
-		page: number = 1,
-		take: number = 100,
+		{ take, page }: GetPage,
 		user: AccessTokenPayload
 	) {
 		const data = await prisma.bankDB.findMany({

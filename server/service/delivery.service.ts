@@ -4,6 +4,7 @@ import { DeliveryDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/jwt.service"
 import type { IService } from "@/interface/server/IService"
 import type { DeliveryCreate, DeliveryId, DeliveryUpdate, } from "@/interface/model/delivery.type"
+import { GetPage } from "@/interface/server/IServiceRequest";
 
 export class ServiceDeliver implements IService<DeliveryDB> {
 	constructor(private valid: DeliverSchema) {
@@ -19,7 +20,7 @@ export class ServiceDeliver implements IService<DeliveryDB> {
 		return { data, page, take }
   }
 	
-	async findAllPrivate(page: number, take: number, user: AccessTokenPayload) {
+	async findAllPrivate({ page, take }: GetPage, user: AccessTokenPayload) {
 		const data = await prisma.$transaction(async (tx) => {
       return tx.deliveryDB.findMany({
 				where: { userId: user.id },

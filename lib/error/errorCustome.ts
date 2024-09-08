@@ -34,3 +34,5 @@ export class ErrorDelivery extends Error {
 		Object.setPrototypeOf(this, ErrorDelivery.prototype);
 	}
 }
+
+

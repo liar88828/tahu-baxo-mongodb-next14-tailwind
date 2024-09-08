@@ -13,7 +13,7 @@ export async function getBankAll() {
       cache : "no-cache",
     })
     if (!res.ok) {
-      throw new Error('api error');
+      throw new Error('bank api error');
     }
     const data: ResponseData<BankDB> = await res.json()
     return data
@@ -36,7 +36,7 @@ export async function getBankId(id : BankId) {
       cache : "no-cache",
     })
     if (!res.ok) {
-      throw new Error('api error');
+      throw new Error('bank api error');
     }
     const data : BankDB = await res.json()
     return data

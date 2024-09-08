@@ -1,22 +1,20 @@
 import { NextRequest } from "next/server"
-import { GetData, GetPage, GetUpdate, IServiceRequest, } from "../../interface/server/IServiceRequest"
 
 import { z } from "zod"
 import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service"
-import type { Params } from "../../interface/server/param"
+import type { Params } from "@/interface/server/param"
+import { cookies } from "next/headers";
+import { GetData, GetPage, GetUpdate, IServiceRequest, } from "@/interface/server/IServiceRequest"
 
 export class RequestService implements IServiceRequest {
 	getTokenCookie(req: NextRequest) {
-		const token = req.cookies.get("token")
-		const test = req.cookies.getAll()
-		// console.log('--------')
-		// console.log(req.cookies)
-		// console.log(token)
-		// console.log(test)
-		// console.log('--------')
-		if (!token) {
+		// const token = req.cookies.get("session")
+		const token = cookies().get("session")
+		if (!token?.value) {
 			throw new Error("Not have token in Cookie")
 		}
+		// console.log(token.value)
+		
 		return token.value
 	}
 	
@@ -68,11 +66,14 @@ export class RequestService implements IServiceRequest {
 	getPage(request: NextRequest): GetPage {
 		const searchParams = request.nextUrl.searchParams
 		let page = Number(searchParams.get("page") ?? 1)
-		const take = Number(searchParams.get("take") ?? 100)
+		let take = Number(searchParams.get("take") ?? 100)
+		let search = searchParams.get("search") ?? null
+		search = search === 'undefined' ? null : search
 		page = page < 0 ? 1 : page
 		return {
 			page,
 			take,
+			search
 		}
 	}
 	
@@ -97,6 +98,7 @@ export class RequestService implements IServiceRequest {
 		// console.log('bearer------')
 		const user = await jwtService.verifyAccessToken(bearer)
 		// console.log('user------',user)
+		// console.log(bearer)
 		return user as AccessTokenPayload
 	}
 }

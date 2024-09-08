@@ -91,11 +91,11 @@ export class TransactionService {
 		})
 	}
 	
-	async createMany(data: CheckoutCreateMany, user: AccessTokenPayload): Promise<ResponseCheckout> {
+	async createMany(data: CheckoutCreateMany, user: AccessTokenPayload) {
 		const { order, transaction, trollyIds } = await this.validCheckout.checkoutValidMany(data)
 		return prisma.$transaction(async (tx) => {
 			
-			const orderanDB = await tx.orderanDB.create({
+			const orderanDB: ResponseCheckout['orderanDB'] = await tx.orderanDB.create({
 				data: {
 					dari: order.dari,
 					lokasi: order.lokasi,
@@ -106,9 +106,7 @@ export class TransactionService {
 					ongkir: order.ongkir,
 				},
 			})
-			console.log("------- db order transaction")
-			
-			const transactionDB = await tx.transactionDB.create({
+			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
 				data: {
 					jumlah: transaction.jumlah,
 					// productDBId: transaction.productDBId,
@@ -120,8 +118,6 @@ export class TransactionService {
 					
 				},
 			})
-			console.log("------- db transaction transaction")
-			
 			const TrollyDB = await tx.trolleyDB.updateMany({
 				where: {
 					id: {

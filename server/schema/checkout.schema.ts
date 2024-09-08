@@ -15,7 +15,8 @@ export class CheckoutSchema {
 		transaction: transactionSchema.createForMany,
 		order: orderSchema.create,
 		trollyIds: z.object({
-			id: z.number()
+			id: z.number(),
+			userId: z.string(),
 		}).array()
 	}) satisfies z.Schema<CheckoutCreateMany>
 	

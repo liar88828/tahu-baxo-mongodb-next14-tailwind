@@ -2,8 +2,9 @@ import { penerimaSchema, PenerimaSchema } from "@/server/schema/penerima.schema"
 import prisma from "@/config/prisma"
 import { PenerimaDB } from "@prisma/client"
 import type { AccessTokenPayload } from "./jwt.service"
-import type { IService } from "../../interface/server/IService"
-import type { PenerimaCreate } from "../../interface/model/penerima.type"
+import type { IService } from "@/interface/server/IService"
+import type { PenerimaCreate } from "@/interface/model/penerima.type"
+import { GetPage } from "@/interface/server/IServiceRequest";
 
 export class PenerimaService implements IService<PenerimaDB> {
 	constructor(private valid: PenerimaSchema) {
@@ -17,7 +18,7 @@ export class PenerimaService implements IService<PenerimaDB> {
 		return { data, page, take }
 	}
 	
-	async findAllPrivate(page: number, take: number) {
+	async findAllPrivate({ page, take }: GetPage,) {
 		const data = await prisma.penerimaDB.findMany({
 			take: take,
 			skip: (page - 1) * take,

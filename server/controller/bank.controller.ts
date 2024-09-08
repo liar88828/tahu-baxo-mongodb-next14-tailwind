@@ -26,8 +26,8 @@ class BankController implements IController {
 	async findAllPrivate(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			const { page, take } = this.serviceReq.getPage(req)
-			const data = await this.serviceBank.findAllPrivate(page, take, user)
+			const page = this.serviceReq.getPage(req)
+			const data = await this.serviceBank.findAllPrivate(page, user)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)

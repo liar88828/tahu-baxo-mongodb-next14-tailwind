@@ -1,6 +1,8 @@
+'use server'
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
 import { userSchema } from "@/server/schema/user.schema";
+import { apiLogin, } from "@/server/api/auth";
 
 export async function onLogin(prevState : any, formData : FormData) {
   try {
@@ -8,11 +10,9 @@ export async function onLogin(prevState : any, formData : FormData) {
       email : formData.get('email'),
       password : formData.get('password'),
     }
-    const data = userSchema.login.parse(rawFormData);
-    // console.log(data, 'success')
-    // revalidatePath('/auth')
-    // redirect('/auth/register')
-    return {message : ['true']}
+    const form = userSchema.login.parse(rawFormData);
+    const res = await apiLogin(form)
+    return { message: ['true'], }
   } catch (err) {
     if (err instanceof ZodError) {
       console.log(err.flatten().fieldErrors);
@@ -26,8 +26,6 @@ export async function onRegister(prevState : any, formData : FormData) {
   try {
     const rawFormData = Object.fromEntries(formData.entries())
     const data = userSchema.registerSchema.parse(rawFormData);
-    console.log(data, 'success')
-    // redirect('/otp')
     return {message : ['true']}
   } catch (err) {
     if (err instanceof ZodError) {

@@ -8,7 +8,8 @@ import { LoginUser, NewPassword, RegisterUser, ResetSchema } from "@/interface/m
 export type SelectPrisma<T> = Record<keyof T, true>
 
 export class UserService {
-  //
+	
+	//
 	selectPrismaUserPublic: SelectPrisma<UserPublic> = {
 		id: true,
 		name: true,
@@ -18,6 +19,7 @@ export class UserService {
 		role: true,
 		createdAt: true,
 		// trolleyId: true,
+		
 		phone: true,
 		address: true,
 	}

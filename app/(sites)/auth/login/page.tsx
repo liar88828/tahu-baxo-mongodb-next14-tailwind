@@ -3,13 +3,16 @@ import Link from "next/link";
 import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
-import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
+import { redirect } from "next/navigation";
 
 export default function Page() {
+	// const { setAuth, auth, getSession } = useAuthContext()
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
+	
 	if (state?.message?.[0] === 'true') {
+		console.log(state)
 		redirect('/home')
 	}
 	return (

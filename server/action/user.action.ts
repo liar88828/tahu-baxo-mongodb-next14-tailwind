@@ -11,7 +11,7 @@ export async function getUserId({id_user} : UserId) {
       cache : "no-cache",
     })
     if (!res.ok) {
-      throw new Error('api error');
+      throw new Error('user api error');
     }
     const data : UserPublic = await res.json()
     return data
