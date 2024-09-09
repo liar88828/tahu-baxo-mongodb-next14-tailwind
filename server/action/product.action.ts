@@ -19,9 +19,9 @@ export async function getProductsAll(search?: string) {
 			throw new Error('product api error');
 		}
 		const data: PaginationDB<ProductDB> = await res.json()
-		console.log('------')
-		console.log(data)
-		console.log('------')
+		// console.log('------')
+		// console.log(data)
+		// console.log('------')
 		return data
 	} catch (err: unknown) {
 		if (err instanceof Error) {
@@ -57,13 +57,11 @@ export async function getProductsAllPrivate(search?: string) {
 	} catch (err: unknown) {
 		if (err instanceof Error) {
 			console.log(err.message)
-			return null
 		}
 		if (err instanceof ErrorAuth) {
 			redirect('/auth/login')
 		}
 		console.log('this error')
-		return null
 	}
 }
 

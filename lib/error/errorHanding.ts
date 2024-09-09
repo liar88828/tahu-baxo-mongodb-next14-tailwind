@@ -1,6 +1,6 @@
 import { z } from 'Zod'
 import { Prisma } from '@prisma/client'
-import { ErrorProduct, ErrorTrolley, ErrorUser } from "@/lib/error/errorCustome";
+import { ErrorAuth, ErrorProduct, ErrorTrolley, ErrorUser } from "@/lib/error/errorCustome";
 import { ErrorStatus, errorStatus } from "@/lib/error/errorStatus";
 import { errorPrisma } from "@/lib/error/errorPrisma";
 
@@ -48,6 +48,10 @@ export function errorHanding(e: unknown): Response {
 	
 	if (e instanceof Prisma.PrismaClientKnownRequestError) {
 		return errorPrisma(e.code)
+	}
+	
+	if (e instanceof ErrorAuth) {
+		return Response.json(e.message, { status: 400 })
 	}
 	
 	if (e instanceof Error) {

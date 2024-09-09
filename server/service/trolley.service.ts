@@ -30,7 +30,15 @@ export class TrolleyService {
 			include: { Product: true },
 			where: {},
 		})
-		
+	}
+	
+	async getAllPrivate(user: AccessTokenPayload): Promise<GetAllTrolley[]> {
+		return prisma.trolleyDB.findMany({
+			include: { Product: true },
+			where: {
+				userId: user.id,
+			},
+		})
 	}
 	
 	async create(data: TrolleyCreate): Promise<TrolleyResponse> {
@@ -44,15 +52,30 @@ export class TrolleyService {
 			if (trolleyDB >= 200) {
 				throw new ErrorTrolley("conflict")
 			}
-			console.log(data)
-			const res = await tx.trolleyDB.create({
-				data: {
-					userId: data.userId,
-					productId: data.productId,
-					qty: data.qty,
-				},
-			})
-			return { data: res, status: "create data" }
+			
+			const createProduct = async () => {
+				const trolleyDB = await tx.trolleyDB.findFirst({ where: { userId: data.userId, productId: data.productId } })
+				if (!trolleyDB) {
+					return tx.trolleyDB.create({
+						data: {
+							userId: data.userId,
+							productId: data.productId,
+							qty: data.qty,
+						}
+					})
+				} else {
+					return tx.trolleyDB.update({
+						where: { id: trolleyDB.id },
+						data: {
+							userId: data.userId,
+							productId: data.productId,
+							qty: { increment: data.qty }
+						}
+					})
+				}
+				
+			}
+			return { data: await createProduct(), status: "create data" }
 			
 		})
 	}
@@ -70,9 +93,8 @@ export class TrolleyService {
 				throw new ErrorTrolley("conflict")
 			}
 			// find trolley
-			const trolley = await tx.trolleyDB.findUnique({
+			const trolley = await tx.trolleyDB.findFirst({
 				where: {
-					id: data.id,
 					userId: user.id,
 					productId: data.productId,
 				},
@@ -242,6 +264,14 @@ export class TrolleyService {
 			// })
 		})
 	}
+	
+	async getCount({ id }: AccessTokenPayload): Promise<ResponseTrolleyCount> {
+		return prisma.trolleyDB.count({
+			where: { userId: id },
+		})
+		
+	}
 }
 
 export const trolleyService = new TrolleyService(trolleySchema)
+export type ResponseTrolleyCount = number

@@ -11,6 +11,9 @@ export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
 	
+	// console.log("----")
+	// console.log(state)
+	// console.log("----")
 	if (state?.message?.[0] === 'true') {
 		console.log(state)
 		redirect('/home')

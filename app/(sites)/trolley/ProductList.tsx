@@ -1,15 +1,16 @@
 import React from 'react'
-import { IconAdd, IconDelete, IconRemove } from "@/components/icon/IconMore";
-import { getTrolleyAll } from "@/server/action/trolley.action";
-import { TrolleyDataId } from "@/interface/model/trolley.type";
-import { ProductDB } from "@prisma/client";
+import { IconDelete } from "@/components/icon/IconMore";
+import { getTrolleyPrivate } from "@/server/action/trolley.action";
+import { ProductDB, TrolleyDB } from "@prisma/client";
 import { Rupiah } from "@/lib/utils/formatMoney";
+import { ProductListCount } from "@/app/(sites)/trolley/ProductListCount";
 
-export async function ProductList(idTrolley: TrolleyDataId) {
-  const data = await getTrolleyAll(idTrolley)
+export async function ProductList() {
+	const data = await getTrolleyPrivate()
   if (!data) {
     return <h1>Error Bos</h1>
   }
+	// console.log(data)
   return (
     <div>
       <div className="flex justify-between items-center w-full text-2xl mb-2 ">
@@ -22,7 +23,8 @@ export async function ProductList(idTrolley: TrolleyDataId) {
       <div className='space-y-4 '>
         { data.map((item, index) => (
           item.Product ? <ProductListItem
-            item={ item.Product }
+						trolley={ item }
+						product={ item.Product }
             key={ index }>
             <input type="checkbox" defaultChecked className="checkbox checkbox-sm mr-2"/>
           </ProductListItem> : null
@@ -32,10 +34,10 @@ export async function ProductList(idTrolley: TrolleyDataId) {
   )
 }
 
-export function ProductListItem({ item, children }: { item: ProductDB, children?: React.ReactNode }) {
+export function ProductListItem({ trolley, product, children }: ProductListItemProps) {
   return (
     <div
-      key={ item.id }
+			key={ product.id }
       className={ 'flex items-center ' }>
       <div className={ ' ' }>
         { children }
@@ -51,7 +53,7 @@ export function ProductListItem({ item, children }: { item: ProductDB, children?
             <div className=' flex justify-between  w-full'>
               <div className=''>
                 <h1 className='text-lg font-semibold text-base-content/80'>
-                  { item.nama }
+									{ product.nama }
                 </h1>
                 <h2 className='text-sm font-bold text-base-content/50'>Red</h2>
               </div>
@@ -60,28 +62,14 @@ export function ProductListItem({ item, children }: { item: ProductDB, children?
               </button>
             </div>
             <div className='flex justify-between items-center w-full '>
-              <h1 className='text-lg font-bold'>{ Rupiah(item.harga) }</h1>
-              <ProductListCount/>
-            </div>
-          </div>
-        </div>
-      </div>
+							<h1 className='text-lg font-bold'>{ Rupiah(product.harga) }</h1>
+							<ProductListCount item={ trolley }/>
+						</div>
+					</div>
+				</div>
+			</div>
     </div>
   )
 }
 
-export function ProductListCount() {
-  return (
-    <div className='flex space-x-2 justify-center items-center'>
-      <button className='btn btn-square btn-outline btn-sm'>
-        {/* icon plus */ }
-        <IconAdd/>
-      </button>
-      <h1 className='font-bold text-xl'>1</h1>
-      <button className='btn btn-square btn-outline btn-sm'>
-        {/* icon minus */ }
-        <IconRemove/>
-      </button>
-    </div>
-  )
-}
+export type ProductListItemProps = { trolley: TrolleyDB, product: ProductDB, children?: React.ReactNode };

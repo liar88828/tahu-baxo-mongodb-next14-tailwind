@@ -1,10 +1,9 @@
 import React from 'react'
 import { ProductListItem } from "@/app/(sites)/trolley/ProductList";
 import { getTrolleyAll } from "@/server/action/trolley.action";
-import { TrolleyDataId } from "@/interface/model/trolley.type";
 
-export async function ProductList({ itemProps }: { itemProps: TrolleyDataId }) {
-  const data = await getTrolleyAll(itemProps)
+export async function ProductList() {
+  const data = await getTrolleyAll()
   if (!data) {
     return <h1>Data Bank is Not found</h1>
   }
@@ -20,7 +19,8 @@ export async function ProductList({ itemProps }: { itemProps: TrolleyDataId }) {
             return (item.Product ?
               <ProductListItem
                 key={ item.productId }
-                item={ item.Product }
+                trolley={ item }
+                product={ item.Product }
               />
               : null)
           }) }

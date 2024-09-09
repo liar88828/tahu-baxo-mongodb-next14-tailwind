@@ -15,8 +15,8 @@ class ProductController implements IController {
   
   async findAll(req: NextRequest) {
     try {
-      const { page, take } = this.serviceReq.getPage(req)
-      const data = await this.serviceProduct.findAll(page, take)
+			const page = this.serviceReq.getPage(req)
+			const data = await this.serviceProduct.findAllPublic(page)
       return Response.json(data)
     } catch (e: unknown) {
       return errorHanding(e)
@@ -78,10 +78,7 @@ class ProductController implements IController {
   async updateOne(req: NextRequest, params: Params) {
     try {
       const user = await this.serviceReq.getUserPayload(req)
-      let { data, id } = await this.serviceReq.getUpdateInt<ProductUpdate>(
-        req,
-        params
-      )
+			let { data, id } = await this.serviceReq.getUpdateInt<ProductUpdate>(req, params)
       data.userId = user.id
       return Response.json(
         await this.serviceProduct.updateOne(data, {

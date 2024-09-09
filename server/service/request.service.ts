@@ -5,13 +5,14 @@ import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service"
 import type { Params } from "@/interface/server/param"
 import { cookies } from "next/headers";
 import { GetData, GetPage, GetUpdate, IServiceRequest, } from "@/interface/server/IServiceRequest"
+import { ErrorAuth } from "@/lib/error/errorCustome";
 
 export class RequestService implements IServiceRequest {
 	getTokenCookie(req: NextRequest) {
 		// const token = req.cookies.get("session")
 		const token = cookies().get("session")
 		if (!token?.value) {
-			throw new Error("Not have token in Cookie")
+			throw new ErrorAuth("Not have token in Cookie")
 		}
 		// console.log(token.value)
 		

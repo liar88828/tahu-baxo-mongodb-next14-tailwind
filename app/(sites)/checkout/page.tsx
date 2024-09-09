@@ -18,7 +18,7 @@ export default async function page() {
           <ProfileInfo />
         </Suspense>
         <Suspense fallback={ <SkeletonCardLong/> }>
-          <ProductList itemProps={ data }/>
+          <ProductList/>
         </Suspense>
         <Suspense fallback={<SkeletonCard />}>
           <DeliveryList />

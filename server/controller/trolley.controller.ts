@@ -23,6 +23,7 @@ export class TrolleyController {
 		}
 	}
 	
+
 	async getAllPublic(req: NextRequest) {
 		try {
 			return NextResponse.json(await this.serviceTrolley.getAllPublic())
@@ -30,6 +31,17 @@ export class TrolleyController {
 			return errorHanding(e)
 		}
 	}
+	
+	async getAllPrivate(req: NextRequest) {
+		try {
+			const user = await this.serviceReq.getUserPayload(req)
+			const res = await this.serviceTrolley.getAllPrivate(user)
+			return NextResponse.json(res)
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
 	async create(req: NextRequest,) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
@@ -82,6 +94,18 @@ export class TrolleyController {
 			return errorHanding(e)
 		}
 	}
+	
+	async getCount(req: NextRequest) {
+		try {
+			// console.log('get user')
+			const user = await this.serviceReq.getUserPayload(req)
+			// console.log('get token')
+			return NextResponse.json(await this.serviceTrolley.getCount(user))
+		} catch (e: unknown) {
+			return errorHanding(e)
+		}
+	}
+	
 }
 
 export const trolleyController = new TrolleyController(

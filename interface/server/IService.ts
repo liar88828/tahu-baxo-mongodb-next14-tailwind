@@ -8,4 +8,6 @@ export interface IService<T> {
 	
 	findAllPrivate(page: GetPage, user: AccessTokenPayload): Promise<ResponseData<T>>
 	
+	findAllPublic(page: GetPage): Promise<ResponseData<T>>
+	
 }

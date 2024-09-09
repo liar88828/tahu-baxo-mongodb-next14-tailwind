@@ -15,3 +15,9 @@ export type ResponseRegister = {
 	refreshToken: { id: string }
 	data: Pick<User, "name" | "id" | "email" | "image">
 }
+
+export type AuthCookie = {
+	accessToken: string
+	refreshToken: string
+	data: Pick<User, "name" | "id" | "email" | "image">
+}

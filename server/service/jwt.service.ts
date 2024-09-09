@@ -116,6 +116,7 @@ export class JwtService {
 		return data as AccessTokenPayload
 	}
 	
+
 	jwtPayload(token: string, willThrow: boolean = true) {
 		return JwtService.jwtPayloadStatic(token)
 	}
@@ -123,3 +124,21 @@ export class JwtService {
 }
 
 export const jwtService = new JwtService()
+
+export async function checkTokenMiddleware(token: string | undefined) {
+	try {
+		if (!token) {
+			return false
+		}
+		// will return invalid not throw
+		return jwt.decode(token, {
+			json: false,
+			complete: false
+		});
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			return error.message
+		}
+	}
+	
+}

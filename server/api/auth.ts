@@ -1,7 +1,8 @@
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import { config } from "@/config/baseConfig";
-import { ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
+import { AuthCookie, ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
 import { cookies } from "next/headers";
+import { ErrorAuth } from "@/lib/error/errorCustome";
 
 export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 	const res = await fetch(`${ config.url }/api/user/login`,
@@ -15,7 +16,7 @@ export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 		}
 	)
 	if (!res.ok) {
-		throw new Error('api error');
+		throw new ErrorAuth('api login is error');
 	}
 	const data: ResponseAuthUser = await res.json()
 	authCookie().setAuth(data)
@@ -34,14 +35,14 @@ export async function apiRegister(form: RegisterUser) {
 		}
 	)
 	if (!res.ok) {
-		throw new Error('api error');
+		throw new Error('api register is error');
 	}
 	const data: ResponseAuthUser = await res.json()
 	authCookie().setAuth(data)
 	return data
 }
 
-export async function apiLogout(form: RegisterUser) {
+export async function apiLogout() {
 	const res = await fetch(`${ config.url }/api/user/logout`,
 		{
 			headers: {
@@ -52,9 +53,12 @@ export async function apiLogout(form: RegisterUser) {
 		}
 	)
 	if (!res.ok) {
-		throw new Error('api error');
+		const data: ResponseAuthUser = await res.json()
+		console.log(data)
+		throw new ErrorAuth('api auth logout error');
 	}
 	const data: ResponseAuthUser = await res.json()
+	console.log('hello api logout')
 	authCookie().deleteAuth()
 	return data
 }
@@ -70,7 +74,7 @@ export async function apiProfile(id: string) {
 		}
 	)
 	if (!res.ok) {
-		throw new Error('api error');
+		throw new Error('api profile error');
 	}
 	const data: UserPublic = await res.json()
 	return data
@@ -79,25 +83,46 @@ export async function apiProfile(id: string) {
 export function authCookie() {
 	const cookieStore = cookies()
 	
-	const getAuth = (): ResponseAuthUser => {
-		const cookie = cookieStore.get('auth')
-		if (!cookie?.value) {
-			throw new Error("Cookie not found")
+	const getAccess = () => {
+		if (cookieStore.has("access")) {
+			const access = cookieStore.get('access')
+			return access?.value ?? ''
 		}
-		return JSON.parse(cookie.value)
+		return ''
+	}
+	const getAuth = (): AuthCookie => {
+		let refresh = cookieStore.get('refresh')
+		let user = cookieStore.get('user')
+		
+		return {
+			accessToken: getAccess(),
+			refreshToken: refresh?.value ?? '',
+			data: JSON.parse(user?.value ?? '')
+		};
 	}
 	
+	const check: Record<keyof AuthCookie, {}> = {
+		accessToken: cookieStore.has("access"),
+		refreshToken: cookieStore.has("refresh"),
+		data: cookieStore.has("user")
+	}
 	return {
-		getAuth,
+		getAccess: getAccess,
+		checkAuth:
+		check,
+		getAuth: getAuth,
 		setAuth: (data: ResponseAuthUser) => {
-			// cookieStore.set('access', data.accessToken, { secure: true })
-			// cookieStore.set('refresh', data.refreshToken.id, { secure: true })
-			// cookieStore.set('user', JSON.stringify(data.data), { secure: true })
-			cookieStore.set('auth', JSON.stringify(data), { secure: true })
+			cookieStore.set('access', data.accessToken, { secure: true })
+			cookieStore.set('refresh', data.refreshToken.id, { secure: true })
+			cookieStore.set('user', JSON.stringify(data.data), { secure: true })
+			// cookieStore.set('auth', JSON.stringify(data), { secure: true })
 		},
 		deleteAuth: () => {
-			cookieStore.delete('session')
-			cookieStore.delete('auth')
+			// cookieStore.delete('session')
+			cookieStore.delete('access')
+			cookieStore.delete('refresh')
+			cookieStore.delete('user')
+			// cookieStore.delete('auth')
 		}
 	}
 }

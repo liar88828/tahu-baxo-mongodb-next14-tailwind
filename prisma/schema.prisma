@@ -209,8 +209,8 @@ model TrolleyDB {
   // trolleyId   Int?
   User          User           @relation(fields: [userId], references: [id])
   userId        String
-  Product       ProductDB?     @relation(fields: [productId], references: [id])
-  productId     Int?
+  Product       ProductDB      @relation(fields: [productId], references: [id])
+  productId     Int
   Transaction   TransactionDB? @relation(fields: [transactionId], references: [id])
   transactionId Int?
   qty           Int

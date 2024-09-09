@@ -2,8 +2,8 @@ import React from "react";
 import { IconMore } from "@/components/icon/IconMore";
 import { Rupiah } from "@/lib/utils/formatMoney";
 import Link from "next/link";
-import { getProductsAll, getProductsAllPrivate } from "@/server/action/product.action";
 import { ProductDB } from "@prisma/client";
+import { getProductsAll } from "@/server/action/product.action";
 
 function ProductItemCard({ item }: { item: ProductDB }) {
 	return (
@@ -40,22 +40,36 @@ function ProductItemCard({ item }: { item: ProductDB }) {
 	);
 }
 
-export default ProductItem;
-
-export async function ProductItem({ search }: { search?: string }) {
-	const data = await getProductsAll(search)
+export async function ProductItem() {
+	const data = await getProductsAll()
+	
 	if (!data) {
 		return <h1>Data Product is Not found</h1>
 	}
-	return data.data.map((item) => <ProductItemCard item={ item }/>
+	return data.data.map((item) => <ProductItemCard
+			item={ item }
+			key={ item.id }
+		/>
 	)
 }
 
-export async function ProductItemPrivate({ search }: { search?: string }) {
-	const data = await getProductsAllPrivate(search)
+export async function ProductItemSearch({ data }: { data: ProductDB[] }) {
 	if (!data) {
-		console.log('----')
 		return <h1>Data Product is Not found</h1>
 	}
-	return data.data.map((item) => <ProductItemCard item={ item }/>)
+	return data.map((item) => <ProductItemCard
+			item={ item }
+			key={ item.id }
+		/>
+	)
+}
+
+export async function ProductItemPrivate({ data }: { data: ProductDB[] }) {
+	if (!data) {
+		return <h1>Data Product is Not found</h1>
+	}
+	return data.map((item) => <ProductItemCard
+		item={ item }
+		key={ item.id }
+	/>)
 }

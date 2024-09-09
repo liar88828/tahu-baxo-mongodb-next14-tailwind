@@ -40,9 +40,7 @@ class AuthController {
 		try {
 			
 			const token = this.serviceRequest.getTokenCookie(req)
-			console.log('---logout----')
-			console.log(token)
-			console.log('-------')
+			// console.log(token)
 			const sendData = await this.serviceAuth.logout(token)
 			return Response.json(sendData)
 		} catch (e) {

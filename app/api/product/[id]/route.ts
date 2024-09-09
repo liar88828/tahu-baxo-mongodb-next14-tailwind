@@ -3,7 +3,7 @@ import { productController } from "@/server/controller/product.controller"
 import type { Params } from "@/interface/server/param"
 
 export async function GET(request: NextRequest, params: Params) {
-  console.log('--product id ---')
+	// console.log('--product id ---')
   // console.log(params)
   // console.log('-----')
   return productController.findId(request, params)

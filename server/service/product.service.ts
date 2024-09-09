@@ -43,9 +43,7 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async findAllPrivate(
-		{ page, take, search }: GetPage,
-		user: AccessTokenPayload
+	async findAllPrivate({ page, take, search }: GetPage, user: AccessTokenPayload
 	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
@@ -56,12 +54,27 @@ export class ProductService implements IService<ProductDB> {
 				},
 				take: take,
 				skip: (page - 1) * take,
-				include: {
-					_count: true
-				}
+				// select:{_count: true},
+				// include: {
+				// 	_count: true
+				// }
 			})
-			console.log(data)
-			return { data, page, take }
+			// console.log(data)
+			return { data, page, take, }
+		})
+	}
+	
+	async findAllPublic({ page, take, search }: GetPage): Promise<PaginationDB<ProductDB>> {
+		return prisma.$transaction(async (tx) => {
+			const data = await tx.productDB.findMany({
+				where: {
+					...(search ? { nama: { contains: search } } : {})
+				},
+				take: take,
+				skip: (page - 1) * take,
+				
+			})
+			return { data, page, take, }
 		})
 	}
 	

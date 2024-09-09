@@ -1,24 +1,19 @@
-import React, { Suspense } from 'react'
-import { ProductItem } from "@/components/ProductItem";
-import { TitleCard } from "@/components/TitleCard";
+import React from 'react'
+import { ProductItemSearch } from "@/components/ProductItem";
 import { getProductsAll } from "@/server/action/product.action";
+import { ParamsProfile } from "@/interface/server/param";
 
-export default async function Product() {
-	const data = await getProductsAll()
+export default async function Product({ params: { searchParams: { search } } }: { params: ParamsProfile }) {
+	const data = await getProductsAll(search)
 	
 	if (!data) {
 		return <h1>Data Bank is Not found</h1>
 	}
 	return (
 		<div>
-			<TitleCard
-				title="Result : 1234"
-				button={ '' }
-			/>
+			{/*<TitleSearch title={ `Result : ${ data.data.length }` }/>*/ }
 			<div className='grid grid-cols-2 gap-3'>
-				<Suspense fallback={ <div>Loading...</div> }>
-					<ProductItem/>
-				</Suspense>
+				<ProductItemSearch data={ data.data }/>
 			</div>
 		</div>
 	)

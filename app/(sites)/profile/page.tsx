@@ -10,7 +10,6 @@ import { authCookie } from "@/server/api/auth";
 export default async function page(params : ParamsProfile) {
   const auth = authCookie().getAuth()
   
-  // const data = await apiProfile(auth.data.id)
   if (!auth) {
     return <h1>User is not found</h1>
   }

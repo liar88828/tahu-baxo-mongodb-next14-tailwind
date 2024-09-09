@@ -1,6 +1,5 @@
 import React from 'react'
-import { TitleCard } from "@/components/TitleCard";
-import { getProductsAll } from "@/server/action/product.action";
+import { TitleMore } from "@/components/TitleSearch";
 import { ProductItem } from "@/components/ProductItem";
 
 export default async function Product() {
@@ -11,7 +10,7 @@ export default async function Product() {
 	// console.log(data)
 	return (
 		<div className=''>
-			<TitleCard
+			<TitleMore
 				title={ 'Flash Sale' }
 				button={ 'View more' }
 			/>

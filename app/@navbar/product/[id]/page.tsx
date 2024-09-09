@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import { IconBack, IconFavorite, IconTrolley } from "@/components/icon/IconMore";
+import { getUserTrolley } from "@/server/action/trolley.action";
 
-export default function page() {
-	
+export default async function page() {
+	const userTrolley = await getUserTrolley()
+	console.log(userTrolley)
 	return (
 		<div className='navbar bg-base-100'>
 			<div className='navbar-start'>
@@ -18,16 +20,21 @@ export default function page() {
 			<div className='navbar-center'>
 				<a className='btn btn-ghost text-xl'>Product</a>
 			</div>
-			<div className='navbar-end'>
+			<div className='navbar-end pr-2'>
 				<button className='btn btn-ghost btn-circle'>
 					<IconFavorite/>
 				</button>
-				<button className='btn btn-ghost btn-circle'>
-					<div className='indicator'>
+				<div className='indicator'>
+					<span className=" indicator-item badge badge-primary badge-xs
+					text-xs
+					">{ userTrolley }</span>
+					<Link
+						href={ '/trolley' }
+						
+						className='btn btn-xs  btn-circle btn-ghost'>
 						<IconTrolley/>
-						<span className='badge badge-xs badge-primary indicator-item'></span>
+					</Link>
 					</div>
-				</button>
 			
 			</div>
 		</div>

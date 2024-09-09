@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Product from './Product'
 import { TabProduct } from './TabProduct'
 import CategoryWrap from "@/app/(sites)/search/CategoryWrap";
@@ -9,8 +9,11 @@ export default function page(params : ParamsProfile) {
       <div className='space-y-4 p-3'>
         <CategoryWrap />
         {/*<Category/>*/}
+				<Suspense fallback={ <div>Loading...</div> }>
+        
         <TabProduct params={params} />
-        <Product />
+					<Product params={ params }/>
+				</Suspense>
       </div>
     </>
   )
