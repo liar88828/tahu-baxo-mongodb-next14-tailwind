@@ -54,9 +54,6 @@ export async function ProductItem() {
 }
 
 export async function ProductItemSearch({ data }: { data: ProductDB[] }) {
-	if (!data) {
-		return <h1>Data Product is Not found</h1>
-	}
 	return data.map((item) => <ProductItemCard
 			item={ item }
 			key={ item.id }

@@ -5,7 +5,7 @@ import { authCookie } from "@/server/api/auth";
 
 export default function page() {
 	const auth = authCookie().getAuth()
-	console.log(auth.accessToken)
+	// console.log(auth.accessToken)
 	
   return (
     <div className='navbar bg-base-100'>

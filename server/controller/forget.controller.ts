@@ -2,7 +2,7 @@ import { requestService, RequestService, } from "@/server/service/request.servic
 import { userService, UserService } from "@/server/service/user.service"
 import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
-import { OtpSchema, OtpService } from "@/server/service/otp.service"
+import { OtpSchema, OtpService } from "@/server/service/auth/otp.service"
 import { EmailService } from "@/server/service/email.service"
 import { NewPassword } from "@/interface/model/auth.type"
 import prisma from "@/config/prisma"

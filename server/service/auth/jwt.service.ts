@@ -1,15 +1,16 @@
+import 'server-only'
 import jwt from "jsonwebtoken"
 import { User } from "@prisma/client"
-import { ErrorUser } from "@/lib/error/errorCustome"
 import prisma from "@/config/prisma"
-import { cookies } from "next/headers"
-import { createSession } from "@/server/service/session.service";
+import { createSession } from "@/server/service/auth/session.service";
+import { decrypt, encrypt } from "@/server/service/auth/jose.service";
 
 export type UserBaseToken = Pick<User, "id" | "email" | "name">
 
 export type AccessTokenPayload = UserBaseToken & { idToken: string }
 
 export type RefreshTokenPayload = { userId: string }
+
 
 export class JwtService {
 	private expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -20,17 +21,6 @@ export class JwtService {
 		private accessExp: string = "1h",
 		private refreshExp: string = "7d"
 	) {
-	}
-	
-	static jwtPayloadStatic(
-		token: string
-		// willThrow : boolean = true
-	) {
-		const data = jwt.decode(token, { json: true })
-		if (!data) {
-			throw new Error("Token is not verified")
-		}
-		return data
 	}
 	
 	async verifyRefreshToken(token: string) {
@@ -67,9 +57,7 @@ export class JwtService {
 	}
 	
 	async createAccessToken(data: AccessTokenPayload) {
-		return jwt.sign(data, this.accessSecret, {
-			expiresIn: this.accessExp,
-		})
+		return encrypt(data)
 	}
 	
 	async deleteRefreshToken(token: string,) {
@@ -78,47 +66,8 @@ export class JwtService {
 		})
 	}
 	
-	async verifySessionToken(): Promise<jwt.JwtPayload> {
-		const cookie = cookies().get("session")?.value
-		
-		if (!cookie) {
-			throw new ErrorUser("unauthorized")
-		}
-		// will return invalid not throw
-		const data = await jwt.verify(cookie, this.accessSecret)
-		if (!data || typeof data === "string") {
-			throw new ErrorUser("unauthorized")
-		}
-		return data
-	}
-	
-	async checkToken(token: string | undefined) {
-		if (!token) {
-			throw false
-		}
-		// will return invalid not throw
-		const data = await jwt.verify(token, this.accessSecret)
-		if (!data || typeof data === "string") {
-			throw false
-		}
-		return true
-	}
-	
 	async verifyAccessToken(token: string | undefined) {
-		if (!token) {
-			throw new Error("unauthorized not have access token")
-		}
-		// will return invalid not throw
-		const data = jwt.verify(token, this.accessSecret)
-		if (!data || typeof data === "string") {
-			throw new ErrorUser("unauthorized")
-		}
-		return data as AccessTokenPayload
-	}
-	
-
-	jwtPayload(token: string, willThrow: boolean = true) {
-		return JwtService.jwtPayloadStatic(token)
+		return decrypt(token)
 	}
 	
 }
@@ -135,6 +84,20 @@ export async function checkTokenMiddleware(token: string | undefined) {
 			json: false,
 			complete: false
 		});
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			return error.message
+		}
+	}
+}
+
+export async function verifyTokenMiddleware(token: string | undefined) {
+	try {
+		if (!token) {
+			return false
+		}
+		// will return invalid not throw
+		return jwt.verify(token, process.env.ACCESSTOKENSECRET ?? '')
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
 			return error.message

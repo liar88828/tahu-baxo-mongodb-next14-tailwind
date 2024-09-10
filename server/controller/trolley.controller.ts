@@ -2,7 +2,7 @@ import { trolleyService, TrolleyService, } from "@/server/service/trolley.servic
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { Params } from "@/interface/server/param"
 import type { TrolleyCreate, TrolleyUpdate } from "@/interface/model/trolley.type"
 

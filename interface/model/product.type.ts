@@ -2,8 +2,8 @@ import type { z } from "zod"
 import type { ProductDB, User } from "@prisma/client"
 import type { productSchema } from "@/server/schema/product.schema"
 
-export type ProductCreatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated_at">
-export type ProductUpdatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated_at">
+export type ProductCreatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated_at" | 'img'>
+export type ProductUpdatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated_at" | 'img'>
 export type ProductCreate = z.output<typeof productSchema.create>
 export type ProductUpdate = z.output<typeof productSchema.update>
 export type ProductTransaction = {

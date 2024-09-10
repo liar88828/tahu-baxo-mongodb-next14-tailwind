@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { checkTokenMiddleware } from "@/server/service/jwt.service";
+import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
+import { productMiddleWare } from "@/server/middleware/productMiddleWare";
+import { decrypt } from "@/server/service/auth/jose.service";
 
-// 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard', '/profile', '/product', '/trolley', "/checkout", '/transaction']
-const publicRoutes = ['/auth', '/']
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public
 	const path = req.nextUrl.pathname
@@ -14,13 +13,9 @@ export default async function middleware(req: NextRequest) {
 	
 	// 3. Decrypt the session from the cookie
 	const cookie = cookies().get('access')?.value
-	const session = await checkTokenMiddleware(cookie)
-	
-	// console.log(path, "path")
-	// console.log(test, "test")
-	// console.log(isProtectedRoute, "isProtectedRoute")
-	// console.log(isPublicRoute, "isPublicRoute")
-	console.log(session, 'session')
+	const session = await decrypt(cookie)
+	// console.log(cookie,'cookies')
+	// console.log(session, 'session')
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
 		console.log('will redirect')
@@ -31,9 +26,9 @@ export default async function middleware(req: NextRequest) {
 	if (
 		isPublicRoute &&
 		session &&
-		!req.nextUrl.pathname.startsWith('/dashboard')
+		!req.nextUrl.pathname.startsWith('/home')
 	) {
-		return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+		return NextResponse.redirect(new URL('/home', req.nextUrl))
 	}
 	
 	// console.log(publicRoutes && session)
@@ -60,7 +55,3 @@ export const config = {
 	
 }
 
-export async function productMiddleWare(req: NextRequest,): Promise<Response | void> {
-	console.log('product middleware')
-	
-}

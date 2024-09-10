@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { Params } from "./param"
 
 export type GetId = {

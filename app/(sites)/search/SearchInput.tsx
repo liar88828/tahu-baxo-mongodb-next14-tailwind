@@ -1,5 +1,4 @@
 'use client'
-
 import { IconSearch } from "@/components/icon/IconMore";
 import { usePageSearch } from "@/hook/usePageSearch";
 import { useEffect, useState } from "react";
@@ -17,6 +16,11 @@ export function SearchInput() {
 	return (
 		<div className='join w-full'>
 			<input
+				onKeyDown={ (e) => {
+					if (e.key === 'Enter') {
+						updateQueryParams('search', search)
+					}
+				} }
 				onChange={ (e) => {
 					setSearch(e.target.value)
 				} }

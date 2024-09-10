@@ -1,18 +1,14 @@
 import React, { Suspense } from 'react';
-import { ProfileInfo } from "@/app/(sites)/checkout/ProfileInfo";
-import { ProductList } from "@/app/(sites)/checkout/ProductList";
-import { PaymentList } from "@/app/(sites)/checkout/PaymentList";
-import { DeliveryList } from "@/app/(sites)/checkout/DeliveryList";
+import { ProfileInfo } from "@/app/(sites)/checkout/profile/ProfileInfo";
+import { ProductList } from "@/app/(sites)/checkout/product/ProductList";
+import { Payment } from "@/app/(sites)/checkout/payment/Payment";
+import { Delivery } from "@/app/(sites)/checkout/delivery/Delivery";
 import { TotalPay } from "@/app/(sites)/checkout/TotalPay";
 import { SkeletonCard, SkeletonCardLong } from "@/components/Skeleton";
-import { getTrolley } from "@/server/action/test";
 
 export default async function page() {
-  const data = await getTrolley()
-  if (!data) {
-    return <h1>Data Trolley is Empty</h1>
-  }
-  return (<>
+	
+	return (<>
       <div className='space-y-6 p-4'>
         <Suspense fallback={<SkeletonCard />}>
           <ProfileInfo />
@@ -21,10 +17,10 @@ export default async function page() {
           <ProductList/>
         </Suspense>
         <Suspense fallback={<SkeletonCard />}>
-          <DeliveryList />
+					<Delivery/>
         </Suspense>
         <Suspense fallback={<SkeletonCard />}>
-          <PaymentList />
+					<Payment/>
         </Suspense>
         <TotalPay />
       </div>

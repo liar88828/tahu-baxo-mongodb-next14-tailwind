@@ -1,6 +1,6 @@
 import prisma from "@/config/prisma"
 import { TransactionSchema, transactionSchema, } from "@/server/schema/transaction.schema"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import { CheckoutCreateMany, CheckoutCreateSchema, ResponseCheckout, } from "@/interface/model/transaction.type"
 import { checkoutSchema, CheckoutSchema } from "@/server/schema/checkout.schema";
 

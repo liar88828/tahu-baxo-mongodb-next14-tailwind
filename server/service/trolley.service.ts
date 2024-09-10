@@ -1,7 +1,7 @@
 import prisma from "@/config/prisma"
 
 import { ErrorProduct, ErrorTrolley } from "@/lib/error/errorCustome"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import { trolleySchema, type TrolleySchema } from "../schema/trolley.schema"
 import {
 	GetAllTrolley,
@@ -81,8 +81,7 @@ export class TrolleyService {
 	}
 	
 	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<TrolleyResponse> {
-		
-		console.log(data)
+		// console.log(data)
 		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			// check stock trolley

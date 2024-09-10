@@ -1,10 +1,12 @@
 'use server'
 import { config } from "@/config/baseConfig";
 import { ProductDB } from "@prisma/client";
-import { PaginationDB } from "@/server/service/product.service";
+import { PaginationDB, productService } from "@/server/service/product.service";
 import { authCookie } from "@/server/api/auth";
 import { redirect } from "next/navigation";
 import { ErrorAuth } from "@/lib/error/errorCustome";
+import { ZodError } from "zod";
+import { ProductCreate } from "@/interface/model/product.type";
 
 export async function getProductsAll(search?: string) {
 	try {
@@ -19,9 +21,6 @@ export async function getProductsAll(search?: string) {
 			throw new Error('product api error');
 		}
 		const data: PaginationDB<ProductDB> = await res.json()
-		// console.log('------')
-		// console.log(data)
-		// console.log('------')
 		return data
 	} catch (err: unknown) {
 		if (err instanceof Error) {
@@ -86,6 +85,35 @@ export async function getProductId(id: number) {
 			return null
 		}
 		return null
+	}
+	
+}
+
+export async function createProduct(prevState: any, formData: FormData) {
+	try {
+		//@ts-expect-error
+		// const rawForm = Object.fromEntries(formData.entries())
+		const rawFormData = {
+			nama: formData.get('name'),
+			jenis: formData.get('jenis'),
+			lokasi: formData.get('lokasi'),
+			keterangan: formData.get('keterangan'),
+			jumlah: formData.get('jumlah'),
+			harga: formData.get('harga'),
+		} as ProductCreate
+		// console.log(rawFormData);
+		rawFormData.jumlah = Number(rawFormData.jumlah)
+		rawFormData.harga = Number(rawFormData.harga)
+		rawFormData.userId = authCookie().getAuth().data.id
+		const data = await productService.createOne(rawFormData)
+		console.log(data)
+		
+		return { message: ['true'] }
+	} catch (err) {
+		if (err instanceof ZodError) {
+			return err.flatten().fieldErrors
+		}
+		console.log(err)
 	}
 	
 }

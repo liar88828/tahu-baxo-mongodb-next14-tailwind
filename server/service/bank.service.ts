@@ -1,7 +1,7 @@
 import { BankCreate, BankId, bankSchema, BankSchema, BankUpdate, } from "@/server/schema/bank.schema"
 import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { IService } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
 

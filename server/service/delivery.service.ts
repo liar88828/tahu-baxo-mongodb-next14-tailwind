@@ -1,7 +1,7 @@
 import { DeliverSchema, deliverySchema } from "@/server/schema/deliver.schema"
 import prisma from "@/config/prisma"
 import { DeliveryDB } from "@prisma/client"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { IService } from "@/interface/server/IService"
 import type { DeliveryCreate, DeliveryId, DeliveryUpdate, } from "@/interface/model/delivery.type"
 import { GetPage } from "@/interface/server/IServiceRequest";

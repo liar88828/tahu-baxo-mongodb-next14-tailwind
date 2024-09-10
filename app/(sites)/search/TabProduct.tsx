@@ -19,7 +19,7 @@ const loopTabBar = [
 ]
 
 export function TabProduct({ params: { searchParams: { tab } } }: { params: ParamsProfile }) {
-	const { addQueryParam, updateQueryParams } = usePageSearch()
+	const { updateQueryParams } = usePageSearch()
 	
 	tab = tab === undefined ? 'new-product' : tab;
 	return (

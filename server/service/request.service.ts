@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server"
 
 import { z } from "zod"
-import { AccessTokenPayload, jwtService } from "@/server/service/jwt.service"
+import { AccessTokenPayload, jwtService } from "@/server/service/auth/jwt.service"
 import type { Params } from "@/interface/server/param"
 import { cookies } from "next/headers";
 import { GetData, GetPage, GetUpdate, IServiceRequest, } from "@/interface/server/IServiceRequest"

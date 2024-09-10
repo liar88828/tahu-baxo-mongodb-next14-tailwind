@@ -1,6 +1,6 @@
 import { productSchema, ProductSchema } from "@/server/schema/product.schema"
 import prisma from "@/config/prisma"
-import { AccessTokenPayload } from "@/server/service/jwt.service"
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { ProductDB } from "@prisma/client"
 import type { IService } from "@/interface/server/IService"
 import type { ProductCreate, ProductId, ProductTransaction, ProductUpdate, } from "@/interface/model/product.type"

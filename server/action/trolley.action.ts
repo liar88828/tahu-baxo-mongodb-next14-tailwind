@@ -12,6 +12,7 @@ import { ErrorAuth } from "@/lib/error/errorCustome";
 import { ResponseTrolleyCount } from "@/server/service/trolley.service";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { TrolleyDB } from "@prisma/client";
 
 export async function getTrolleyPrivate() {
 	const auth = authCookie().getAccess()
@@ -173,12 +174,12 @@ export async function onAddTrolley({ id }: any, formData: FormData) {
 	}
 }
 
-export async function onIncrementTrolley(formData: FormData) {
+export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 	try {
 		const auth = authCookie().getAuth()
 		const data: TrolleyUpdate = {
-			id: Number(formData.get('id')) ?? 0,
-			productId: Number(formData.get('productId')) ?? 0,
+			id: id,
+			productId: productId,
 			qty: 1,
 			userId: auth.data.id
 		}
@@ -190,30 +191,23 @@ export async function onIncrementTrolley(formData: FormData) {
 			},
 			body: JSON.stringify(data)
 		})
+		
 		if (!res.ok) {
-			// console.log('------user--')
 			throw new ErrorAuth(await res.text())
-			// console.log('------user--')
 		}
-		revalidatePath('/')
-		return await res.json() as ResponseTrolleyCount
-	} catch (error) {
-		if (error instanceof ErrorAuth) {
-			if (error.message.includes("jwt expired")) {
-				// console.log('jwt is expired')
-				redirect('/auth/login')
-				// make new access token and fetch again
-			}
-		}
+		revalidatePath('/trolley')
+	} catch (e) {
+		console.log(e)
+		return e
 	}
 }
 
-export async function onDecrementTrolley(formData: FormData) {
+export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 	try {
 		const auth = authCookie().getAuth()
 		const data: TrolleyUpdate = {
-			id: Number(formData.get('id')) ?? 0,
-			productId: Number(formData.get('productId')) ?? 0,
+			id: id,
+			productId: productId,
 			qty: 1,
 			userId: auth.data.id
 		}
@@ -230,7 +224,7 @@ export async function onDecrementTrolley(formData: FormData) {
 			throw new ErrorAuth(await res.text())
 			// console.log('------user--')
 		}
-		revalidatePath('/')
+		revalidatePath('/trolley')
 		return await res.json() as ResponseTrolleyCount
 	} catch (error) {
 		if (error instanceof ErrorAuth) {

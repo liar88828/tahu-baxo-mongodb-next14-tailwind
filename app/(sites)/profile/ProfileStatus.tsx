@@ -31,7 +31,7 @@ export function ProfileStatusItem(
       <div className="flex justify-between w-full">
         <h1 className='text font-bold capitalize'>{title}</h1>
         <Link
-          href={`/profile/${tab}/create`}
+          href={ `/profile/${ tab }/add` }
           className={'btn btn-xs btn-square btn-outline m-1'}
         ><IconAdd /></Link>
       </div>

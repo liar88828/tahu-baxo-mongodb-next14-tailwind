@@ -1,7 +1,7 @@
 import { penerimaSchema, PenerimaSchema } from "@/server/schema/penerima.schema"
 import prisma from "@/config/prisma"
 import { PenerimaDB } from "@prisma/client"
-import type { AccessTokenPayload } from "./jwt.service"
+import type { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { IService } from "@/interface/server/IService"
 import type { PenerimaCreate } from "@/interface/model/penerima.type"
 import { GetPage } from "@/interface/server/IServiceRequest";

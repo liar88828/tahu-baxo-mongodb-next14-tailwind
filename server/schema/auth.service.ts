@@ -1,18 +1,18 @@
 import type { ResponseRegister as ResponseAuthUser } from "../../interface/user/UserPublic"
-import { bcryptService, type BcryptService } from "../service/bcrypt.service"
+import { bcryptService, type BcryptService } from "../service/auth/bcrypt.service"
 import {
 	AccessTokenPayload,
 	jwtService,
 	type JwtService,
 	type RefreshTokenPayload,
 	UserBaseToken,
-} from "../service/jwt.service"
+} from "@/server/service/auth/jwt.service"
 import { UserService } from "../service/user.service"
 import { userSchema, type UserSchema, } from "./user.schema"
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import prisma from "@/config/prisma";
 import { ErrorAuth } from "@/lib/error/errorCustome";
-import { deleteSession } from "@/server/service/session.service";
+import { deleteSession } from "@/server/service/auth/session.service";
 
 export class AuthService extends UserService {
 	constructor(
@@ -153,9 +153,6 @@ export class AuthService extends UserService {
 		return this.serviceJwt.createRefreshToken({ userId: sessionID.id })
 	}
 	
-	async refreshToken(token: string) {
-		return this.serviceJwt.jwtPayload(token) as RefreshTokenPayload
-	}
 }
 
 export const authService = new AuthService(

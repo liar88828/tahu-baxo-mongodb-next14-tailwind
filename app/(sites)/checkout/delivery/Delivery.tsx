@@ -1,8 +1,8 @@
 import React from "react";
 import { getDeliveryAll } from "@/server/action/delivery.action";
-import { DeliveryDB } from "@prisma/client";
+import { DeliveryContext, DeliveryModal } from "@/app/(sites)/checkout/delivery/DeliveryModal";
 
-export async function DeliveryList() {
+export async function Delivery() {
   const data = await getDeliveryAll()
   if (!data) {
     return <h1>Data Delivery is Empty </h1>
@@ -11,15 +11,10 @@ export async function DeliveryList() {
     <div>
       <div className="flex justify-between items-center w-full text-2xl mb-2">
         <h1 className={'font-bold text-xl'}>Delivery Method</h1>
-        <button className={'btn btn-primary btn-sm'}>Select</button>
+				<DeliveryModal data={ data.data }/>
       </div>
       <div className=' space-y-2 '>
-        <div className="flex w-full overflow-x-scroll">
-          { data.data.map(item => (
-
-            <DeliveryListItem item={item} key={item.id} />
-          ))}
-        </div>
+				<DeliveryContext/>
         <div className="">
           <div className="grid grid-cols-2 gap-2">
             <input type="text" className={'input  input-bordered '} placeholder={'Add Price'} />
@@ -38,20 +33,3 @@ export async function DeliveryList() {
 
 }
 
-interface DeliveryListItemProps {
-  item : DeliveryDB
-}
-
-export function DeliveryListItem({item} : DeliveryListItemProps) {
-  return (
-    <div className="card card-bordered bg-base-200/50 border-white/50 card-compact w-full shadow">
-      <div className="card-body">
-        <div className="flex justify-between items-center w-full text-2xl mb-2">
-          <h1 className="card-title">{item.nama}</h1>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </div>
-        <h2 className={'text-lg font-semibold text-nowrap'}>{item.hp}</h2>
-      </div>
-    </div>
-  );
-}

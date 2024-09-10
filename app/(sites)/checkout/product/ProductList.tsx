@@ -1,11 +1,11 @@
 import React from 'react'
 import { ProductListItem } from "@/app/(sites)/trolley/ProductList";
-import { getTrolleyAll } from "@/server/action/trolley.action";
+import { getTrolleyPrivate } from "@/server/action/trolley.action";
 
 export async function ProductList() {
-  const data = await getTrolleyAll()
+	const data = await getTrolleyPrivate()
   if (!data) {
-    return <h1>Data Bank is Not found</h1>
+		return <h1>Product data is Not found</h1>
   }
   return (
     <div className="">

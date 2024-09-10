@@ -1,4 +1,4 @@
-import { AccessTokenPayload } from "@/server/service/jwt.service";
+import { AccessTokenPayload } from "@/server/service/auth/jwt.service";
 import { GetPage } from "@/interface/server/IServiceRequest";
 
 export type ResponseData<T> = { data: T[], page: number, take: number };

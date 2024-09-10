@@ -1,6 +1,6 @@
 import { userSchema, UserSchema, } from "@/server/schema/user.schema"
 import prisma from "../../config/prisma"
-import { bcryptService, BcryptService } from "@/server/service/bcrypt.service"
+import { bcryptService, BcryptService } from "@/server/service/auth/bcrypt.service"
 import { UserId, UserPublic } from "@/interface/user/UserPublic"
 import { ErrorUser } from "@/lib/error/errorCustome"
 import { LoginUser, NewPassword, RegisterUser, ResetSchema } from "@/interface/model/auth.type";

@@ -10,7 +10,6 @@ export default function page(params : ParamsProfile) {
         <CategoryWrap />
         {/*<Category/>*/}
 				<Suspense fallback={ <div>Loading...</div> }>
-        
         <TabProduct params={params} />
 					<Product params={ params }/>
 				</Suspense>

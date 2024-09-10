@@ -7,13 +7,9 @@ import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
 
 export default function Page() {
-	// const { setAuth, auth, getSession } = useAuthContext()
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
 	
-	// console.log("----")
-	// console.log(state)
-	// console.log("----")
 	if (state?.message?.[0] === 'true') {
 		console.log(state)
 		redirect('/home')

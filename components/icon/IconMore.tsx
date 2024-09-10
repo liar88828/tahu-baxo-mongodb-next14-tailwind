@@ -105,3 +105,9 @@ export function IconTrolley() {
   );
 }
 
+export function IconWarning({ className }: { className: string }) {
+	return (
+		<Icon icon="mdi:warning-outline" className={ `size-8 ${ className }` }/>
+	);
+}
+
