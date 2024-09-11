@@ -1,12 +1,12 @@
 import React from "react";
 import { IconBell, IconMenu, IconPerson } from "@/components/icon/IconMore";
 import Link from "next/link";
-import { authCookie } from "@/server/api/auth";
+
+import { authCookie } from "@/server/api/authCookie";
 
 export default function page() {
-	const auth = authCookie().getAuth()
-	// console.log(auth.accessToken)
-	
+	const auth = authCookie().checkAuth
+	console.log(auth)
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -55,7 +55,7 @@ export default function page() {
           <ul
             tabIndex={ 0 }
             className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3  p-2 shadow'
-					>{ auth ? (<>
+					>{ auth.data ? (<>
 							<li>
 								<Link href={ '/profile' }>Info</Link>
 							</li>

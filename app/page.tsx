@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
 export default function page() {
+	redirect('/home')
   return (
     <main>
       <Link

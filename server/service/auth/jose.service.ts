@@ -9,7 +9,7 @@ export async function encrypt(payload: AccessTokenPayload) {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
-		.setExpirationTime('7d')
+		.setExpirationTime('1h')
 		.sign(encodedKey)
 }
 

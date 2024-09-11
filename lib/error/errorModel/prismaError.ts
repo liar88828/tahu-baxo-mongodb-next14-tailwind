@@ -1,4 +1,4 @@
-export const errorPrisma = (e: string): Response => {
+export const prismaError = (e: string): Response => {
 	console.error(e)
 	if (e === 'P2002') {
 		return Response.json('There is a unique constraint violation', {

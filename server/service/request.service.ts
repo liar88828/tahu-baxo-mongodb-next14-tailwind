@@ -12,7 +12,7 @@ export class RequestService implements IServiceRequest {
 		// const token = req.cookies.get("session")
 		const token = cookies().get("session")
 		if (!token?.value) {
-			throw new ErrorAuth("Not have token in Cookie")
+			throw new ErrorAuth('unauthorized', "Not have token in Cookie")
 		}
 		// console.log(token.value)
 		

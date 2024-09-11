@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from "next/link";
 import { onLogout } from "@/server/action/auth.action";
-import { authCookie } from "@/server/api/auth";
+
+import { authCookie } from "@/server/api/authCookie";
 
 function Page() {
-	console.log()
 	const user = authCookie().checkAuth.refreshToken
 	return (< >
 			<div className="p-5 space-y-5">

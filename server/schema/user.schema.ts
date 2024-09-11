@@ -87,4 +87,8 @@ export class UserSchema {
 }
 
 export const userSchema = new UserSchema()
-
+// export type LoginUser = z.output<typeof userSchema.login>
+const dataLogin = {
+	email: "",
+	password: "",
+}

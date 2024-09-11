@@ -33,11 +33,11 @@ export type ResetSchema = z.output<typeof userSchema.resetSchema>
 
 export type otpError = z.inferFlattenedErrors<typeof userSchema.otpSchema>
 type InitialFormState = {
-	message: string[],
+	message: string,
 	// data: any
 	
 }
 export const initialState: InitialFormState = {
-	message: [''],
+	message: '',
 	// data: {}
 }

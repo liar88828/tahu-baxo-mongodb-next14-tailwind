@@ -7,12 +7,11 @@ import {
 	TrolleyResponse,
 	TrolleyUpdate
 } from "@/interface/model/trolley.type";
-import { authCookie } from "@/server/api/auth";
-import { ErrorAuth } from "@/lib/error/errorCustome";
 import { ResponseTrolleyCount } from "@/server/service/trolley.service";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { TrolleyDB } from "@prisma/client";
+import { authCookie } from "@/server/api/authCookie";
 
 export async function getTrolleyPrivate() {
 	const auth = authCookie().getAccess()
@@ -85,18 +84,20 @@ export async function addTrolley(item: TrolleyDataId, id: TrolleyDataId) {
     return null
   }
 }
-export async function removeTrolley(id : number) {
+
+export async function deleteTrolley(id: number) {
   try {
-    const res = await fetch(`${config.url}/api/products/${id}`, {
+		const res = await fetch(`${ config.url }/api/trolley/${ id }`, {
       method : "DELETE",
       headers : {
         'Accept' : 'application/json',
       },
-      cache : "no-cache",
-    })
+			
+		})
     if (!res.ok) {
       throw new Error('api error');
     }
+		revalidatePath('/trolley')
     const data: TrolleyResponse = await res.json()
     return data
   } catch (err : unknown) {
@@ -120,13 +121,11 @@ export async function getUserTrolley() {
 			}
 		})
 		if (!res.ok) {
-			// console.log('------user--')
-			throw new ErrorAuth(await res.text())
-			// console.log('------user--')
+			throw new Error(await res.text())
 		}
 		return await res.json() as ResponseTrolleyCount
 	} catch (error) {
-		if (error instanceof ErrorAuth) {
+		if (error instanceof Error) {
 			if (error.message.includes("jwt expired")) {
 				// console.log('jwt is expired')
 				redirect('/auth/login')
@@ -137,11 +136,6 @@ export async function getUserTrolley() {
 }
 
 export async function onAddTrolley({ id }: any, formData: FormData) {
-	
-	// console.log('--- bottom product trolley---');
-	// console.log(id)
-	// console.log('--- bottom product trolley---');
-	
 	try {
 		const auth = authCookie().getAuth()
 		const data: TrolleyCreate = {
@@ -162,7 +156,7 @@ export async function onAddTrolley({ id }: any, formData: FormData) {
 		})
 		if (!res.ok) {
 			// console.log('------user--')
-			throw new ErrorAuth(await res.text())
+			throw new Error(await res.text())
 			// console.log('------user--')
 		}
 		revalidatePath('/')
@@ -193,7 +187,7 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 		})
 		
 		if (!res.ok) {
-			throw new ErrorAuth(await res.text())
+			throw new Error(await res.text())
 		}
 		revalidatePath('/trolley')
 	} catch (e) {
@@ -221,13 +215,13 @@ export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 		})
 		if (!res.ok) {
 			// console.log('------user--')
-			throw new ErrorAuth(await res.text())
+			throw new Error(await res.text())
 			// console.log('------user--')
 		}
 		revalidatePath('/trolley')
 		return await res.json() as ResponseTrolleyCount
 	} catch (error) {
-		if (error instanceof ErrorAuth) {
+		if (error instanceof Error) {
 			if (error.message.includes("jwt expired")) {
 				// console.log('jwt is expired')
 				redirect('/auth/login')

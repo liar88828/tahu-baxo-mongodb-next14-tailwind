@@ -5,7 +5,7 @@ const formatMoney = (price : number) => {
   }).format(price).replace(",00", "")
 }
 
-export const Rupiah = (price : number | undefined) : string => {
+export const Rupiah = (price: number | undefined): string => {
   try {
     if (!price) {
       throw new Error('price cannot null')

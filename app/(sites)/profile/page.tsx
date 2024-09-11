@@ -5,7 +5,8 @@ import { ProfileInfo } from './ProfileInfo'
 import { Suspense } from "react";
 import { Loading } from "@/components/loading";
 import { ParamsProfile } from "@/interface/server/param";
-import { authCookie } from "@/server/api/auth";
+
+import { authCookie } from "@/server/api/authCookie";
 
 export default async function page(params : ParamsProfile) {
   const auth = authCookie().getAuth()

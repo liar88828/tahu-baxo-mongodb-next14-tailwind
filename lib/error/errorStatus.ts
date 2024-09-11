@@ -28,9 +28,12 @@ export const errorStatus =
 		notImplemented: 501,     // Server does not recognize method
 		badGateway: 502,         // Invalid response from the upstream server
 		serviceUnavailable: 503, // Service unavailable
-		gatewayTimeout: 504      // Gateway timeout
+		gatewayTimeout: 504,      // Gateway timeout
+		text: 0
 	}
 
 export type ErrorStatus = keyof typeof errorStatus
+const testErrorText: ErrorStatus = 'notFound'
 
+console.log(testErrorText)
 const data: Partial<ErrorStatus> = 'notFound'

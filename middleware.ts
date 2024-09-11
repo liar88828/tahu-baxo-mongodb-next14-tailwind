@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
 import { decrypt } from "@/server/service/auth/jose.service";
+import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
 
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public
@@ -15,7 +16,7 @@ export default async function middleware(req: NextRequest) {
 	const cookie = cookies().get('access')?.value
 	const session = await decrypt(cookie)
 	// console.log(cookie,'cookies')
-	// console.log(session, 'session')
+	console.log(session, 'session')
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
 		console.log('will redirect')
@@ -42,6 +43,9 @@ export default async function middleware(req: NextRequest) {
 		return productMiddleWare(req)
 	}
 	
+	if (req.nextUrl.pathname.startsWith('/trolley')) {
+		return trolleyMiddleware(req)
+	}
 	
 	return NextResponse.next()
 }

@@ -1,6 +1,7 @@
 import React from 'react'
-import { ProductListItem } from "@/app/(sites)/trolley/ProductList";
 import { getTrolleyPrivate } from "@/server/action/trolley.action";
+import { ProductItem } from "@/app/(sites)/trolley/ProductItem";
+import { ProductNote } from "@/app/(sites)/checkout/product/ProductNote";
 
 export async function ProductList() {
 	const data = await getTrolleyPrivate()
@@ -17,7 +18,7 @@ export async function ProductList() {
         {
           data.map((item) => {
             return (item.Product ?
-              <ProductListItem
+              <ProductItem
                 key={ item.productId }
                 trolley={ item }
                 product={ item.Product }
@@ -25,10 +26,8 @@ export async function ProductList() {
               : null)
           }) }
       </div>
-      <textarea
-        className={'textarea textarea-bordered w-full shadow mt-1'}
-        placeholder='Write a description...'
-      ></textarea>
+      <ProductNote/>
     </div>
   )
 }
+

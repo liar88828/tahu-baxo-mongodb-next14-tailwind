@@ -10,7 +10,8 @@ export default async function page() {
 	
 	return (<>
       <div className='space-y-6 p-4'>
-        <Suspense fallback={<SkeletonCard />}>
+      
+      <Suspense fallback={<SkeletonCard />}>
           <ProfileInfo />
         </Suspense>
         <Suspense fallback={ <SkeletonCardLong/> }>

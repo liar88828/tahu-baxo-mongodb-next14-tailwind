@@ -3,15 +3,22 @@ import React, { createContext, ReactNode, useState } from 'react';
 import { UserPublic } from "@/interface/user/UserPublic";
 import { BankDB, DeliveryDB, TrolleyDB } from "@prisma/client";
 
+type TrolleyContext = TrolleyDB & { price: number }
+type DescriptionCheckout = {
+	note: string,
+	price: number,
+	distance: string,
+	packing: string
+	
+}
+
 export type TCheckoutContext = {
 	user: UserPublic | null,
-	trolley: TrolleyDB | null,
+	trolley: TrolleyContext | null,
+	trolleyMany: TrolleyContext[],
 	bank: BankDB | null
 	delivery: DeliveryDB | null
-	// productId: number,
-	// productName: string,
-	// bankId:number,
-	
+	description: DescriptionCheckout
 }
 export type TProviderCheckout = {
 	state: TCheckoutContext
@@ -19,17 +26,27 @@ export type TProviderCheckout = {
 	removeUser: () => void
 	addUser: (user: UserPublic) => void
 	removeTrolley: () => void
-	addTrolley: (trolley: TrolleyDB) => void
+	addTrolley: (trolley: TrolleyContext) => void
+	removeTrolleyMany: (trolleyId: number) => void
+	addTrolleyMany: (trolley: TrolleyContext) => void
 	removeBank: () => void
 	addBank: (bank: BankDB) => void
 	removeDelivery: () => void
 	addDelivery: (delivery: DeliveryDB) => void
+	description: (item: Partial<DescriptionCheckout>) => void
 }
 const initialState: TCheckoutContext = {
 	user: null,
 	trolley: null,
+	trolleyMany: [],
 	bank: null,
-	delivery: null
+	delivery: null,
+	description: {
+		note: '',
+		distance: "",
+		packing: "",
+		price: 0
+	}
 }
 export const ContextTrolley = createContext<TProviderCheckout>(
 	{
@@ -44,6 +61,10 @@ export const ContextTrolley = createContext<TProviderCheckout>(
 		},
 		removeTrolley: () => {
 		},
+		addTrolleyMany: () => {
+		},
+		removeTrolleyMany: () => {
+		},
 		addBank: () => {
 		},
 		removeBank: () => {
@@ -51,6 +72,9 @@ export const ContextTrolley = createContext<TProviderCheckout>(
 		addDelivery: () => {
 		},
 		removeDelivery: () => {
+		},
+		description: () => {
+		
 		}
 	});
 
@@ -66,12 +90,22 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 		...prevState, user: null
 	}))
 	
-	const addTrolley = (trolley: TrolleyDB) => setCheckout(prevState => ({
-		...prevState, trolley
+	const addTrolley = (trolley: TrolleyContext,) => setCheckout(prevState => ({
+		...prevState, trolley: trolley
 	}))
 	const removeTrolley = () => setCheckout(prevState => ({
 		...prevState, trolley: null
 	}))
+	
+	const addTrolleyMany = (trolley: TrolleyContext,) => setCheckout(prevState => ({
+		...prevState, trolleyMany: [...prevState.trolleyMany, trolley]
+	}))
+	
+	const removeTrolleyMany = (trolleyId: number) => setCheckout(prevState => ({
+		
+		...prevState, trolleyMany: prevState.trolleyMany.filter(t => t.id !== trolleyId)
+	}))
+	
 	const addBank = (bank: BankDB) => setCheckout(prevState => ({
 		...prevState, bank
 	}))
@@ -84,6 +118,14 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 	const removeDelivery = () => setCheckout(prevState => ({
 		...prevState, delivery: null
 	}))
+	const description = (value: Partial<DescriptionCheckout>) => {
+		setCheckout(prevState => ({
+			...prevState, description: {
+				...prevState.description,
+				...value,
+			}
+		}))
+	}
 	
 	return (
 		<ContextTrolley.Provider value={ {
@@ -95,7 +137,10 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 			addBank,
 			removeBank,
 			addDelivery,
-			removeDelivery
+			removeDelivery,
+			removeTrolleyMany,
+			addTrolleyMany,
+			description
 		} }>
 			{ children }
 		</ContextTrolley.Provider>

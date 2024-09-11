@@ -29,6 +29,7 @@ class AuthController {
 		try {
 			// valid
 			let { data } = await this.serviceRequest.getData<LoginUser>(req)
+			// console.log(data,'data login')
 			const sendData = await this.serviceAuth.login(data)
 			return Response.json(sendData)
 		} catch (e: unknown) {

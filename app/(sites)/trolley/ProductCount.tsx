@@ -4,7 +4,7 @@ import { IconAdd, IconRemove } from "@/components/icon/IconMore";
 import { onDecrementTrolley, onIncrementTrolley } from "@/server/action/trolley.action";
 import React from "react";
 
-export function ProductListCount({ item }: { item: TrolleyDB }) {
+export function ProductCount({ item }: { item: TrolleyDB }) {
 	return (
 		<div className='flex space-x-2 justify-center items-center'>
 			

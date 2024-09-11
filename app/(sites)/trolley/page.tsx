@@ -1,12 +1,12 @@
 import NavBottom from './NavBottom'
-import { ProductList } from './ProductList'
+import { Product } from './Product'
 
 export default async function page() {
 	
 	return (
     <>
       <div className='p-5 space-y-2 pb-52'>
-				<ProductList/>
+				<Product/>
         <NavBottom />
       </div>
     </>

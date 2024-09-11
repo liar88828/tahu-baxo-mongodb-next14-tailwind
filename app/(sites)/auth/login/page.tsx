@@ -5,13 +5,22 @@ import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
 import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
+import { z } from "zod";
+import { userSchema } from "@/server/schema/user.schema";
 
+type FlattenedErrors = z.inferFlattenedErrors<typeof userSchema.login>['fieldErrors'];
+
+export type OnLoginState = {
+	message?: string,
+	err?: FlattenedErrors
+	
+}
 export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
 	
-	if (state?.message?.[0] === 'true') {
-		console.log(state)
+	console.log(state.message, 'state user login')
+	if (state.message === 'true') {
 		redirect('/home')
 	}
 	return (
@@ -35,9 +44,9 @@ export default function Page() {
 						className={ 'input input-bordered w-full' }
 						placeholder="Enter Your Email ..."
 					/>
-					{ state?.email &&
+					{ state.err?.email &&
 						<p className={ 'text-error text-xs' }>
-							{ state.email }
+							{ state.err?.email }
 						</p>
 					}
 				</div>
@@ -51,12 +60,17 @@ export default function Page() {
 						className={ 'input input-bordered w-full' }
 						placeholder="Enter Your Password ..."
 					/>
-					{ state?.password &&
+					{ state.err?.password &&
 						<p className={ 'text-error text-xs' }>
-							{ state.password }
+							{ state.err.password }
 						</p>
 					}
 				</div>
+				{ state.message &&
+					<p className={ 'text-error text-xs' }>
+						{ state.message }
+					</p>
+				}
 				<button
 					disabled={ pending }
 					type="submit" className={ 'btn btn-block btn-primary' }

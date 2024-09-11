@@ -1,14 +1,17 @@
 'use client'
 import { Icon } from '@iconify/react'
-import Link from 'next/link'
 import React from 'react'
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+	const router = useRouter()
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
-        <Link
-          href='/home'
+				<button
+					onClick={ () => {
+						router.back()
+					} }
           className='btn btn-ghost btn-circle'
         >
           {/* back */}
@@ -16,7 +19,7 @@ export default function Navbar() {
             icon='ic:round-arrow-back'
             className='size-5'
           />
-        </Link>
+				</button>
       </div>
       <div className='navbar-center'>
         <a className='btn btn-ghost text-xl'>daisyUI</a>

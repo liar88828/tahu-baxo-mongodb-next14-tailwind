@@ -1,6 +1,7 @@
 import React from "react";
 import { getDeliveryAll } from "@/server/action/delivery.action";
 import { DeliveryContext, DeliveryModal } from "@/app/(sites)/checkout/delivery/DeliveryModal";
+import { DeliveryDesc } from "@/app/(sites)/checkout/delivery/DeliveryDesc";
 
 export async function Delivery() {
   const data = await getDeliveryAll()
@@ -15,21 +16,9 @@ export async function Delivery() {
       </div>
       <div className=' space-y-2 '>
 				<DeliveryContext/>
-        <div className="">
-          <div className="grid grid-cols-2 gap-2">
-            <input type="text" className={'input  input-bordered '} placeholder={'Add Price'} />
-            <input type="text" className={'input  input-bordered'} placeholder={'Long'} />
-          </div>
-          <div className="mt-2">
-            <select className="select select-bordered w-full " defaultValue={ 'Select Packing' }>
-              <option value={ "Kargo" }>Kargo</option>
-              <option value={ "Send" }>Send</option>
-            </select>
-          </div>
-        </div>
+        <DeliveryDesc/>
       </div>
     </div>
   )
-
 }
 

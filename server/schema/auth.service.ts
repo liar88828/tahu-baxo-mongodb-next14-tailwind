@@ -46,6 +46,7 @@ export class AuthService extends UserService {
 	async login(data: LoginUser): Promise<ResponseAuthUser> {
 		data = this.valid.loginValid(data)
 		const { password, ...userDb } = await super.findEmail(data)
+		
 		// token
 		console.log("---------- refresh token")
 		const { refreshToken, accessToken } = await this.token(userDb)
@@ -84,7 +85,7 @@ export class AuthService extends UserService {
 			}
 		})
 		if (!token || !token.sessionToken || !token?.user?.id) {
-			throw new ErrorAuth('id / session / user token is not valid')
+			throw new ErrorAuth("unauthorized", 'id / session / user token is not valid')
 		}
 		
 		const data = await this.serviceJwt.verifyRefreshToken(token.sessionToken) as RefreshTokenPayload
@@ -111,7 +112,7 @@ export class AuthService extends UserService {
 			}
 		})
 		if (!token || !token.sessionToken || !token?.user?.id) {
-			throw new ErrorAuth('id / session / user token is not valid')
+			throw new ErrorAuth('unauthorized', 'id / session / user token is not valid')
 		}
 		
 		const data = await this.serviceJwt.verifyRefreshToken(token.sessionToken) as RefreshTokenPayload

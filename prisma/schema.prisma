@@ -155,7 +155,7 @@ model ProductDB {
 
 model DeliveryDB {
   id            Int             @id @default(autoincrement())
-  nama          String          @unique
+  nama          String
   hp            String
   lokasi        String
   jenis         String
@@ -169,7 +169,7 @@ model DeliveryDB {
 
 model BankDB {
   id            Int             @id @default(autoincrement())
-  nama          String          @unique
+  nama          String
   hp            String
   no            String
   lokasi        String

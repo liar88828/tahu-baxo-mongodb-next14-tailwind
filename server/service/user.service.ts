@@ -2,7 +2,7 @@ import { userSchema, UserSchema, } from "@/server/schema/user.schema"
 import prisma from "../../config/prisma"
 import { bcryptService, BcryptService } from "@/server/service/auth/bcrypt.service"
 import { UserId, UserPublic } from "@/interface/user/UserPublic"
-import { ErrorUser } from "@/lib/error/errorCustome"
+import { ErrorAuth } from "@/lib/error/errorCustome"
 import { LoginUser, NewPassword, RegisterUser, ResetSchema } from "@/interface/model/auth.type";
 
 export type SelectPrisma<T> = Record<keyof T, true>
@@ -83,8 +83,9 @@ export class UserService {
 				// trolleyId: true
 			},
     })
+		console.log(data, 'user db login')
     if (!data) {
-			throw new Error("Email is not found")
+			throw new ErrorAuth('notFound', "Email is not found")
     }
     await this.serviceBcrypt.comparePassword(userReq.password, data.password)
     return data
@@ -140,7 +141,7 @@ export class UserService {
 			select: this.selectPrismaUserPublic,
     })
     if (!data) {
-			throw new ErrorUser("notFound")
+			throw new ErrorAuth("notFound", 'user is not found')
     }
     return data
   }

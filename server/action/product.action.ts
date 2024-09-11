@@ -2,11 +2,11 @@
 import { config } from "@/config/baseConfig";
 import { ProductDB } from "@prisma/client";
 import { PaginationDB, productService } from "@/server/service/product.service";
-import { authCookie } from "@/server/api/auth";
 import { redirect } from "next/navigation";
 import { ErrorAuth } from "@/lib/error/errorCustome";
 import { ZodError } from "zod";
 import { ProductCreate } from "@/interface/model/product.type";
+import { authCookie } from "@/server/api/authCookie";
 
 export async function getProductsAll(search?: string) {
 	try {
