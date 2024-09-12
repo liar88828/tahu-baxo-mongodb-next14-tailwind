@@ -6,6 +6,12 @@ import { useFormState, useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
 
+export type OnFormState<T> = {
+  message?: string,
+  err?: T
+  
+}
+
 function Page() {
   const [state, formAction,] = useFormState(onRegister, initialState)
   const {pending} = useFormStatus();
@@ -14,7 +20,9 @@ function Page() {
     redirect('/auth/otp')
   }
   return (
-    <div className="p-5 space-y-5">
+    <div
+      data-testid="register-Page"
+      className="p-5 space-y-5">
       <div className="text-left">
         <h1 className={'text-3xl font-bold'}>Create Your Account</h1>
         <p className={'text-lg font-light'}>Join us by creating a new account. It`s quick and easy!</p>
@@ -32,9 +40,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Fullname ..."
           />
-          {state?.fullname &&
+          { state.err?.fullname &&
             <p className={'text-error text-xs'}>
-              {state.fullname}
+              { state.err.fullname }
             </p>
           }
         </div>
@@ -46,9 +54,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Email ..."
           />
-          {state?.email &&
+          { state.err?.email &&
             <p className={'text-error text-xs'}>
-              {state.email}
+              { state.err.email }
             </p>
           }
         </div>
@@ -60,9 +68,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Password ..."
           />
-          {state?.password &&
+          { state.err?.password &&
             <p className={'text-error text-xs'}>
-              {state.password}
+              { state.err.password }
             </p>
           }
         </div>
@@ -74,9 +82,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Confirm New Password ..."
           />
-          {state?.confPass &&
+          { state.err?.confPass &&
             <p className={'text-error text-xs'}>
-              {state.confPass}
+              { state.err.confPass }
             </p>
           }
         </div>

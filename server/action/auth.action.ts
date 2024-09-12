@@ -3,10 +3,11 @@ import { revalidatePath } from "next/cache";
 import { userSchema } from "@/server/schema/user.schema";
 import { apiLogin, apiLogout, } from "@/server/api/auth";
 import { authCookie } from "@/server/api/authCookie";
-import { OnLoginState } from "@/app/(sites)/auth/login/page";
 import { errorForm } from "@/lib/error/errorForm";
+import { OnFormState } from "@/app/(sites)/auth/register/page";
+import { LoginFormError, RegisterFormError, ResetFormError } from "@/interface/model/auth.type";
 
-export async function onLogin(prevState: any, formData: FormData): Promise<OnLoginState> {
+export async function onLogin(prevState: any, formData: FormData): Promise<OnFormState<LoginFormError>> {
   try {
     const rawFormData = {
       email : formData.get('email'),
@@ -22,12 +23,12 @@ export async function onLogin(prevState: any, formData: FormData): Promise<OnLog
   }
 }
 
-export async function onRegister(prevState : any, formData : FormData) {
+export async function onRegister(prevState: any, formData: FormData): Promise<OnFormState<RegisterFormError>> {
 
   try {
     const rawFormData = Object.fromEntries(formData.entries())
-    const data = userSchema.registerSchema.parse(rawFormData);
-    return {message : ['true']}
+		const res = userSchema.registerSchema.parse(rawFormData);
+		return { message: 'true' }
   } catch (err) {
 		console.error('on register error')
 		return errorForm(err)
@@ -50,7 +51,7 @@ export async function onForgot(prevState : any, formData : FormData) {
   }
 }
 
-export async function onReset(prevState : any, formData : FormData) {
+export async function onReset(prevState: any, formData: FormData): Promise<OnFormState<ResetFormError>> {
   const form = Object.fromEntries(formData.entries())
   console.log(form);
   try {
@@ -60,7 +61,7 @@ export async function onReset(prevState : any, formData : FormData) {
     }
     const data = userSchema.resetSchema.parse(rawFormData);
     console.log(data, 'success')
-    return {message : ['true']}
+		return { message: 'true' }
 
   } catch (err) {
 		console.error('on reset error')

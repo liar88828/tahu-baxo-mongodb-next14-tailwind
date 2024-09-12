@@ -25,10 +25,10 @@ function ProductItemCard({ item }: { item: ProductDB }) {
 					<div className="badge badge-neutral badge-xs p-1">new</div>
 					<div className="badge badge-xs p-1">123 sold</div>
 				</div>
-				<h1 className='font-light text-sm'>{ item.nama }</h1>
+				<h1 className='font-light text-sm'>{ item.name }</h1>
 				<div className='flex justify-between'>
 					<div className="flex">
-						<h2 className='font-bold text-lg'>{ Rupiah(item.harga) }</h2>
+						<h2 className='font-bold text-lg'>{ Rupiah(item.price) }</h2>
 						<h3 className='font-light text-sm line-through'>-50%</h3>
 					</div>
 					<button className={ 'btn  btn-circle btn-xs ' }>

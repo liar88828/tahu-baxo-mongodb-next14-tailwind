@@ -70,7 +70,7 @@ model User {
   DeliveryDB    DeliveryDB[]
   BankDB        BankDB[]
   TrolleyDB     TrolleyDB[]
-  PenerimaDB    PenerimaDB[]
+  ReceiverDB    ReceiverDB[]
 }
 
 model VerificationToken {
@@ -98,11 +98,11 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model PenerimaDB {
+model ReceiverDB {
   id            Int             @id @default(autoincrement())
-  nama          String
-  alamat        String
-  hp            String
+  name          String
+  address       String
+  phone         String
   TransactionDB TransactionDB[]
 
   User   User   @relation(fields: [userId], references: [id])
@@ -110,40 +110,40 @@ model PenerimaDB {
 }
 
 model OrderanDB {
-  id         String   @id @default(uuid())
+  id            String   @id @default(uuid())
   // orang
-  dari       String
-  pengirim   String
-  hp         String
+  from          String
+  sender        String
+  phone         String
   // tanggal
   // pesan          DateTime
   // waktuKirim     DateTime
   // keterangan
-  guna       String
-  lokasi     String
-  ongkir     Int
+  desc          String
+  location      String
+  shipping_cost Int
   // total
   // typePembayaran String
   // totalBayar     Int
   // totalPenjualan Int
-  status     String
+  status        String
   // semua
   // at update / create
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   TransactionDB TransactionDB[]
 }
 
 model ProductDB {
   id         Int         @id @default(autoincrement())
-  nama       String
-  lokasi     String
-  jenis      String
+  name       String
+  location   String
+  type       String
   img        String?     @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  harga      Int
-  jumlah     Int
-  keterangan String
+  price      Int
+  qty        Int
+  desc       String
   // at update / create
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
@@ -155,13 +155,13 @@ model ProductDB {
 
 model DeliveryDB {
   id            Int             @id @default(autoincrement())
-  nama          String
-  hp            String
-  lokasi        String
-  jenis         String
-  harga         Int
+  name          String
+  phone         String
+  location      String
+  type          String
+  price         Int
   img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  keterangan    String
+  desc          String
   TransactionDB TransactionDB[]
   User          User            @relation(fields: [userId], references: [id])
   userId        String
@@ -169,13 +169,13 @@ model DeliveryDB {
 
 model BankDB {
   id            Int             @id @default(autoincrement())
-  nama          String
-  hp            String
-  no            String
-  lokasi        String
-  jenis         String
+  name          String
+  phone         String
+  no_req        String
+  location      String
+  type          String
   img           String?         @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  keterangan    String
+  desc          String
   TransactionDB TransactionDB[]
   User          User            @relation(fields: [userId], references: [id])
   userId        String
@@ -183,13 +183,13 @@ model BankDB {
 
 model TransactionDB {
   id           Int         @id @default(autoincrement())
-  jumlah       Int
+  qty          Int
   // ProductDB              ProductDB?               @relation(fields: [productDBId], references: [id])
   // productDBId            Int
   OrderanDB    OrderanDB?  @relation(fields: [orderanDBId], references: [id])
   orderanDBId  String
-  PenerimaDB   PenerimaDB? @relation(fields: [penerimaDBId], references: [id])
-  penerimaDBId Int
+  ReceiverDB   ReceiverDB? @relation(fields: [receiverDBId], references: [id])
+  receiverDBId Int
   DeliveryDB   DeliveryDB? @relation(fields: [deliveryDBId], references: [id])
   deliveryDBId Int
   BankDB       BankDB?     @relation(fields: [bankDBId], references: [id])

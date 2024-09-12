@@ -11,13 +11,18 @@ export function ProfileModal({ data }: { data: UserPublic[] }) {
 	
 	return (
 		<>
-			<button className="btn btn-primary btn-sm" onClick={ () => {
+			<button
+				data-testid={ 'checkout-ProfileModal-button' }
+				className="btn btn-primary btn-sm" onClick={ () => {
 				// @ts-expect-error
 				document.getElementById('modalUserInfo').showModal()
-			} }>Select
+			} }>
+				Select
 			</button>
 			<dialog id="modalUserInfo" className="modal">
-				<div className="modal-box">
+				<div
+					data-testid={ 'checkout-ProfileModal-div' }
+					className="modal-box">
 					<h3 className="font-bold text-lg">Select User </h3>
 					<input
 						className="input input-sm w-full input-bordered"

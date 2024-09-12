@@ -3,9 +3,11 @@ import React, { useContext } from "react";
 import { ContextTrolley } from "@/components/provider/ProviderContext";
 
 export function ProductNote() {
-	const { reduce, state, description } = useContext(ContextTrolley)
+	const { state, description } = useContext(ContextTrolley)
 	return (
 		<textarea
+			
+			data-testid={ 'checkout-ProductNote' }
 			value={ state.description.note }
 			onChange={ e => {
 				// reduce(prevState => ({

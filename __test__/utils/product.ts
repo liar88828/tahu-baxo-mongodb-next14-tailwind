@@ -34,14 +34,3 @@ export async function createProduct(
   return await res.json()
 }
 
-export const productTransaction = {
-  jumlah: 10,
-  nama: "Laptop XYZ",
-  lokasi: "Surabaya",
-  jenis: "Electronics",
-  harga: 7500000,
-  keterangan: "Brand new laptop with 16GB RAM and 512GB SSD",
-  id: 101,
-  img: "https://example.com/laptop_xyz.jpg",
-  userId: "",
-}

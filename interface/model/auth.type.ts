@@ -41,3 +41,7 @@ export const initialState: InitialFormState = {
 	message: '',
 	// data: {}
 }
+
+export type LoginFormError = z.inferFlattenedErrors<typeof userSchema.login>['fieldErrors'];
+export type RegisterFormError = z.inferFlattenedErrors<typeof userSchema.register>['fieldErrors'];
+export type ResetFormError = z.inferFlattenedErrors<typeof userSchema.resetSchema>['fieldErrors'];

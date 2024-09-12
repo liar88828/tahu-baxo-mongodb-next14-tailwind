@@ -7,7 +7,9 @@ import { authCookie } from "@/server/api/authCookie";
 function Page() {
 	const user = authCookie().checkAuth.refreshToken
 	return (< >
-			<div className="p-5 space-y-5">
+			<div
+				data-testid="logout-Page"
+				className="p-5 space-y-5">
 				<div className="text-left">
 					<h1 className={ 'text-3xl font-bold' }>You’ve Been Logged Out</h1>
 					<p className={ 'text-lg font-light' }>You have successfully logged out of your account.</p>

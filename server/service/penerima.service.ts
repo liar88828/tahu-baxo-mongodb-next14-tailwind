@@ -1,17 +1,21 @@
 import { penerimaSchema, PenerimaSchema } from "@/server/schema/penerima.schema"
 import prisma from "@/config/prisma"
-import { PenerimaDB } from "@prisma/client"
 import type { AccessTokenPayload } from "@/server/service/auth/jwt.service"
-import type { IService } from "@/interface/server/IService"
+import type { IService, ResponseData } from "@/interface/server/IService"
 import type { PenerimaCreate } from "@/interface/model/penerima.type"
 import { GetPage } from "@/interface/server/IServiceRequest";
+import { ReceiverDB } from "@prisma/client";
 
-export class PenerimaService implements IService<PenerimaDB> {
+export class PenerimaService implements IService<ReceiverDB> {
 	constructor(private valid: PenerimaSchema) {
 	}
 	
+	findAllPublic(page: GetPage): Promise<ResponseData<ReceiverDB>> {
+		throw new Error("Method not implemented.")
+	}
+	
 	async findAll(page: number, take: number) {
-		const data = await prisma.penerimaDB.findMany({
+		const data = await prisma.receiverDB.findMany({
 			take: take,
 			skip: (page - 1) * take,
 		})
@@ -19,7 +23,7 @@ export class PenerimaService implements IService<PenerimaDB> {
 	}
 	
 	async findAllPrivate({ page, take }: GetPage,) {
-		const data = await prisma.penerimaDB.findMany({
+		const data = await prisma.receiverDB.findMany({
 			take: take,
 			skip: (page - 1) * take,
 		})
@@ -27,7 +31,7 @@ export class PenerimaService implements IService<PenerimaDB> {
 	}
 	
 	async findOne(id: number) {
-		const data = await prisma.penerimaDB.findUnique({ where: { id } })
+		const data = await prisma.receiverDB.findUnique({ where: { id } })
 		if (!data) {
 			throw new Error("Data Penerima is not found")
 		}
@@ -36,11 +40,11 @@ export class PenerimaService implements IService<PenerimaDB> {
 	
 	async createOne(data: PenerimaCreate, user: AccessTokenPayload) {
 		data = this.valid.validCreate(data)
-		return prisma.penerimaDB.create({
+		return prisma.receiverDB.create({
 			data: {
-				nama: data.nama,
-				alamat: data.alamat,
-				hp: data.hp,
+				name: data.name,
+				address: data.address,
+				phone: data.phone,
 				userId: user.id,
 			},
 		})
@@ -48,18 +52,18 @@ export class PenerimaService implements IService<PenerimaDB> {
 	
 	async updateOne(data: any, id: number) {
 		data = this.valid.validCreate(data)
-		return prisma.penerimaDB.update({
+		return prisma.receiverDB.update({
 			where: { id },
 			data: {
-				nama: data.nama,
-				alamat: data.alamat,
-				hp: data.hp,
+				name: data.name,
+				address: data.address,
+				phone: data.phone,
 			},
 		})
 	}
 	
 	async deleteOne(id: number, user: AccessTokenPayload) {
-		const data = await prisma.penerimaDB.delete({ where: { id, userId: user.id } })
+		const data = await prisma.receiverDB.delete({ where: { id, userId: user.id } })
 		if (!data) {
 			throw new Error("Data Penerima is not found")
 		}

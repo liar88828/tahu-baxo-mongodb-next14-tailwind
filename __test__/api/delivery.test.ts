@@ -1,55 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
-
-import { DeliveryDB } from "@prisma/client";
-import { DeliveryCreate } from "@/interface/model/delivery.type";
 import { RegisterUser } from "@/interface/model/auth.type";
-
-const testExpectation: DeliveryDB = {
-	id: expect.any(Number),
-	userId: expect.any(String),
-	harga: 123,
-	img: "http:image is noting",
-	jenis: "Test Data",
-	hp: expect.any(String),
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test delivery",
-}
-const dataTestDelivery: DeliveryCreate = {
-	harga: 123,
-	img: "http:image is noting",
-	jenis: "Test Data",
-	hp: '0234 2342 2342',
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test delivery",
-	userId: ''
-}
-const dataTestDeliveryEmpty: DeliveryCreate = {
-	harga: 0,
-	img: "",
-	jenis: "",
-	hp: '',
-	keterangan: "",
-	lokasi: "",
-	nama: "",
-	userId: ''
-}
+import { dataTestDelivery, dataTestDeliveryEmpty, expectationDelivery, } from "@/assets/example/delivery";
 
 let deliveryToken = ''
 let deliveryId = 0
 
-const registerData: RegisterUser = {
-	"fullname": "userDelivery",
-	"email": "userDelivery@gmail.com",
-	"password": "user1234",
-	"confPass": "user1234",
-	"phone": "081 1232 1234",
-	"address": "jln jakarta raya"
-}
 export let deliveryFinish = false
+
 describe
 	//.skipIf(bankFinish === true)
 	('can test api delivery', async () => {
@@ -68,17 +27,6 @@ describe
 		describe("POST can create Data Delivery", async () => {
 			
 			it('ERROR Create data delivery, not have token', async () => {
-				const testExpectation: DeliveryDB = {
-					id: expect.any(Number),
-					userId: expect.any(String),
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					hp: "1324 2342 2345",
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test delivery",
-				}
 				
 				const res = await fetch("http://localhost:3000/api/delivery", {
 					method: "POST",
@@ -91,24 +39,14 @@ describe
 				const code = res.status
 				const data = await res.json()
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
-				expect(data).toBe("jwt malformed")
+				expect(data).toBe("Invalid Compact JWS")
 				
 			})
 			
 			it('ERROR Create data delivery, is empty', async () => {
-				const testExpectation: DeliveryDB = {
-					id: expect.any(Number),
-					userId: expect.any(String),
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					hp: "1324 2342 2345",
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test delivery",
-				}
+				
 				const res = await fetch("http://localhost:3000/api/delivery", {
 					method: "POST",
 					headers: {
@@ -121,15 +59,14 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
-				
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
-				expect(data).length(7)
+				expect(data).length(6)
 			})
 			
 			it('ERROR Create data delivery, name is empty', async () => {
 				const test = structuredClone(dataTestDelivery)
-				test.nama = ''
+				test.name = ''
 				const res = await fetch("http://localhost:3000/api/delivery", {
 					method: "POST",
 					headers: {
@@ -142,33 +79,12 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test delivery",
-					userId: expect.any(String)
-				})
-				
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).length(1)
 			})
 			
 			it('SUCCESS Create data delivery ', async () => {
-				const testExpectation: DeliveryDB = {
-					id: expect.any(Number),
-					userId: expect.any(String),
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					hp: '0234 2342 2342',
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test delivery",
-				}
 				
 				const res = await fetch("http://localhost:3000/api/delivery", {
 					method: "POST",
@@ -182,7 +98,7 @@ describe
 				const data = await res.json()
 				deliveryId = data.id
 				expect(code).toBe(200)
-				expect(data).toMatchObject(testExpectation)
+				expect(data).toMatchObject(expectationDelivery)
 			})
 		})
 		
@@ -201,7 +117,7 @@ describe
 				
 				expect(code).toBe(200)
 				expect(data).toMatchObject({
-					data: [testExpectation],
+					data: [expectationDelivery],
 					"page": expect.any(Number),
 					"take": expect.any(Number)
 					
@@ -212,17 +128,7 @@ describe
 			
 			it('SUCCESS GET data delivery my id', async () => {
 				
-				const test: DeliveryDB = {
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					hp: expect.any(String),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number)
-				}
+
 				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
 					method: "GET",
 					headers: {
@@ -233,7 +139,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).toBe(200)
-				expect(data).toMatchObject(test)
+				expect(data).toMatchObject(expectationDelivery)
 				expect(code).not.toBe(400)
 			})
 			
@@ -248,17 +154,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number)
-				})
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
 			})
@@ -280,9 +176,9 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
-				expect(data).toBe("jwt malformed")
+				expect(data).toBe("Invalid Compact JWS")
 				
 			})
 			
@@ -299,7 +195,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
 			})
@@ -317,7 +213,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(code).toBe(400)
 				
@@ -336,14 +232,14 @@ describe
 				const data = await res.json()
 				console.log(data)
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject(testExpectation)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).length(5)
 			})
 			
 			it('ERROR PUT data delivery, name is empty', async () => {
 				const test = structuredClone(dataTestDelivery)
-				test.nama = ''
+				test.name = ''
 				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
 					method: "PUT",
 					headers: {
@@ -356,16 +252,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test delivery",
-					userId: expect.any(String)
-				})
+				expect(data).not.toMatchObject(test)
 				
 				expect(code).toBe(400)
 				expect(data).length(1)
@@ -373,7 +260,7 @@ describe
 			
 			it('SUCCESS PUT data delivery use mock', async () => {
 				const test = structuredClone(dataTestDelivery)
-				test.nama = 'name delivery is updated'
+				test.name = 'name delivery is updated'
 				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
 					method: "PUT",
 					headers: {
@@ -386,16 +273,7 @@ describe
 				const data = await res.json()
 				deliveryId = data.id
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					hp: '0234 2342 2342',
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: test.nama,
-					userId: expect.any(String)
-				})
+				expect(data).toMatchObject(test)
 			})
 		})
 		
@@ -412,17 +290,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number)
-				})
+				expect(data).not.toMatchObject(expectationDelivery)
 				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe('Not have token in Bearer')
@@ -440,18 +308,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number)
-				})
-				console.log(data)
+				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
 			})
@@ -469,17 +326,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					hp: expect.any(String),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: "name delivery is updated",
-					userId: expect.any(String),
-					id: expect.any(Number)
-				})
+				expect(data).toMatchObject(expectationDelivery)
 				expect(code).not.toBe(400)
 			})
 			
@@ -495,17 +342,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					hp: expect.any(String),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: "name delivery is updated",
-					userId: expect.any(String),
-					id: expect.any(Number)
-				})
+				expect(data).not.toMatchObject(expectationDelivery)
 				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe('Data is Not Found maybe was been delete')

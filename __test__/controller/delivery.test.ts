@@ -4,7 +4,8 @@ import prisma from "@/config/prisma";
 import * as appHandler from "../../app/api/delivery/route"
 import * as appHandlerParam from "../../app/api/delivery/[id]/route";
 import { DeliveryDB } from "@prisma/client";
-import { dataTestCreate, dataTestError, dataTestUpdate } from "@/__test__/utils/delivery";
+import { dataTestError, dataTestUpdate } from "@/__test__/utils/delivery";
+import { dataTestCreate } from "@/assets/example/delivery";
 
 let rootId: number;
 describe.skip('can test controller delivery', async () => {

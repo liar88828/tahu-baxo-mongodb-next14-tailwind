@@ -13,7 +13,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 	const found = state.trolleyMany.some(t => t.id === trolley.id)
 	const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (state.trolley?.id !== trolley.id) {
-			addTrolley({ ...trolley, price: product.harga })
+			addTrolley({ ...trolley, price: product.price })
 		} else {
 			removeTrolley()
 		}
@@ -22,7 +22,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 	const handleCheckBoxMany = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// console.log(state.trolleyMany.find(t => t.id === trolley.id))
 		if (!found) {
-			addTrolleyMany({ ...trolley, price: product.harga })
+			addTrolleyMany({ ...trolley, price: product.price })
 		} else {
 			removeTrolleyMany(trolley.id)
 		}
@@ -50,7 +50,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 						<div className=' flex justify-between  w-full'>
 							<div className=''>
 								<h1 className='text-lg font-semibold text-base-content/80'>
-									{ product.nama }
+									{ product.name }
 								</h1>
 								<h2 className='text-sm font-bold text-base-content/50'>Red</h2>
 							</div>
@@ -61,7 +61,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 							</button>
 						</div>
 						<div className='flex justify-between items-center w-full '>
-							<h1 className='text-lg font-bold'>{ Rupiah(product.harga) }</h1>
+							<h1 className='text-lg font-bold'>{ Rupiah(product.price) }</h1>
 							<ProductCount item={ trolley }/>
 						</div>
 					</div>

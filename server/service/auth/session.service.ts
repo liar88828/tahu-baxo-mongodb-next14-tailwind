@@ -16,7 +16,7 @@ export async function getSession() {
 	console.log()
 	const cookie = cookies().get('session')?.value
 	if (!cookie) {
-		throw new ErrorAuth("cookie is not stored")
+		throw new ErrorAuth('unauthorized', "cookie is not stored")
 	}
 	return cookie
 }
@@ -53,7 +53,7 @@ export async function createSession(token: string) {
 export async function findSessionByUserId(userId: string) {
 	const sessionDB = await prisma.session.findUnique({ where: { userId } })
 	if (!sessionDB) {
-		throw new ErrorAuth('session db is not found')
+		throw new ErrorAuth('unauthorized', 'session db is not found')
 	}
 	return sessionDB
 }

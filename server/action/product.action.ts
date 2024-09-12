@@ -4,9 +4,11 @@ import { ProductDB } from "@prisma/client";
 import { PaginationDB, productService } from "@/server/service/product.service";
 import { redirect } from "next/navigation";
 import { ErrorAuth } from "@/lib/error/errorCustome";
-import { ZodError } from "zod";
-import { ProductCreate } from "@/interface/model/product.type";
+import { ProductCreate, ProductCreateFormError } from "@/interface/model/product.type";
 import { authCookie } from "@/server/api/authCookie";
+import { OnFormState } from "@/app/(sites)/auth/register/page";
+import { errorForm } from "@/lib/error/errorForm";
+import { errorApi } from "@/lib/error/errorApi";
 
 export async function getProductsAll(search?: string) {
 	try {
@@ -18,15 +20,13 @@ export async function getProductsAll(search?: string) {
 			cache: "no-cache",
 		})
 		if (!res.ok) {
-			throw new Error('product api error');
+			errorApi(res.status, 'product', 'api product get all error')
+			
 		}
 		const data: PaginationDB<ProductDB> = await res.json()
 		return data
 	} catch (err: unknown) {
-		if (err instanceof Error) {
-			console.log(err.message)
-			return null
-		}
+		console.error('on get All error')
 		return null
 	}
 }
@@ -46,7 +46,7 @@ export async function getProductsAllPrivate(search?: string) {
 		if (!res.ok) {
 			const data = await res.json()
 			if (data === 'jwt expired') {
-				throw new ErrorAuth('unauthorized');
+				throw new ErrorAuth('unauthorized', 'jwt is expire maybe');
 			}
 			throw new Error('product private api error');
 			
@@ -89,7 +89,7 @@ export async function getProductId(id: number) {
 	
 }
 
-export async function createProduct(prevState: any, formData: FormData) {
+export async function createProduct(prevState: any, formData: FormData): Promise<OnFormState<ProductCreateFormError>> {
 	try {
 		//@ts-expect-error
 		// const rawForm = Object.fromEntries(formData.entries())
@@ -102,18 +102,16 @@ export async function createProduct(prevState: any, formData: FormData) {
 			harga: formData.get('harga'),
 		} as ProductCreate
 		// console.log(rawFormData);
-		rawFormData.jumlah = Number(rawFormData.jumlah)
-		rawFormData.harga = Number(rawFormData.harga)
+		rawFormData.qty = Number(rawFormData.qty)
+		rawFormData.price = Number(rawFormData.price)
 		rawFormData.userId = authCookie().getAuth().data.id
 		const data = await productService.createOne(rawFormData)
 		console.log(data)
 		
-		return { message: ['true'] }
+		return { message: 'true' }
 	} catch (err) {
-		if (err instanceof ZodError) {
-			return err.flatten().fieldErrors
-		}
-		console.log(err)
+		console.error('on get All error')
+		return errorForm(err)
 	}
 	
 }

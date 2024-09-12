@@ -50,7 +50,7 @@ export class TrolleyService {
 			})
 			
 			if (trolleyDB >= 200) {
-				throw new ErrorTrolley("conflict")
+				throw new ErrorTrolley("badRequest", 'the data trolley is maximum the count cannot more than 200 item')
 			}
 			
 			const createProduct = async () => {
@@ -89,7 +89,7 @@ export class TrolleyService {
 				where: { userId: user.id },
 			})
 			if (trolleyDB >= 200) {
-				throw new ErrorTrolley("conflict")
+				throw new ErrorTrolley("badRequest", 'the data trolley is maximum the count cannot more than 200 item')
 			}
 			// find trolley
 			const trolley = await tx.trolleyDB.findFirst({
@@ -101,7 +101,7 @@ export class TrolleyService {
 			
 			if (!trolley) {
 				// create trolley
-				throw new ErrorTrolley("notFound")
+				throw new ErrorTrolley("notFound", 'data trolley is not found maybe user id or product id')
 			} else {
 				// update trolley
 				const res = await tx.trolleyDB.update({
@@ -133,7 +133,7 @@ export class TrolleyService {
 			})
 			
 			if (!trolley) {
-				throw new ErrorTrolley("notFound")
+				throw new ErrorTrolley("notFound", 'data trolley is not found maybe product id or user id ')
 			} else {
 				const res = await tx.trolleyDB.update({
 					where: {
@@ -202,13 +202,13 @@ export class TrolleyService {
 			where: { userId: user.id },
 		})
 		if (!trolleyDB) {
-			throw new ErrorTrolley("notFound")
+			throw new ErrorTrolley("notFound", 'the data trolley is not found search by id user')
 		}
 		const productDB = await prisma.productDB.findUnique({
 			where: { id: data.id },
 		})
 		if (!productDB) {
-			throw new ErrorProduct("notFound")
+			throw new ErrorProduct("notFound", 'data product is is not found search by product id')
 		}
 		return prisma.$transaction(async (tx) => {
 			const trolley = await tx.trolleyDB.findUnique({

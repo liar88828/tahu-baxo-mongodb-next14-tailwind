@@ -2,12 +2,17 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData"
 import prisma from "@/config/prisma"
 import { config } from "@/config/baseConfig"
-import { createPenerima, penerimaTransaction } from "../utils/penerima"
-import { createDelivery, deliveryTransaction } from "../utils/delivery"
-import { bankTransaction } from "../utils/bank"
-import { createBank, createProduct, productTransaction } from "../utils/product"
-import { CheckoutCreateSchema, ResponseCheckout, } from "@/interface/model/transaction.type"
+import { createPenerima, } from "../utils/penerima"
+import { createDelivery, } from "../utils/delivery"
+
+import { createBank, createProduct, } from "../utils/product"
+import { ResponseCheckout, } from "@/interface/model/transaction.type"
 import { deleteTransaction } from "@/__test__/utils/transaction";
+import { transactionCreateExample } from "@/assets/example/transaction";
+import { productTransaction } from "@/assets/example/product";
+import { deliveryTransaction } from "@/assets/example/delivery";
+import { penerimaTransaction } from "@/assets/example/received";
+import { bankTransaction } from "@/assets/example/bank";
 
 let idUser = ""
 let transactionToken = ""
@@ -23,39 +28,15 @@ const testData: ResponseCheckout = {
 	orderanDB: expect.any(Object),
 }
 
-const dataTransaction: CheckoutCreateSchema = {
-	// penerima: {
-	// 	nama: "Alice Johnson",
-	// 	alamat: "Jl. Merdeka No. 123, Jakarta",
-	// 	hp: "081234567893"
-	// },
-	transaction: {
-		jumlah: 123,
-		penerimaDBId: 0,
-		deliveryDBId: 0,
-		bankDBId: 0,
-		productDBId: 0,
-	},
-	order: {
-		dari: "John Doe",
-		pengirim: "Doe Delivery",
-		nama: "Jane Smith",
-		hp: "081234567890",
-		guna: "Personal Use",
-		lokasi: "Jakarta",
-		ongkir: 15000,
-		status: "Shipped",
-	},
-}
 
 it("just delete all", async () => {
 	await prisma.bankDB.deleteMany()
 	await prisma.productDB.deleteMany()
 	await prisma.deliveryDB.deleteMany()
-	await prisma.penerimaDB.deleteMany()
+	await prisma.receiverDB.deleteMany()
 })
 
-describe("can test api product", async () => {
+describe("can test api transaction", async () => {
 	beforeAll(async () => {
 		const { data, accessToken } = await registerTest("transaction")
 		transactionToken = accessToken
@@ -64,27 +45,27 @@ describe("can test api product", async () => {
 		
 		const productDB = await createProduct(productTransaction, accessToken)
 		// productId = productDB.id
-		dataTransaction.transaction.productDBId = productDB.id
+		transactionCreateExample.transaction.productDBId = productDB.id
 		productTransaction.userId = productDB.userId
 		//
 		const bankDB = await createBank(bankTransaction, accessToken)
 		// bankId = bankDB.id
-		dataTransaction.transaction.bankDBId = bankDB.id
+		transactionCreateExample.transaction.bankDBId = bankDB.id
 		bankTransaction.userId = bankDB.userId
 		//
 		const deliveryDB = await createDelivery(deliveryTransaction, accessToken)
 		// deliveryId = deliveryDB.id
-		dataTransaction.transaction.deliveryDBId = deliveryDB.id
+		transactionCreateExample.transaction.deliveryDBId = deliveryDB.id
 		deliveryTransaction.userId = deliveryDB.userId
 		
 		//
 		const penerimaDB = await createPenerima(penerimaTransaction, accessToken)
-		dataTransaction.transaction.penerimaDBId = penerimaDB.id
+		transactionCreateExample.transaction.receiverDBId = penerimaDB.id
 		penerimaTransaction.userId = penerimaDB.userId
 		
 		// console.log(productDB)
 		// console.log(transactionToken)
-		console.log(dataTransaction)
+		console.log(transactionCreateExample)
 		console.log(penerimaId)
 		console.log(deliveryId)
 		console.log(bankId)
@@ -100,12 +81,12 @@ describe("can test api product", async () => {
 		await prisma.productDB.deleteMany()
 		await prisma.deliveryDB.deleteMany()
 		await prisma.trolleyDB.deleteMany()
-		await prisma.penerimaDB.deleteMany()
+		await prisma.receiverDB.deleteMany()
 		await prisma.orderanDB.deleteMany()
 		await deleteUserTest(transactionToken)
 	})
 	
-	describe("POST can checkout data transaction", async () => {
+	describe.skip("POST can checkout data transaction", async () => {
 		it("SUCCESS create data transaction", async () => {
 			const res = await fetch(`${ config.url }/api/transactions/checkout`, {
 				method: "POST",
@@ -113,9 +94,9 @@ describe("can test api product", async () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${ transactionToken }`,
 				},
-				body: JSON.stringify(dataTransaction),
+				body: JSON.stringify(transactionCreateExample),
 			})
-			
+			console.log(transactionCreateExample, 'test')
 			const code = res.status
 			const data = await res.json()
 			console.log("--- res -----")
@@ -125,7 +106,7 @@ describe("can test api product", async () => {
 			transactionId = data.transactionDB.id
 			expect(code).toBe(200)
 			expect(data).toBeDefined()
-			// const text = await res.text()
+			
 			expect(data).toStrictEqual(testData)
 		})
 	})

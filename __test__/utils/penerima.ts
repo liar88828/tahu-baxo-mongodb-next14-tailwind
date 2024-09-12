@@ -1,4 +1,4 @@
-import type { DeliveryDB, PenerimaDB } from "@prisma/client"
+import { DeliveryDB, ReceiverDB } from "@prisma/client";
 
 export async function createPenerima(
   penerima: PenerimaTransaction,
@@ -15,11 +15,6 @@ export async function createPenerima(
   const code = res.status
   return await res.json()
 }
-export const penerimaTransaction: PenerimaTransaction = {
-  nama: "Alice Johnson",
-  alamat: "Jl. Merdeka No. 123, Jakarta",
-  hp: "081234567893",
-  userId: "",
-}
-export type PenerimaTransaction = Omit<PenerimaDB, "id">
+
+export type PenerimaTransaction = Omit<ReceiverDB, "id">
 

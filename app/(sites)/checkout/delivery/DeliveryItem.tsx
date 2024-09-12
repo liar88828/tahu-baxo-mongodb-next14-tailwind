@@ -10,10 +10,12 @@ interface DeliveryListItemProps {
 
 export function DeliveryItem({ item, add, fun }: DeliveryListItemProps) {
 	return (
-		<div className="card card-bordered bg-base-200/50 border-white/50 card-compact w-full shadow">
+		<div
+			data-testid={ 'checkout-DeliveryItem' }
+			className="card card-bordered bg-base-200/50 border-white/50 card-compact w-full shadow">
 			<div className="card-body">
 				<div className="flex justify-between items-center w-full text-2xl mb-2">
-					<h1 className="card-title">{ item.nama }</h1>
+					<h1 className="card-title">{ item.name }</h1>
 					<div className="modal-action">
 						<form method="dialog">
 							<button
@@ -24,7 +26,7 @@ export function DeliveryItem({ item, add, fun }: DeliveryListItemProps) {
 						</form>
 					</div>
 				</div>
-				<h2 className={ 'text-lg font-semibold text-nowrap' }>{ item.hp }</h2>
+				<h2 className={ 'text-lg font-semibold text-nowrap' }>{ item.phone }</h2>
 			</div>
 		</div>
 	);

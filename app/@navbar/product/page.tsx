@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { IconBack, IconFavorite } from "@/components/icon/IconMore";
+
 export default function page() {
   return (
     <div className='navbar bg-base-100'>

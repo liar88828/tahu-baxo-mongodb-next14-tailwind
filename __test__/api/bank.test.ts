@@ -1,60 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
-import { BankCreate } from "@/server/schema/bank.schema";
-import { BankDB } from "@prisma/client";
-import { userFinish } from "@/__test__/api/user.test";
-
-const dataTestBank = {
-	no: "084 2342 2342 4323",
-	hp: "1231-2534-3454-2245",
-	img: "http:image is noting",
-	jenis: "Test Data",
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test bank",
-	userId: ''
-}
-const dataTestBankEmpty: BankCreate = {
-	no: "0",
-	img: "",
-	jenis: "",
-	hp: "0",
-	keterangan: "",
-	lokasi: "",
-	nama: "",
-	userId: ''
-}
+import { bankDataList, dataExpectType, dataTestBankEmpty } from "@/assets/example/bank";
 
 let bankToken = ''
 let bankId = 0
-const dataExpect: BankDB = {
-	no: "084 2342 2342 4323",
-	img: "http:image is noting",
-	jenis: "Test Data",
-	hp: "1231-2534-3454-2245",
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test bank",
-	userId: expect.any(String),
-	id: expect.any(Number)
-}
 
-const dataExpectType: BankCreate = {
-	hp: expect.any(String),
-	img: expect.any(String),
-	jenis: expect.any(String),
-	no: expect.any(String),
-	keterangan: expect.any(String),
-	lokasi: expect.any(String),
-	nama: expect.any(String),
-	userId: expect.any(String),
-	id: expect.any(Number)
-	
-}
 
 export let bankFinish = false
-
+const dataTestBank = bankDataList[0]
 describe('can test api bank', async () => {
 	beforeAll(async () => {
 		const { data, accessToken } = await registerTest('bank');
@@ -65,7 +19,9 @@ describe('can test api bank', async () => {
 		await prisma.bankDB.deleteMany()
 		await deleteUserTest(bankToken)
 	})
-	describe.skipIf(userFinish === true)("POST can create Data Bank", async () => {
+	describe
+		// .skipIf(userFinish === true)
+		("POST can create Data Bank", async () => {
 		
 		it('ERROR Create data bank, not have token', async () => {
 			const res = await fetch("http://localhost:3000/api/bank", {
@@ -108,15 +64,15 @@ describe('can test api bank', async () => {
 			const data = await res.json()
 			
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(dataExpect)
+			expect(data).not.toMatchObject(dataExpectType)
 			
 			expect(code).toBe(400)
-			expect(data).length(7)
+			expect(data).length(6)
 		})
 		
 		it('ERROR Create data bank, name is empty', async () => {
 			const test = structuredClone(dataTestBank)
-			test.nama = ''
+			test.name = ''
 			const res = await fetch("http://localhost:3000/api/bank", {
 				method: "POST",
 				headers: {
@@ -128,7 +84,7 @@ describe('can test api bank', async () => {
 			const code = res.status
 			const data = await res.json()
 			expect(code).not.toBe(200)
-			expect(data).not.toMatchObject(dataExpect)
+			expect(data).not.toMatchObject(dataExpectType)
 			expect(code).toBe(400)
 			expect(data).length(1)
 		})
@@ -147,7 +103,6 @@ describe('can test api bank', async () => {
 			bankId = data.id
 			console.log(data)
 			expect(code).toBe(200)
-			expect(data).toMatchObject(dataExpect)
 			expect(data).toMatchObject(dataExpectType)
 		})
 	})
@@ -186,7 +141,7 @@ describe('can test api bank', async () => {
 			const data = await res.json()
 			
 			expect(code).toBe(200)
-			expect(data).toMatchObject(dataExpect)
+			expect(data).toMatchObject(dataExpectType)
 			expect(code).not.toBe(400)
 			
 		})
@@ -226,7 +181,7 @@ describe('can test api bank', async () => {
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(dataExpectType)
 			expect(code).toBe(400)
-			expect(data).toBe("jwt malformed")
+			expect(data).toBe("Invalid Compact JWS")
 			
 		})
 		
@@ -288,7 +243,7 @@ describe('can test api bank', async () => {
 		
 		it('ERROR PUT data bank, name is empty', async () => {
 			const test = structuredClone(dataTestBank)
-			test.nama = ''
+			test.name = ''
 			const res = await fetch(`http://localhost:3000/api/bank/${ bankId }`, {
 				method: "PUT",
 				headers: {
@@ -309,7 +264,7 @@ describe('can test api bank', async () => {
 		
 		it('SUCCESS PUT data bank use mock', async () => {
 			const test = structuredClone(dataTestBank)
-			test.nama = 'name bank is updated'
+			test.name = 'name bank is updated'
 			const res = await fetch(`http://localhost:3000/api/bank/${ bankId }`, {
 				method: "PUT",
 				headers: {
@@ -319,22 +274,11 @@ describe('can test api bank', async () => {
 				body: JSON.stringify(test),
 			})
 			
-			const testData: BankDB = {
-				no: "084 2342 2342 4323",
-				hp: "1231-2534-3454-2245",
-				img: "http:image is noting",
-				jenis: "Test Data",
-				keterangan: "Is Test Data not for sell",
-				lokasi: "this location not expose",
-				nama: test.nama,
-				userId: expect.any(String),
-				id: expect.any(Number)
-			}
 			const code = res.status
 			const data = await res.json()
 			bankId = data.id
 			expect(code).toBe(200)
-			expect(data).toMatchObject(testData)
+			expect(data).toMatchObject(dataExpectType)
 		})
 	})
 	

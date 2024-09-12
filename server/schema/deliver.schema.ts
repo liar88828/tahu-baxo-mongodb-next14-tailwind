@@ -1,5 +1,14 @@
 import { z } from "zod"
-import { addressInit, descriptionInit, imageInit, nameInit, phoneInit, userId, } from "@/server/schema/init.schema"
+import {
+	addressInit,
+	descriptionInit,
+	imageInit,
+	nameInit,
+	phoneInit,
+	priceInit,
+	typeInit,
+	userId,
+} from "@/server/schema/init.schema"
 import { ISchema } from "@/interface/server/ISchema";
 import {
 	DeliveryCreate,
@@ -11,32 +20,26 @@ import {
 export class DeliverSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()
 	create = z.object({
+		desc: descriptionInit,
 		id: this.id,
-		nama: nameInit,
-		hp: phoneInit,
-		lokasi: addressInit,
 		img: imageInit,
-		keterangan: descriptionInit,
-		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
-		harga: z
-			.number({ required_error: "Harga is required" })
-			.int()
-			.nonnegative(),
+		location: addressInit,
+		name: nameInit,
+		phone: phoneInit,
+		price: priceInit,
+		type: typeInit,
 		userId: userId,
 	}) satisfies z.Schema<DeliveryCreatePrisma>
 	
 	update = z.object({
 		// id: this.id,
-		nama: nameInit,
-		hp: phoneInit,
-		lokasi: addressInit,
-		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
+		desc: descriptionInit,
 		img: imageInit,
-		keterangan: descriptionInit,
-		harga: z
-			.number({ required_error: "Harga is required" })
-			.int()
-			.nonnegative(),
+		location: addressInit,
+		name: nameInit,
+		phone: phoneInit,
+		price: priceInit,
+		type: typeInit,
 	}) satisfies z.Schema<DeliveryUpdatePrisma>
 	
 	createValid(data: DeliveryCreate) {

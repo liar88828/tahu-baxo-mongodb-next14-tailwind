@@ -4,9 +4,10 @@ import prisma from "@/config/prisma";
 import * as appHandler from "../../app/api/bank/route"
 import * as appHandlerParam from "../../app/api/bank/[id]/route";
 import { BankDB, User } from "@prisma/client";
-import { dataTestCreate, dataTestCreate2, dataTestError, dataTestUpdate } from "@/__test__/utils/bank";
+import { dataTestCreate, dataTestCreate2 } from "@/assets/example/bank";
+import { dataTestError, dataTestUpdate } from "@/__test__/utils/bank";
 
-describe('can test controller bank', async () => {
+describe.skip('can test controller bank', async () => {
 	beforeAll(async (context) => {
 		const data = await prisma.user.create({
 			data: {

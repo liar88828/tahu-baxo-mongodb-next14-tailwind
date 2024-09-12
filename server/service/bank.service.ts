@@ -2,11 +2,15 @@ import { BankCreate, BankId, bankSchema, BankSchema, BankUpdate, } from "@/serve
 import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
-import type { IService } from "@/interface/server/IService"
+import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
 
 export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {
+	}
+	
+	findAllPublic(page: GetPage): Promise<ResponseData<BankDB>> {
+		throw new Error("Method not implemented.")
 	}
 	
 	async findAll(page: number = 1, take: number = 100) {

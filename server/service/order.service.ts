@@ -11,12 +11,12 @@ export class OrderService {
     data = this.valid.validCreate(data)
     return prisma.orderanDB.create({
 			data: {
-				dari: data.dari,
-				lokasi: data.lokasi,
-				guna: data.guna,
-				pengirim: data.pengirim,
-				hp: data.hp,
-				ongkir: data.ongkir,
+				from: data.from,
+				location: data.location,
+				desc: data.desc,
+				sender: data.sender,
+				phone: data.phone,
+				shipping_cost: data.shipping_cost,
 				status: data.status,
 				// pesan: data.pesan,
 				// waktuKirim: data.waktuKirim,

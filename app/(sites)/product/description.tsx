@@ -8,7 +8,7 @@ export function Description({ item }: { item: ProductDB }) {
 		<div className=' space-y-4'>
 			<div className="p-4   space-y-2">
 				<div className="">
-					<h1 className={ 'font-bold line-clamp-2 text-ellipsis text-3xl' }>{ item.nama }</h1>
+					<h1 className={ 'font-bold line-clamp-2 text-ellipsis text-3xl' }>{ item.name }</h1>
 					<p className="text-muted-foreground text-lg md:text-xl">
 						The ultimate productivity tool for your workspace.
 					</p>
@@ -25,8 +25,8 @@ export function Description({ item }: { item: ProductDB }) {
 					</div>
 				</div>
 				<div className="flex">
-					<h2 className={ 'font-bold text-4xl ' }>{ Rupiah(item.harga) }</h2>
-					<p className={ 'font-light line-through' }>{ Rupiah(item.harga) }</p>
+					<h2 className={ 'font-bold text-4xl ' }>{ Rupiah(item.price) }</h2>
+					<p className={ 'font-light line-through' }>{ Rupiah(item.price) }</p>
 				</div>
 				
 				<div className="space-x-1">
@@ -47,7 +47,7 @@ export function Description({ item }: { item: ProductDB }) {
 			<div className="bg-base-300 px-2 space-y-10 py-10">
 				<div className="">
 					<h1 className={ 'text-2xl font-bold  sm:text-3xl md:text-4xl' }>Description</h1>
-					<p className={ 'text-justify' }>{ item.keterangan }</p>
+					<p className={ 'text-justify' }>{ item.desc }</p>
 					<p className={ 'text-justify' }>The Acme Deluxe Widget is a high-quality productivity tool designed to
 						streamline your workflow and boost your efficiency. Crafted with precision and attention to detail, this
 						widget is built to last and provide you with years of reliable performance.</p>

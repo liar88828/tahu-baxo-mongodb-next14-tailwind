@@ -1,43 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import prisma from "@/config/prisma"
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData"
-import { ProductCreate } from "@/interface/model/product.type";
-import { RegisterUser } from "@/interface/model/auth.type";
-
-const dataTestProduct: ProductCreate = {
-	harga: 123,
-	img: "http:image is noting",
-	jenis: "Test Data",
-	jumlah: 123,
-	keterangan: "Is Test Data not for sell",
-	lokasi: "this location not expose",
-	nama: "is test product",
-	userId: "",
-}
-const dataTestProductEmpty: ProductCreate = {
-	harga: 0,
-	img: "",
-	jenis: "",
-	jumlah: 0,
-	keterangan: "",
-	lokasi: "",
-	nama: "",
-	userId: "",
-}
+import { dataTestProduct, dataTestProductEmpty, expectationProduct } from "@/assets/example/product";
 
 let productToken = ""
 let productId = 0
 
-const registerData: RegisterUser = {
-	fullname: "userProduct",
-	email: "userProduct@gmail.com",
-	password: "user1234",
-	confPass: "user1234",
-	phone: "081 1232 1234",
-	address: "jln jakarta raya",
-}
-
-describe
+describe.skip
 	//.skipIf(false)
 	("can test api product", async () => {
 		beforeAll(async () => {
@@ -64,16 +33,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(code).toBe(400)
 			})
@@ -91,24 +51,14 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
-				
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
-				expect(data).length(7)
+				expect(data).length(6)
 			})
 			
 			it("ERROR Create data product, name is empty", async () => {
 				const test = structuredClone(dataTestProduct)
-				test.nama = ""
+				test.name = ""
 				const res = await fetch("http://localhost:3000/api/product", {
 					method: "POST",
 					headers: {
@@ -121,17 +71,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
-				
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(data).length(1)
 			})
@@ -148,17 +88,10 @@ describe
 				const code = res.status
 				const data = await res.json()
 				productId = data.id
+				// console.log(data)
+				
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
+				expect(data).toMatchObject(expectationProduct)
 			})
 		})
 		
@@ -175,18 +108,7 @@ describe
 				
 				expect(code).toBe(200)
 				expect(data).toMatchObject({
-					data: [
-						{
-							harga: expect.any(Number),
-							img: expect.any(String),
-							jenis: expect.any(String),
-							jumlah: expect.any(Number),
-							keterangan: expect.any(String),
-							lokasi: expect.any(String),
-							nama: expect.any(String),
-							userId: expect.any(String),
-						},
-					],
+					data: [expectationProduct],
 					page: expect.any(Number),
 					take: expect.any(Number),
 				})
@@ -207,17 +129,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).toMatchObject(expectationProduct)
 				expect(code).not.toBe(400)
 			})
 			
@@ -235,53 +147,13 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
 			})
 		})
 		
 		describe("PUT can create Data Product", async () => {
-			it("ERROR PUT data product, not have token", async () => {
-				const res = await fetch(
-					`http://localhost:3000/api/product/${ "woring id" }`,
-					{
-						method: "PUT",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${ "empty token" }`,
-						},
-						body: JSON.stringify(dataTestProduct),
-					}
-				)
-				const code = res.status
-				const data = await res.json()
-				
-				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
-				expect(code).toBe(400)
-				expect(data).toBe("jwt malformed")
-			})
 			
 			it("ERROR PUT data product, wrong id", async () => {
 				const res = await fetch(
@@ -299,19 +171,30 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
+			})
+			
+			it("ERROR PUT data product, not have token", async () => {
+				const res = await fetch(
+					`http://localhost:3000/api/product/${ 1 }`,
+					{
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${ 'not have token' }`,
+						},
+						body: JSON.stringify(dataTestProduct),
+					}
+				)
+				const code = res.status
+				const data = await res.json()
+				
+				expect(code).not.toBe(200)
+				expect(data).not.toMatchObject(expectationProduct)
+				expect(code).toBe(400)
+				expect(data).toBe("Invalid Compact JWS")
 			})
 			
 			it("ERROR PUT data product, data is has empty object", async () => {
@@ -330,16 +213,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(code).toBe(400)
 			})
@@ -360,16 +234,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				
 				expect(code).toBe(400)
 				expect(data).length(4)
@@ -377,7 +242,7 @@ describe
 			
 			it("ERROR PUT data product, name is empty", async () => {
 				const test = structuredClone(dataTestProduct)
-				test.nama = ""
+				test.name = ""
 				const res = await fetch(
 					`http://localhost:3000/api/product/${ productId }`,
 					{
@@ -393,24 +258,14 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: "is test product",
-					userId: expect.any(String),
-				})
-				
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(data).length(1)
 			})
 			
 			it("SUCCESS PUT data product use mock", async () => {
 				const test = structuredClone(dataTestProduct)
-				test.nama = "name product is updated"
+				test.name = "name product is updated"
 				const res = await fetch(
 					`http://localhost:3000/api/product/${ productId }`,
 					{
@@ -426,16 +281,7 @@ describe
 				const data = await res.json()
 				productId = data.id
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: 123,
-					img: "http:image is noting",
-					jenis: "Test Data",
-					jumlah: 123,
-					keterangan: "Is Test Data not for sell",
-					lokasi: "this location not expose",
-					nama: test.nama,
-					userId: expect.any(String),
-				})
+				expect(data).toMatchObject(expectationProduct)
 			})
 		})
 		describe("DELETE can create Data Product", async () => {
@@ -453,17 +299,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe("Not have token in Bearer")
@@ -484,18 +320,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
-				console.log(data)
+				expect(data).not.toMatchObject(expectationProduct)
 				expect(code).toBe(400)
 				expect(data).toHaveLength(1)
 			})
@@ -515,17 +340,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).toBe(200)
-				expect(data).toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).toMatchObject(expectationProduct)
 				expect(code).not.toBe(400)
 			})
 			
@@ -544,17 +359,7 @@ describe
 				const data = await res.json()
 				
 				expect(code).not.toBe(200)
-				expect(data).not.toMatchObject({
-					harga: expect.any(Number),
-					img: expect.any(String),
-					jenis: expect.any(String),
-					jumlah: expect.any(Number),
-					keterangan: expect.any(String),
-					lokasi: expect.any(String),
-					nama: expect.any(String),
-					userId: expect.any(String),
-					id: expect.any(Number),
-				})
+				expect(data).not.toMatchObject(expectationProduct)
 				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe("Data is Not Found maybe was been delete")

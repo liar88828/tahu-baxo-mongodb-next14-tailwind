@@ -77,6 +77,7 @@ class ProductController implements IController {
   
   async updateOne(req: NextRequest, params: Params) {
     try {
+      
       const user = await this.serviceReq.getUserPayload(req)
 			let { data, id } = await this.serviceReq.getUpdateInt<ProductUpdate>(req, params)
       data.userId = user.id

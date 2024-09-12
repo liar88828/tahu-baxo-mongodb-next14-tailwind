@@ -2,12 +2,16 @@ import { DeliverSchema, deliverySchema } from "@/server/schema/deliver.schema"
 import prisma from "@/config/prisma"
 import { DeliveryDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
-import type { IService } from "@/interface/server/IService"
+import type { IService, ResponseData } from "@/interface/server/IService"
 import type { DeliveryCreate, DeliveryId, DeliveryUpdate, } from "@/interface/model/delivery.type"
 import { GetPage } from "@/interface/server/IServiceRequest";
 
 export class ServiceDeliver implements IService<DeliveryDB> {
 	constructor(private valid: DeliverSchema) {
+	}
+	
+	findAllPublic(page: GetPage): Promise<ResponseData<DeliveryDB>> {
+		throw new Error("Method not implemented.")
 	}
 	
 	async findAll(page: number, take: number) {

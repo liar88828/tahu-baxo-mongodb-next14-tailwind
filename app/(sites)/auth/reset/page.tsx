@@ -14,7 +14,9 @@ function Page() {
     redirect('/auth/done')
   }
   return (
-    <div className="p-5 space-y-5">
+    <div
+      data-testid="reset-Page"
+      className="p-5 space-y-5">
       <div className="text-left">
         <h1 className={'text-3xl font-bold'}>Set Your New Password</h1>
         <p className={'text-lg font-light'}>Please enter a new password for your account.</p>
@@ -32,9 +34,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your New Password ..."
           />
-          {state?.password &&
+					{ state.err?.password &&
             <p className={'text-error text-xs'}>
-              {state.password}
+							{ state.err.password }
             </p>
           }
         </div>
@@ -47,9 +49,9 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your Confirm New Password ..."
           />
-          {state?.confPass &&
+					{ state.err?.confPass &&
             <p className={'text-error text-xs'}>
-              {state.confPass}
+							{ state.err.confPass }
             </p>
           }
         </div>

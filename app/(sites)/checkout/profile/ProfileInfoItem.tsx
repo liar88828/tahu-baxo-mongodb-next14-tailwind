@@ -10,7 +10,9 @@ interface ProfileInfoItemProps {
 
 export function ProfileInfoItem({ item, add, fun }: ProfileInfoItemProps) {
 	return (
-		<div className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 shadow flex-shrink-0 '>
+		<div
+			data-testid={ 'checkout-ProfileInfoItem' }
+			className='flex rounded-lg border-white/30 p-2 border-2 space-x-2 shadow flex-shrink-0 '>
 			<div className="p-2">
 			<img
 				src='https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'

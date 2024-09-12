@@ -5,16 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
 import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
-import { z } from "zod";
-import { userSchema } from "@/server/schema/user.schema";
 
-type FlattenedErrors = z.inferFlattenedErrors<typeof userSchema.login>['fieldErrors'];
-
-export type OnLoginState = {
-	message?: string,
-	err?: FlattenedErrors
-	
-}
 export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
@@ -24,7 +15,9 @@ export default function Page() {
 		redirect('/home')
 	}
 	return (
-		<div className="p-5 space-y-5">
+		<div
+			data-testid="login-Page"
+			className="p-5 space-y-5">
 			<div className="text-left">
 				<h1 className={ 'text-3xl font-bold' }>Welcome Back!</h1>
 				<p className={ 'text-lg font-light' }>Please sign in to your account.</p>

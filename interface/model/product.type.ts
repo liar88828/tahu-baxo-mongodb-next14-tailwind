@@ -7,10 +7,12 @@ export type ProductUpdatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated
 export type ProductCreate = z.output<typeof productSchema.create>
 export type ProductUpdate = z.output<typeof productSchema.update>
 export type ProductTransaction = {
-	jumlah: number
+	qty: ProductDB["qty"]
 	productId: ProductDB["id"]
 }
 export type ProductId = {
 	id_product: ProductDB["id"]
 	id_user?: User["id"]
 }
+
+export type ProductCreateFormError = z.inferFlattenedErrors<typeof productSchema.create>['fieldErrors'];

@@ -14,7 +14,9 @@ export function TotalPay() {
     [state.trolleyMany, state.description.price])
   
   console.log(state)
-  return (<div className={'space-y-2 '}>
+  return (<div
+      data-testid={ 'checkout-TotalPay' }
+      className={ 'space-y-2 ' }>
       {/*<div className='flex justify-between items-center '>*/ }
       {/*  <h1 className='text-lg '>Promo</h1>*/ }
       {/*  <h1 className='text-lg font-bold'>Rp21312.23</h1>*/ }

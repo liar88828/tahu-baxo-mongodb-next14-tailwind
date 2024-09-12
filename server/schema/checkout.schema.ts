@@ -8,7 +8,6 @@ export class CheckoutSchema {
 	create = z.object({
 		transaction: transactionSchema.create,
 		order: orderSchema.create,
-		
 	}) satisfies z.Schema<CheckoutCreate>
 	
 	createMany = z.object({

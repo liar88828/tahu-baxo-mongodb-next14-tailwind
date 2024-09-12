@@ -10,7 +10,9 @@ export async function ProductList() {
   }
   return (
     <div className="">
-      <div className="flex justify-between items-center w-full text-2xl mb-2 ">
+      <div
+        data-testid={ 'checkout-ProductList' }
+        className="flex justify-between items-center w-full text-2xl mb-2 ">
         <h1 className={'font-bold text-xl'}>Product List</h1>
         <button className={'btn btn-primary btn-sm'}>Show</button>
       </div>

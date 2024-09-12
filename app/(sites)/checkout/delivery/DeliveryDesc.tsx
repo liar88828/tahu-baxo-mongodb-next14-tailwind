@@ -5,7 +5,9 @@ import { ContextTrolley } from "@/components/provider/ProviderContext";
 export function DeliveryDesc() {
 	const { description } = useContext(ContextTrolley)
 	return (
-		<div className="">
+		<div
+			data-testid={ 'checkout-DeliveryDesc' }
+			className="">
 			<div className="grid grid-cols-2 gap-2">
 				<input
 					onChange={ e => description({ price: Number(e.target.value) }) }

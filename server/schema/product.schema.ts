@@ -1,5 +1,13 @@
 import { z } from "zod"
-import { addressInit, descriptionInit, imageInit, nameInit, userId, } from "@/server/schema/init.schema"
+import {
+	addressInit,
+	descriptionInit,
+	imageInit,
+	nameInit,
+	priceInit,
+	qtyInit,
+	userId,
+} from "@/server/schema/init.schema"
 import type { ISchema } from "@/interface/server/ISchema"
 import type {
 	ProductCreate,
@@ -13,39 +21,30 @@ export class ProductSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()
 	create = z.object({
 		// id: this.id,
-		lokasi: addressInit,
-		nama: nameInit,
+		price: priceInit,
 		img: imageInit,
-		keterangan: descriptionInit,
-		harga: z.number({ required_error: "Harga is required" }).nonnegative(),
-		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
-		jumlah: z
-			.number({ required_error: "Jumlah is required" })
-			.int()
-			.nonnegative(),
+		type: z.string({ required_error: "Jenis is required" }).min(1).max(100),
+		qty: qtyInit,
+		desc: descriptionInit,
+		location: addressInit,
+		name: nameInit,
 		userId: userId,
 	}) satisfies z.Schema<ProductCreatePrisma>
 	
 	update = z.object({
 		// id: this.id,
-		lokasi: addressInit,
-		nama: nameInit,
+		price: priceInit,
 		img: imageInit,
-		keterangan: descriptionInit,
-		harga: z.number({ required_error: "Harga is required" }).nonnegative(),
-		jenis: z.string({ required_error: "Jenis is required" }).min(1).max(100),
-		jumlah: z
-			.number({ required_error: "Jumlah is required" })
-			.int()
-			.nonnegative(),
+		type: z.string({ required_error: "Jenis is required" }).min(1).max(100),
+		qty: qtyInit,
+		desc: descriptionInit,
+		location: addressInit,
+		name: nameInit,
 		userId: userId,
 	}) satisfies z.Schema<ProductUpdatePrisma>
 	
 	productTransactionSchema = z.object({
-		jumlah: z
-			.number({ required_error: "Jumlah is required" })
-			.int()
-			.nonnegative(),
+		qty: qtyInit,
 		productId: z.number(),
 	}) satisfies z.Schema<ProductTransaction>
 	

@@ -10,11 +10,12 @@ function Page() {
   const {pending} = useFormStatus();
   if (state?.message?.[0] === 'true') {
     redirect('/auth/reset');
-
   }
   console.log(pending)
   return (
-    <div className="p-5 space-y-5">
+    <div
+      data-testid="forgot-Page"
+      className="p-5 space-y-5">
       <div className="text-left">
         <h1 className={'text-3xl font-bold'}>Forgot Your Password?</h1>
         <p className={'text-lg font-light'}>No worries! Just enter the email address associated with your account, and

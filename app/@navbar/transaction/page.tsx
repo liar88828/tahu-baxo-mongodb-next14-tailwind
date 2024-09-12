@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import React from "react";
 import { IconBack } from "@/components/icon/IconMore";
+
 export default function page() {
   return (
     <div className='navbar bg-base-100'>

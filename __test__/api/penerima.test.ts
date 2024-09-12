@@ -1,41 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import prisma from "@/config/prisma"
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData"
-import { PenerimaDB } from "@prisma/client"
+import { penerimaTransaction, testExpectPenerima, testPenerimaEmpty } from "@/assets/example/received";
 
-import { RegisterUser } from "@/interface/model/auth.type";
-
-const sendPenerima: Omit<PenerimaDB, "id"> = {
-	nama: "Alice Johnson",
-	alamat: "Jl. Merdeka No. 123, Jakarta",
-	hp: "081234567893",
-	userId: "",
-}
-const testPenerimaEmpty: Omit<PenerimaDB, "id"> = {
-	nama: "",
-	alamat: "",
-	hp: "",
-	userId: "",
-}
-
-const testExpectPenerima: PenerimaDB = {
-	nama: expect.any(String),
-	alamat: expect.any(String),
-	hp: expect.any(String),
-	id: expect.any(Number),
-	userId: expect.any(String),
-}
 let penerimaToken = ""
 let penerimaId = 0
-
-const registerPenerima: RegisterUser = {
-	fullname: "penerima",
-	email: "penerima@gmail.com",
-	password: "user1234",
-	confPass: "user1234",
-	phone: "081 1232 1234",
-	address: "jln jakarta raya",
-}
 
 describe("can test api penerima", async () => {
 	beforeAll(async () => {
@@ -44,7 +13,7 @@ describe("can test api penerima", async () => {
 		
 	})
 	afterAll(async () => {
-		await prisma.penerimaDB.deleteMany()
+		await prisma.receiverDB.deleteMany()
 		await deleteUserTest(penerimaToken)
 	})
 	
@@ -56,7 +25,7 @@ describe("can test api penerima", async () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${ "empty token" }`,
 				},
-				body: JSON.stringify(sendPenerima),
+				body: JSON.stringify(penerimaTransaction),
 			})
 			const code = res.status
 			const data = await res.json()
@@ -86,8 +55,8 @@ describe("can test api penerima", async () => {
 		})
 		
 		it("ERROR Create data penerima, name is empty", async () => {
-			const test = structuredClone(sendPenerima)
-			test.nama = ""
+			const test = structuredClone(penerimaTransaction)
+			test.name = ""
 			const res = await fetch("http://localhost:3000/api/penerima", {
 				method: "POST",
 				headers: {
@@ -111,7 +80,7 @@ describe("can test api penerima", async () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${ penerimaToken }`,
 				},
-				body: JSON.stringify(sendPenerima),
+				body: JSON.stringify(penerimaTransaction),
 			})
 			const code = res.status
 			const data = await res.json()
@@ -191,7 +160,7 @@ describe("can test api penerima", async () => {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${ "empty token" }`,
 					},
-					body: JSON.stringify(sendPenerima),
+					body: JSON.stringify(penerimaTransaction),
 				}
 			)
 			const code = res.status
@@ -200,7 +169,7 @@ describe("can test api penerima", async () => {
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(testExpectPenerima)
 			expect(code).toBe(400)
-			expect(data).toBe("jwt malformed")
+			expect(data).toBe("Invalid Compact JWS")
 		})
 		
 		it("ERROR PUT data penerima, wrong id", async () => {
@@ -212,7 +181,7 @@ describe("can test api penerima", async () => {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${ penerimaToken }`,
 					},
-					body: JSON.stringify(sendPenerima),
+					body: JSON.stringify(penerimaTransaction),
 				}
 			)
 			const code = res.status
@@ -268,8 +237,8 @@ describe("can test api penerima", async () => {
 		})
 		
 		it("ERROR PUT data penerima, name is empty", async () => {
-			const test = structuredClone(sendPenerima)
-			test.nama = ""
+			const test = structuredClone(penerimaTransaction)
+			test.name = ""
 			const res = await fetch(
 				`http://localhost:3000/api/penerima/${ penerimaId }`,
 				{
@@ -292,8 +261,8 @@ describe("can test api penerima", async () => {
 		})
 		
 		it("SUCCESS PUT data penerima use mock", async () => {
-			const test = structuredClone(sendPenerima)
-			test.nama = "name penerima is updated"
+			const test = structuredClone(penerimaTransaction)
+			test.name = "name penerima is updated"
 			const res = await fetch(
 				`http://localhost:3000/api/penerima/${ penerimaId }`,
 				{
@@ -331,9 +300,8 @@ describe("can test api penerima", async () => {
 			
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(testExpectPenerima)
-			console.log(data)
 			expect(code).toBe(400)
-			expect(data).toBe("jwt malformed")
+			expect(data).toBe("Invalid Compact JWS")
 		})
 		
 		it("ERROR delete data penerima. wrong id ", async () => {

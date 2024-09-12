@@ -1,4 +1,4 @@
-import 'server-only'
+// import 'server-only'
 import jwt from "jsonwebtoken"
 import { User } from "@prisma/client"
 import prisma from "@/config/prisma"
@@ -67,7 +67,7 @@ export class JwtService {
 	}
 	
 	async verifyAccessToken(token: string | undefined) {
-		return decrypt(token)
+		return decrypt(token, true)
 	}
 	
 }

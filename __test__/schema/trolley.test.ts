@@ -1,21 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { TrolleyCreate, TrolleyUpdate } from "@/interface/model/trolley.type"
 import { trolleySchema } from "@/server/schema/trolley.schema";
 import { z } from "zod";
-
-export const sendTrolleyCreate: TrolleyCreate = {
-	
-	qty: 10,
-	productId: 10,
-	userId: 'user'
-}
-
-const sendTrolleyUpdate: TrolleyUpdate = {
-	id: 1,
-	qty: 10,
-	productId: 10,
-	userId: 'user'
-}
+import { sendTrolleyCreate, sendTrolleyUpdate } from "@/assets/example/trolley";
 
 describe('can test trolley schema', async () => {
 	

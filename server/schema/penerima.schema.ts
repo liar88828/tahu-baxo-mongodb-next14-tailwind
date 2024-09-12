@@ -5,15 +5,15 @@ import { PenerimaCreate, PenerimaCreatePrisma } from "@/interface/model/penerima
 export class PenerimaSchema {
 	id = z.number().optional()
 	create = z.object({
-		nama: nameInit,
-		alamat: addressInit,
-		hp: phoneInit,
+		name: nameInit,
+		address: addressInit,
+		phone: phoneInit,
 	})satisfies z.Schema<PenerimaCreatePrisma>
 	
 	update = z.object({
-		nama: nameInit,
-		alamat: addressInit,
-		hp: phoneInit,
+		name: nameInit,
+		address: addressInit,
+		phone: phoneInit,
 	})satisfies z.Schema<PenerimaCreatePrisma>
 	
 	validCreate(data: PenerimaCreate): PenerimaCreate {

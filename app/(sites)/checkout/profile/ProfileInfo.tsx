@@ -9,7 +9,9 @@ export async function ProfileInfo() {
   }
   return (
     <div>
-			<div className="flex justify-between items-center w-full text-2xl mb-2 ">
+			<div
+				data-testid={ 'checkout-ProfileInfo' }
+				className="flex justify-between items-center w-full text-2xl mb-2 ">
 				<h1 className={ 'font-bold text-xl' }>User Information</h1>
 				<ProfileModal data={ data }/>
       </div>

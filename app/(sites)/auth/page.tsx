@@ -3,9 +3,11 @@ import Link from "next/link";
 
 function Page() {
   return (
-    <div className="p-5 space-y-5">
+		<div
+			data-testid="auth-Page"
+			className="p-5 space-y-5">
       <div className="text-left">
-        <h1 className={'text-3xl font-bold'}>Welcome to [My Website]!</h1>
+				<h1 className={ 'text-3xl font-bold' }>Welcome to My Website!</h1>
         <p className={'text-lg font-light'}>We`re excited to have you here. [Your Website Name] is your go-to platform
           for [briefly describe your website`s purpose, e.g., connecting with like-minded individuals, exploring
           innovative solutions, etc.</p>

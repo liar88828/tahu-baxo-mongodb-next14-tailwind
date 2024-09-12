@@ -10,15 +10,20 @@ export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 	const { addDelivery } = useContext(ContextTrolley)
 	return (
 		<>
-			<button className="btn btn-primary btn-sm" onClick={ () => {
+			<button
+				data-testid={ 'checkout-DeliveryModal-button' }
+				className="btn btn-primary btn-sm" onClick={ () => {
 				// @ts-expect-error
 				document.getElementById('modalDelivery').showModal()
 			} }>
 				Select
 			</button>
-			<dialog id="modalDelivery" className="modal">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Select User </h3>
+			<dialog
+				id="modalDelivery" className="modal">
+				<div
+					data-testid={ 'checkout-DeliveryModal-div' }
+					className="modal-box">
+					<h3 className="font-bold text-lg">Select Delivery</h3>
 					<input
 						className="input input-sm w-full input-bordered"
 						placeholder="Search Name user"

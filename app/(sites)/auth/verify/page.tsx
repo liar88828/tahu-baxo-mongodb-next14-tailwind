@@ -3,7 +3,9 @@ import Link from "next/link";
 
 function Page() {
   return (
-    <div className="p-5 space-y-5">
+    <div
+      data-testid="verify-Page"
+      className="p-5 space-y-5">
       <div className="text-left">
         <h1 className={'text-3xl font-bold'}>Verify Your Email Address</h1>
         <p className={'text-lg font-light'}>We’ve sent a verification link to your email. Please check your inbox and

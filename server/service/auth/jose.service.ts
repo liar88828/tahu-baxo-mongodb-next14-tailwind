@@ -1,4 +1,4 @@
-import 'server-only'
+// import 'server-only'
 import { jwtVerify, SignJWT } from "jose";
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service";
 
@@ -13,15 +13,22 @@ export async function encrypt(payload: AccessTokenPayload) {
 		.sign(encodedKey)
 }
 
-export async function decrypt(session: string | undefined = '') {
+export async function decrypt(session: string | undefined = '', _throw: boolean = false) {
 	// console.log(session,'decrypt')
-	try {
+	// try {
 		const { payload } = await jwtVerify(session, encodedKey, {
 			algorithms: ['HS256'],
 		})
+	if (_throw) {
+		if (!payload) {
+			throw new Error('jwt malformed')
+		}
+	}
 		// console.log(payload,'payload')
 		return payload
-	} catch (error) {
-		console.log('Failed to verify session')
-	}
+	// } catch (error) {
+	// 	console.log('Failed to verify session')
+	//
+	// 	return error
+	// }
 }

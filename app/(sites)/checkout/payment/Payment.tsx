@@ -9,7 +9,9 @@ export async function Payment() {
   }
   return (
     <div>
-      <div className="flex justify-between items-center w-full text-2xl mb-2">
+			<div
+				data-testid={ 'checkout-Payment' }
+				className="flex justify-between items-center w-full text-2xl mb-2">
         <h1 className={'font-bold text-xl'}>Payment Method</h1>
 				<PaymentModal data={ data.data }/>
       </div>

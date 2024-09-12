@@ -4,13 +4,13 @@ import type { OrderCreate, OrderDBCreate, } from "@/interface/model/order.type"
 
 export class OrderSchema {
 	create = z.object({
-		dari: z.string(),
-		nama: z.string(),
-		pengirim: nameInit,
-		hp: phoneInit,
-		guna: descriptionInit,
-		lokasi: addressInit,
-		ongkir: z.number(),
+		from: z.string(),
+		name: z.string(),
+		sender: nameInit,
+		phone: phoneInit,
+		desc: descriptionInit,
+		location: addressInit,
+		shipping_cost: z.number(),
 		status: z.string(),
 	}) satisfies z.Schema<OrderDBCreate>
 	

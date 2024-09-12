@@ -6,11 +6,10 @@ import { Delivery } from "@/app/(sites)/checkout/delivery/Delivery";
 import { TotalPay } from "@/app/(sites)/checkout/TotalPay";
 import { SkeletonCard, SkeletonCardLong } from "@/components/Skeleton";
 
-export default async function page() {
-	
-	return (<>
-      <div className='space-y-6 p-4'>
-      
+export default async function Page() {
+  return (<div
+      data-testid={ 'checkout-page' }
+      className='space-y-6 p-4'>
       <Suspense fallback={<SkeletonCard />}>
           <ProfileInfo />
         </Suspense>
@@ -25,6 +24,5 @@ export default async function page() {
         </Suspense>
         <TotalPay />
       </div>
-    </>
   )
 }

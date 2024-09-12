@@ -32,13 +32,13 @@ export class TransactionService {
 			// console.log('------- db penerima transaction')
 			const orderanDB = await tx.orderanDB.create({
 				data: {
-					dari: order.dari,
-					lokasi: order.lokasi,
-					guna: order.guna,
-					pengirim: order.pengirim,
-					hp: order.hp,
+					from: order.from,
+					location: order.location,
+					desc: order.desc,
+					sender: order.sender,
+					phone: order.phone,
 					status: order.status,
-					ongkir: order.ongkir,
+					shipping_cost: order.shipping_cost,
 					
 					// pesan: order.pesan,
 					// waktuKirim: order.waktuKirim,
@@ -52,9 +52,9 @@ export class TransactionService {
 			
 			const transactionDB = await tx.transactionDB.create({
 				data: {
-					jumlah: transaction.jumlah,
+					qty: transaction.qty,
 					// productDBId: transaction.productDBId,
-					penerimaDBId: transaction.penerimaDBId,
+					receiverDBId: transaction.receiverDBId,
 					deliveryDBId: transaction.deliveryDBId,
 					orderanDBId: orderanDB.id,
 					bankDBId: transaction.bankDBId,
@@ -62,7 +62,7 @@ export class TransactionService {
 					TrolleyDB: {
 						create: {
 							userId: user.id,
-							qty: transaction.jumlah,
+							qty: transaction.qty,
 							productId: transaction.productDBId,
 						},
 					},
@@ -75,8 +75,8 @@ export class TransactionService {
 					id: transaction.productDBId,
 				},
 				data: {
-					jumlah: {
-						decrement: transaction.jumlah,
+					qty: {
+						decrement: transaction.qty,
 					},
 				},
 			})
@@ -97,20 +97,20 @@ export class TransactionService {
 			
 			const orderanDB: ResponseCheckout['orderanDB'] = await tx.orderanDB.create({
 				data: {
-					dari: order.dari,
-					lokasi: order.lokasi,
-					guna: order.guna,
-					pengirim: order.pengirim,
-					hp: order.hp,
+					from: order.from,
+					location: order.location,
+					desc: order.desc,
+					sender: order.sender,
+					phone: order.phone,
 					status: order.status,
-					ongkir: order.ongkir,
+					shipping_cost: order.shipping_cost,
 				},
 			})
 			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
 				data: {
-					jumlah: transaction.jumlah,
+					qty: transaction.qty,
 					// productDBId: transaction.productDBId,
-					penerimaDBId: transaction.penerimaDBId,
+					receiverDBId: transaction.receiverDBId,
 					deliveryDBId: transaction.deliveryDBId,
 					orderanDBId: orderanDB.id,
 					bankDBId: transaction.bankDBId,

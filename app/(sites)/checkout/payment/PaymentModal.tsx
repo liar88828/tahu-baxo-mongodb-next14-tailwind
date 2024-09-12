@@ -10,14 +10,18 @@ export function PaymentModal({ data }: { data: BankDB[] }) {
 	const { addBank } = useContext(ContextTrolley)
 	return (
 		<>
-			<button className="btn btn-primary btn-sm" onClick={ () => {
+			<button
+				data-testid={ 'checkout-PaymentModal-button' }
+				className="btn btn-primary btn-sm" onClick={ () => {
 				// @ts-expect-error
 				document.getElementById('modalPayment').showModal()
 			} }>Select
 			</button>
 			<dialog id="modalPayment" className="modal">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Select User </h3>
+				<div
+					data-testid={ 'checkout-PaymentModal-div' }
+					className="modal-box">
+					<h3 className="font-bold text-lg">Select Payment</h3>
 					<input
 						className="input input-sm w-full input-bordered"
 						placeholder="Search Name user"

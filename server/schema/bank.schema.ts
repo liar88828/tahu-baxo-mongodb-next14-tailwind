@@ -1,7 +1,7 @@
 import prisma from "@/config/prisma"
 import { z } from "zod"
 import { BankDB, Prisma, User } from "@prisma/client"
-import { addressInit, descriptionInit, imageInit, nameInit, phoneInit, } from "@/server/schema/init.schema"
+import { addressInit, descriptionInit, imageInit, nameInit, phoneInit, userId, } from "@/server/schema/init.schema"
 import type { ISchema } from "@/interface/server/ISchema"
 
 export type BankUpdate = Prisma.Args<typeof prisma.bankDB, "update">["data"]
@@ -15,25 +15,25 @@ export class BankSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()
 	update = z.object({
 		id: this.id,
-		hp: phoneInit,
+		phone: phoneInit,
 		img: imageInit,
-		no: z.string({ required_error: "No is required" }).min(2).max(30),
-		nama: nameInit,
-		lokasi: addressInit,
-		jenis: z.string({ required_error: "Jenis is required" }).min(2).max(30),
-		keterangan: descriptionInit,
+		no_req: z.string({ required_error: "No is required" }).min(2).max(30),
+		name: nameInit,
+		location: addressInit,
+		type: z.string({ required_error: "Jenis is required" }).min(2).max(30),
+		desc: descriptionInit,
 	}) satisfies z.Schema<BankUpdate>
 	
 	create = z.object({
 		id: this.id,
-		hp: phoneInit,
+		phone: phoneInit,
 		img: imageInit,
-		no: z.string({ required_error: "No is required" }).min(2).max(30),
-		nama: nameInit,
-		lokasi: addressInit,
-		jenis: z.string({ required_error: "Jenis is required" }).min(2).max(30),
-		keterangan: descriptionInit,
-		userId: z.string().min(1),
+		no_req: z.string({ required_error: "No is required" }).min(2).max(30),
+		name: nameInit,
+		location: addressInit,
+		type: z.string({ required_error: "Jenis is required" }).min(2).max(30),
+		desc: descriptionInit,
+		userId: userId,
 	}) satisfies z.Schema<BankCreate>
 	
 	createValid(data: BankCreate): BankCreate {

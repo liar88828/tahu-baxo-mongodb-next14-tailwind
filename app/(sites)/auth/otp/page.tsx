@@ -27,7 +27,10 @@ export default function Page() {
   };
 
   return (
-    <div className="p-5 space-y-5">
+    <div
+      data-testid="otp-Page"
+      
+      className="p-5 space-y-5">
       <div className="text-center">
         <h1 className={'text-3xl font-bold'}>Enter Your OTP</h1>
         <p className={'text-lg font-light'}>We`ve sent a One-Time Password (OTP) to your registered email/phone number.

@@ -49,7 +49,7 @@ export class ProductService implements IService<ProductDB> {
 			const data = await tx.productDB.findMany({
 				where: {
 					// userId: user.id,
-					...(search ? { nama: { contains: search } } : {})
+					...(search ? { name: { contains: search } } : {})
 					
 				},
 				take: take,
@@ -68,7 +68,7 @@ export class ProductService implements IService<ProductDB> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				where: {
-					...(search ? { nama: { contains: search } } : {})
+					...(search ? { name: { contains: search } } : {})
 				},
 				take: take,
 				skip: (page - 1) * take,
@@ -100,13 +100,13 @@ export class ProductService implements IService<ProductDB> {
 		data = this.valid.createValid(data)
 		return prisma.productDB.create({
 			data: {
-				harga: data.harga,
+				price: data.price,
 				img: data.img,
-				jenis: data.jenis,
-				lokasi: data.lokasi,
-				keterangan: data.keterangan,
-				nama: data.nama,
-				jumlah: data.jumlah,
+				type: data.type,
+				location: data.location,
+				desc: data.desc,
+				name: data.name,
+				qty: data.qty,
 				// ...(id ? { id } : {}),
 				userId: data.userId,
 			},
@@ -117,6 +117,7 @@ export class ProductService implements IService<ProductDB> {
 		data: ProductUpdate,
 		{ id_product, id_user }: ProductId
 	): Promise<ProductDB> {
+		console.log({ data, id_product, id_user }, 'test update')
 		data = this.valid.updateValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },
@@ -137,7 +138,7 @@ export class ProductService implements IService<ProductDB> {
 		data = this.valid.addStockValid(data)
 		return prisma.productDB.update({
 			where: { id: id_product, userId: id_user },
-			data: { jumlah: data.jumlah },
+			data: { qty: data.qty },
 		})
 	}
 }

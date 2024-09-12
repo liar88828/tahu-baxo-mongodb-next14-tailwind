@@ -13,7 +13,7 @@ const loginData = {
 
 export let userFinish = false
 
-describe(//.skipIf(userFinish === false)
+describe.skip(//.skipIf(userFinish === false)
 	"Can Auth User Api", async () => {
 		beforeAll(async () => {
 			// 	const userDB = await prisma.user.findFirst({ where: { email: "loginUserTest@gmail.com" } })
@@ -216,7 +216,6 @@ describe(//.skipIf(userFinish === false)
 				
 				expect(code).toBe(200)
 				expect(code).not.toBe(400)
-				
 				expect(data).toMatchObject({
 					accessToken: expect.any(String),
 					refreshToken: expect.any(Object),

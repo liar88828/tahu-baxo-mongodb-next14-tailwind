@@ -10,7 +10,9 @@ export async function Delivery() {
   }
   return (
     <div>
-      <div className="flex justify-between items-center w-full text-2xl mb-2">
+      <div
+        data-testid={ 'checkout-Delivery' }
+        className="flex justify-between items-center w-full text-2xl mb-2">
         <h1 className={'font-bold text-xl'}>Delivery Method</h1>
 				<DeliveryModal data={ data.data }/>
       </div>

@@ -42,6 +42,7 @@ export class RequestService implements IServiceRequest {
 		request: NextRequest,
 		params: Params
 	): Promise<GetUpdate<D, number>> {
+		console.log('params', params)
 		return {
 			data: await this.getData<D>(request).then((res) => res.data),
 			id: this.getIdInt(params).id,
@@ -57,6 +58,7 @@ export class RequestService implements IServiceRequest {
 	}
 	
 	getIdInt({ params }: Params): { id: number } {
+		console.log('id test ', params)
 		return { id: z.number().min(1).parse(Number(params.id)) }
 	}
 	
