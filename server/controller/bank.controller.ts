@@ -1,10 +1,10 @@
-import { BankCreate, BankUpdate } from "../schema/bank.schema"
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { NextRequest } from "next/server"
 import { bankService, BankService } from "@/server/service/bank.service"
 import { IController } from "@/interface/server/IController"
 import { errorHanding } from "@/lib/error/errorHanding"
 import type { Params } from "@/interface/server/param"
+import { BankCreate, BankUpdate } from "@/interface/model/bank.type";
 
 class BankController implements IController {
 	constructor(

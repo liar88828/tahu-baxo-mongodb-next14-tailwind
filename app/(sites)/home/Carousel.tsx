@@ -22,7 +22,7 @@ export function CarouselItem({ index }: { index: number }) {
 				className={ `rounded-xl h-40 w-full object-cover shadow-md flex  ${ index % 2 === 0 ? 'bg-blue-400' : 'bg-red-400' }` }
 			>
 				<div className="py-5 pl-5 flex justify-between flex-col">
-					<h1 className={ 'text-xl font-extrabold text-base-300/60' }>Up to 65% Off on All Products </h1>
+					<h1 className={ 'text-xl font-extrabold text-base-300/80' }>Up to 65% Off on All Products </h1>
 					<h2 className={ ' text-md font-medium text-base-300/60' }>Lorem ipsum dolor sit amet</h2>
 				</div>
 				<img

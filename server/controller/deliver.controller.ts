@@ -23,7 +23,7 @@ class DeliverController implements IController {
 		}
 	}
 	
-	async findAllPrivate(req: NextRequest) {
+	async findAllPrivate(req: NextRequest,) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			const page = this.serviceReq.getPage(req)

@@ -1,4 +1,5 @@
 import bcrypt, { hash } from 'bcrypt'
+import { ErrorAuth } from "@/lib/error/errorCustome";
 
 export class BcryptService {
 	
@@ -17,11 +18,11 @@ export class BcryptService {
 	
 	async comparePassword(passReq: string, passDb?: string | null) {
     if (!passDb) {
-      throw new Error("Password is not found")
+			throw new ErrorAuth('notFound', "Password is not found")
     }
     const passValid = await bcrypt.compare(passReq, passDb)
     if (!passValid) {
-      throw new Error('Password is Not Valid')
+			throw new ErrorAuth('badRequest', 'Password is Not Valid')
     }
   }
 }

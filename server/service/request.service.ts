@@ -58,7 +58,7 @@ export class RequestService implements IServiceRequest {
 	}
 	
 	getIdInt({ params }: Params): { id: number } {
-		console.log('id test ', params)
+		// console.log('id test ', params)
 		return { id: z.number().min(1).parse(Number(params.id)) }
 	}
 	
@@ -98,10 +98,7 @@ export class RequestService implements IServiceRequest {
 	
 	async getUserPayload(req: NextRequest) {
 		const bearer = this.getTokenBearer(req)
-		// console.log('bearer------')
 		const user = await jwtService.verifyAccessToken(bearer)
-		// console.log('user------',user)
-		// console.log(bearer)
 		return user as AccessTokenPayload
 	}
 }

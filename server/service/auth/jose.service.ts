@@ -1,6 +1,7 @@
-// import 'server-only'
+import 'server-only'
 import { jwtVerify, SignJWT } from "jose";
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service";
+import { ErrorAuth } from "@/lib/error/errorCustome";
 
 const secretKey = process.env.ACCESSTOKENSECRET
 const encodedKey = new TextEncoder().encode(secretKey)
@@ -14,21 +15,53 @@ export async function encrypt(payload: AccessTokenPayload) {
 }
 
 export async function decrypt(session: string | undefined = '', _throw: boolean = false) {
-	// console.log(session,'decrypt')
-	// try {
+	try {
 		const { payload } = await jwtVerify(session, encodedKey, {
 			algorithms: ['HS256'],
 		})
-	if (_throw) {
+		// console.log(payload, 'payload')
 		if (!payload) {
-			throw new Error('jwt malformed')
+			
+			throw new ErrorAuth("unauthorized", 'jwt malformed')
+		}
+		// }
+		return payload
+	} catch (error) {
+		// console.log('Failed to verify session')
+		return 'error'
+	}
+}
+
+export async function decryptAPI(session: string | undefined = '') {
+	try {
+		const payload = await jwtVerify(session, encodedKey, {
+			algorithms: ['HS256'],
+			
+		})
+		// console.log(payload, 'error')
+		return payload.payload
+	} catch (error) {
+		// @ts-ignore
+		if (error.code === 'ERR_JWT_EXPIRED') {
+			console.error('ERR_JWT_EXPIRED')
+			throw new ErrorAuth("unauthorized", 'Token is Expired')
+		}
+		// @ts-ignore
+		if (error.code === 'ERR_JWS_INVALID') {
+			console.error('ERR_JWS_INVALID')
+			throw new ErrorAuth("unauthorized", 'Token is Invalid')
 		}
 	}
-		// console.log(payload,'payload')
-		return payload
-	// } catch (error) {
-	// 	console.log('Failed to verify session')
-	//
-	// 	return error
-	// }
+}
+
+export async function decryptMiddleware(session: string | undefined = '', _throw: boolean = false) {
+	try {
+		await jwtVerify(session, encodedKey, {
+			algorithms: ['HS256'],
+		})
+		return true
+	} catch (error) {
+		console.error(error)
+		return false
+	}
 }

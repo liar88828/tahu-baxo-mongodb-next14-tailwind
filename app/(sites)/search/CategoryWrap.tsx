@@ -15,7 +15,7 @@ export default function CategoryWrap() {
 				{/*<button className={ 'btn btn-primary btn-sm' }>Select</button>*/ }
 			</div>
 			{/*justify-between*/ }
-			<div className=' flex flex-wrap gap-2  '>
+			<div className='flex flex-wrap gap-2'>
 				{ categoryProduct.map((item, i) => (
 					<button
 						onClick={ () => updateQueryParams('category', item.title) }

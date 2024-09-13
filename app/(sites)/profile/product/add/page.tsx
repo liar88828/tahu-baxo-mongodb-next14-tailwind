@@ -3,15 +3,16 @@ import React from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { initialState } from "@/interface/model/auth.type";
 import { createProduct } from "@/server/action/product.action";
+import { redirect } from "next/navigation";
 
 function Page() {
 	
 	const [state, formAction,] = useFormState(createProduct, initialState)
 	const { pending } = useFormStatus();
 	console.log(state)
-	// if (state?.message?.[0] === 'true') {
-	// 	redirect('/auth/otp')
-	// }
+	if (state?.message === 'true') {
+		redirect('/profile/product')
+	}
 	
 	return (
 		<div className="p-5 space-y-5">
@@ -32,92 +33,98 @@ function Page() {
 						className={ 'input input-bordered w-full' }
 						placeholder="Enter Name Product ..."
 					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
+					{ state.err?.name &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.name }
+						</p>
+					}
 				</div>
 				
 				<div>
-					<label htmlFor="jenis">Jenis</label>
+					<label htmlFor="type">Type</label>
 					<input
-						name={ 'jenis' }
+						name={ 'type' }
 						type="text"
 						className={ 'input input-bordered w-full' }
-						placeholder="Enter Jenis Product ..."
+						placeholder="Enter Type Product ..."
 					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
+					{ state.err?.type &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.type }
+						</p>
+					}
 				</div>
 				
 				
 				<div>
-					<label htmlFor="lokasi">Lokasi</label>
+					<label htmlFor="location">Location</label>
 					<input
-						name={ 'lokasi' }
+						name={ 'location' }
 						type="text"
 						className={ 'input input-bordered w-full' }
-						placeholder="Enter Lokasi Product ..."
+						placeholder="Enter Location Product ..."
 					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
+					{ state.err?.location &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.location }
+						</p>
+					}
 				</div>
 				
 				
 				<div>
-					<label htmlFor="keterangan">Keterangan</label>
+					<label htmlFor="qty">Qty</label>
 					<input
-						name={ 'keterangan' }
-						type="text"
-						className={ 'input input-bordered w-full' }
-						placeholder="Enter Keterangan Product ..."
-					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
-				</div>
-				
-				
-				<div>
-					<label htmlFor="jumlah">Jumlah</label>
-					<input
-						name={ 'jumlah' }
+						min={ 0 }
+						name={ 'qty' }
 						type="number"
 						className={ 'input input-bordered w-full' }
-						placeholder="Enter Jemlah Product ..."
+						placeholder="Enter Qty Product ..."
 					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
+					{ state.err?.qty &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.qty }
+						</p>
+					}
+					
 				</div>
 				
 				
 				<div>
-					<label htmlFor="harga">Harga</label>
+					<label htmlFor="price">Price</label>
 					<input
-						name={ 'harga' }
+						min={ 0 }
+						name={ 'price' }
 						type="number"
 						className={ 'input input-bordered w-full' }
-						placeholder="Enter harga Product ..."
+						placeholder="Enter Price Product ..."
 					/>
-					{/*{ state?.email &&*/ }
-					{/*	<p className={ 'text-error text-xs' }>*/ }
-					{/*		{ state.email }*/ }
-					{/*	</p>*/ }
-					{/*}*/ }
+					{ state.err?.price &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.price }
+						</p>
+					}
 				</div>
 				
+				<div>
+					<label htmlFor="desc">Description</label>
+					<textarea
+						name={ 'desc' }
+						className={ 'textarea textarea-bordered w-full' }
+						placeholder="Enter Description Product ..."
+					/>
+					{ state.err?.desc &&
+						<p className={ 'text-error text-xs' }>
+							{ state.err.desc }
+						</p>
+					}
+				</div>
+				
+				{ state.message &&
+					<p className={ 'text-error text-xs' }>
+						{ state.message }
+					</p>
+				}
 				<button
 					disabled={ pending }
 					type="submit" className={ 'btn btn-block btn-primary' }
@@ -131,15 +138,3 @@ function Page() {
 }
 
 export default Page;
-
-export type ProductDB = {
-	id: number;
-	nama: string;
-	lokasi: string;
-	jenis: string;
-	img: string | null;
-	harga: number;
-	jumlah: number;
-	keterangan: string;
-	userId: string;
-}

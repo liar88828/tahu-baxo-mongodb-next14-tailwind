@@ -1,6 +1,6 @@
 import { BankDB } from "@prisma/client";
-import { BankCreate } from "@/server/schema/bank.schema";
 import { expect } from "vitest";
+import { BankCreate } from "@/interface/model/bank.type";
 
 export const dataExpectType: BankCreate = {
 	phone: expect.any(String),

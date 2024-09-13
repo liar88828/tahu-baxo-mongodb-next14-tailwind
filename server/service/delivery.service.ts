@@ -24,10 +24,14 @@ export class ServiceDeliver implements IService<DeliveryDB> {
 		return { data, page, take }
   }
 	
-	async findAllPrivate({ page, take }: GetPage, user: AccessTokenPayload) {
+	async findAllPrivate({ page, take, search }: GetPage, user: AccessTokenPayload) {
 		const data = await prisma.$transaction(async (tx) => {
       return tx.deliveryDB.findMany({
-				where: { userId: user.id },
+				orderBy: { name: 'asc' },
+				where: {
+					userId: user.id,
+					...(search ? { name: { contains: search } } : {})
+				},
 				take: take,
 				skip: (page - 1) * take,
       })

@@ -18,3 +18,6 @@ export type DeliveryId = {
 }
 export type DeliveryCreate = z.output<typeof deliverySchema.create>
 export type DeliveryUpdate = z.output<typeof deliverySchema.update>
+
+export type DeliveryCreateFormError = z.inferFlattenedErrors<typeof deliverySchema.create>['fieldErrors'];
+export type DeliveryCreateKey = Record<keyof DeliveryCreate, any>

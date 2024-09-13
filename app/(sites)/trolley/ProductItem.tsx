@@ -11,6 +11,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 	const { addTrolley, state, removeTrolley, removeTrolleyMany, addTrolleyMany } = useContext(ContextTrolley);
 	
 	const found = state.trolleyMany.some(t => t.id === trolley.id)
+	
 	const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (state.trolley?.id !== trolley.id) {
 			addTrolley({ ...trolley, price: product.price })
@@ -27,6 +28,7 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 			removeTrolleyMany(trolley.id)
 		}
 	}
+	
 	return (
 		<div
 			className={ 'flex items-center ' }>

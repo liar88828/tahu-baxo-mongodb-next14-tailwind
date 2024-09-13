@@ -10,7 +10,7 @@ export default async function Product() {
 				title={ 'Flash Sale' }
 				button={ 'View more' }
 			/>
-			<div className='grid grid-cols-2 gap-3'>
+			<div className='grid-card'>
 				<ProductItem/>
 			</div>
 		</div>

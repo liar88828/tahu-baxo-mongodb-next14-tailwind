@@ -13,8 +13,6 @@ export async function Product() {
 			msg={ 'Service api maybe busy' }
 			link={ '/home' }
 			title={ 'Server Busy' }
-		
-		
 		/>
 	}
 	return (

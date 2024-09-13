@@ -2,35 +2,18 @@
 import React from 'react'
 import { onAddTrolley } from "@/server/action/trolley.action";
 import { ParamsProduct } from "@/interface/server/param";
-import { useFormState } from "react-dom";
 
 export default function NavBottom({ params }: ParamsProduct) {
-	
-	// console.log('--- bottom product trolley---');
-	// console.log(params);
-	// console.log('------');
-	const [state, formAction,] = useFormState(onAddTrolley, params
-		
-		// {
-		// productId: params.id,
-		// qty: 0,
-		// userId
-		// } as TrolleyCreatePrisma
-	);
-  
   return (
     <div className='fixed bottom-0 right-0 left-0 bg-base-100 p-2 grid grid-cols-2 gap-2'>
-			<form action={ formAction }>
-				
 				<button
-					type={ 'submit' }
-        className='btn btn-outline w-full font-bold text-lg'
+					onClick={ () => onAddTrolley(params.id) }
+					className='btn btn-outline w-full text-lg'
       >
         Add Trolley
 				</button>
-			</form>
       <button
-        className='btn btn-primary w-full font-bold text-lg'
+				className='btn btn-primary w-full text-lg'
       >
         Buy Now
       </button>

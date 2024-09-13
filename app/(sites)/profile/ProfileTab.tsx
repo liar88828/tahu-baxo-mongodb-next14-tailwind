@@ -1,27 +1,29 @@
+'use client'
 import Link from "next/link";
-import { ParamsProfile } from "@/interface/server/param";
+import { usePathname } from "next/navigation";
 
-export function ProfileTab({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
+export function ProfileTab() {
+  const pathname = usePathname();
   return (
-    <div role="tablist" className="tabs tabs-bordered shadow">
+    <div role="tablist" className="tabs tabs-bordered  ">
       <Link
-        href={'/profile?tab=product'}
+        href={ '/profile/product?tab=product' }
         role='tab'
-        className={`tab ${tab === 'product' || tab == null ? 'tab-active' : ''}`}
+        className={ `tab ${ pathname.includes('product') ? 'tab-active' : '' }` }
       >
         Product
       </Link>
       <Link
-        href={'/profile?tab=delivery'}
+        href={ '/profile/delivery?tab=delivery' }
         role='tab'
-        className={`tab ${tab === 'delivery' ? 'tab-active' : ''}`}
+        className={ `tab ${ pathname.includes('delivery') ? 'tab-active' : '' }` }
       >
         Delivery
       </Link>
       <Link
-        href={'/profile?tab=payment'}
+        href={ '/profile/payment?tab=payment' }
         role='tab'
-        className={`tab ${tab === 'payment' ? 'tab-active' : ''}`}
+        className={ `tab ${ pathname.includes('payment') ? 'tab-active' : '' }` }
       >
         Payment
       </Link>

@@ -117,3 +117,9 @@ export function IconHome({ className }: { className?: string }) {
 	);
 }
 
+export function IconDetail({ className }: { className?: string }) {
+	return (
+		<Icon icon="mdi:note-text-outline" className={ 'size-5' }/>
+	);
+}
+

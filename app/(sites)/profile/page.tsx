@@ -1,29 +1,5 @@
-import { DataList } from './DataList'
-import { ProfileStatus } from './ProfileStatus'
-import { ProfileTab } from './ProfileTab'
-import { ProfileInfo } from './ProfileInfo'
-import { Suspense } from "react";
-import { Loading } from "@/components/loading";
-import { ParamsProfile } from "@/interface/server/param";
+import { redirect } from "next/navigation";
 
-import { authCookie } from "@/server/api/authCookie";
-
-export default async function page(params : ParamsProfile) {
-  const auth = authCookie().getAuth()
-  
-  if (!auth) {
-    return <h1>User is not found</h1>
-  }
-  return (
-    <>
-      <div className='space-y-2 p-2'>
-        <ProfileInfo id={ auth.data.id }/>
-        <Suspense fallback={<Loading />}>
-          <ProfileTab params={params} />
-          <ProfileStatus params={params} />
-          <DataList params={ params }/>
-        </Suspense>
-      </div>
-    </>
-  )
+export default async function page() {
+  redirect('/profile/product')
 }

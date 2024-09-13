@@ -6,6 +6,8 @@ export type ProductCreatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated
 export type ProductUpdatePrisma = Omit<ProductDB, 'id' | "created_at" | "updated_at" | 'img'>
 export type ProductCreate = z.output<typeof productSchema.create>
 export type ProductUpdate = z.output<typeof productSchema.update>
+export type ProductCreateKey = Record<keyof ProductCreate, any>
+export type ProductUpdateKey = Record<keyof ProductCreate, any>
 export type ProductTransaction = {
 	qty: ProductDB["qty"]
 	productId: ProductDB["id"]

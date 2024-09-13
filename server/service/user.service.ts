@@ -83,7 +83,7 @@ export class UserService {
 				// trolleyId: true
 			},
     })
-		console.log(data, 'user db login')
+		// console.log(data, 'user db login')
     if (!data) {
 			throw new ErrorAuth('notFound', "Email is not found")
     }

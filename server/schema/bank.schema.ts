@@ -1,15 +1,7 @@
-import prisma from "@/config/prisma"
 import { z } from "zod"
-import { BankDB, Prisma, User } from "@prisma/client"
 import { addressInit, descriptionInit, imageInit, nameInit, phoneInit, userId, } from "@/server/schema/init.schema"
 import type { ISchema } from "@/interface/server/ISchema"
-
-export type BankUpdate = Prisma.Args<typeof prisma.bankDB, "update">["data"]
-export type BankCreate = Prisma.Args<typeof prisma.bankDB, "create">["data"]
-export type BankId = {
-	id_bank: BankDB["id"]
-	id_user: User["id"]
-}
+import { BankCreate, BankUpdate } from "@/interface/model/bank.type";
 
 export class BankSchema implements ISchema {
 	id = z.number({ required_error: "ID is required" }).optional()

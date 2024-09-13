@@ -28,7 +28,7 @@ export async function deleteSession() {
 }
 
 export async function createSession(token: string) {
-	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+	const expiresAt = new Date(Date.now() + 60 * 60 * 1000)
 	return setSession(token, expiresAt)
 }
 

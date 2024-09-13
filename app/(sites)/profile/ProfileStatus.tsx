@@ -1,38 +1,41 @@
+'use client'
 import { IconAdd } from "@/components/icon/IconMore";
 import Link from "next/link";
-import { ParamsProfile } from "@/interface/server/param";
+import { usePathname } from "next/navigation";
 
-export function ProfileStatus({params : {searchParams : {tab}}} : { params : ParamsProfile }) {
-  tab = tab === undefined ? 'product' : tab;
+export function ProfileStatus() {
+  const path = usePathname()
+  const page = path.split('/')[2]
+
   return (
     <div className='grid grid-cols-2 gap-2'>
       <ProfileStatusItem
-        title={`All Types ${tab}`}
+        title={ `All Types ${ page }` }
         count={10}
-        tab={tab}
+        link={ `/profile/${ page }/add` }
       />
       <ProfileStatusItem
-        title={`All ${tab} Sold`}
+        title={ `All ${ page } Sold` }
         count={2324}
-        tab={tab}
+        link={ '' }
       />
     </div>
   )
 }
 
 export function ProfileStatusItem(
-  {title, count, tab} : {
+  { title, count, link }: {
     title : string
     count : number,
-    tab : string
+    link: string
   }) {
   return (
-    <div className='rounded-lg border-white/30 p-2 border-2 shadow bg-base-200/20'>
+    <div className=' p-2 '>
       <div className="flex justify-between w-full">
         <h1 className='text font-bold capitalize'>{title}</h1>
         <Link
-          href={ `/profile/${ tab }/add` }
-          className={'btn btn-xs btn-square btn-outline m-1'}
+          href={ link }
+          className={ 'btn btn-xs btn-square  m-1' }
         ><IconAdd /></Link>
       </div>
       <h2>{count}</h2>

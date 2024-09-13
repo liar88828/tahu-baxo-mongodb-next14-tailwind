@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 import { trolleyController } from "@/server/controller/trolley.controller"
-import type { Params } from "../../../../interface/server/param"
+import type { Params } from "@/interface/server/param"
 
 export async function POST(req: NextRequest, params: Params) {
   return trolleyController.increment(req, params)

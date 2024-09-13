@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 import { IconBack } from "@/components/icon/IconMore";
 
-export default function page({ children }: PropsWithChildren) {
-	return (<>
+export default function layout() {
+	return (
 			<div className='navbar bg-base-100'>
 				<div className='navbar-start'>
 					<Link
@@ -28,8 +28,6 @@ export default function page({ children }: PropsWithChildren) {
 					</button>
 				</div>
 			</div>
-			{ children }
-		</>
-	
 	)
 }
+

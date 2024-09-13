@@ -47,19 +47,14 @@ export class ProductService implements IService<ProductDB> {
 	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
+				orderBy: { created_at: "desc" },
 				where: {
-					// userId: user.id,
+					userId: user.id,
 					...(search ? { name: { contains: search } } : {})
-					
 				},
 				take: take,
 				skip: (page - 1) * take,
-				// select:{_count: true},
-				// include: {
-				// 	_count: true
-				// }
 			})
-			// console.log(data)
 			return { data, page, take, }
 		})
 	}

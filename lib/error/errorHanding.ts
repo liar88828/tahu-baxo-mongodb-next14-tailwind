@@ -23,7 +23,6 @@ export function errorHanding(e: unknown): Response {
 	if (e instanceof ErrorUser) {
 		return userError(e)
 	}
-	
 
 	if (e instanceof z.ZodError) {
 		return Response.json(e.issues, { status: 400 })

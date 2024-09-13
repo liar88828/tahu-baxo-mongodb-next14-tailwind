@@ -57,6 +57,7 @@ export class TrolleyController {
 	async increment(req: NextRequest, params: Params) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
+			console.log(user, 'user ----- ')
 			const { data } = await this.serviceReq.getData<TrolleyUpdate>(req)
 			const { id } = this.serviceReq.getIdIntEx(params)
 			data.id = id

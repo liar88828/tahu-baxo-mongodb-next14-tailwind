@@ -1,9 +1,10 @@
-import { BankCreate, BankId, bankSchema, BankSchema, BankUpdate, } from "@/server/schema/bank.schema"
+import { bankSchema, BankSchema, } from "@/server/schema/bank.schema"
 import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
+import { BankCreate, BankId, BankUpdate } from "@/interface/model/bank.type";
 
 export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {
@@ -22,11 +23,15 @@ export class BankService implements IService<BankDB> {
   }
 	
 	async findAllPrivate(
-		{ take, page }: GetPage,
+		{ take, page, search }: GetPage,
 		user: AccessTokenPayload
 	) {
 		const data = await prisma.bankDB.findMany({
-			where: { userId: user.id },
+			orderBy: { name: 'asc' },
+			where: {
+				userId: user.id,
+				...(search ? { name: { contains: search } } : {})
+			},
 			take: take,
 			skip: (page - 1) * take,
 		})

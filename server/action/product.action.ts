@@ -2,13 +2,13 @@
 import { config } from "@/config/baseConfig";
 import { ProductDB } from "@prisma/client";
 import { PaginationDB, productService } from "@/server/service/product.service";
-import { redirect } from "next/navigation";
-import { ErrorAuth } from "@/lib/error/errorCustome";
-import { ProductCreate, ProductCreateFormError } from "@/interface/model/product.type";
+import { ProductCreateFormError, ProductCreateKey } from "@/interface/model/product.type";
 import { authCookie } from "@/server/api/authCookie";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { errorForm } from "@/lib/error/errorForm";
 import { errorApi } from "@/lib/error/errorApi";
+import { revalidatePath } from "next/cache";
+import { errorGetData } from "@/lib/error/errorGetData";
 
 export async function getProductsAll(search?: string) {
 	try {
@@ -26,8 +26,7 @@ export async function getProductsAll(search?: string) {
 		const data: PaginationDB<ProductDB> = await res.json()
 		return data
 	} catch (err: unknown) {
-		console.error('on get All error')
-		return null
+		return errorGetData(err);
 	}
 }
 
@@ -44,23 +43,12 @@ export async function getProductsAllPrivate(search?: string) {
 			cache: "no-cache",
 		})
 		if (!res.ok) {
-			const data = await res.json()
-			if (data === 'jwt expired') {
-				throw new ErrorAuth('unauthorized', 'jwt is expire maybe');
-			}
-			throw new Error('product private api error');
-			
+			errorApi(res.status, 'product', await res.json())
 		}
 		const data: PaginationDB<ProductDB> = await res.json()
 		return data
 	} catch (err: unknown) {
-		if (err instanceof Error) {
-			console.log(err.message)
-		}
-		if (err instanceof ErrorAuth) {
-			redirect('/auth/login')
-		}
-		console.log('this error')
+		return errorForm(err)
 	}
 }
 
@@ -75,43 +63,37 @@ export async function getProductId(id: number) {
 			cache: "no-cache",
 		})
 		if (!res.ok) {
-			throw new Error('api error');
+			errorApi(res.status, 'product', await res.json())
 		}
 		const data: ProductDB = await res.json()
 		return data
 	} catch (err: unknown) {
-		if (err instanceof Error) {
-			console.log(err.message)
-			return null
-		}
-		return null
+		return errorForm(err)
+		
 	}
 	
 }
 
 export async function createProduct(prevState: any, formData: FormData): Promise<OnFormState<ProductCreateFormError>> {
 	try {
-		//@ts-expect-error
-		// const rawForm = Object.fromEntries(formData.entries())
-		const rawFormData = {
-			nama: formData.get('name'),
-			jenis: formData.get('jenis'),
-			lokasi: formData.get('lokasi'),
-			keterangan: formData.get('keterangan'),
-			jumlah: formData.get('jumlah'),
-			harga: formData.get('harga'),
-		} as ProductCreate
-		// console.log(rawFormData);
-		rawFormData.qty = Number(rawFormData.qty)
-		rawFormData.price = Number(rawFormData.price)
-		rawFormData.userId = authCookie().getAuth().data.id
+		// @ts-ignore
+		// const rawFormData = Object.fromEntries(formData.entries())
+		const rawFormData: ProductCreateKey = {
+			name: formData.get('name') ?? '',
+			type: formData.get('type') ?? '',
+			location: formData.get('location') ?? '',
+			desc: formData.get('desc') ?? '',
+			qty: Number(formData.get('qty')),
+			price: Number(formData.get('price')),
+			userId: authCookie().getAuth().data.id
+		}
+		// console.log(rawFormData)
 		const data = await productService.createOne(rawFormData)
+		revalidatePath('/')
 		console.log(data)
-		
+		// redirect('/profile')
 		return { message: 'true' }
 	} catch (err) {
-		console.error('on get All error')
-		return errorForm(err)
+		return errorForm(err);
 	}
-	
 }

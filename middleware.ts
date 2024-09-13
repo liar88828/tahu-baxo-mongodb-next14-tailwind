@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
-import { decrypt } from "@/server/service/auth/jose.service";
+import { decryptMiddleware } from "@/server/service/auth/jose.service";
 import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
 
 export default async function middleware(req: NextRequest) {
@@ -14,9 +14,8 @@ export default async function middleware(req: NextRequest) {
 	
 	// 3. Decrypt the session from the cookie
 	const cookie = cookies().get('access')?.value
-	const session = await decrypt(cookie)
-	// console.log(cookie,'cookies')
-	console.log(session, 'session')
+	const session = await decryptMiddleware(cookie)
+	// console.log(session,'session-----------')
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
 		console.log('will redirect')
@@ -46,6 +45,10 @@ export default async function middleware(req: NextRequest) {
 	if (req.nextUrl.pathname.startsWith('/trolley')) {
 		return trolleyMiddleware(req)
 	}
+	if (req.nextUrl.pathname.startsWith('/api')) {
+		// console.log('middleware api-------')
+		// return trolleyMiddleware(req)
+	}
 	
 	return NextResponse.next()
 }
@@ -53,7 +56,7 @@ export default async function middleware(req: NextRequest) {
 export const config = {
 	matcher: [
 		'/((?!api|_next/static|_next/image|.*\\.png$).*)',
-		// '/api/:path*',
+		'/api/:path*',
 	
 	],
 	

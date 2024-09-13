@@ -1,7 +1,7 @@
 import type { BankDB, ProductDB } from "@prisma/client"
 import type { CreateDB } from "@/interface/model/transaction.type"
-import type { BankCreate } from "@/server/schema/bank.schema"
 import type { ProductCreate } from "@/interface/model/product.type"
+import { BankCreate } from "@/interface/model/bank.type";
 
 export async function createBank(
   bank: CreateDB<BankCreate>,

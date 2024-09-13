@@ -9,7 +9,6 @@ type DescriptionCheckout = {
 	price: number,
 	distance: string,
 	packing: string
-	
 }
 
 export type TCheckoutContext = {
@@ -102,7 +101,6 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 	}))
 	
 	const removeTrolleyMany = (trolleyId: number) => setCheckout(prevState => ({
-		
 		...prevState, trolleyMany: prevState.trolleyMany.filter(t => t.id !== trolleyId)
 	}))
 	

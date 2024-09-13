@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function NavButton() {
   return (
-    <div className='btm-nav border-t-2 h-20'>
+		<div className='btm-nav bg-base-100 h-20'>
       <NavBottomItem
         title='Home'
         icon='ic:round-home'

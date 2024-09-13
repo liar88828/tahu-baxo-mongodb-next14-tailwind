@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { User } from "@prisma/client"
 import prisma from "@/config/prisma"
 import { createSession } from "@/server/service/auth/session.service";
-import { decrypt, encrypt } from "@/server/service/auth/jose.service";
+import { decryptAPI, encrypt } from "@/server/service/auth/jose.service";
 
 export type UserBaseToken = Pick<User, "id" | "email" | "name">
 
@@ -67,9 +67,8 @@ export class JwtService {
 	}
 	
 	async verifyAccessToken(token: string | undefined) {
-		return decrypt(token, true)
+		return decryptAPI(token)
 	}
-	
 }
 
 export const jwtService = new JwtService()

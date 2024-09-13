@@ -17,7 +17,7 @@ export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 		}
 	)
 	if (!res.ok) {
-		errorApi(res.status, 'auth', 'login failed');
+		errorApi(res.status, 'auth', await res.json());
 	}
 
 	const data: ResponseAuthUser = await res.json()
