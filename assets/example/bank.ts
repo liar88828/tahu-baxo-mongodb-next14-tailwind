@@ -59,7 +59,7 @@ export const dataTestCreate2: BankCreate = {
 	desc: "atm kui di gesek",
 	userId: "asda",
 }
-export const bankDataList: BankDB[] = [
+export const bankDataList: Omit<BankDB, 'created_at' | 'updated_at'>[] = [
 	{
 		id: 503,
 		name: "Bank ABC",
@@ -69,7 +69,8 @@ export const bankDataList: BankDB[] = [
 		type: "Savings Account",
 		img: "https://example.com/bank_abc.jpg",
 		desc: "High-interest savings account with zero monthly fees",
-		userId: "cm0ray6cb0001rsx0eaaiat90"
+		userId: "cm0ray6cb0001rsx0eaaiat90",
+		
 	},
 	{
 		id: 504,

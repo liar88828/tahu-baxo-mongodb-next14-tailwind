@@ -1,7 +1,6 @@
 import { it } from "vitest";
 import prisma from "@/config/prisma";
 import { BankDB, DeliveryDB } from "@prisma/client";
-import { registerTest } from "@/__test__/utils/registerData";
 import { productDataList } from "@/assets/example/product";
 import { deliveryDataList } from "@/assets/example/delivery";
 import { bankDataList } from "@/assets/example/bank";
@@ -9,10 +8,17 @@ import { bankDataList } from "@/assets/example/bank";
 let transactionToken = ''
 let idUser = ''
 it('should seed prisma', async () => {
-	const { data, accessToken } = await registerTest("user4")
-	transactionToken = accessToken
-	idUser = data.id
+	// const { data, accessToken } = await registerTest("user4")
+	// transaidctionToken = accessToken
+	// idUser = data.id
 	//
+	const user = await prisma.user.findFirst().then(res => {
+		if (!res) {
+			throw new Error("No prisma user found")
+		}
+		idUser = res.id
+		return res
+	})
 	// await createProduct(productTransaction, accessToken)
 	const dataProductMany = productDataList.map(d => {
 		return {
@@ -48,7 +54,7 @@ it('should seed prisma', async () => {
 		data: dataDeliveryMany
 	})
 	
-	const dataBankMany: Omit<BankDB, 'id'>[] = bankDataList.map(d => {
+	const dataBankMany: Omit<BankDB, 'id' | 'created_at' | 'updated_at'>[] = bankDataList.map(d => {
 		return {
 			phone: d.phone,
 			name: d.name,
@@ -58,10 +64,20 @@ it('should seed prisma', async () => {
 			desc: d.desc,
 			img: d.img,
 			userId: idUser,
+			
 		}
 	})
 	await prisma.bankDB.createMany({
 		data: dataBankMany
+	})
+	
+	await prisma.receiverDB.create({
+		data: {
+			name: user.name,
+			address: user.address,
+			phone: user.phone,
+			userId: user.id,
+		}
 	})
 	
 });

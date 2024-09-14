@@ -5,6 +5,7 @@ import { onRegister } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
+import usePhone from "@/hook/usePhone";
 
 export type OnFormState<T> = {
   message?: string,
@@ -13,10 +14,11 @@ export type OnFormState<T> = {
 }
 
 function Page() {
+  const { phone, setPhone } = usePhone()
   const [state, formAction,] = useFormState(onRegister, initialState)
   const {pending} = useFormStatus();
   console.log(state)
-  if (state?.message?.[0] === 'true') {
+  if (state?.message === 'true') {
     redirect('/auth/otp')
   }
   return (
@@ -27,21 +29,21 @@ function Page() {
         <h1 className={'text-3xl font-bold'}>Create Your Account</h1>
         <p className={'text-lg font-light'}>Join us by creating a new account. It`s quick and easy!</p>
       </div>
-
+      
       <form
-        action={formAction}
+        action={ formAction }
         className=" space-y-5"
       >
         <div>
           <label htmlFor="fullname">Full Name</label>
           <input
-            name={'fullname'}
+            name={ 'fullname' }
             type="text"
-            className={'input input-bordered w-full'}
+            className={ 'input input-bordered w-full' }
             placeholder="Enter Your Fullname ..."
           />
           { state.err?.fullname &&
-            <p className={'text-error text-xs'}>
+            <p className={ 'text-error text-xs' }>
               { state.err.fullname }
             </p>
           }
@@ -49,27 +51,59 @@ function Page() {
         <div>
           <label htmlFor="email">Email</label>
           <input
-            name={'email'}
+            name={ 'email' }
             type="email"
-            className={'input input-bordered w-full'}
+            className={ 'input input-bordered w-full' }
             placeholder="Enter Your Email ..."
           />
           { state.err?.email &&
-            <p className={'text-error text-xs'}>
+            <p className={ 'text-error text-xs' }>
               { state.err.email }
+            </p>
+          }
+        </div>
+        
+        <div>
+          <label htmlFor="phone">Phone</label>
+          <input
+            value={ phone }
+            onChange={ e => setPhone(e) }
+            name={ 'phone' }
+            type="tel"
+            className={ 'input input-bordered w-full' }
+            placeholder="Enter Your Phone Number ..."
+          />
+          { state.err?.phone &&
+            <p className={ 'text-error text-xs' }>
+              { state.err.phone }
+            </p>
+          }
+        </div>
+        
+        
+        <div>
+          <label htmlFor="address">Address</label>
+          <textarea
+            name={ 'address' }
+            className={ 'textarea textarea-bordered w-full' }
+            placeholder="Enter Your Address ..."
+          ></textarea>
+          { state.err?.address &&
+            <p className={ 'text-error text-xs' }>
+              { state.err.address }
             </p>
           }
         </div>
         <div>
           <label htmlFor="password">Password</label>
           <input
-            name={'password'}
+            name={ 'password' }
             type="password"
-            className={'input input-bordered w-full'}
+            className={ 'input input-bordered w-full' }
             placeholder="Enter Your Password ..."
           />
           { state.err?.password &&
-            <p className={'text-error text-xs'}>
+            <p className={ 'text-error text-xs' }>
               { state.err.password }
             </p>
           }
@@ -77,30 +111,33 @@ function Page() {
         <div>
           <label htmlFor="confPass">Confirm New Password</label>
           <input
-            name={'confPass'}
+            name={ 'confPass' }
             type="password"
-            className={'input input-bordered w-full'}
+            className={ 'input input-bordered w-full' }
             placeholder="Enter Your Confirm New Password ..."
           />
           { state.err?.confPass &&
-            <p className={'text-error text-xs'}>
+            <p className={ 'text-error text-xs' }>
               { state.err.confPass }
             </p>
           }
         </div>
-        <button className={'btn btn-block btn-primary'}>Sign Up</button>
+        <button
+          disabled={ pending }
+          className={ 'btn btn-block btn-primary' }>Sign Up
+        </button>
       </form>
       <div className="space-y-1 mt-2">
         <p>Already have an account? <Link
-          href={'/auth/login'}
-          className={' text-primary cursor-pointer  underline '}
+          href={ '/auth/login' }
+          className={ ' text-primary cursor-pointer  underline ' }
         >Sign in here.</Link></p>
-
-        <p> By signing up, you agree to our <span className={'text-primary'}>Terms of Service</span> and <span
-          className={'text-primary'}
+        
+        <p> By signing up, you agree to our <span className={ 'text-primary' }>Terms of Service</span> and <span
+          className={ 'text-primary' }
         >Privacy Policy.</span></p>
       </div>
-
+    
     </div>
   );
 }

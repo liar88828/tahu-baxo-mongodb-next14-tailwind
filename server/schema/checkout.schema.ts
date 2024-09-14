@@ -4,7 +4,6 @@ import { CheckoutCreate, CheckoutCreateMany } from "@/interface/model/transactio
 import { orderSchema } from "@/server/schema/order.schema";
 
 export class CheckoutSchema {
-	
 	create = z.object({
 		transaction: transactionSchema.create,
 		order: orderSchema.create,

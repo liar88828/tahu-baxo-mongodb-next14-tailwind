@@ -51,19 +51,20 @@ export function IconDelete() {
   );
 }
 
-export function IconRemove() {
+export function IconRemove({ className }: { className?: string }) {
   return (
     <Icon
       icon='ic:round-remove'
-      className='size-5'
+			className={ `size-5 ${ className }` }
     />
   );
 }
-export function IconAdd() {
+
+export function IconAdd({ className }: { className?: string }) {
   return (
     <Icon
       icon='ic:round-add'
-      className='size-5'
+			className={ `size-5 ${ className }` }
     />
   );
 }
@@ -120,6 +121,30 @@ export function IconHome({ className }: { className?: string }) {
 export function IconDetail({ className }: { className?: string }) {
 	return (
 		<Icon icon="mdi:note-text-outline" className={ 'size-5' }/>
+	);
+}
+
+export function IconLocation({ className }: { className?: string }) {
+	return (
+		<Icon icon="mdi:location-on-outline" className={ 'size-5' }/>
+	);
+}
+
+export function IconMoney({ className }: { className?: string }) {
+	return (
+		<Icon icon="mdi:attach-money" className={ 'size-5' }/>
+	);
+}
+
+export function IconBox({ className }: { className?: string }) {
+	return (
+		<Icon icon="solar:box-linear" className={ `size-6/10 ${ className }` }/>
+	);
+}
+
+export function IconTruck({ className }: { className?: string }) {
+	return (
+		<Icon icon="mdi:truck-outline" className={ `~size-6/10 ${ className }` }/>
 	);
 }
 

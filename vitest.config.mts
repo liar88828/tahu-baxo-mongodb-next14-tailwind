@@ -9,7 +9,6 @@ export default defineConfig({
   test : {
     environment : 'jsdom',
     alias : {
-      //@ts-expect-error
       "@" : fileURLToPath(new URL("./", import.meta.url))
     },
     coverage : {

@@ -1,7 +1,7 @@
 'use server'
 import { revalidatePath } from "next/cache";
 import { userSchema } from "@/server/schema/user.schema";
-import { apiLogin, apiLogout, } from "@/server/api/auth";
+import { apiLogin, apiLogout, apiRegister, } from "@/server/api/auth";
 import { authCookie } from "@/server/api/authCookie";
 import { errorForm } from "@/lib/error/errorForm";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
@@ -28,6 +28,7 @@ export async function onRegister(prevState: any, formData: FormData): Promise<On
   try {
     const rawFormData = Object.fromEntries(formData.entries())
 		const res = userSchema.registerSchema.parse(rawFormData);
+		const data = await apiRegister(res)
 		return { message: 'true' }
   } catch (err) {
 		console.error('on register error')

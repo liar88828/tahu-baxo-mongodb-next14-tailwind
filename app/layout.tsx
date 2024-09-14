@@ -4,6 +4,7 @@ import './globals.css'
 import React from "react";
 import ProviderAuth from "@/components/provider/ProviderAuth";
 import ProviderContext from "@/components/provider/ProviderContext";
+import ProviderRedux from "@/components/provider/ProviderRedux";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,9 +14,8 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout(
-	{ children, navbar }: {
+	{ children, }: {
 		children: React.ReactNode,
-		navbar: React.ReactNode,
 	}) {
 	return (
 		<html
@@ -27,8 +27,9 @@ export default function RootLayout(
 		<div className="container">
 			<ProviderAuth>
 				<ProviderContext>
-			{ navbar }
+					<ProviderRedux>
 			{ children }
+					</ProviderRedux>
 				</ProviderContext>
 			</ProviderAuth>
 		</div>

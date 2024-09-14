@@ -62,15 +62,14 @@ model User {
   Authenticator Authenticator[]
   accounts      Account[]
   sessions      Session[]
-  // Trolley       Trolley         @relation(fields: [trolleyId], references: [id])
-  // trolleyId     Int             @unique
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  ProductDB     ProductDB[]
-  DeliveryDB    DeliveryDB[]
-  BankDB        BankDB[]
-  TrolleyDB     TrolleyDB[]
-  ReceiverDB    ReceiverDB[]
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  ProductDB  ProductDB[]
+  DeliveryDB DeliveryDB[]
+  BankDB     BankDB[]
+  TrolleyDB  TrolleyDB[]
+  ReceiverDB ReceiverDB[]
 }
 
 model VerificationToken {
@@ -110,28 +109,16 @@ model ReceiverDB {
 }
 
 model OrderanDB {
-  id            String   @id @default(uuid())
-  // orang
+  id            String          @id @default(uuid())
   from          String
   sender        String
   phone         String
-  // tanggal
-  // pesan          DateTime
-  // waktuKirim     DateTime
-  // keterangan
   desc          String
   location      String
   shipping_cost Int
-  // total
-  // typePembayaran String
-  // totalBayar     Int
-  // totalPenjualan Int
   status        String
-  // semua
-  // at update / create
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
   TransactionDB TransactionDB[]
 }
 
@@ -185,9 +172,6 @@ model BankDB {
 
 model TransactionDB {
   id           Int         @id @default(autoincrement())
-  qty          Int
-  // ProductDB              ProductDB?               @relation(fields: [productDBId], references: [id])
-  // productDBId            Int
   OrderanDB    OrderanDB?  @relation(fields: [orderanDBId], references: [id])
   orderanDBId  String
   ReceiverDB   ReceiverDB? @relation(fields: [receiverDBId], references: [id])
@@ -199,16 +183,8 @@ model TransactionDB {
   TrolleyDB    TrolleyDB[]
 }
 
-// model Trolley {
-//   id               Int                  @id @default(autoincrement())
-//   TrolleyOnProduct TrolleyOnProductDB[]
-//   User             User?
-// }
-
 model TrolleyDB {
   id            Int            @id @default(autoincrement())
-  // Trolley     Trolley?   @relation(fields: [trolleyId], references: [id])
-  // trolleyId   Int?
   User          User           @relation(fields: [userId], references: [id])
   userId        String
   Product       ProductDB      @relation(fields: [productId], references: [id])

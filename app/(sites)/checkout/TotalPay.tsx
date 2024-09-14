@@ -3,17 +3,44 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useContext } from "react";
 import { ContextTrolley } from "@/components/provider/ProviderContext";
 import { Rupiah } from "@/lib/utils/formatMoney";
+import { onTransaction } from "@/server/action/transaction.action";
 
 export function TotalPay() {
   const route = useRouter()
-  const { state } = useContext(ContextTrolley)
+  const { state, getTotalPrice } = useContext(ContextTrolley)
   let price = useCallback(() => {
-      let totalProduct = state.trolleyMany.reduce((a, b) => a + (b.price * b.qty), 0)
-      return totalProduct + state.description.price
+      return getTotalPrice()
     },
     [state.trolleyMany, state.description.price])
   
   console.log(state)
+  const onCheckout = async () => {
+    onTransaction({
+      order: {
+        name: state.user!!.name,
+        from: state.user!!.address,
+        status: 'Waiting',
+        phone: state.user!!.phone,
+        location: state.user!!.address,
+        desc: state.description.note,
+        shipping_cost: state.description.price,
+        sender: state.delivery!!.name,
+        total: price()
+      },
+      transaction: {
+        receiverDBId: 1,
+        deliveryDBId: state.delivery!!.id,
+        bankDBId: state.bank!!.id,
+      },
+      trollyIds: state.trolleyMany.map(item => {
+        return {
+          id: item.id,
+          userId: state.user!!.id
+        }
+      })
+    })
+    route.push('/transaction')
+  }
   return (<div
       data-testid={ 'checkout-TotalPay' }
       className={ 'space-y-2 ' }>
@@ -32,7 +59,7 @@ export function TotalPay() {
         </h1>
       </div>
       <button
-        onClick={ () => route.push('/transaction') }
+        onClick={ onCheckout }
         className='btn btn-primary w-full font-bold text-lg  '
       >
         Buy Now

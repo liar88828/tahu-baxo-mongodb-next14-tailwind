@@ -6,7 +6,6 @@ import { Rupiah } from "@/lib/utils/formatMoney";
 export function Description({ item }: { item: ProductDB }) {
 	return (
 		<div className=' space-y-4'>
-			
 			<div className="px-4   space-y-4 pt-4">
 				<div className="">
 					<h1 className={ 'font-bold line-clamp-2 text-ellipsis text-3xl' }>{ item.name }</h1>
@@ -42,7 +41,6 @@ export function Description({ item }: { item: ProductDB }) {
 						) }
 				</div>
 			</div>
-			
 			{/*------------*/ }
 			<div className="px-4 bg-base-300 space-y-10 py-10">
 				<div className="">
@@ -74,8 +72,7 @@ export function Description({ item }: { item: ProductDB }) {
 					</ul>
 				</div>
 			</div>
-			{/*	-----------*/
-			}
+			{/*	-----------*/ }
 		</div>
 	)
 		;

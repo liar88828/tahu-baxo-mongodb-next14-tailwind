@@ -4,7 +4,7 @@ import { ProductList } from "@/app/(sites)/checkout/product/ProductList";
 import { Payment } from "@/app/(sites)/checkout/payment/Payment";
 import { Delivery } from "@/app/(sites)/checkout/delivery/Delivery";
 import { TotalPay } from "@/app/(sites)/checkout/TotalPay";
-import { SkeletonCard, SkeletonCardLong } from "@/components/Skeleton";
+import { SkeletonCard } from "@/components/Skeleton";
 
 export default async function Page() {
   return (<div
@@ -13,9 +13,9 @@ export default async function Page() {
       <Suspense fallback={<SkeletonCard />}>
           <ProfileInfo />
         </Suspense>
-        <Suspense fallback={ <SkeletonCardLong/> }>
+      {/*<Suspense fallback={ <SkeletonCardLong/> }>*/ }
           <ProductList/>
-        </Suspense>
+      {/*</Suspense>*/ }
         <Suspense fallback={<SkeletonCard />}>
 					<Delivery/>
         </Suspense>

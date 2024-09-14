@@ -48,7 +48,7 @@ export async function getProductsAllPrivate(search?: string) {
 		const data: PaginationDB<ProductDB> = await res.json()
 		return data
 	} catch (err: unknown) {
-		return errorForm(err)
+		return null
 	}
 }
 
@@ -68,7 +68,7 @@ export async function getProductId(id: number) {
 		const data: ProductDB = await res.json()
 		return data
 	} catch (err: unknown) {
-		return errorForm(err)
+		return null
 		
 	}
 	

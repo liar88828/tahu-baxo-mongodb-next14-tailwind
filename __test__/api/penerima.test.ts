@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import prisma from "@/config/prisma"
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData"
 import { penerimaTransaction, testExpectPenerima, testPenerimaEmpty } from "@/assets/example/received";
+import { getAllDataReceiver } from "@/server/action/received.action";
 
 let penerimaToken = ""
 let penerimaId = 0
@@ -94,22 +95,22 @@ describe("can test api penerima", async () => {
 	
 	describe("GET can get Data Penerima", async () => {
 		it("SUCCESS GET data penerima all penerima", async () => {
-			const res = await fetch("http://localhost:3000/api/penerima", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			const code = res.status
-			const data = await res.json()
+			const fun = async () => {
+				const res = await getAllDataReceiver('');
+				if (!res) {
+					throw null
+				}
+				return res
+			}
+			const res = await fun()
 			
-			expect(code).toBe(200)
-			expect(data).toMatchObject({
+			expect(res.code).toBe(200)
+			expect(res.data).toMatchObject({
 				data: [testExpectPenerima],
 				page: expect.any(Number),
 				take: expect.any(Number),
 			})
-			expect(code).not.toBe(400)
+			expect(res.code).not.toBe(400)
 		})
 		
 		it("SUCCESS GET data penerima my id", async () => {

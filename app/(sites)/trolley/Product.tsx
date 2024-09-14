@@ -34,12 +34,9 @@ export async function Product() {
 						/>
 						:
 						data.map((item, index) => (
-							item.Product ? <ProductItem
-								trolley={ item }
-								product={ item.Product }
-								key={ index }>
-								{/*<input type="checkbox" defaultChecked className="checkbox checkbox-sm mr-2"/>*/ }
-							</ProductItem> : <ErrorComponent/>
+							item.Product
+								? <ProductItem trolley={ item } product={ item.Product } key={ index }/>
+								: <ErrorComponent/>
 						)) }
 			</div>
 		</div>

@@ -7,11 +7,10 @@ import { ProductListItemProps } from "@/app/(sites)/trolley/Product";
 import { ContextTrolley } from "@/components/provider/ProviderContext";
 import { deleteTrolley } from "@/server/action/trolley.action";
 
-export function ProductItem({ trolley, product, children }: ProductListItemProps) {
+export function ProductItem({ trolley, product }: ProductListItemProps) {
+	
 	const { addTrolley, state, removeTrolley, removeTrolleyMany, addTrolleyMany } = useContext(ContextTrolley);
-	
 	const found = state.trolleyMany.some(t => t.id === trolley.id)
-	
 	const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (state.trolley?.id !== trolley.id) {
 			addTrolley({ ...trolley, price: product.price })
@@ -19,11 +18,11 @@ export function ProductItem({ trolley, product, children }: ProductListItemProps
 			removeTrolley()
 		}
 	}
-	
+	console.log(state)
 	const handleCheckBoxMany = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// console.log(state.trolleyMany.find(t => t.id === trolley.id))
 		if (!found) {
-			addTrolleyMany({ ...trolley, price: product.price })
+			addTrolleyMany({ ...trolley, Product: product })
 		} else {
 			removeTrolleyMany(trolley.id)
 		}

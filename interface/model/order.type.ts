@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client"
-import type { orderSchema } from "../../server/schema/order.schema"
+import type { orderSchema } from "@/server/schema/order.schema"
 import type prisma from "../../config/prisma"
 import type { z } from "zod"
 

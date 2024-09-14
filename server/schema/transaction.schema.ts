@@ -24,7 +24,7 @@ export class TransactionSchema {
 	}) satisfies z.Schema<Omit<TransactionDB, 'id' | 'orderanDBId'>>
 	
 	createForMany = z.object({
-		qty: z.number(),
+		// qty: z.number(),
 		// productDBId: z.number(),
 		receiverDBId: z.number(),
 		deliveryDBId: z.number(),

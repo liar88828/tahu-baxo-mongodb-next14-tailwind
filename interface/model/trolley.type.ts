@@ -8,6 +8,7 @@ export type TrolleyUpdate = z.output<typeof trolleySchema.update>
 export type TrolleyCreate = z.output<typeof trolleySchema.create>
 export type TrolleyDataId = Pick<TrolleyDB, "id" | 'userId'>
 export type GetAllTrolley = TrolleyDB & { Product: ProductDB | null }
+export type GetAllTrolleyContext = TrolleyDB & { Product: ProductDB }
 
 const id: TrolleyDataId = {
 	id: 1,

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const phoneInit = z.string({ required_error: 'Number Phone is required', }).min(2).max(30)
 export const imageInit = z.string({ required_error: 'Img is required', }).max(200).optional().nullable()
-export const addressInit = z.string({ required_error: 'Location is required', }).min(2).max(100)
+export const addressInit = z.string({ required_error: 'Address is required', }).min(2).max(100)
 export const descriptionInit = z.string({ required_error: 'Description is required', }).min(2).max(300)
 export const nameInit = z.string({ required_error: 'Name is required', }).min(2).max(30)
 export const userId = z.string({ required_error: 'User is required' }).cuid()

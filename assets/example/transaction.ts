@@ -41,11 +41,12 @@ export const transactionCreateExample: CheckoutCreateSchema = {
 		location: "Jakarta",
 		shipping_cost: 15000,
 		status: "Shipped",
+		total: 15000 * 123
 	},
 }
 export const transactionCreateManyExample: CheckoutCreateMany = {
 	transaction: {
-		qty: 123,
+		
 		receiverDBId: 123,
 		deliveryDBId: 123,
 		bankDBId: 123,
@@ -59,6 +60,7 @@ export const transactionCreateManyExample: CheckoutCreateMany = {
 		location: "Jakarta",
 		shipping_cost: 15000,
 		status: "Shipped",
+		total: 15000 * 123
 	},
 	trollyIds: [
 		{

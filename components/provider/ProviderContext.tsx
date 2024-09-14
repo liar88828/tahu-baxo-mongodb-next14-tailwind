@@ -2,6 +2,7 @@
 import React, { createContext, ReactNode, useState } from 'react';
 import { UserPublic } from "@/interface/user/UserPublic";
 import { BankDB, DeliveryDB, TrolleyDB } from "@prisma/client";
+import { GetAllTrolleyContext } from "@/interface/model/trolley.type";
 
 type TrolleyContext = TrolleyDB & { price: number }
 type DescriptionCheckout = {
@@ -14,7 +15,7 @@ type DescriptionCheckout = {
 export type TCheckoutContext = {
 	user: UserPublic | null,
 	trolley: TrolleyContext | null,
-	trolleyMany: TrolleyContext[],
+	trolleyMany: GetAllTrolleyContext[],
 	bank: BankDB | null
 	delivery: DeliveryDB | null
 	description: DescriptionCheckout
@@ -27,12 +28,13 @@ export type TProviderCheckout = {
 	removeTrolley: () => void
 	addTrolley: (trolley: TrolleyContext) => void
 	removeTrolleyMany: (trolleyId: number) => void
-	addTrolleyMany: (trolley: TrolleyContext) => void
+	addTrolleyMany: (trolley: GetAllTrolleyContext) => void
 	removeBank: () => void
 	addBank: (bank: BankDB) => void
 	removeDelivery: () => void
 	addDelivery: (delivery: DeliveryDB) => void
 	description: (item: Partial<DescriptionCheckout>) => void
+	getTotalPrice: () => number
 }
 const initialState: TCheckoutContext = {
 	user: null,
@@ -73,8 +75,8 @@ export const ContextTrolley = createContext<TProviderCheckout>(
 		removeDelivery: () => {
 		},
 		description: () => {
-		
-		}
+		},
+		getTotalPrice: () => 0
 	});
 
 export default function ProviderContext({ children }: { children: ReactNode }) {
@@ -96,7 +98,7 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 		...prevState, trolley: null
 	}))
 	
-	const addTrolleyMany = (trolley: TrolleyContext,) => setCheckout(prevState => ({
+	const addTrolleyMany = (trolley: GetAllTrolleyContext) => setCheckout(prevState => ({
 		...prevState, trolleyMany: [...prevState.trolleyMany, trolley]
 	}))
 	
@@ -124,7 +126,11 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 			}
 		}))
 	}
-	
+	const getTotalPrice = () => {
+		let totalProduct = checkout.trolleyMany.reduce((a, b) => a + (b.Product.price * b.qty), 0)
+		return totalProduct + checkout.description.price
+		
+	}
 	return (
 		<ContextTrolley.Provider value={ {
 			state: checkout, reduce: setCheckout,
@@ -138,7 +144,8 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 			removeDelivery,
 			removeTrolleyMany,
 			addTrolleyMany,
-			description
+			description,
+			getTotalPrice
 		} }>
 			{ children }
 		</ContextTrolley.Provider>

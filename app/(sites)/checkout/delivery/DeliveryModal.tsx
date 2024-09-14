@@ -4,12 +4,19 @@ import { ContextTrolley } from "@/components/provider/ProviderContext";
 import { DeliveryItem } from "@/app/(sites)/checkout/delivery/DeliveryItem";
 import { DeliveryDB } from "@prisma/client";
 import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { deliveryAction } from "@/store/checkout/delivery";
+import Link from "next/link";
 
 export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 	const [search, setSearch] = useState('')
 	const { addDelivery } = useContext(ContextTrolley)
+	const dispatch = useDispatch<AppDispatch>()
+	
 	return (
 		<>
+			
 			<button
 				data-testid={ 'checkout-DeliveryModal-button' }
 				className="btn btn-primary btn-sm" onClick={ () => {
@@ -18,6 +25,7 @@ export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 			} }>
 				Select
 			</button>
+			<Link href={ '/test' }>Go Link</Link>
 			<dialog
 				id="modalDelivery" className="modal">
 				<div
@@ -37,7 +45,10 @@ export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 							<DeliveryItem
 								item={ item }
 								add={ true }
-								fun={ () => addDelivery(item) }
+								fun={ () => {
+									addDelivery(item)
+									dispatch(deliveryAction.addDelivery(item))
+								} }
 								key={ item.id }/>
 						)) }
 					</div>

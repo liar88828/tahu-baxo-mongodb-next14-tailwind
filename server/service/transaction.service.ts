@@ -18,9 +18,7 @@ export class TransactionService {
 	}
 	
 	async createOne(data: CheckoutCreateSchema, user: AccessTokenPayload): Promise<ResponseCheckout> {
-		console.log("------- service transaction")
 		const { order, transaction } = await this.validCheckout.checkoutValid(data)
-		console.log("------- validTransaction transaction")
 		return prisma.$transaction(async (tx) => {
 			// const penerimaDB = await tx.penerimaDB.create({
 			// 	data: {
@@ -52,7 +50,6 @@ export class TransactionService {
 			
 			const transactionDB = await tx.transactionDB.create({
 				data: {
-					qty: transaction.qty,
 					// productDBId: transaction.productDBId,
 					receiverDBId: transaction.receiverDBId,
 					deliveryDBId: transaction.deliveryDBId,
@@ -108,8 +105,6 @@ export class TransactionService {
 			})
 			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
 				data: {
-					qty: transaction.qty,
-					// productDBId: transaction.productDBId,
 					receiverDBId: transaction.receiverDBId,
 					deliveryDBId: transaction.deliveryDBId,
 					orderanDBId: orderanDB.id,

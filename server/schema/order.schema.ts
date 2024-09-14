@@ -10,8 +10,9 @@ export class OrderSchema {
 		phone: phoneInit,
 		desc: descriptionInit,
 		location: addressInit,
-		shipping_cost: z.number(),
+		shipping_cost: z.number().positive(),
 		status: z.string(),
+		total: z.number().positive(),
 	}) satisfies z.Schema<OrderDBCreate>
 	
 	validCreate(data: OrderCreate): OrderCreate {

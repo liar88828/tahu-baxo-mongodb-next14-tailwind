@@ -1,13 +1,16 @@
-import React from 'react'
-import { getTrolleyPrivate } from "@/server/action/trolley.action";
+'use client'
+import React, { useContext } from 'react'
 import { ProductItem } from "@/app/(sites)/trolley/ProductItem";
 import { ProductNote } from "@/app/(sites)/checkout/product/ProductNote";
+import { ContextTrolley } from "@/components/provider/ProviderContext";
 
-export async function ProductList() {
-	const data = await getTrolleyPrivate()
-  if (!data) {
-		return <h1>Product data is Not found</h1>
-  }
+export function ProductList() {
+  // const data = await getTrolleyPrivate()
+  const { state } = useContext(ContextTrolley)
+  
+  // if (!state.trolleyMany) {
+  // 	return <h1>Product data is Not found</h1>
+  // }
   return (
     <div className="">
       <div
@@ -18,7 +21,7 @@ export async function ProductList() {
       </div>
       <div className='space-y-2 h-56 overflow-y-auto'>
         {
-          data.map((item) => {
+          state.trolleyMany.map((item) => {
             return (item.Product ?
               <ProductItem
                 key={ item.productId }

@@ -7,8 +7,8 @@ import { Rupiah } from "@/lib/utils/formatMoney";
 export default function NavBottom() {
   const route = useRouter()
   const { state } = useContext(ContextTrolley)
-  console.log(state)
-  let price = useCallback(() => state.trolleyMany.reduce((a, b) => a + (b.price * b.qty), 0),
+  // console.log(state)
+  let price = useCallback(() => state.trolleyMany.reduce((a, b) => a + (b.Product.price * b.qty), 0),
     [state.trolleyMany])
   
   return (

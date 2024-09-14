@@ -17,7 +17,7 @@ export function TitleSearch(
   
   const { updateQueryParams } = usePageSearch()
   return (
-		<div className='flex justify-between pl-1 mb-2 items-center'>
+		<div className='flex justify-between pl-1 mb-4 items-center'>
 			<h1 className='font-semibold text-xl'>{ title }</h1>
 			<div className="join w-1/2">
         <input

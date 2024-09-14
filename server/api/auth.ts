@@ -29,11 +29,10 @@ export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 export async function apiRegister(form: RegisterUser) {
 	const res = await fetch(`${ config.url }/api/user/register`,
 		{
+			method: "POST",
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			cache: "no-cache",
-			method: "POST",
 			body: JSON.stringify(form),
 		}
 	)

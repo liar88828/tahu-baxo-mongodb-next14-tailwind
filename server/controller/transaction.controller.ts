@@ -26,10 +26,7 @@ class TransactionController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<CheckoutCreateSchema>(req)
-			console.log(data, 'test data ')
-			console.log('valid data')
 			const res = await this.serviceTransaction.createOne(data, user)
-			console.log('valid request')
 			return Response.json(res)
 		} catch (e) {
 			return errorHanding(e)
