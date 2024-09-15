@@ -1,27 +1,24 @@
-import React from 'react';
-import { getAllDataReceiver } from "@/server/action/received.action";
+import React, { Suspense } from 'react';
 import ErrorComponent from "@/components/ErrorComponent";
 import { Shipping } from "@/app/(sites)/profile/(tab)/receiver/shipping";
 import { ParamsProfile } from "@/interface/server/param";
 import { TitleSearch } from "@/components/TitleSearch";
 import { IconSearch } from "@/components/icon/IconMore";
+import { getDataReceiver } from "@/server/action/receiver.action";
+import { Loading } from "@/components/loading";
 
 export default async function Page({ searchParams: { search } }: ParamsProfile) {
-	const receiver = await getAllDataReceiver(search)
+	const receiver = await getDataReceiver(search)
 	if (!receiver) {
 		return <ErrorComponent/>
 	}
 	return (
-		<div>
+		<Suspense fallback={ <Loading/> }>
 			<TitleSearch
 				title={ `Result :${ receiver.data.length }` }
 				button={ <IconSearch/> }
 			/>
-			<div className={ ' grid grid-cols-2 gap-2' }>
-				{ receiver.data.map(item => <Shipping key={ item.id } item={ item }/>) }
-			</div>
-		</div>
+			<Shipping data={ receiver.data }/>
+		</Suspense>
 	);
 }
-
-

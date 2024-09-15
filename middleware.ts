@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
 import { decryptMiddleware } from "@/server/service/auth/jose.service";
 import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
+import { getSession } from "@/server/api/authCookie";
 
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public
@@ -13,9 +13,14 @@ export default async function middleware(req: NextRequest) {
 	const isPublicRoute = publicRoutes.includes(path)
 	
 	// 3. Decrypt the session from the cookie
-	const cookie = cookies().get('access')?.value
+	const cookie = await getSession()
+	
 	const session = await decryptMiddleware(cookie)
-	// console.log(session,'session-----------')
+	// if (session !== null) {
+	// 	const payload = await updateSession()
+	// 	console.log(payload, 'payload')
+	// }
+	// console.log(session,` ${path} session----------xxx-`)
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
 		console.log('will redirect')
@@ -46,6 +51,12 @@ export default async function middleware(req: NextRequest) {
 		return trolleyMiddleware(req)
 	}
 	if (req.nextUrl.pathname.startsWith('/api')) {
+		if (!req.nextUrl.pathname.startsWith('/api/user')) {
+			// console.log('will update session')
+			// const payload = await updateSession(cookie)
+			// console.log(payload, 'payload')
+		}
+		
 		// console.log('middleware api-------')
 		// return trolleyMiddleware(req)
 	}

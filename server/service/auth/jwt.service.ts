@@ -6,8 +6,8 @@ import { createSession } from "@/server/service/auth/session.service";
 import { decryptAPI, encrypt } from "@/server/service/auth/jose.service";
 
 export type UserBaseToken = Pick<User, "id" | "email" | "name">
-
 export type AccessTokenPayload = UserBaseToken & { idToken: string }
+export type AccessUserID = Pick<AccessTokenPayload, 'id'>;
 
 export type RefreshTokenPayload = { userId: string }
 

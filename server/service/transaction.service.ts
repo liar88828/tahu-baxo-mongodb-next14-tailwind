@@ -1,8 +1,9 @@
 import prisma from "@/config/prisma"
 import { TransactionSchema, transactionSchema, } from "@/server/schema/transaction.schema"
-import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
+import { AccessUserID } from "@/server/service/auth/jwt.service"
 import { CheckoutCreateMany, CheckoutCreateSchema, ResponseCheckout, } from "@/interface/model/transaction.type"
 import { checkoutSchema, CheckoutSchema } from "@/server/schema/checkout.schema";
+import { validIdNum, validUserId } from "@/server/schema/init.schema";
 
 type transactionId = {
 	idProduct: number
@@ -17,7 +18,7 @@ export class TransactionService {
 	) {
 	}
 	
-	async createOne(data: CheckoutCreateSchema, user: AccessTokenPayload): Promise<ResponseCheckout> {
+	async createOne(data: CheckoutCreateSchema, user: AccessUserID): Promise<ResponseCheckout> {
 		const { order, transaction } = await this.validCheckout.checkoutValid(data)
 		return prisma.$transaction(async (tx) => {
 			// const penerimaDB = await tx.penerimaDB.create({
@@ -37,7 +38,7 @@ export class TransactionService {
 					phone: order.phone,
 					status: order.status,
 					shipping_cost: order.shipping_cost,
-					
+					total: data.order.total
 					// pesan: order.pesan,
 					// waktuKirim: order.waktuKirim,
 					// typePembayaran: order.typePembayaran,
@@ -55,6 +56,7 @@ export class TransactionService {
 					deliveryDBId: transaction.deliveryDBId,
 					orderanDBId: orderanDB.id,
 					bankDBId: transaction.bankDBId,
+					userId: user.id,
 					// create relational data
 					TrolleyDB: {
 						create: {
@@ -88,7 +90,7 @@ export class TransactionService {
 		})
 	}
 	
-	async createMany(data: CheckoutCreateMany, user: AccessTokenPayload) {
+	async createMany(data: CheckoutCreateMany, user: AccessUserID) {
 		const { order, transaction, trollyIds } = await this.validCheckout.checkoutValidMany(data)
 		return prisma.$transaction(async (tx) => {
 			
@@ -101,6 +103,7 @@ export class TransactionService {
 					phone: order.phone,
 					status: order.status,
 					shipping_cost: order.shipping_cost,
+					total: order.total
 				},
 			})
 			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
@@ -109,6 +112,7 @@ export class TransactionService {
 					deliveryDBId: transaction.deliveryDBId,
 					orderanDBId: orderanDB.id,
 					bankDBId: transaction.bankDBId,
+					userId: user.id
 					// create relational data
 					
 				},
@@ -146,12 +150,34 @@ export class TransactionService {
 		})
 	}
 	
-	async findAll(page: number, limit: number = 100) {
+	async findAll(page: number, limit: number = 100, user: AccessUserID) {
 		return prisma.transactionDB.findMany({
+			where: { userId: user.id },
 			take: limit,
 			skip: (page - 1) * limit,
 		})
 	}
+	
+	async findAllComplete(id: number, user: AccessUserID) {
+		id = validIdNum(id)
+		user = validUserId(user)
+		const res = await prisma.transactionDB.findUnique({
+			where: {
+				id,
+				userId: user.id
+			},
+			include: {
+				BankDB: true,
+				OrderanDB: true,
+				ReceiverDB: true
+			}
+		})
+		if (!res) {
+			throw new Error('data is not found')
+		}
+		return res
+	}
+	
 }
 
 export const transactionService = new TransactionService(

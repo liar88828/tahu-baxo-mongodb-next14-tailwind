@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, test, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ProfileModal } from "@/app/(sites)/checkout/profile/ProfileModal";
+import { testData2 } from "@/__test__/page/checkout/profile/ProfileInfoItem.test";
 
 vi.mock('next/navigation', () => ({
 	useRouter: vi.fn()
@@ -16,17 +17,7 @@ vi.mock('next/headers', () => {
 	}
 })
 
-const testData = [{
-	name: "user1",
-	id: 'just for test',
-	email: 'user1@gmail.com',
-	emailVerified: false,
-	image: 'http://example.test',
-	phone: '082 1231 1231',
-	address: 'jl test city',
-	role: 'USER',
-	createdAt: new Date(),
-}]
+const testData = [testData2]
 
 describe('test modal checkout profile ', async () => {
 	beforeAll(() => {

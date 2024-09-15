@@ -20,7 +20,7 @@ export default async function page({ params }: ParamsProduct) {
         <Description item={ data }/>
 				<div className="p-2">
 					<TitleMore title={ 'Related Products' } button={ 'more' }/>
-					<div className="grid grid-cols-2 gap-2 ">
+					<div className="grid-card ">
 						<ProductItem/>
 					</div>
 				</div>

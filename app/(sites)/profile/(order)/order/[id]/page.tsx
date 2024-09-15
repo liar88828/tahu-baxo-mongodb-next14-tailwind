@@ -58,7 +58,7 @@ export default function Component() {
 			
 			{/**/ }
 			<div className="p-4">
-				<div className=" card card-context card-bordered w-full  ">
+				<div className=" card card-compact sm:card-normal card-bordered w-full  ">
 					<div className="card-body space-y-2">
 						
 						<div className="">

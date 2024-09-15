@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { IconHome } from "@/components/icon/IconMore";
+import React from 'react';
 
 export const message = {
 	'default': {
@@ -26,22 +27,26 @@ export default function ErrorComponent(
 		
 	}) {
 	return (
-		<main className="flex flex-col items-center justify-center mt-20">
-			<div className="space-y-4 text-center">
+		
+		<main className="mt-20 p-4">
+			<section className='card card-compact card-bordered p-2'>
+				<div className="card-body items-center space-y-4">
+					<div className="space-y-4 text-center ">
 				<h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">{ code }</h1>
 				<h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">{ msg }</h2>
 				<p className="text-muted-foreground max-w-[42rem] leading-normal sm:text-xl sm:leading-8">
 					{ title }
 				</p>
 			</div>
-			<div className="mt-8">
 				<Link href={ link }>
-					<div className="animate-bounce rounded-full p-4 mb-4 border">
+					<div className="animate-bounce rounded-full p-4 border">
 						<IconHome/>
 					</div>
 				</Link>
-			</div>
 			{ back }
+				</div>
+			</section>
 		</main>
 	)
 }
+

@@ -1,8 +1,8 @@
-import { BankDB } from "@prisma/client";
 import React from "react";
 import { IconAdd, IconRemove } from "@/components/icon/IconMore";
+import { BankData } from "@/interface/model/bank.type";
 
-export function PaymentItem({ item, add, fun }: { item: BankDB, add: boolean, fun: () => void }) {
+export function PaymentItem({ item, add, fun }: { item: BankData, add: boolean, fun: () => void }) {
 	return (
 		<div
 			data-testid={ 'checkout-PaymentItem' }

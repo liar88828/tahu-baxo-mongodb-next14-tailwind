@@ -31,11 +31,11 @@ export class AuthService extends UserService {
 	
 	async register(data: RegisterUser): Promise<ResponseAuthUser> {
 		data = this.valid.registerValid(data)
-		
 		super.validPassword(data)
 		await super.foundEmail(data)
 		const { password, ...userDb } = await super.createUser(data)
 		const { refreshToken, accessToken } = await this.token(userDb)
+		
 		return {
 			accessToken,
 			refreshToken,

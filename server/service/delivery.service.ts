@@ -70,8 +70,8 @@ export class ServiceDeliver implements IService<DeliveryDB> {
   }
 	
 	async updateOne(
+		{ id_delivery }: DeliveryId,
 		data: DeliveryUpdate,
-		{ id_delivery }: DeliveryId
 	): Promise<DeliveryDB> {
     data = this.valid.updateValid(data)
 		return prisma.deliveryDB.update({

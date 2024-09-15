@@ -5,7 +5,7 @@ import { onLogout } from "@/server/action/auth.action";
 import { authCookie } from "@/server/api/authCookie";
 
 function Page() {
-	const user = authCookie().checkAuth.refreshToken
+	const user = authCookie().checkAuth
 	return (< >
 			<div
 				data-testid="logout-Page"

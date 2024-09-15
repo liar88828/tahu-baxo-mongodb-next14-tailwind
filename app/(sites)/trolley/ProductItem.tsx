@@ -31,7 +31,7 @@ export function ProductItem({ trolley, product }: ProductListItemProps) {
 	return (
 		<div
 			className={ 'flex items-center ' }>
-			<div className={ ' ' }>
+			<div>
 				<input
 					onChange={ handleCheckBoxMany }
 					type="checkbox"
@@ -40,7 +40,7 @@ export function ProductItem({ trolley, product }: ProductListItemProps) {
 				
 				{/*{ children }*/ }
 			</div>
-			<div className='flex rounded-lg p-2 space-x-2 w-full   border '>
+			<div className='flex rounded-lg p-2 space-x-2 w-full border '>
 				<img
 					src='https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
 					alt='product image'
@@ -50,19 +50,22 @@ export function ProductItem({ trolley, product }: ProductListItemProps) {
 					<div className=' w-full'>
 						<div className=' flex justify-between  w-full'>
 							<div className=''>
-								<h1 className='text-lg font-semibold text-base-content/80'>
-									{ product.name }
-								</h1>
-								<h2 className='text-sm font-bold text-base-content/50'>Red</h2>
+								<h1 className='~text-sm/lg  text-base-content/80'>{ product.name }</h1>
+								<h1 className='~text-base/2xl font-bold'>{ Rupiah(product.price) }</h1>
+								
+								
 							</div>
 							<button
 								onClick={ async () => deleteTrolley(trolley.id) }
-								className='btn btn-circle btn-outline btn-sm'>
+								className='btn btn-circle btn-sm'>
 								<IconDelete/>
 							</button>
 						</div>
 						<div className='flex justify-between items-center w-full '>
-							<h1 className='text-lg font-bold'>{ Rupiah(product.price) }</h1>
+							<div className="">
+								<h2 className='~text-sm/lg font-semibold text-base-content/50'>{ product.type }</h2>
+								{/*<h2 className='~text-sm/lg font-bold text-base-content/50'>xl</h2>*/ }
+							</div>
 							<ProductCount item={ trolley }/>
 						</div>
 					</div>

@@ -4,8 +4,10 @@ import { z } from "zod";
 import { checkoutSchema } from "@/server/schema/checkout.schema";
 import { TrolleyDataId } from "@/interface/model/trolley.type";
 
+export type TransactionPrisma = Omit<TransactionDB, "id" | "orderanDBId" | 'created_at' | 'updated_at'>;
+
 export type CheckoutCreate = {
-	transaction: Omit<TransactionDB, "id" | "orderanDBId">
+	transaction: TransactionPrisma
 	order: OrderCreate,
 	
 	// product: ProductTransaction,
@@ -13,7 +15,7 @@ export type CheckoutCreate = {
 }
 
 export type CheckoutCreateMany = {
-	transaction: Omit<TransactionDB, "id" | "orderanDBId">
+	transaction: TransactionPrisma
 	order: OrderCreate,
 	trollyIds: TrolleyDataId[]
 	

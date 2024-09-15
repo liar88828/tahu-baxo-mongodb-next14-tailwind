@@ -1,22 +1,23 @@
 import { z } from "zod"
-import { addressInit, nameInit, phoneInit } from "@/server/schema/init.schema"
-import { PenerimaCreate, PenerimaCreatePrisma } from "@/interface/model/penerima.type"
+import { addressInit, nameInit, phoneInit, userId } from "@/server/schema/init.schema"
+import { ReceiverCreate, ReceiverCreatePrisma, ReceiverUpdatePrisma } from "@/interface/model/receiver.type";
 
-export class PenerimaSchema {
+export class ReceiverSchema {
 	id = z.number().optional()
 	create = z.object({
 		name: nameInit,
 		address: addressInit,
 		phone: phoneInit,
-	})satisfies z.Schema<PenerimaCreatePrisma>
+		userId: userId
+	})satisfies z.Schema<ReceiverCreatePrisma>
 	
 	update = z.object({
 		name: nameInit,
 		address: addressInit,
 		phone: phoneInit,
-	})satisfies z.Schema<PenerimaCreatePrisma>
+	})satisfies z.Schema<ReceiverUpdatePrisma>
 	
-	validCreate(data: PenerimaCreate): PenerimaCreate {
+	validCreate(data: ReceiverCreate): ReceiverCreate {
 		data = this.create.parse(data)
 		if (!data) {
 			throw new Error("Data penerima is not valid")
@@ -33,5 +34,5 @@ export class PenerimaSchema {
 	// }
 }
 
-export const penerimaSchema = new PenerimaSchema()
+export const receiverSchema = new ReceiverSchema()
 // export type PenerimaCreate = Prisma.Args<typeof prisma.penerimaDB, 'create'>['data']

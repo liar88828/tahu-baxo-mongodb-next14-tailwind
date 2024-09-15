@@ -1,9 +1,9 @@
 import React from "react";
-import { UserPublic } from "@/interface/user/UserPublic";
 import { IconAdd, IconRemove } from "@/components/icon/IconMore";
+import { ReceiverDB } from "@prisma/client";
 
 interface ProfileInfoItemProps {
-	item: UserPublic,
+	item: ReceiverDB,
 	add: boolean,
 	fun: () => void,
 }
@@ -24,7 +24,6 @@ export function ProfileInfoItem({ item, add, fun }: ProfileInfoItemProps) {
 				<div className='space-y-0.5 pl-3'>
 					<h1 className='text-lg font-bold'>{ item.name }</h1>
 					<p className='text-sm text-muted-foreground font-light'>{ item.address }</p>
-					<h1 className='text-sm font-medium'>{ item.email }</h1>
 					<h1 className='text-sm font-medium'>{ item.phone }</h1>
 				</div>
 				<div className="modal-action">

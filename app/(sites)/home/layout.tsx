@@ -4,9 +4,9 @@ import Link from "next/link";
 
 import { authCookie } from "@/server/api/authCookie";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default async function layout({ children }: { children: React.ReactNode }) {
 	const auth = authCookie().checkAuth
-	console.log(auth)
+	// console.log(auth)
   return (<>
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>

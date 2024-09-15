@@ -10,6 +10,10 @@ export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {
 	}
 	
+	findOne(id: number): Promise<any> {
+		throw new Error("Method not implemented.")
+	}
+	
 	findAllPublic(page: GetPage): Promise<ResponseData<BankDB>> {
 		throw new Error("Method not implemented.")
 	}
@@ -61,12 +65,12 @@ export class BankService implements IService<BankDB> {
 		return prisma.bankDB.create({ data: { ...data } })
   }
 	
-	async updateOne(data: BankUpdate, { id_bank }: BankId): Promise<BankDB> {
+	async updateOne({ id_bank }: BankId, data: BankUpdate,): Promise<BankDB> {
     data = this.valid.updateValid(data)
 		return prisma.bankDB.update({ data: { ...data }, where: { id: id_bank } })
   }
 	
-	async deleteOne({ id_bank }: BankId): Promise<BankDB> {
+	async deleteOne({ id_bank }: BankId,): Promise<BankDB> {
 		return prisma.bankDB.delete({ where: { id: id_bank } })
   }
 }

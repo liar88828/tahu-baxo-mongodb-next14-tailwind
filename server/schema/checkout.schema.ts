@@ -36,6 +36,14 @@ export class CheckoutSchema {
 		return validData
 	}
 	
+	async checkId(id: number) {
+		const validData = await z.number().parseAsync(id)
+		if (!validData) {
+			throw new Error("Data transaction schema is not valid")
+		}
+		return validData
+	}
+	
 }
 
 export const checkoutSchema = new CheckoutSchema()

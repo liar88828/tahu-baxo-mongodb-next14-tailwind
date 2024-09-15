@@ -47,7 +47,7 @@ export function ProductCount({ item }: { item: TrolleyDB }) {
 			
 			<button
 				onClick={ onIncrement }
-					className='btn btn-square btn-outline btn-sm'>
+				className='btn btn-square btn-sm'>
 					<IconAdd/>
 				</button>
 			
@@ -55,7 +55,7 @@ export function ProductCount({ item }: { item: TrolleyDB }) {
 			
 			<button
 				onClick={ onDecrement }
-					className='btn btn-square btn-outline btn-sm'>
+				className='btn btn-square btn-sm'>
 					{/* icon minus */ }
 					<IconRemove/>
 				</button>

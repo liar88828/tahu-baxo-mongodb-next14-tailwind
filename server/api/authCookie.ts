@@ -1,5 +1,67 @@
 import { cookies } from "next/headers";
 import { AuthCookie, ResponseRegister as ResponseAuthUser } from "@/interface/user/UserPublic";
+import { decrypt } from "@/server/service/auth/jose.service";
+
+const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+
+export function createSession(data: ResponseAuthUser) {
+	// access
+	const cookieStore = cookies()
+	cookieStore.set('access', data.accessToken, {
+		httpOnly: true,
+		secure: true,
+		expires: expiresAt,
+		sameSite: 'lax',
+		path: '/',
+	})
+	// refresh
+	cookieStore.set('refresh', data.refreshToken.id, { secure: true })
+	cookieStore.set('user', JSON.stringify(data.data), { secure: true })
+	// cookieStore.set('auth', JSON.stringify(data), { secure: true })
+}
+
+export async function getSession() {
+	return cookies().get('access')?.value
+}
+
+export async function updateSession() {
+	const cookie = cookies()
+	const access = cookie.has('access')
+	if (access) {
+		const session = cookie.get('access')?.value
+		const payload = await decrypt(session)
+		if (!session || !payload) {
+			return null
+		}
+		cookie.set('access', session, {
+			httpOnly: true,
+			secure: true,
+			expires: expiresAt,
+			sameSite: 'lax',
+			path: '/',
+		})
+	}
+}
+
+export function checkSession() {
+	const cookieStore = cookies()
+	return {
+		accessToken: cookieStore.has("access") ?? null,
+		refreshToken: cookieStore.has("refresh") ?? null,
+		data: cookieStore.has("user") ?? null
+	}
+}
+
+const getData = () => {
+	const cookieStore = cookies()
+	const user = cookieStore.has("user")
+	if (!user) {
+		// throw new ErrorAuth('unauthorized', "Not have token in Cookie")
+		return null
+	}
+	const userCookie = cookieStore.get('user')
+	return JSON.parse(userCookie?.value ?? '')
+}
 
 export function authCookie() {
 	const cookieStore = cookies()
@@ -11,38 +73,30 @@ export function authCookie() {
 		}
 		return ''
 	}
+
 	const getAuth = (): AuthCookie => {
 		let refresh = cookieStore.get('refresh')
-		let user = cookieStore.get('user')
 		
 		return {
 			accessToken: getAccess(),
 			refreshToken: refresh?.value ?? '',
-			data: JSON.parse(user?.value ?? '')
+			data: getData()
 		};
 	}
 	
-	const check: Record<keyof AuthCookie, {}> = {
-		accessToken: cookieStore.has("access"),
-		refreshToken: cookieStore.has("refresh"),
-		data: cookieStore.has("user")
+	function deleteSession() {
+		cookieStore.delete('access')
+		cookieStore.delete('refresh')
+		cookieStore.delete('user')
 	}
+	
 	return {
 		getAccess: getAccess,
-		checkAuth: check,
+		checkAuth: checkSession(),
 		getAuth: getAuth,
-		setAuth: (data: ResponseAuthUser) => {
-			cookieStore.set('access', data.accessToken, { secure: true })
-			cookieStore.set('refresh', data.refreshToken.id, { secure: true })
-			cookieStore.set('user', JSON.stringify(data.data), { secure: true })
-			// cookieStore.set('auth', JSON.stringify(data), { secure: true })
-		},
-		deleteAuth: () => {
-			// cookieStore.delete('session')
-			cookieStore.delete('access')
-			cookieStore.delete('refresh')
-			cookieStore.delete('user')
-			// cookieStore.delete('auth')
-		}
+		getData: getData(),
+		setAuth: createSession,
+		deleteAuth: deleteSession
+		
 	}
 }

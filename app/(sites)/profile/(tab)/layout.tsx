@@ -1,6 +1,6 @@
-import { ProfileTab } from "@/app/(sites)/profile/ProfileTab";
+import { ProfileTab } from "@/app/(sites)/profile/com/ProfileTab";
 import React, { ReactNode } from "react";
-import { ProfileStatus } from "@/app/(sites)/profile/ProfileStatus";
+import { ProfileStatus } from "@/app/(sites)/profile/com/ProfileStatus";
 import { IconBack } from "@/components/icon/IconMore";
 import Link from "next/link";
 

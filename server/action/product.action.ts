@@ -54,7 +54,6 @@ export async function getProductsAllPrivate(search?: string) {
 
 export async function getProductId(id: number) {
 	try {
-		
 		const res = await fetch(`${ config.url }/api/product/${ id }`, {
 			method: "GET",
 			headers: {
@@ -66,6 +65,8 @@ export async function getProductId(id: number) {
 			errorApi(res.status, 'product', await res.json())
 		}
 		const data: ProductDB = await res.json()
+		// const access = cookies().has('access')
+		// await updateSession()
 		return data
 	} catch (err: unknown) {
 		return null

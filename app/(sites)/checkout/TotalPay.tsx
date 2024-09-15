@@ -1,46 +1,32 @@
 'use client'
-import { useRouter } from "next/navigation";
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { ContextTrolley } from "@/components/provider/ProviderContext";
 import { Rupiah } from "@/lib/utils/formatMoney";
 import { onTransaction } from "@/server/action/transaction.action";
 
 export function TotalPay() {
-  const route = useRouter()
-  const { state, getTotalPrice } = useContext(ContextTrolley)
+  const [message, setMessage] = useState()
+  const { state, getTotalPrice, reduce } = useContext(ContextTrolley)
   let price = useCallback(() => {
-      return getTotalPrice()
+      let priceState = getTotalPrice()
+      // reduce(prevState => ({ ...prevState, description: { ...prevState.description, totalPrice: priceState } }))
+      return priceState
     },
     [state.trolleyMany, state.description.price])
   
-  console.log(state)
   const onCheckout = async () => {
-    onTransaction({
-      order: {
-        name: state.user!!.name,
-        from: state.user!!.address,
-        status: 'Waiting',
-        phone: state.user!!.phone,
-        location: state.user!!.address,
-        desc: state.description.note,
-        shipping_cost: state.description.price,
-        sender: state.delivery!!.name,
-        total: price()
-      },
-      transaction: {
-        receiverDBId: 1,
-        deliveryDBId: state.delivery!!.id,
-        bankDBId: state.bank!!.id,
-      },
-      trollyIds: state.trolleyMany.map(item => {
-        return {
-          id: item.id,
-          userId: state.user!!.id
-        }
-      })
+    const res = await onTransaction({
+      ...state,
+      description: {
+        ...state.description,
+        totalPrice: price(),
+      }
     })
-    route.push('/transaction')
+    console.log(res, 'res------')
+    // @ts-ignore
+    setMessage(res?.message ?? '')
   }
+  
   return (<div
       data-testid={ 'checkout-TotalPay' }
       className={ 'space-y-2 ' }>
@@ -58,6 +44,7 @@ export function TotalPay() {
           { price() ? Rupiah(price()) : 'Rp0' }
         </h1>
       </div>
+      { message ? <p className={ ' text-error' }>{ message }</p> : null }
       <button
         onClick={ onCheckout }
         className='btn btn-primary w-full font-bold text-lg  '
@@ -65,6 +52,5 @@ export function TotalPay() {
         Buy Now
       </button>
     </div>
-
   )
 }

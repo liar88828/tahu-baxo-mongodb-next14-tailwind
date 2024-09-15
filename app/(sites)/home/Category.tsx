@@ -20,13 +20,14 @@ export default function Category() {
 						className='size-8'
 					/>
 				</Link>
-				<h1 className='text-center font-bold text-neutral/80  mt-2 text-xs'>{ item.title }</h1>
+				<h1 className='text-center font-bold teexxt-neutral/80  mt-2 text-xs'>{ item.title }</h1>
 			</div>
 		)
 	})
 	return (
 		<div className='rounded-lg shadow p-2 bg-base-200/40 overflow-y-scroll h-48'>
-			<div className='grid grid-cols-4 gap-2 '>{ categoryItem }</div>
+			<div
+				className='grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9  gap-2 '>{ categoryItem }</div>
 		</div>
 	)
 }

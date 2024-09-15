@@ -1,11 +1,11 @@
 'use client'
 import React, { useContext, useState } from "react";
 import { PaymentItem } from "@/app/(sites)/checkout/payment/PaymentItem";
-import { BankDB } from "@prisma/client";
 import { ContextTrolley } from "@/components/provider/ProviderContext";
 import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound";
+import { BankData } from "@/interface/model/bank.type";
 
-export function PaymentModal({ data }: { data: BankDB[] }) {
+export function PaymentModal({ data }: { data: BankData[] }) {
 	const [search, setSearch] = useState('')
 	const { addBank } = useContext(ContextTrolley)
 	return (

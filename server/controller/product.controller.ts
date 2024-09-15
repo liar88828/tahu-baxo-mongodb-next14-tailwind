@@ -82,10 +82,13 @@ class ProductController implements IController {
 			let { data, id } = await this.serviceReq.getUpdateInt<ProductUpdate>(req, params)
       data.userId = user.id
       return Response.json(
-        await this.serviceProduct.updateOne(data, {
+				await this.serviceProduct.updateOne(
+					{
           id_product: id,
           id_user: user.id,
-        })
+					},
+					data,
+				)
       )
     } catch (e: unknown) {
       return errorHanding(e)

@@ -77,10 +77,13 @@ class BankController implements IController {
 				req,
 				params
 			)
-			data = await this.serviceBank.updateOne(data, {
+			data = await this.serviceBank.updateOne(
+				{
 				id_bank: id,
 				id_user: user.id,
-			})
+				},
+				data,
+			)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)

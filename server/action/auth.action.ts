@@ -6,6 +6,7 @@ import { authCookie } from "@/server/api/authCookie";
 import { errorForm } from "@/lib/error/errorForm";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { LoginFormError, RegisterFormError, ResetFormError } from "@/interface/model/auth.type";
+import { redirect } from "next/navigation";
 
 export async function onLogin(prevState: any, formData: FormData): Promise<OnFormState<LoginFormError>> {
   try {
@@ -15,10 +16,8 @@ export async function onLogin(prevState: any, formData: FormData): Promise<OnFor
     }
     const form = userSchema.login.parse(rawFormData);
     const res = await apiLogin(form)
-		// console.error(res, 'error data client')
-		return { message: 'true' }
+		redirect('/home')
   } catch (err) {
-		// console.error('on login error')
 		return errorForm(err)
   }
 }
@@ -29,9 +28,11 @@ export async function onRegister(prevState: any, formData: FormData): Promise<On
     const rawFormData = Object.fromEntries(formData.entries())
 		const res = userSchema.registerSchema.parse(rawFormData);
 		const data = await apiRegister(res)
-		return { message: 'true' }
+		// console.log(data)
+		redirect('/home')
+		// return { message: 'true' }
   } catch (err) {
-		console.error('on register error')
+		// console.error('on register error')
 		return errorForm(err)
   }
 }
@@ -44,8 +45,7 @@ export async function onForgot(prevState : any, formData : FormData) {
     const data = userSchema.forgotSchema.parse(rawFormData);
     // console.log(data, 'success')
     revalidatePath('/')
-    return {message : ['true']}
-
+		return { message: 'true' }
   } catch (err) {
 		console.error('on forget error')
 		return errorForm(err)

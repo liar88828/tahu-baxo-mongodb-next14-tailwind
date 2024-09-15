@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
 import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
+import { ErrorMessage } from "@/components/errorMessage";
 
 export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)
@@ -59,11 +60,9 @@ export default function Page() {
 						</p>
 					}
 				</div>
-				{ state.message &&
-					<p className={ 'text-error text-xs' }>
-						{ state.message }
-					</p>
-				}
+				
+				<ErrorMessage state={ state.message }/>
+				
 				<button
 					disabled={ pending }
 					type="submit" className={ 'btn btn-block btn-primary' }

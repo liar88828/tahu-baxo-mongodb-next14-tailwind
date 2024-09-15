@@ -1,22 +1,22 @@
-import { penerimaService, PenerimaService, } from "@/server/service/penerima.service"
 import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { IController } from "@/interface/server/IController"
 import type { Params } from "@/interface/server/param"
-import type { PenerimaCreate } from "@/interface/model/penerima.type"
+import { ReceiverCreate } from "@/interface/model/receiver.type";
+import { receiverService, ReceiverService } from "@/server/service/receiver.service";
 
-export class PenerimaController implements IController {
+export class ReceiverController implements IController {
 	constructor(
 		private serviceReq: RequestService,
-		private servicePenerima: PenerimaService
+		private serviceReceiver: ReceiverService
 	) {
 	}
 	
 	async findAll(req: NextRequest) {
 		try {
 			const { page, take } = this.serviceReq.getPage(req)
-			let data = await this.servicePenerima.findAll(page, take)
+			let data = await this.serviceReceiver.findAll(page, take)
 			return NextResponse.json(data, { status: 200 })
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -27,7 +27,7 @@ export class PenerimaController implements IController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			const { page, take } = this.serviceReq.getPage(req)
-			let data = await this.servicePenerima.findAll(page, take)
+			let data = await this.serviceReceiver.findAll(page, take)
 			return NextResponse.json(data, { status: 200 })
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -37,7 +37,7 @@ export class PenerimaController implements IController {
 	async findId(req: NextRequest, params: Params) {
 		try {
 			let { id } = this.serviceReq.getIdInt(params)
-			const data = await this.servicePenerima.findOne(id)
+			const data = await this.serviceReceiver.findOne(id)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -48,7 +48,7 @@ export class PenerimaController implements IController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
-			const data = await this.servicePenerima.findOne(id)
+			const data = await this.serviceReceiver.findOne(id)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -58,8 +58,8 @@ export class PenerimaController implements IController {
 	async createOne(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data } = await this.serviceReq.getData<PenerimaCreate>(req)
-			data = await this.servicePenerima.createOne(data, user)
+			let { data } = await this.serviceReq.getData<ReceiverCreate>(req)
+			data = await this.serviceReceiver.createOne(data, user)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -69,11 +69,11 @@ export class PenerimaController implements IController {
 	async updateOne(req: NextRequest, params: Params) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data, id } = await this.serviceReq.getUpdateInt<PenerimaCreate>(
+			let { data, id } = await this.serviceReq.getUpdateInt<ReceiverCreate>(
 				req,
 				params
 			)
-			data = await this.servicePenerima.updateOne(data, id)
+			data = await this.serviceReceiver.updateOne(id, data,)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -84,7 +84,7 @@ export class PenerimaController implements IController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
-			const data = await this.servicePenerima.deleteOne(id, user)
+			const data = await this.serviceReceiver.deleteOne(id, user)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -92,7 +92,7 @@ export class PenerimaController implements IController {
 	}
 }
 
-export const penerimaController = new PenerimaController(
+export const receiverController = new ReceiverController(
 	requestService,
-	penerimaService
+	receiverService
 )

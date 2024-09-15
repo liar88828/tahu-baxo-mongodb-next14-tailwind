@@ -4,6 +4,7 @@ import { Rupiah } from "@/lib/utils/formatMoney";
 import Link from "next/link";
 import { ProductDB } from "@prisma/client";
 import { getProductsAll } from "@/server/action/product.action";
+import Rating from "@/components/Rating";
 
 function ProductItemCard({ item }: { item: ProductDB }) {
 	return (
@@ -27,10 +28,17 @@ function ProductItemCard({ item }: { item: ProductDB }) {
 				</div>
 				<h1 className='font-light text-sm'>{ item.name }</h1>
 				<div className='flex justify-between'>
-					<div className="flex">
+					<div className="flex gap-1">
 						<h2 className='font-bold text-lg'>{ Rupiah(item.price) }</h2>
 						<h3 className='font-light text-sm line-through'>-50%</h3>
 					</div>
+				
+				</div>
+				<div className="flex w-full justify-between">
+					<div className="">
+						<Rating name={ `id_${ item.id }` }/> (56)
+					</div>
+					
 					<button className={ 'btn  btn-circle btn-xs ' }>
 						<IconMore/>
 					</button>

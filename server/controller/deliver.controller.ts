@@ -76,10 +76,13 @@ class DeliverController implements IController {
 				req,
 				params
 			)
-			return Response.json(await this.serviceDeliver.updateOne(data, {
+			return Response.json(await this.serviceDeliver.updateOne(
+				{
 				id_delivery: id,
 				id_user: user.id,
-			}))
+				},
+				data,
+			))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}

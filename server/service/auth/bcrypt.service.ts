@@ -18,7 +18,7 @@ export class BcryptService {
 	
 	async comparePassword(passReq: string, passDb?: string | null) {
     if (!passDb) {
-			throw new ErrorAuth('notFound', "Password is not found")
+			throw new ErrorAuth('badRequest', "Password is not found")
     }
     const passValid = await bcrypt.compare(passReq, passDb)
     if (!passValid) {

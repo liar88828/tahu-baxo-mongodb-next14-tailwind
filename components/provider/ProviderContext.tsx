@@ -1,22 +1,23 @@
 'use client'
 import React, { createContext, ReactNode, useState } from 'react';
-import { UserPublic } from "@/interface/user/UserPublic";
-import { BankDB, DeliveryDB, TrolleyDB } from "@prisma/client";
+import { DeliveryDB, ReceiverDB, TrolleyDB } from "@prisma/client";
 import { GetAllTrolleyContext } from "@/interface/model/trolley.type";
+import { BankData } from "@/interface/model/bank.type";
 
 type TrolleyContext = TrolleyDB & { price: number }
 type DescriptionCheckout = {
 	note: string,
 	price: number,
 	distance: string,
-	packing: string
+	packing: string,
+	totalPrice: number
 }
 
 export type TCheckoutContext = {
-	user: UserPublic | null,
+	receiver: ReceiverDB | null,
 	trolley: TrolleyContext | null,
 	trolleyMany: GetAllTrolleyContext[],
-	bank: BankDB | null
+	bank: BankData | null
 	delivery: DeliveryDB | null
 	description: DescriptionCheckout
 }
@@ -24,20 +25,20 @@ export type TProviderCheckout = {
 	state: TCheckoutContext
 	reduce: React.Dispatch<React.SetStateAction<TCheckoutContext>>
 	removeUser: () => void
-	addUser: (user: UserPublic) => void
+	addUser: (user: ReceiverDB) => void
 	removeTrolley: () => void
 	addTrolley: (trolley: TrolleyContext) => void
 	removeTrolleyMany: (trolleyId: number) => void
 	addTrolleyMany: (trolley: GetAllTrolleyContext) => void
 	removeBank: () => void
-	addBank: (bank: BankDB) => void
+	addBank: (bank: BankData) => void
 	removeDelivery: () => void
 	addDelivery: (delivery: DeliveryDB) => void
 	description: (item: Partial<DescriptionCheckout>) => void
 	getTotalPrice: () => number
 }
 const initialState: TCheckoutContext = {
-	user: null,
+	receiver: null,
 	trolley: null,
 	trolleyMany: [],
 	bank: null,
@@ -46,7 +47,8 @@ const initialState: TCheckoutContext = {
 		note: '',
 		distance: "",
 		packing: "",
-		price: 0
+		price: 0,
+		totalPrice: 0
 	}
 }
 export const ContextTrolley = createContext<TProviderCheckout>(
@@ -83,8 +85,8 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 	// is access token
 	const [checkout, setCheckout] = useState<TCheckoutContext>(initialState);
 	
-	const addUser = (user: UserPublic) => setCheckout(prevState => ({
-		...prevState, user
+	const addUser = (receiver: ReceiverDB) => setCheckout(prevState => ({
+		...prevState, receiver: receiver
 	}))
 	
 	const removeUser = () => setCheckout(prevState => ({
@@ -106,7 +108,7 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 		...prevState, trolleyMany: prevState.trolleyMany.filter(t => t.id !== trolleyId)
 	}))
 	
-	const addBank = (bank: BankDB) => setCheckout(prevState => ({
+	const addBank = (bank: BankData) => setCheckout(prevState => ({
 		...prevState, bank
 	}))
 	const removeBank = () => setCheckout(prevState => ({
@@ -128,9 +130,19 @@ export default function ProviderContext({ children }: { children: ReactNode }) {
 	}
 	const getTotalPrice = () => {
 		let totalProduct = checkout.trolleyMany.reduce((a, b) => a + (b.Product.price * b.qty), 0)
-		return totalProduct + checkout.description.price
+		// setCheckout(prevState => ({ ...prevState, description: { ...prevState.description, totalPrice: totalProduct } }))
 		
+		return totalProduct + checkout.description.price
 	}
+	// setCheckout(prevState => ({
+	// 	...prevState,
+	// 	description: {
+	// 		...prevState.description,
+	// 		price: totalProduct
+	// 	}
+	// }))
+	
+	
 	return (
 		<ContextTrolley.Provider value={ {
 			state: checkout, reduce: setCheckout,

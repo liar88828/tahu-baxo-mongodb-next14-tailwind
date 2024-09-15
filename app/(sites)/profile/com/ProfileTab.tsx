@@ -28,7 +28,7 @@ const tabList = [{
 export function ProfileTab({}) {
   const pathname = usePathname();
   return (
-    <div role="tablist" className="tabs tabs-bordered ">
+    <div role="tablist" className="tabs tabs-boxed tabs-sm sm:tabs-md ">
       { tabList.map((item) => (
         <Link
           key={ item.tab }

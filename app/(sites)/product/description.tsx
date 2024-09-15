@@ -2,6 +2,7 @@ import { repeat } from "@/lib/utils/repeat";
 import React from "react";
 import { ProductDB } from "@prisma/client";
 import { Rupiah } from "@/lib/utils/formatMoney";
+import Rating from "@/components/Rating";
 
 export function Description({ item }: { item: ProductDB }) {
 	return (
@@ -14,16 +15,17 @@ export function Description({ item }: { item: ProductDB }) {
 					</p>
 				</div>
 				{/*<div className=""><IconStart/></div>*/ }
-				<div className="grid gap-2">
-					<div className="flex items-center gap-2">
-						<StarIcon className="size-5 fill-warning"/>
-						<StarIcon className="size-5 fill-warning"/>
-						<StarIcon className="size-5 fill-warning"/>
-						<StarIcon className="size-5 stroke-muted-foreground"/>
-						<StarIcon className="size-5 stroke-muted-foreground"/>
-						<span className="text-muted-foreground text-sm">4.3 (124 reviews)</span>
-					</div>
-				</div>
+				<Rating name={ 'product-detail' }/>
+				{/*<div className="grid gap-2">*/ }
+				{/*	<div className="flex items-center gap-2">*/ }
+				{/*		<StarIcon className="size-5 fill-warning"/>*/ }
+				{/*		<StarIcon className="size-5 fill-warning"/>*/ }
+				{/*		<StarIcon className="size-5 fill-warning"/>*/ }
+				{/*		<StarIcon className="size-5 stroke-muted-foreground"/>*/ }
+				{/*		<StarIcon className="size-5 stroke-muted-foreground"/>*/ }
+				{/*		<span className="text-muted-foreground text-sm">4.3 (124 reviews)</span>*/ }
+				{/*	</div>*/ }
+				{/*</div>*/ }
 				<div className="flex">
 					<h2 className={ 'font-bold text-4xl ' }>{ Rupiah(item.price) }</h2>
 					<p className={ 'font-light line-through' }>{ Rupiah(item.price) }</p>

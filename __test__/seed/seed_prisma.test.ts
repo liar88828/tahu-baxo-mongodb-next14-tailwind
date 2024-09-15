@@ -8,10 +8,10 @@ import { bankDataList } from "@/assets/example/bank";
 let transactionToken = ''
 let idUser = ''
 it('should seed prisma', async () => {
-	// const { data, accessToken } = await registerTest("user4")
+	// const { data: user, accessToken } = await registerTest("user4")
+	// idUser = user.id
 	// transaidctionToken = accessToken
-	// idUser = data.id
-	//
+	
 	const user = await prisma.user.findFirst().then(res => {
 		if (!res) {
 			throw new Error("No prisma user found")
@@ -19,6 +19,7 @@ it('should seed prisma', async () => {
 		idUser = res.id
 		return res
 	})
+	
 	// await createProduct(productTransaction, accessToken)
 	const dataProductMany = productDataList.map(d => {
 		return {

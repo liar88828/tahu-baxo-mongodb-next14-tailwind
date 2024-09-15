@@ -18,6 +18,7 @@ export class OrderService {
 				phone: data.phone,
 				shipping_cost: data.shipping_cost,
 				status: data.status,
+				total: data.total
 				// pesan: data.pesan,
 				// waktuKirim: data.waktuKirim,
 				// namaPengiriman: data.nama,

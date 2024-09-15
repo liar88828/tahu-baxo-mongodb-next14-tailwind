@@ -11,11 +11,11 @@ export function errorApi(status: number, from: FromType, message: string = '') {
 	}
 	if (from === 'auth') {
 		if (status === errorStatus.notFound) {
-			// console.error(`error not found : ${message}`)
+			// dev-check
+			console.error('not found')
 			throw new ErrorAuth('notFound', `${ message }`,);
 		}
 		if (status === errorStatus.badRequest) {
-			// console.error('error bad request')
 			throw new ErrorAuth('badRequest', `${ message }`,);
 		}
 		

@@ -16,19 +16,12 @@ export async function encrypt(payload: AccessTokenPayload) {
 
 export async function decrypt(session: string | undefined = '', _throw: boolean = false) {
 	try {
-		const { payload } = await jwtVerify(session, encodedKey, {
+		const payload = await jwtVerify(session, encodedKey, {
 			algorithms: ['HS256'],
 		})
-		// console.log(payload, 'payload')
-		if (!payload) {
-			
-			throw new ErrorAuth("unauthorized", 'jwt malformed')
-		}
-		// }
 		return payload
 	} catch (error) {
-		// console.log('Failed to verify session')
-		return 'error'
+		return error
 	}
 }
 
@@ -55,13 +48,15 @@ export async function decryptAPI(session: string | undefined = '') {
 }
 
 export async function decryptMiddleware(session: string | undefined = '', _throw: boolean = false) {
+	if (!session) {
+		return null
+	}
 	try {
-		await jwtVerify(session, encodedKey, {
+		return await jwtVerify(session, encodedKey, {
 			algorithms: ['HS256'],
 		})
-		return true
 	} catch (error) {
 		console.error(error)
-		return false
+		return null
 	}
 }

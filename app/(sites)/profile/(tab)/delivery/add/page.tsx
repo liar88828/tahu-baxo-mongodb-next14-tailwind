@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
 import { createDelivery } from "@/server/action/delivery.action";
+import { InputTel } from "@/components/elements/Input";
 
 function Page() {
 	const [state, formAction,] = useFormState(createDelivery, initialState)
@@ -55,7 +56,6 @@ function Page() {
 					}
 				</div>
 				
-				
 				<div>
 					<label htmlFor="location">Location</label>
 					<input
@@ -71,24 +71,7 @@ function Page() {
 					}
 				</div>
 				
-				
-				<div>
-					<label htmlFor="phone">Phone</label>
-					<input
-						min={ 0 }
-						name={ 'phone' }
-						type="tel"
-						className={ 'input input-bordered w-full' }
-						placeholder="Enter Phone Delivery ..."
-					/>
-					{ state.err?.phone &&
-						<p className={ 'text-error text-xs' }>
-							{ state.err.phone }
-						</p>
-					}
-				
-				</div>
-				
+				<InputTel state={ state } title={ 'Phone' } keys={ 'phone' }/>
 				
 				<div>
 					<label htmlFor="price">Price</label>

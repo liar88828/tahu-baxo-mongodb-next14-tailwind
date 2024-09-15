@@ -63,13 +63,14 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  ProductDB  ProductDB[]
-  DeliveryDB DeliveryDB[]
-  BankDB     BankDB[]
-  TrolleyDB  TrolleyDB[]
-  ReceiverDB ReceiverDB[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  ProductDB     ProductDB[]
+  DeliveryDB    DeliveryDB[]
+  BankDB        BankDB[]
+  TrolleyDB     TrolleyDB[]
+  ReceiverDB    ReceiverDB[]
+  TransactionDB TransactionDB[]
 }
 
 model VerificationToken {
@@ -109,7 +110,7 @@ model ReceiverDB {
 }
 
 model OrderanDB {
-  id            String          @id @default(uuid())
+  id            String @id @default(uuid())
   from          String
   sender        String
   phone         String
@@ -117,6 +118,8 @@ model OrderanDB {
   location      String
   shipping_cost Int
   status        String
+  total         Int
+
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
   TransactionDB TransactionDB[]
@@ -180,7 +183,11 @@ model TransactionDB {
   deliveryDBId Int
   BankDB       BankDB?     @relation(fields: [bankDBId], references: [id])
   bankDBId     Int
+  User         User        @relation(fields: [userId], references: [id])
+  userId       String
   TrolleyDB    TrolleyDB[]
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
 }
 
 model TrolleyDB {

@@ -148,3 +148,9 @@ export function IconTruck({ className }: { className?: string }) {
 	);
 }
 
+export function IconX({ className }: { className?: string }) {
+	return (
+		<Icon icon="streamline:delete-1" className={ `~size-6/10 ${ className }` }/>
+	);
+}
+

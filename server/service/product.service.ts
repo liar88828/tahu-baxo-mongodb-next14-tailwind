@@ -109,8 +109,8 @@ export class ProductService implements IService<ProductDB> {
 	}
 	
 	async updateOne(
+		{ id_product, id_user }: ProductId,
 		data: ProductUpdate,
-		{ id_product, id_user }: ProductId
 	): Promise<ProductDB> {
 		console.log({ data, id_product, id_user }, 'test update')
 		data = this.valid.updateValid(data)

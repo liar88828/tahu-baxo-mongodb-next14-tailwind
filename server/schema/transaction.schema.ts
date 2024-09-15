@@ -1,18 +1,12 @@
 import { z } from "zod"
 import { productSchema, ProductSchema } from "@/server/schema/product.schema"
-import { PenerimaSchema, penerimaSchema } from "@/server/schema/penerima.schema"
+import { ReceiverSchema, receiverSchema } from "@/server/schema/receiverSchema"
 import { orderSchema, OrderSchema } from "@/server/schema/order.schema"
 import type { OrderCreate } from "@/interface/model/order.type"
-import { TransactionDB } from "@prisma/client";
+import { userId } from "@/server/schema/init.schema";
+import { TransactionPrisma } from "@/interface/model/transaction.type";
 
 export class TransactionSchema {
-	constructor(
-		private productSchema: ProductSchema,
-		private penerimaSchema: PenerimaSchema,
-		private orderSchema: OrderSchema
-	) {
-	}
-	
 	create = z.object({
 		// id: z.number(),
 		// orderanDBId: z.string(),// because will add in transaction db
@@ -21,15 +15,23 @@ export class TransactionSchema {
 		receiverDBId: z.number(),
 		deliveryDBId: z.number(),
 		bankDBId: z.number(),
-	}) satisfies z.Schema<Omit<TransactionDB, 'id' | 'orderanDBId'>>
-	
+		userId: userId
+	}) satisfies z.Schema<TransactionPrisma>
 	createForMany = z.object({
 		// qty: z.number(),
 		// productDBId: z.number(),
 		receiverDBId: z.number(),
 		deliveryDBId: z.number(),
 		bankDBId: z.number(),
-	}) satisfies z.Schema<Omit<TransactionDB, 'id' | 'orderanDBId'>>
+		userId: userId
+	}) satisfies z.Schema<TransactionPrisma>
+	
+	constructor(
+		private productSchema: ProductSchema,
+		private penerimaSchema: ReceiverSchema,
+		private orderSchema: OrderSchema
+	) {
+	}
 	
 	idProduct(id: number) {
 		id = z.number().parse(id)
@@ -59,7 +61,7 @@ export class TransactionSchema {
 
 export const transactionSchema = new TransactionSchema(
 	productSchema,
-	penerimaSchema,
+	receiverSchema,
 	orderSchema
 )
 export const order = {

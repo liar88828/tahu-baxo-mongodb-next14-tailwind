@@ -26,6 +26,7 @@ import { CheckoutCreateMany, CheckoutCreateSchema } from "@/interface/model/tran
 // }
 export const transactionCreateExample: CheckoutCreateSchema = {
 	transaction: {
+		userId: 'a1413',
 		qty: 123,
 		receiverDBId: 123,
 		deliveryDBId: 123,
@@ -46,7 +47,7 @@ export const transactionCreateExample: CheckoutCreateSchema = {
 }
 export const transactionCreateManyExample: CheckoutCreateMany = {
 	transaction: {
-		
+		userId: 'a1413',
 		receiverDBId: 123,
 		deliveryDBId: 123,
 		bankDBId: 123,

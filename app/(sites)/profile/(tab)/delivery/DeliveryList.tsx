@@ -22,7 +22,9 @@ export async function DeliveryList({ search }: { search: string }) {
 				
 				{ delivery.data.length === 0
 					? <ErrorComponent/>
-					: delivery.data.map(item => <DeliveryListItem item={ item }/>)
+					: delivery.data.map(item => <DeliveryListItem
+						key={ item.id }
+						item={ item }/>)
 					
 				}
 			</div>

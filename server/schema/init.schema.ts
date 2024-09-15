@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AccessUserID } from "@/server/service/auth/jwt.service";
 
 export const phoneInit = z.string({ required_error: 'Number Phone is required', }).min(2).max(30)
 export const imageInit = z.string({ required_error: 'Img is required', }).max(200).optional().nullable()
@@ -14,3 +15,9 @@ export const qtyInit = z
 	.int()
 	.nonnegative()
 export const typeInit = z.string({ required_error: "Type is required" }).min(1).max(100)
+
+export const validIdNum = (id: number) => z.number().parse(id)
+export const validUserId = (id: AccessUserID) => z.object({
+	id: userId
+}).parse(id)
+

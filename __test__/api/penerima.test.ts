@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import prisma from "@/config/prisma"
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData"
 import { penerimaTransaction, testExpectPenerima, testPenerimaEmpty } from "@/assets/example/received";
-import { getAllDataReceiver } from "@/server/action/received.action";
+import { getAllDataReceiver } from "@/server/action/receiver.action";
 
 let penerimaToken = ""
 let penerimaId = 0

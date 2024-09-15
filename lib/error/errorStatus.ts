@@ -33,7 +33,3 @@ export const errorStatus =
 	}
 
 export type ErrorStatus = keyof typeof errorStatus
-const testErrorText: ErrorStatus = 'notFound'
-
-console.log(testErrorText)
-const data: Partial<ErrorStatus> = 'notFound'

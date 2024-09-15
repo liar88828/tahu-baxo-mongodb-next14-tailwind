@@ -19,7 +19,7 @@ export type TProduct = {
 
 }
 
-export type SearchParams = { searchParams: { page?: string, take?: string, id?: string } };
+export type SearchParams = { params: { id: string }, searchParams: { page?: string, take?: string, id?: string } };
 
 export type TDelivery = {
   id: string,

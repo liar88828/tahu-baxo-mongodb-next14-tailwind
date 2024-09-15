@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
 import usePhone from "@/hook/usePhone";
 
+import { ErrorMessage } from "@/components/errorMessage";
+
 export type OnFormState<T> = {
   message?: string,
   err?: T
@@ -122,6 +124,10 @@ function Page() {
             </p>
           }
         </div>
+				
+				<ErrorMessage state={ state.message }/>
+        
+        
         <button
           disabled={ pending }
           className={ 'btn btn-block btn-primary' }>Sign Up

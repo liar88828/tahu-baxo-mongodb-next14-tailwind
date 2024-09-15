@@ -273,7 +273,7 @@ describe.skip(//.skipIf(userFinish === false)
 			
 			it("ERROR login use api, email is not found", async () => {
 				const loginData = {
-					email: " notFound@gmail.com",
+					email: " error@gmail.com",
 					password: "login123",
 				}
 				const res = await fetch(`${ config.url }/api/user/login`, {

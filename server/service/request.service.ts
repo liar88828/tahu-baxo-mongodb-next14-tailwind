@@ -99,6 +99,7 @@ export class RequestService implements IServiceRequest {
 	async getUserPayload(req: NextRequest) {
 		const bearer = this.getTokenBearer(req)
 		const user = await jwtService.verifyAccessToken(bearer)
+		// console.log(cookies().get('access'),'---------------from api------------------')
 		return user as AccessTokenPayload
 	}
 }

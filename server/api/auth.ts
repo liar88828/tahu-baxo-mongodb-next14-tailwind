@@ -2,7 +2,7 @@
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import { config } from "@/config/baseConfig";
 import { ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
-import { authCookie } from "@/server/api/authCookie";
+import { authCookie, createSession } from "@/server/api/authCookie";
 import { errorApi } from "@/lib/error/errorApi";
 
 export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
@@ -16,13 +16,13 @@ export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 			body: JSON.stringify(form),
 		}
 	)
-	if (!res.ok) {
-		errorApi(res.status, 'auth', await res.json());
-	}
-
 	const data: ResponseAuthUser = await res.json()
-	// console.log(data,'api user')
-	authCookie().setAuth(data)
+	
+	if (!res.ok) {
+		console.log('will throw')
+		errorApi(res.status, 'auth', await res.text());
+	}
+	createSession(data)
 	return data
 }
 
@@ -36,8 +36,11 @@ export async function apiRegister(form: RegisterUser) {
 			body: JSON.stringify(form),
 		}
 	)
+	console.log(res.status, 'status')
+	console.log(await res.json(), 'text')
 	if (!res.ok) {
-		errorApi(res.status, 'auth', 'register failed');
+		console.error('will throw')
+		errorApi(res.status, 'auth', await res.text());
 	}
 	const data: ResponseAuthUser = await res.json()
 	authCookie().setAuth(data)

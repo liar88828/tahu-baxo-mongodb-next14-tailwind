@@ -15,6 +15,6 @@ export function errorForm(err: unknown) {
 		return { message: `${ err._msg }` }
 	}
 	// return message
-	// console.log(err, 'client error auth end')
+	console.log(err, 'client error auth end')
 	return { message: "unknown maybe server is busy" }
 }

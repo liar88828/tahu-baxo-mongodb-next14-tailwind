@@ -1,10 +1,11 @@
 import React from 'react';
-import { Content, ProfileInfo, Shipping } from "@/app/(sites)/profile/content";
-import { ProfileTab } from "@/app/(sites)/profile/ProfileTab";
+import { Content, } from "@/app/(sites)/profile/com/content";
+import { ProfileTab } from "@/app/(sites)/profile/com/ProfileTab";
 import Link from "next/link";
 import { IconBack } from "@/components/icon/IconMore";
+import { ProfileInfo, Shipping } from "@/app/(sites)/profile/com/serverCom";
 
-export default function Page() {
+export default async function Page() {
   return (
     <>
       <div className='navbar bg-base-100'>
