@@ -11,13 +11,17 @@ interface InputProp<T extends object> {
 }
 
 export const Input = <T extends object>({ state, title, keys, type }: InputProp<T>) => {
-	return <div>
+	return <div
+		data-testid="InputDiv"
+	>
 		<label
 			htmlFor={ keys }>{ title }</label>
 		<input
+			data-testid="InputValue"
 			min={ 0 }
 			name={ keys }
 			type={ type }
+			aria-label="cost-input"
 			className={ "input input-bordered w-full" }
 			placeholder={ `Enter ${ title } ...` }
 		/>
@@ -39,12 +43,15 @@ export function InputTel<T extends object>({ state, title, keys, }: Omit<InputPr
 			//@ts-ignore
 			htmlFor={ keys }>{ title }</label>
 		<input
+			data-testid="InputDiv"
+			
 			value={ phone }
 			onChange={ setPhone }
 			min={ 0 }
 			//@ts-ignore
 			name={ keys }
 			type={ 'tel' }
+			aria-label="cost-input-phone"
 			className={ "input input-bordered w-full" }
 			placeholder={ `Enter ${ title } ...` }
 		/>
@@ -60,11 +67,14 @@ export function InputTel<T extends object>({ state, title, keys, }: Omit<InputPr
 }
 
 export function TextArea<T extends object>({ state, title, keys, }: Omit<InputProp<T>, 'type'>) {
-	return <div>
+	return <div
+		data-testid="TextAreaDiv"
+	>
 		<label
 			//@ts-ignore
 			htmlFor={ keys }>{ title }</label>
 		<textarea
+			aria-label={ 'cost-textarea' }
 			//@ts-ignore
 			name={ keys }
 			className={ 'textarea textarea-bordered w-full' }

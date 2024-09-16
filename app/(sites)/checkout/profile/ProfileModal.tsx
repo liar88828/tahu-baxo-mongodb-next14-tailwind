@@ -1,13 +1,12 @@
 'use client'
-import React, { useContext, useState } from "react";
-import { ContextTrolley } from "@/components/provider/ProviderContext";
-import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound";
+import React, { useState } from "react";
 import { ReceiverDB } from "@prisma/client";
-import { ShippingAddressCheckout } from "@/app/(sites)/profile/(tab)/receiver/shipping";
+import { useReceiver } from "@/store/useReceiver";
+import { ShippingAddressCheckout } from "@/app/(sites)/checkout/profile/shippingAddressCheckout";
 
 export function ProfileModal({ data }: { data: ReceiverDB[] }) {
 	const [search, setSearch] = useState('')
-	const { addUser } = useContext(ContextTrolley)
+	const { addReceiver } = useReceiver()
 	
 	return (
 		<>
@@ -38,9 +37,7 @@ export function ProfileModal({ data }: { data: ReceiverDB[] }) {
 							key={ item.id }
 							item={ item }
 							add={ true }
-							fun={ () => {
-								addUser(item)
-							} }
+							fun={ () => addReceiver(item) }
 						/>)
 						}
 					</div>
@@ -56,30 +53,6 @@ export function ProfileModal({ data }: { data: ReceiverDB[] }) {
 				</form>
 			</dialog>
 		</>
-	);
-}
-
-export function ProfileInfoContext() {
-	const { state, removeUser } = useContext(ContextTrolley)
-	
-	if (!state.receiver) {
-		return <ItemNotFound
-			title={ 'Please Add User' }
-			fun={ () => {
-				// @ts-expect-error
-				document.getElementById('modalUserInfo').showModal()
-			} }
-		/>
-		
-	}
-	return (
-		<div>
-			<ShippingAddressCheckout
-				item={ state.receiver }
-				fun={ removeUser }
-				add={ false }
-			/>
-		</div>
 	);
 }
 

@@ -1,16 +1,16 @@
 import React from 'react';
 import Link from "next/link";
 import { getTransactionComplete } from "@/server/action/transaction.action";
-import ErrorComponent from "@/components/ErrorComponent";
+import ErrorComponent from "@/components/error/ErrorComponent";
 import { SearchParams } from "@/interface/model/model";
 import { toDate } from "@/lib/utils/formatDate";
 import { Rupiah } from "@/lib/utils/formatMoney";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
+import { TextTransaction } from "@/app/(sites)/transaction/[id]/textTransaction";
 
-async function Page({ params }: SearchParams) {
-	const auth = authCookie().getData
+export default async function Page({ params }: SearchParams) {
+	const auth = cookieService().getData
 	const data = await getTransactionComplete(Number(params.id))
-	console.log(data, 'data')
 	if (!data) {
 		return <ErrorComponent/>
 	}
@@ -68,18 +68,4 @@ async function Page({ params }: SearchParams) {
 	);
 }
 
-export default Page;
 
-const TextTransaction = (
-	{ title, text }:
-		{
-			title: string, text: string | number,
-		}
-) => {
-	return (
-		<div className="flex justify-between w-full">
-			<h1 className={ 'text font-medium text-neutral/50' }>{ title }</h1>
-			<h2 className={ 'text font-semibold text-neutral/80' }>{ text }</h2>
-		</div>
-	);
-};

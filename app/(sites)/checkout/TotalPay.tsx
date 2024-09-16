@@ -1,32 +1,34 @@
 'use client'
-import React, { useCallback, useContext, useState } from "react";
-import { ContextTrolley } from "@/components/provider/ProviderContext";
+import React, { useEffect, useState } from "react";
 import { Rupiah } from "@/lib/utils/formatMoney";
 import { onTransaction } from "@/server/action/transaction.action";
+import { useDelivery } from "@/store/useDelivery";
+import { useReceiver } from "@/store/useReceiver";
+import { useBank } from "@/store/useBank";
+import { useTrolley } from "@/store/useTrolley";
+import { useCheckout } from "@/store/useCheckout";
 
 export function TotalPay() {
   const [message, setMessage] = useState()
-  const { state, getTotalPrice, reduce } = useContext(ContextTrolley)
-  let price = useCallback(() => {
-      let priceState = getTotalPrice()
-      // reduce(prevState => ({ ...prevState, description: { ...prevState.description, totalPrice: priceState } }))
-      return priceState
-    },
-    [state.trolleyMany, state.description.price])
+  const [rupiah, setRupiah] = useState<string>()
+  const { delivery } = useDelivery()
+  const { receiver } = useReceiver()
+  const { bank } = useBank()
+  const { trolley, totalTrolley, } = useTrolley()
+  const { description, totalPay } = useCheckout()
+  
+  useEffect(() => {
+    const total = totalTrolley()
+    totalPay(total)
+    setRupiah(description.totalPrice ? Rupiah(description.totalPrice) : 'Rp0')
+  }, [trolley, description.shippingCost])
   
   const onCheckout = async () => {
-    const res = await onTransaction({
-      ...state,
-      description: {
-        ...state.description,
-        totalPrice: price(),
-      }
-    })
-    console.log(res, 'res------')
+    const data = { delivery, receiver, bank, trolley, description }
+    const res = await onTransaction(data)
     // @ts-ignore
     setMessage(res?.message ?? '')
   }
-  
   return (<div
       data-testid={ 'checkout-TotalPay' }
       className={ 'space-y-2 ' }>
@@ -41,7 +43,8 @@ export function TotalPay() {
       <div className='flex justify-between items-center pb-2'>
         <h1 className='text-lg font-semibold'>Total</h1>
         <h1 className='text-lg font-bold'>
-          { price() ? Rupiah(price()) : 'Rp0' }
+          { rupiah }
+          
         </h1>
       </div>
       { message ? <p className={ ' text-error' }>{ message }</p> : null }

@@ -1,7 +1,7 @@
 import { transactionSchema } from "@/server/schema/transaction.schema";
 import { z } from "zod";
-import { CheckoutCreate, CheckoutCreateMany } from "@/interface/model/transaction.type";
 import { orderSchema } from "@/server/schema/order.schema";
+import { CheckoutCreate, CheckoutCreateMany } from "@/interface/model/checkout.type";
 
 export class CheckoutSchema {
 	create = z.object({

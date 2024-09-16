@@ -1,6 +1,6 @@
 import React from 'react'
-import { TitleMore } from "@/components/TitleSearch";
-import { ProductItem } from "@/components/ProductItem";
+import { ProductItem } from "@/components/product/ProductItem";
+import { TitleMore } from "@/components/title/TitleMore";
 
 export default async function Product() {
 	

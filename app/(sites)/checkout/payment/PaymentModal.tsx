@@ -1,13 +1,12 @@
 'use client'
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { PaymentItem } from "@/app/(sites)/checkout/payment/PaymentItem";
-import { ContextTrolley } from "@/components/provider/ProviderContext";
-import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound";
 import { BankData } from "@/interface/model/bank.type";
+import { useBank } from "@/store/useBank";
 
 export function PaymentModal({ data }: { data: BankData[] }) {
 	const [search, setSearch] = useState('')
-	const { addBank } = useContext(ContextTrolley)
+	const { addBank, } = useBank()
 	return (
 		<>
 			<button
@@ -52,30 +51,6 @@ export function PaymentModal({ data }: { data: BankData[] }) {
 				</form>
 			</dialog>
 		</>
-	);
-}
-
-export function PaymentContext() {
-	const { state, removeBank } = useContext(ContextTrolley)
-	
-	if (!state.bank) {
-		return <ItemNotFound
-			title={ "Please Add Payment" }
-			
-			fun={ () => {
-				// @ts-expect-error
-				document.getElementById('modalPayment').showModal()
-			}
-			
-			}/>
-	}
-	return (
-		<div>
-			<PaymentItem
-				item={ state.bank }
-				fun={ removeBank }
-				add={ false }/>
-		</div>
 	);
 }
 

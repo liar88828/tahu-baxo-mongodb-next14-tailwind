@@ -1,7 +1,7 @@
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { NextRequest, NextResponse } from "next/server"
 import { errorHanding } from "@/lib/error/errorHanding"
-import { authService, type AuthService } from "../schema/auth.service"
+import { authService, type AuthService } from "../service/auth/auth.service"
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import { Params } from "@/interface/server/param";
 

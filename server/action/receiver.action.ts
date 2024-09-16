@@ -4,7 +4,7 @@ import { ReceiverDB } from "@prisma/client";
 import { config } from "@/config/baseConfig";
 import { errorApi } from "@/lib/error/errorApi";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";
 import { ReceiverCreateFormError, ReceiverCreateKey } from "@/interface/model/receiver.type";
@@ -34,7 +34,7 @@ export async function getAllDataReceiver(search: string) {
 }
 
 export async function getDataReceiver(search: string) {
-	const auth = authCookie().getData;
+	const auth = cookieService().getData;
 	// console.log(auth, 'auth-----')
 	try {
 		const res = await receiverService.findAllPrivate(
@@ -51,7 +51,7 @@ export async function getDataReceiver(search: string) {
 
 export async function createReceiver(prevState: any, formData: FormData): Promise<OnFormState<ReceiverCreateFormError>> {
 	try {
-		const auth = authCookie().getAuth()
+		const auth = cookieService().getAuth()
 		// @ts-ignore
 		const rawFormData: ReceiverCreateKey = {
 			name: formData.get('name') ?? '',
@@ -69,7 +69,7 @@ export async function createReceiver(prevState: any, formData: FormData): Promis
 
 export async function deleteReceiver(id: number): Promise<OnFormState<ReceiverCreateFormError>> {
 	try {
-		const auth = authCookie().getAuth()
+		const auth = cookieService().getAuth()
 		const data = await receiverService.deleteOne(id, auth.data)
 		console.log(data, 'test')
 		revalidatePath('/')

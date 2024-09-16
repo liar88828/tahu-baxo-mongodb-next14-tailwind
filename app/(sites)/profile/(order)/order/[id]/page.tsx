@@ -1,35 +1,25 @@
-'use client'
-import React, { useState } from 'react'
-import { IconAdd, IconBack, IconBox, IconRemove, IconTruck } from "@/components/icon/IconMore";
-import Divider from "@/components/Divider";
+import React from 'react'
+import { IconAdd, IconBack, IconBox, IconTruck } from "@/components/icon/IconMore";
+import Divider from "@/components/elements/Divider";
 import Link from "next/link";
+import { OrderSummary } from "@/app/(sites)/profile/(order)/order/[id]/OrderSummary";
+import { getTransactionComplete } from "@/server/action/transaction.action";
+import { SearchParams } from "@/interface/model/model";
+import ErrorComponent from "@/components/error/ErrorComponent";
+import { toDate } from "@/lib/utils/formatDate";
+import { Rupiah } from "@/lib/utils/formatMoney";
+import { orderStatuses } from "@/app/(sites)/profile/(order)/order/[id]/orderStatuses";
 
-export default function Component() {
-	const [isItemsExpanded, setIsItemsExpanded] = useState(false)
+export default async function Page({ params }: SearchParams) {
+	const data = await getTransactionComplete(Number(params.id))
+	console.log(data)
 	
-	const orderDetails = {
-		orderId: '#ORD-12345',
-		date: 'May 15, 2023',
-		status: 'Shipped',
-		items: [
-			{ name: 'Wireless Headphones', price: 129.99, quantity: 1 },
-			{ name: 'Smartphone Case', price: 24.99, quantity: 2 },
-			{ name: 'USB-C Cable', price: 9.99, quantity: 3 },
-		],
-		subtotal: 209.95,
-		shipping: 5.99,
-		tax: 17.84,
-		total: 233.78,
-		shippingAddress: '123 Main St, Anytown, ST 12345',
-		paymentMethod: 'Visa ending in 1234',
+	if (!data) {
+		return <ErrorComponent/>
 	}
-	
-	const orderStatuses = [
-		{ name: 'Processing', completed: true },
-		{ name: 'Shipped', completed: true },
-		{ name: 'Delivered', completed: false },
-	]
-	
+	if (!data.OrderanDB || !data.ReceiverDB || !data.BankDB) {
+		return <ErrorComponent/>
+	}
 	return (
 		<>
 			<div className='navbar bg-base-100'>
@@ -64,10 +54,11 @@ export default function Component() {
 						<div className="">
 							<div className="flex w-full justify-between">
 								<h1 className="card-title text-2xl">Order Details</h1>
-								<div className=" badge badge-outline mt-2">{ orderDetails.status }</div>
+								<div className=" badge badge-outline mt-2">{ data.OrderanDB.status }</div>
 							</div>
 							<div className={ 'mt-2' }>
-								Order { orderDetails.orderId } - Placed on { orderDetails.date }
+								<p className={ 'text-xs ' }>Order { data.orderanDBId } </p>
+								<p>- Placed on { toDate(data.OrderanDB.created_at) }</p>
 							</div>
 						</div>
 						
@@ -90,35 +81,12 @@ export default function Component() {
 							)) }
 						</div>
 						{/**/ }
-						<div>
-							<h3 className="text-lg font-semibold mb-2">Order Summary</h3>
-							<div className="flex justify-between items-center">
-								<button
-									onClick={ () => setIsItemsExpanded(!isItemsExpanded) }
-									className=" btn btn-sm"
-								>
-									{ isItemsExpanded ? (
-										<IconRemove className="mx-2"/>
-									) : (
-										<IconAdd className="mx-2"/>
-									) }
-									{ orderDetails.items.length } items
-								</button>
-								<span className="font-medium">${ orderDetails.subtotal.toFixed(2) }</span>
-							</div>
-							{ isItemsExpanded && (
-								<ul className="mt-2 space-y-2">
-									{ orderDetails.items.map((item, index) => (
-										<li
-											key={ index }
-											className="flex justify-between text-sm">
-											<span>{ item.quantity }x { item.name }</span>
-											<span>${ (item.price * item.quantity).toFixed(2) }</span>
-										</li>
-									)) }
-								</ul>
-							) }
-						</div>
+						
+						<OrderSummary
+							subTotal={ data.OrderanDB.sub_total }
+							trolley={ data.TrolleyDB }
+						/>
+						
 						<Divider/>
 						
 						<div>
@@ -126,20 +94,20 @@ export default function Component() {
 							<div className="space-y-1">
 								<div className="flex justify-between text-sm">
 									<span>Subtotal</span>
-									<span>${ orderDetails.subtotal.toFixed(2) }</span>
+									<span>${ Rupiah(data.OrderanDB.sub_total) }</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Shipping</span>
-									<span>${ orderDetails.shipping.toFixed(2) }</span>
+									<span>${ Rupiah(data.OrderanDB.shipping_cost) }</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Tax</span>
-									<span>${ orderDetails.tax.toFixed(2) }</span>
+									<span>${ 123 }</span>
 								</div>
 								<Divider/>
 								<div className="flex justify-between font-medium">
 									<span>Total</span>
-									<span>${ orderDetails.total.toFixed(2) }</span>
+									<span>${ Rupiah(data.OrderanDB.total) }</span>
 								</div>
 							</div>
 						</div>
@@ -151,7 +119,7 @@ export default function Component() {
 								<IconTruck className="h-5 w-5 mt-0.5"/>
 								<div>
 									<p className="font-medium">Shipping Address</p>
-									<p className="text-sm text-gray-600">{ orderDetails.shippingAddress }</p>
+									<p className="text-sm text-gray-600">{ data.ReceiverDB.address }</p>
 								</div>
 							</div>
 						</div>
@@ -161,7 +129,7 @@ export default function Component() {
 							<h3 className="text-lg font-semibold mb-2">Payment Method</h3>
 							<div className="flex items-center space-x-2">
 								<IconBox className="h-5 w-5"/>
-								<span>{ orderDetails.paymentMethod }</span>
+								<span>{ data.BankDB.name }</span>
 							</div>
 						</div>
 						<div className="">
@@ -171,7 +139,7 @@ export default function Component() {
 					</div>
 				</div>
 			</div>
-		
 		</>
 	)
 }
+

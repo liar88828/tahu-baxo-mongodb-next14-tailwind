@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, test, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { ProductList } from "@/app/(sites)/checkout/product/ProductList";
 import { getTrolleyPrivate } from "@/server/action/trolley.action";
+import { ProductCheckout } from "@/app/(sites)/checkout/product/ProductCheckout";
 //
 // vi.mock('next/headers', () => ({
 // cookies: vi.fn().mockReturnThis()
@@ -24,7 +24,7 @@ describe.skip('test checkout Product list', async () => {
 		
 	});
 	test('page checkout product list : success', async () => {
-		const Result = await ProductList()
+		const Result = await ProductCheckout()
 		render(Result);
 		await waitFor(() => {
 			expect(screen.getByTestId('checkout-ProductList',)).toBeDefined()

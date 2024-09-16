@@ -1,9 +1,9 @@
 import prisma from "@/config/prisma"
 import { TransactionSchema, transactionSchema, } from "@/server/schema/transaction.schema"
 import { AccessUserID } from "@/server/service/auth/jwt.service"
-import { CheckoutCreateMany, CheckoutCreateSchema, ResponseCheckout, } from "@/interface/model/transaction.type"
 import { checkoutSchema, CheckoutSchema } from "@/server/schema/checkout.schema";
 import { validIdNum, validUserId } from "@/server/schema/init.schema";
+import { CheckoutCreateMany, CheckoutCreateSchema, ResponseCheckout } from "@/interface/model/checkout.type";
 
 type transactionId = {
 	idProduct: number
@@ -38,7 +38,8 @@ export class TransactionService {
 					phone: order.phone,
 					status: order.status,
 					shipping_cost: order.shipping_cost,
-					total: data.order.total
+					total: data.order.total,
+					sub_total: data.order.sub_total
 					// pesan: order.pesan,
 					// waktuKirim: order.waktuKirim,
 					// typePembayaran: order.typePembayaran,
@@ -93,7 +94,6 @@ export class TransactionService {
 	async createMany(data: CheckoutCreateMany, user: AccessUserID) {
 		const { order, transaction, trollyIds } = await this.validCheckout.checkoutValidMany(data)
 		return prisma.$transaction(async (tx) => {
-			
 			const orderanDB: ResponseCheckout['orderanDB'] = await tx.orderanDB.create({
 				data: {
 					from: order.from,
@@ -103,7 +103,9 @@ export class TransactionService {
 					phone: order.phone,
 					status: order.status,
 					shipping_cost: order.shipping_cost,
-					total: order.total
+					total: order.total,
+					sub_total: data.order.sub_total
+					
 				},
 			})
 			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
@@ -169,7 +171,13 @@ export class TransactionService {
 			include: {
 				BankDB: true,
 				OrderanDB: true,
-				ReceiverDB: true
+				ReceiverDB: true,
+				TrolleyDB: {
+					include: {
+						Product: true
+					}
+				},
+				
 			}
 		})
 		if (!res) {

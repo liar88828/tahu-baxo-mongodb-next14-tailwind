@@ -29,7 +29,11 @@ export type DeleteUser = {
 }
 export type UserCreate = Prisma.Args<typeof prisma.user, 'create'>['data']
 export type UserUpdate = Prisma.Args<typeof prisma.user, 'update'>['data']
+
 export type ResetSchema = z.output<typeof userSchema.resetSchema>
+export type UpdateSchema = z.output<typeof userSchema.update>
+export type LoginSchema = z.output<typeof userSchema.login>
+export type RegisterSchema = z.output<typeof userSchema.register>
 //
 type InitialFormState = {
 	message: string,

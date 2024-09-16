@@ -1,23 +1,17 @@
-'use client'
-import { Icon } from '@iconify/react'
 import React, { ReactNode } from 'react'
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { IconBack } from "@/components/icon/IconMore";
 
 export default function layout({ children }: { children: ReactNode }) {
-	const router = useRouter()
 	return (<>
 			<div className='navbar bg-base-100'>
 				<div className='navbar-start'>
-					<button
-						onClick={ () => router.back() }
+					<Link
+						href={ '/trolley' }
 						className='btn btn-ghost btn-circle'
 					>
-						{/* back */ }
-						<Icon
-							icon='ic:round-arrow-back'
-							className='size-5'
-						/>
-					</button>
+						<IconBack/>
+					</Link>
 				</div>
 				<div className='navbar-center'>
 					<a className='btn btn-ghost text-xl'>Checkout</a>

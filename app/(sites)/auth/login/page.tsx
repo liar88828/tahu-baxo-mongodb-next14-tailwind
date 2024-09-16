@@ -5,7 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
 import { initialState } from "@/interface/model/auth.type";
 import { redirect } from "next/navigation";
-import { ErrorMessage } from "@/components/errorMessage";
+import { ErrorMessage } from "@/components/error/errorMessage";
 
 export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)

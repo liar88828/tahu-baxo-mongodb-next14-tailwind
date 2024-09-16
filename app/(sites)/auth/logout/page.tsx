@@ -2,10 +2,10 @@ import React from 'react';
 import Link from "next/link";
 import { onLogout } from "@/server/action/auth.action";
 
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 
 function Page() {
-	const user = authCookie().checkAuth
+	const user = cookieService().checkAuth
 	return (< >
 			<div
 				data-testid="logout-Page"

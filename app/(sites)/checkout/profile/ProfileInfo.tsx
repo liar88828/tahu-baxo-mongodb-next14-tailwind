@@ -1,6 +1,7 @@
 import React from 'react';
-import { ProfileInfoContext, ProfileModal } from "@/app/(sites)/checkout/profile/ProfileModal";
+import { ProfileModal } from "@/app/(sites)/checkout/profile/ProfileModal";
 import { getDataReceiver } from "@/server/action/receiver.action";
+import { ProfileInfoContext } from "@/app/(sites)/checkout/profile/ProfileInfoContext";
 
 export async function ProfileInfo() {
 	const data = await getDataReceiver('')

@@ -1,7 +1,7 @@
 import React from 'react'
 import { getTrolleyPrivate } from "@/server/action/trolley.action";
 import { ProductDB, TrolleyDB } from "@prisma/client";
-import ErrorComponent, { message } from "@/components/ErrorComponent";
+import ErrorComponent from "@/components/error/ErrorComponent";
 import { errorStatus } from "@/lib/error/errorStatus";
 import { ProductItem } from "@/app/(sites)/trolley/ProductItem";
 
@@ -22,23 +22,8 @@ export async function Product() {
 					<input type="checkbox" defaultChecked className="checkbox checkbox-sm"/>
 					<h1 className={ 'font-bold text-xl' }>Product List</h1>
 				</div>
-				{/*<button className={'btn btn-primary btn-sm'}>Show</button>*/ }
 			</div>
-			<div className='space-y-4 '>
-				
-				{
-					data.length === 0 ?
-						<ErrorComponent
-							msg={ 'Product Is Empty' }
-							title={ message.trolley.empty }
-						/>
-						:
-						data.map((item, index) => (
-							item.Product
-								? <ProductItem trolley={ item } product={ item.Product } key={ index }/>
-								: <ErrorComponent/>
-						)) }
-			</div>
+			<ProductItem data={ data }/>
 		</div>
 	)
 }

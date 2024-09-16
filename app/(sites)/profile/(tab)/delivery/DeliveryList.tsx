@@ -1,10 +1,10 @@
 import React from 'react'
-import { TitleSearch } from "@/components/TitleSearch";
+import { TitleSearch } from "@/components/title/TitleSearch";
 import { IconEdit, IconSearch } from "@/components/icon/IconMore";
-import { Loading } from "@/components/loading";
+import { Loading } from "@/components/loading/loading";
 import { getDeliveryAllPrivate } from "@/server/action/delivery.action";
 import { DeliveryDB } from "@prisma/client";
-import ErrorComponent from "@/components/ErrorComponent";
+import ErrorComponent from "@/components/error/ErrorComponent";
 import { Rupiah } from "@/lib/utils/formatMoney";
 
 export async function DeliveryList({ search }: { search: string }) {

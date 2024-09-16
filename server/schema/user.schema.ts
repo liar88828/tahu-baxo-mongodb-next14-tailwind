@@ -5,6 +5,7 @@ import { LoginUser, RegisterUser, UserUpdate } from "@/interface/model/auth.type
 export class UserSchema {
 	
 	id = z.string({ required_error: 'ID is required' }).optional()
+	
 	register = z.object({
 		fullname: nameInit,
 		email: z.string().email().min(1).max(50),
@@ -12,8 +13,8 @@ export class UserSchema {
 		confPass: z.string().min(8).max(50),
 		phone: phoneInit,
 		address: addressInit,
-		
 	}) satisfies z.Schema<RegisterUser>
+	
 	registerSchema = this.register
 		.superRefine(
 			({ confPass, password }, ctx) => {
@@ -33,6 +34,7 @@ export class UserSchema {
 	otpSchema = z.object({
 		otp: z.string().min(6).max(6),
 	})
+	
 	resetSchema = z.object({
 		password: z.string().min(8).max(50),
 		confPass: z.string().min(8).max(50),

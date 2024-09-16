@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import React from "react";
 import { getTransaction } from "@/server/action/transaction.action";
 import { toDate } from "@/lib/utils/formatDate";
-import { EmptyComponent } from "@/components/EmptyComponent";
+import { EmptyComponent } from "@/components/error/EmptyComponent";
 
 export async function ProfileRecent() {
 	const data = await getTransaction()

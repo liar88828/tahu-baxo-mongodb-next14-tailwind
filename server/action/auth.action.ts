@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { userSchema } from "@/server/schema/user.schema";
 import { apiLogin, apiLogout, apiRegister, } from "@/server/api/auth";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { errorForm } from "@/lib/error/errorForm";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { LoginFormError, RegisterFormError, ResetFormError } from "@/interface/model/auth.type";
@@ -79,7 +79,7 @@ export async function onLogout() {
 		return errorForm(err)
 	} finally {
 		console.log('this finally')
-		authCookie().deleteAuth()
+		cookieService().deleteAuth()
 	}
 }
 

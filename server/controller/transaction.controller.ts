@@ -7,9 +7,9 @@ import { errorHanding } from "@/lib/error/errorHanding"
 import { requestService, RequestService, } from "@/server/service/request.service"
 import { transactionService, TransactionService, } from "@/server/service/transaction.service"
 import prisma from "@/config/prisma"
-import { CheckoutCreateSchema } from "@/interface/model/transaction.type"
 import type { Params } from "@/interface/server/param"
 import type { ProductTransaction } from "@/interface/model/product.type"
+import { CheckoutCreateSchema } from "@/interface/model/checkout.type";
 
 class TransactionController {
 	constructor(

@@ -1,6 +1,6 @@
 import { getBankAllPrivate } from "@/server/action/bank.action";
-import { Loading } from "@/components/loading";
-import { TitleSearch } from "@/components/TitleSearch";
+import { Loading } from "@/components/loading/loading";
+import { TitleSearch } from "@/components/title/TitleSearch";
 import { IconSearch } from "@/components/icon/IconMore";
 import React from "react";
 import { BankDB } from "@prisma/client";

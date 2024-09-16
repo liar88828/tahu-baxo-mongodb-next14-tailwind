@@ -1,9 +1,9 @@
 import React from 'react'
-import { TitleSearch } from "@/components/TitleSearch";
+import { TitleSearch } from "@/components/title/TitleSearch";
 import { IconSearch } from "@/components/icon/IconMore";
 import { getProductsAllPrivate } from "@/server/action/product.action";
-import { ProductItemPrivate } from "@/components/ProductItem";
-import { Loading } from "@/components/loading";
+import { ProductItemPrivate } from "@/components/product/ProductItem";
+import { Loading } from "@/components/loading/loading";
 
 export async function ProductList({ search }: { search: string }) {
 	const product = await getProductsAllPrivate(search)

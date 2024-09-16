@@ -1,15 +1,13 @@
 import { z } from "zod"
 import { productSchema, ProductSchema } from "@/server/schema/product.schema"
-import { ReceiverSchema, receiverSchema } from "@/server/schema/receiverSchema"
 import { orderSchema, OrderSchema } from "@/server/schema/order.schema"
-import type { OrderCreate } from "@/interface/model/order.type"
 import { userId } from "@/server/schema/init.schema";
 import { TransactionPrisma } from "@/interface/model/transaction.type";
+import { receiverSchema, ReceiverSchema } from "@/server/schema/receiver.schema";
 
 export class TransactionSchema {
+	
 	create = z.object({
-		// id: z.number(),
-		// orderanDBId: z.string(),// because will add in transaction db
 		qty: z.number(),
 		productDBId: z.number(),
 		receiverDBId: z.number(),
@@ -17,9 +15,8 @@ export class TransactionSchema {
 		bankDBId: z.number(),
 		userId: userId
 	}) satisfies z.Schema<TransactionPrisma>
+	
 	createForMany = z.object({
-		// qty: z.number(),
-		// productDBId: z.number(),
 		receiverDBId: z.number(),
 		deliveryDBId: z.number(),
 		bankDBId: z.number(),
@@ -33,26 +30,34 @@ export class TransactionSchema {
 	) {
 	}
 	
-	idProduct(id: number) {
-		id = z.number().parse(id)
-		if (!id) {
-			throw new Error("data is Not valid")
-		}
-		return id
-	}
+	// orderValid(data: OrderCreate) {
+	// 	data = this.orderSchema.create.parse(data)
+	// 	if (!data) {
+	// 		throw new Error("data is Not valid")
+	// 	}
+	// 	return data
+	// }
 	
-	orderValid(data: OrderCreate) {
-		data = this.orderSchema.create.parse(data)
+	orderValid(data: TransactionPrisma) {
+		data = this.create.parse(data)
 		if (!data) {
 			throw new Error("data is Not valid")
 		}
 		return data
 	}
 	
-	idOrder(id: string) {
-		id = z.string().parse(id)
+	orderValidMany(data: TransactionPrisma) {
+		data = this.createForMany.parse(data)
+		if (!data) {
+			throw new Error("data is Not valid")
+		}
+		return data
+	}
+	
+	idProduct(id: number) {
+		id = z.number().parse(id)
 		if (!id) {
-			throw new Error("id is Not valid")
+			throw new Error("data is Not valid")
 		}
 		return id
 	}

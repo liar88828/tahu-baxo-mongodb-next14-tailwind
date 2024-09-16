@@ -1,9 +1,7 @@
-'use client'
 import React from 'react'
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function NavBottom() {
-  const route = useRouter()
   return (
     <div
       data-testid={ 'checkout-NavBottom' }
@@ -20,12 +18,12 @@ export function NavBottom() {
         <h1 className='text-lg font-semibold'>Total</h1>
         <h1 className='text-lg font-bold'>Rp21312.23</h1>
       </div>
-      <button
-        onClick={() => route.push('/checkout')}
+			<Link
+				href={ '/checkout' }
         className='btn btn-primary w-full font-bold text-lg'
       >
         Buy Now
-      </button>
+			</Link>
     </div>
   )
 }

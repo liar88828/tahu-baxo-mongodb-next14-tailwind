@@ -1,7 +1,6 @@
 import React from "react";
 import { getDeliveryAll } from "@/server/action/delivery.action";
 import { DeliveryContext, DeliveryModal } from "@/app/(sites)/checkout/delivery/DeliveryModal";
-import { DeliveryDesc } from "@/app/(sites)/checkout/delivery/DeliveryDesc";
 
 export async function Delivery() {
   const data = await getDeliveryAll()
@@ -16,10 +15,7 @@ export async function Delivery() {
         <h1 className={'font-bold text-xl'}>Delivery Method</h1>
 				<DeliveryModal data={ data.data }/>
       </div>
-      <div className=' space-y-2 '>
 				<DeliveryContext/>
-        <DeliveryDesc/>
-      </div>
     </div>
   )
 }

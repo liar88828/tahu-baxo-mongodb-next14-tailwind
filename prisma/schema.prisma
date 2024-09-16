@@ -118,6 +118,7 @@ model OrderanDB {
   location      String
   shipping_cost Int
   status        String
+  sub_total     Int
   total         Int
 
   created_at    DateTime        @default(now())

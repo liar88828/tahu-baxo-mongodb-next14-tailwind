@@ -1,6 +1,7 @@
 import React from "react";
 import { getBankAll } from "@/server/action/bank.action";
-import { PaymentContext, PaymentModal } from "@/app/(sites)/checkout/payment/PaymentModal";
+import { PaymentModal } from "@/app/(sites)/checkout/payment/PaymentModal";
+import { PaymentContext } from "@/app/(sites)/checkout/payment/PaymentContext";
 
 export async function Payment() {
   const data = await getBankAll()

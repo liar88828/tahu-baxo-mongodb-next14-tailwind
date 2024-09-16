@@ -3,7 +3,7 @@ import { config } from "@/config/baseConfig";
 import { ProductDB } from "@prisma/client";
 import { PaginationDB, productService } from "@/server/service/product.service";
 import { ProductCreateFormError, ProductCreateKey } from "@/interface/model/product.type";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { errorForm } from "@/lib/error/errorForm";
 import { errorApi } from "@/lib/error/errorApi";
@@ -32,7 +32,7 @@ export async function getProductsAll(search?: string) {
 
 export async function getProductsAllPrivate(search?: string) {
 	try {
-		const token = authCookie().getAuth()
+		const token = cookieService().getAuth()
 		// console.log(token)
 		const res = await fetch(`${ config.url }/api/product/user?search=${ search }`, {
 			method: "GET",
@@ -86,7 +86,7 @@ export async function createProduct(prevState: any, formData: FormData): Promise
 			desc: formData.get('desc') ?? '',
 			qty: Number(formData.get('qty')),
 			price: Number(formData.get('price')),
-			userId: authCookie().getAuth().data.id
+			userId: cookieService().getAuth().data.id
 		}
 		// console.log(rawFormData)
 		const data = await productService.createOne(rawFormData)

@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { ProductNote } from "@/app/(sites)/checkout/product/ProductNote";
+import { NoteDescription } from "@/app/(sites)/checkout/product/NoteDescription";
 
 test('page checkout payment item : success', async () => {
-	render(<ProductNote/>);
+	render(<NoteDescription/>);
 	await waitFor(() => {
 		expect(screen.getByTestId('checkout-ProductNote',)).toBeDefined()
 		expect(screen.getByPlaceholderText('Write a note for product ...', {})).toBeDefined()

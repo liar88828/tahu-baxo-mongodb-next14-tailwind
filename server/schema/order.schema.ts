@@ -13,6 +13,7 @@ export class OrderSchema {
 		shipping_cost: z.number().positive(),
 		status: z.string(),
 		total: z.number().positive(),
+		sub_total: z.number().positive(),
 	}) satisfies z.Schema<OrderDBCreate>
 	
 	validCreate(data: OrderCreate): OrderCreate {

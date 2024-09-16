@@ -2,7 +2,7 @@
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import { config } from "@/config/baseConfig";
 import { ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
-import { authCookie, createSession } from "@/server/api/authCookie";
+import { cookieService, createSession } from "@/server/service/auth/cookie.service";
 import { errorApi } from "@/lib/error/errorApi";
 
 export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
@@ -43,7 +43,7 @@ export async function apiRegister(form: RegisterUser) {
 		errorApi(res.status, 'auth', await res.text());
 	}
 	const data: ResponseAuthUser = await res.json()
-	authCookie().setAuth(data)
+	cookieService().setAuth(data)
 	return data
 }
 
@@ -62,7 +62,7 @@ export async function apiLogout() {
 	}
 	const data: ResponseAuthUser = await res.json()
 	console.log('hello api logout')
-	authCookie().deleteAuth()
+	cookieService().deleteAuth()
 	return data
 }
 

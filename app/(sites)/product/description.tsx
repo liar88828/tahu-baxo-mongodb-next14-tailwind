@@ -2,7 +2,7 @@ import { repeat } from "@/lib/utils/repeat";
 import React from "react";
 import { ProductDB } from "@prisma/client";
 import { Rupiah } from "@/lib/utils/formatMoney";
-import Rating from "@/components/Rating";
+import Rating from "@/components/elements/Rating";
 
 export function Description({ item }: { item: ProductDB }) {
 	return (

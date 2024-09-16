@@ -6,13 +6,13 @@ import { createPenerima, } from "../utils/penerima"
 import { createDelivery, } from "../utils/delivery"
 
 import { createBank, createProduct, } from "../utils/product"
-import { ResponseCheckout, } from "@/interface/model/transaction.type"
 import { deleteTransaction } from "@/__test__/utils/transaction";
 import { transactionCreateExample } from "@/assets/example/transaction";
 import { productTransaction } from "@/assets/example/product";
 import { deliveryTransaction } from "@/assets/example/delivery";
 import { penerimaTransaction } from "@/assets/example/received";
 import { bankTransaction } from "@/assets/example/bank";
+import { ResponseCheckout } from "@/interface/model/checkout.type";
 
 let idUser = ""
 let transactionToken = ""

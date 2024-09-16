@@ -1,21 +1,20 @@
 import { describe, expect, it } from "vitest"
-import { checkoutSchema } from "@/server/schema/checkout.schema";
 import { transactionCreateExample, transactionCreateManyExample } from "@/assets/example/transaction";
+import { transactionSchema } from "@/server/schema/transaction.schema";
 
 describe('can test transaction schema', async () => {
 	
 	describe("test zod schema", () => {
-		it("can validate create data", async () => {
+		it("Success can validate create data", async () => {
 			async function testFun() {
 				try {
-					return checkoutSchema.checkoutValid(transactionCreateExample)
+					return transactionSchema.orderValid(transactionCreateExample)
 				} catch (e) {
 					console.log(e)
 				}
 			}
 			
 			const testData = await testFun()
-			console.log(testData)
 			expect(testData).toStrictEqual(transactionCreateExample)
 			expect(testData).toEqual(transactionCreateExample)
 		})
@@ -25,16 +24,32 @@ describe('can test transaction schema', async () => {
 		it("can validate create data many id product", async () => {
 			async function testFun() {
 				try {
-					return checkoutSchema.checkoutValidMany(transactionCreateManyExample)
+					return transactionSchema.orderValidMany(transactionCreateManyExample)
 				} catch (e) {
 					console.log(e)
 				}
 			}
 			
 			const testData = await testFun()
-			console.log(testData)
 			expect(testData).toStrictEqual(transactionCreateManyExample)
 			expect(testData).toEqual(transactionCreateManyExample)
 		})
 	})
+	
+	describe("test zod id product form transaction", () => {
+		it("can validate create data many id product", async () => {
+			async function testFun() {
+				try {
+					return transactionSchema.idProduct(transactionCreateExample['productDBId'])
+				} catch (e) {
+					console.log(e)
+				}
+			}
+			
+			const testData = await testFun()
+			expect(testData).toStrictEqual(transactionCreateExample['productDBId'])
+			expect(testData).toEqual(transactionCreateExample['productDBId'])
+		})
+	})
+	
 })

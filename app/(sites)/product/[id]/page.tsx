@@ -4,8 +4,9 @@ import { Description } from "@/app/(sites)/product/description";
 import NavBottom from "@/app/(sites)/product/NavBottom";
 import { getProductId } from "@/server/action/product.action";
 import { ParamsProduct } from "@/interface/server/param";
-import { ProductItem } from "@/components/ProductItem";
-import { TitleMore } from "@/components/TitleSearch";
+import { ProductItem } from "@/components/product/ProductItem";
+
+import { TitleMore } from "@/components/title/TitleMore";
 
 export default async function page({ params }: ParamsProduct) {
   const data = await getProductId(params.id)

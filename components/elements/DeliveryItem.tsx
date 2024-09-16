@@ -1,9 +1,11 @@
 import { DeliveryDB } from "@prisma/client";
 import React from "react";
 
-function DeliveryItem({ item }: { item: DeliveryDB }) {
+export function DeliveryItem({ item }: { item: DeliveryDB }) {
 	return (
-		<div className="bg-base-100 rounded-lg shadow border p-6 ">
+		<div
+			data-testid="DeliveryItem"
+			className="bg-base-100 rounded-lg shadow border p-6 ">
 			{/* Header */ }
 			<div
 				className="flex items-center justify-between">

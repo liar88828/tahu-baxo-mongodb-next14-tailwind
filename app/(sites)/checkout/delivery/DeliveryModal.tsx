@@ -1,36 +1,29 @@
-'use client'
-import React, { useContext, useState } from "react";
-import { ContextTrolley } from "@/components/provider/ProviderContext";
-import { DeliveryItem } from "@/app/(sites)/checkout/delivery/DeliveryItem";
-import { DeliveryDB } from "@prisma/client";
-import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { deliveryAction } from "@/store/checkout/delivery";
-import Link from "next/link";
+"use client"
+import React, { useState } from "react"
+import { DeliveryItem } from "@/app/(sites)/checkout/delivery/DeliveryItem"
+import { DeliveryDB } from "@prisma/client"
+import { ItemNotFound } from "@/app/(sites)/checkout/ItemNotFound"
+import { useDelivery } from "@/store/useDelivery"
 
-export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
-	const [search, setSearch] = useState('')
-	const { addDelivery } = useContext(ContextTrolley)
-	const dispatch = useDispatch<AppDispatch>()
+export function DeliveryModal({ data }: { data: DeliveryDB[] }) {
+	const [search, setSearch] = useState("")
+	const { addDelivery } = useDelivery()
 	
 	return (
 		<>
-			
 			<button
-				data-testid={ 'checkout-DeliveryModal-button' }
-				className="btn btn-primary btn-sm" onClick={ () => {
-				// @ts-expect-error
-				document.getElementById('modalDelivery').showModal()
-			} }>
+				data-testid={ "checkout-DeliveryModal-button" }
+				className="btn btn-primary btn-sm"
+				onClick={ () => {
+					// @ts-expect-error
+					document.getElementById("modalDelivery").showModal()
+				} }
+			>
 				Select
 			</button>
-			<Link href={ '/test' }>Go Link</Link>
-			<dialog
-				id="modalDelivery" className="modal">
-				<div
-					data-testid={ 'checkout-DeliveryModal-div' }
-					className="modal-box">
+			{/*<Link href={ "/test" }>Go Link</Link>*/ }
+			<dialog id="modalDelivery" className="modal">
+				<div data-testid={ "checkout-DeliveryModal-div" } className="modal-box">
 					<h3 className="font-bold text-lg">Select Delivery</h3>
 					<input
 						className="input input-sm w-full input-bordered"
@@ -41,15 +34,13 @@ export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 					/>
 					{/*<p className="py-4">Press ESC key or click the button below to close</p>*/ }
 					<div className="overflow-y-scroll space-y-2 p-2">
-						{ data.map(item => (
+						{ data.map((item) => (
 							<DeliveryItem
 								item={ item }
 								add={ true }
-								fun={ () => {
-									addDelivery(item)
-									dispatch(deliveryAction.addDelivery(item))
-								} }
-								key={ item.id }/>
+								fun={ () => addDelivery(item) }
+								key={ item.id }
+							/>
 						)) }
 					</div>
 					<div className="modal-action">
@@ -58,37 +49,33 @@ export function DeliveryModal({ data }: { data: DeliveryDB [] }) {
 							<button className="btn">Close</button>
 						</form>
 					</div>
-				
 				</div>
 				<form method="dialog" className="modal-backdrop">
 					<button>close</button>
 				</form>
 			</dialog>
 		</>
-	);
+	)
 }
 
 export function DeliveryContext() {
-	const { state, removeDelivery } = useContext(ContextTrolley)
+	const { delivery, removeDelivery } = useDelivery()
 	
-	if (!state.delivery) {
-		return <ItemNotFound
-			title={ 'Please Add Delivery'
-			
-			}
-			fun={ () => {
-				// @ts-expect-error
-				document.getElementById('modalDelivery').showModal()
-			} }
-		/>
+	if (!delivery) {
+		return (
+			<ItemNotFound
+				title={ "Please Add Delivery" }
+				fun={ () => {
+					// @ts-expect-error
+					document.getElementById("modalDelivery").showModal()
+				} }
+			/>
+		)
 	}
 	
 	return (
 		<div>
-			<DeliveryItem
-				item={ state.delivery }
-				fun={ removeDelivery }
-				add={ false }/>
+			<DeliveryItem item={ delivery } fun={ removeDelivery } add={ false }/>
 		</div>
-	);
+	)
 }

@@ -3,7 +3,7 @@ import { config } from "@/config/baseConfig";
 import { BankDB, DeliveryDB } from "@prisma/client";
 import { DeliveryCreateFormError, DeliveryCreateKey, DeliveryId } from "@/interface/model/delivery.type";
 import { ResponseData } from "@/interface/server/IService";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";
@@ -12,7 +12,7 @@ import { errorApi } from "@/lib/error/errorApi";
 import { errorGetData } from "@/lib/error/errorGetData";
 
 export async function getDeliveryAllPrivate(search: string) {
-  const token = authCookie().getAuth()
+  const token = cookieService().getAuth()
   try {
     const res = await fetch(`${ config.url }/api/delivery/user?search=${ search }`, {
       method: "GET",
@@ -79,7 +79,7 @@ export async function createDelivery(prevState: any, formData: FormData): Promis
       location: formData.get('location') ?? '',
       desc: formData.get('desc') ?? '',
       price: Number(formData.get('price')),
-      userId: authCookie().getAuth().data.id,
+      userId: cookieService().getAuth().data.id,
       phone: formData.get('phone'),
     }
     // console.log(rawFormData)

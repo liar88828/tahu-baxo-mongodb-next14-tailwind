@@ -2,7 +2,7 @@
 import { config } from "@/config/baseConfig";
 import { BankDB } from "@prisma/client";
 import { ResponseData } from "@/interface/server/IService";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";
@@ -12,7 +12,7 @@ import { errorApi } from "@/lib/error/errorApi";
 import { errorGetData } from "@/lib/error/errorGetData";
 
 export async function getBankAllPrivate(search: string) {
-  const token = authCookie().getAuth()
+  const token = cookieService().getAuth()
   
   try {
     const res = await fetch(`${ config.url }/api/bank/user?search=${ search }`, {
@@ -84,7 +84,7 @@ export async function createBank(prevState: any, formData: FormData): Promise<On
       type: formData.get('type') ?? '',
       location: formData.get('location') ?? '',
       desc: formData.get('desc') ?? '',
-      userId: authCookie().getAuth().data.id,
+      userId: cookieService().getAuth().data.id,
       no_req: formData.get('no_req'),
       phone: formData.get('no_req'),
       

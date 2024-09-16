@@ -3,7 +3,7 @@ import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
 import { decryptMiddleware } from "@/server/service/auth/jose.service";
 import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
-import { getSession } from "@/server/api/authCookie";
+import { getSession } from "@/server/service/auth/cookie.service";
 
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public

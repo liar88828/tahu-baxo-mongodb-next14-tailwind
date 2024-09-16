@@ -1,6 +1,6 @@
 import type { z } from "zod"
-import type { receiverSchema } from "@/server/schema/receiverSchema"
 import { ReceiverDB } from "@prisma/client";
+import { receiverSchema } from "@/server/schema/receiver.schema";
 
 export type ReceiverCreatePrisma = Omit<ReceiverDB, "id">
 export type ReceiverUpdatePrisma = Omit<ReceiverDB, "id" | 'userId'>

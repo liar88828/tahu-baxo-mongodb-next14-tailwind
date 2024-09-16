@@ -10,12 +10,12 @@ import {
 import { ResponseTrolleyCount } from "@/server/service/trolley.service";
 import { revalidatePath } from "next/cache";
 import { TrolleyDB } from "@prisma/client";
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 import { errorApi } from "@/lib/error/errorApi";
 import { errorGetData } from "@/lib/error/errorGetData";
 
 export async function getTrolleyPrivate() {
-	const auth = authCookie().getAccess()
+	const auth = cookieService().getAccess()
 	try {
 		const res = await fetch(`${ config.url }/api/trolley`, {
 			method: "GET",
@@ -97,7 +97,7 @@ export async function deleteTrolley(id: number) {
 
 export async function getUserTrolley() {
 	try {
-		const access = authCookie().getAccess()
+		const access = cookieService().getAccess()
 		const res = await fetch(`${ config.url }/api/trolley/count`, {
 			method: "GET",
 			headers: {
@@ -115,7 +115,7 @@ export async function getUserTrolley() {
 }
 
 export async function onAddTrolley(id: number,) {
-	const auth = authCookie()
+	const auth = cookieService()
 	try {
 		const data: TrolleyCreate = {
 			userId: auth.getAuth().data.id,
@@ -147,7 +147,7 @@ export async function onAddTrolley(id: number,) {
 
 export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = authCookie().getAuth()
+		const auth = cookieService().getAuth()
 		const data: TrolleyUpdate = {
 			id: id,
 			productId: productId,
@@ -166,12 +166,12 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 		if (!res.ok) {
 			errorApi(res.status, 'trolley', await res.json())
 		}
-		console.log('api trolley increment')
-		console.log(res.status)
-		console.log(await res.json())
-		console.log('api trolley increment')
+		// console.log('api trolley increment')
+		// console.log(res.status)
+		// console.log(await res.json(), 'tes trolley')
+		// console.log('api trolley increment')
 		revalidatePath('/trolley')
-		return true
+		return await res.json() as TrolleyResponse
 	} catch (e) {
 		return errorGetData(e)
 	}
@@ -179,7 +179,7 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 
 export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = authCookie().getAuth()
+		const auth = cookieService().getAuth()
 		const data: TrolleyUpdate = {
 			id: id,
 			productId: productId,
@@ -198,7 +198,7 @@ export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 			errorApi(res.status, 'trolley', await res.json())
 		}
 		revalidatePath('/trolley')
-		return true
+		return await res.json() as TrolleyResponse
 	} catch (e) {
 		return errorGetData(e)
 	}

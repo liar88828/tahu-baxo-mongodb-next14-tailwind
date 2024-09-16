@@ -3,7 +3,7 @@ import Product from './Product'
 import { TabProduct } from './TabProduct'
 import CategoryWrap from "@/app/(sites)/search/CategoryWrap";
 import { ParamsProfile } from "@/interface/server/param";
-import { LoadingBounce } from "@/components/loading";
+import { LoadingBounce } from "@/components/loading/loading";
 
 export default function page(params : ParamsProfile) {
   return (<>

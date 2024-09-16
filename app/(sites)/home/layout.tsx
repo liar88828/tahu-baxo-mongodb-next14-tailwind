@@ -2,10 +2,10 @@ import React from "react";
 import { IconBell, IconMenu, IconPerson } from "@/components/icon/IconMore";
 import Link from "next/link";
 
-import { authCookie } from "@/server/api/authCookie";
+import { cookieService } from "@/server/service/auth/cookie.service";
 
 export default async function layout({ children }: { children: React.ReactNode }) {
-	const auth = authCookie().checkAuth
+  const auth = cookieService().checkAuth
 	// console.log(auth)
   return (<>
     <div className='navbar bg-base-100'>

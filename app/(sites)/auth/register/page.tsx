@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
 import usePhone from "@/hook/usePhone";
 
-import { ErrorMessage } from "@/components/errorMessage";
+import { ErrorMessage } from "@/components/error/errorMessage";
 
 export type OnFormState<T> = {
   message?: string,

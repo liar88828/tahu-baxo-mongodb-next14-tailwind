@@ -4,7 +4,7 @@ import Product from './Product'
 import { SearchInput } from "@/app/(sites)/search/SearchInput";
 import React, { Suspense } from "react";
 import NavButton from "@/app/(sites)/home/NavButton";
-import { LoadingBounce } from "@/components/loading";
+import { LoadingBounce } from "@/components/loading/loading";
 
 export default function page() {
   return (

@@ -1,7 +1,7 @@
 import NavBottom from './NavBottom'
 import { Product } from './Product'
 import { Suspense } from "react";
-import { LoadingBounce } from "@/components/loading";
+import { LoadingBounce } from "@/components/loading/loading";
 
 export default async function page() {
 	

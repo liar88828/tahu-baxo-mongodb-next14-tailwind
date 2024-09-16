@@ -1,10 +1,10 @@
-import { receiverSchema, ReceiverSchema } from "@/server/schema/receiverSchema"
 import prisma from "@/config/prisma"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
 import { ReceiverDB } from "@prisma/client";
 import { ReceiverCreate } from "@/interface/model/receiver.type";
 import { AccessUserID } from "@/server/service/auth/jwt.service";
+import { receiverSchema, ReceiverSchema } from "@/server/schema/receiver.schema";
 
 export class ReceiverService implements IService<ReceiverDB> {
 	constructor(private valid: ReceiverSchema) {

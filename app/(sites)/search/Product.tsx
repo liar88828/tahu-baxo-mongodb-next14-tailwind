@@ -1,5 +1,5 @@
 import React from 'react'
-import { ProductItemSearch } from "@/components/ProductItem";
+import { ProductItemSearch } from "@/components/product/ProductItem";
 import { getProductsAll } from "@/server/action/product.action";
 import { ParamsProfile } from "@/interface/server/param";
 
