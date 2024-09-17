@@ -101,7 +101,6 @@ describe('can test api bank', async () => {
 			const code = res.status
 			const data = await res.json()
 			bankId = data.id
-			console.log(data)
 			expect(code).toBe(200)
 			expect(data).toMatchObject(dataExpectType)
 		})
@@ -296,7 +295,6 @@ describe('can test api bank', async () => {
 			
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(dataExpectType)
-			console.log(data)
 			expect(code).toBe(400)
 			expect(data).toBe('Not have token in Bearer')
 		})
@@ -347,7 +345,6 @@ describe('can test api bank', async () => {
 			
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(dataExpectType)
-			console.log(data)
 			expect(code).toBe(400)
 			expect(data).toBe('Data is Not Found maybe was been delete')
 			

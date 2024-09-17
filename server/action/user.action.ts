@@ -17,7 +17,7 @@ export async function getUserId({id_user} : UserId) {
     return data
   } catch (err : unknown) {
     if (err instanceof Error) {
-      console.log(err.message)
+			console.log(err.message, 'getUserId')
       return null
     }
     return null

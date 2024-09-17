@@ -98,9 +98,7 @@ export class TrolleyController {
 	
 	async getCount(req: NextRequest) {
 		try {
-			// console.log('get user')
 			const user = await this.serviceReq.getUserPayload(req)
-			// console.log('get token')
 			return NextResponse.json(await this.serviceTrolley.getCount(user))
 		} catch (e: unknown) {
 			return errorHanding(e)

@@ -1,5 +1,6 @@
 'use client'
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { InputQueryParams } from "@/interface/server/param";
 
 export const usePageSearch = () => {
 	let path = ''
@@ -25,7 +26,7 @@ export const usePageSearch = () => {
 		router.push(path);
 	};
 	
-	const updateQueryParams = (key: 'tab' | 'category' | "search", value: string | null) => {
+	const updateQueryParams = (key: InputQueryParams, value: string | null) => {
 		const params = new URLSearchParams(searchParams.toString());
 		
 		if (value) {

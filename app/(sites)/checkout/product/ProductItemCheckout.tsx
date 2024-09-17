@@ -11,11 +11,12 @@ export function ProductItemCheckout() {
 	}
 	return (
 		<div className='space-y-4 '>
-			{ trolley.map((item, index) =>
+			{ trolley.map((item,) =>
 				<ProductItems
+					isCheck={ false }
 					trolley={ item }
 					product={ item.Product }
-					key={ index }/>
+					key={ item.id }/>
 			) }
 		</div>
 	);

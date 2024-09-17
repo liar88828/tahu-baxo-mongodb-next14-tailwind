@@ -48,7 +48,7 @@ export class AuthService extends UserService {
 		const { password, ...userDb } = await super.findEmail(data)
 		
 		// token
-		console.log("---------- refresh token")
+		// console.log("---------- refresh token")
 		const { refreshToken, accessToken } = await this.token(userDb)
 		// send
 		return {

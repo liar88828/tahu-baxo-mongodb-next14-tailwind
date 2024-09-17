@@ -1,3 +1,4 @@
+'use client'
 import { usePageSearch } from "@/hook/usePageSearch";
 import React from "react";
 import { TitleCardProps } from "@/components/title/TitleSearch";

@@ -16,7 +16,7 @@ export const useReceiver = create<UseReceiver>()(
 				...prevState, receiver: receiver
 			})),
 			removeReceiver: () => set(prevState => ({
-				...prevState, user: null
+				...prevState, receiver: null
 			}))
 		}),
 		{

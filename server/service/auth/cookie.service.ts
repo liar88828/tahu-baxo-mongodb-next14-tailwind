@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
-import { AuthCookie, ResponseRegister as ResponseAuthUser } from "@/interface/user/UserPublic";
+import { AuthCookie, ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
 import { decrypt } from "@/server/service/auth/jose.service";
+import { ErrorAuth } from "@/lib/error/errorCustome";
 
 const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
@@ -56,11 +57,11 @@ const getData = () => {
 	const cookieStore = cookies()
 	const user = cookieStore.has("user")
 	if (!user) {
-		// throw new ErrorAuth('unauthorized', "Not have token in Cookie")
-		return null
+		throw new ErrorAuth('unauthorized', "Not have token in Cookie")
+		// return null
 	}
 	const userCookie = cookieStore.get('user')
-	return JSON.parse(userCookie?.value ?? '')
+	return JSON.parse(userCookie?.value ?? '') as UserPublic
 }
 
 export function cookieService() {

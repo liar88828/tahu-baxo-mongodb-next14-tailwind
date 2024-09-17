@@ -6,13 +6,13 @@ import { LoadingBounce } from "@/components/loading/loading";
 export default async function page() {
 	
 	return (
-    <>
-      <div className='p-5 space-y-2 pb-52'>
+		<>
+			<div className='p-5 space-y-2 pb-52'>
 				<Suspense fallback={ <LoadingBounce/> }>
-				<Product/>
-        <NavBottom />
+					<Product/>
+					<NavBottom/>
 				</Suspense>
-      </div>
-    </>
-  )
+			</div>
+		</>
+	)
 }

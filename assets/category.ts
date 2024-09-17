@@ -52,7 +52,18 @@ export const categoryProduct: CategoryProduct[] = [
 		link: "/search?category=jewelry"
 	}
 ];
+
 export const dataCategory = [
+	{ title: 'Electronics', },
+	{ title: 'Fashion', },
+	{ title: 'Home Appliances', },
+	{ title: 'Books', },
+	{ title: 'Toys', },
+	{ title: 'Groceries', },
+	{ title: 'Beauty & Health', },
+	{ title: 'Sports & Outdoors', },
+	{ title: 'Automotive', },
+	{ title: 'Jewelry' },
 	{ title: "Food" },
 	{ title: "Drink" },
 	{ title: "Accessories" },
@@ -68,4 +79,30 @@ export const dataCategory = [
 	{ title: "Books" },
 	{ title: "Music" },
 	{ title: "Outdoor" }
+]
+
+export const newCategory = [
+	// { title: 'Electronics', },
+	{ title: 'Fashion', },
+	{ title: 'Home Appliances', },
+	{ title: 'Books', },
+	{ title: 'Toys', },
+	{ title: 'Groceries', },
+	{ title: 'Beauty & Health', },
+	{ title: 'Sports & Outdoors', },
+	{ title: 'Automotive', },
+	{ title: 'Jewelry', },
+	{ title: 'Food', },
+	{ title: 'Drink', },
+	{ title: 'Accessories', },
+	{ title: 'Protection', },
+	{ title: 'Tiny', },
+	{ title: 'Health', },
+	{ title: 'Clothing', },
+	{ title: 'Home', },
+	{ title: 'Beauty', },
+	{ title: 'Sports', },
+	{ title: 'Music', },
+	{ title: 'Outdoor' },
+
 ]

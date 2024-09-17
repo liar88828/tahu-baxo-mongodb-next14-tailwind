@@ -9,9 +9,7 @@ export default function layout({ children }: { children: ReactNode }) {
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
 				<button
-					onClick={ () => {
-						router.back()
-					} }
+					onClick={ () => router.push('/home') }
           className='btn btn-ghost btn-circle'
         >
           {/* back */}

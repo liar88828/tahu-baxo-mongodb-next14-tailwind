@@ -88,8 +88,6 @@ describe.skip
 				const code = res.status
 				const data = await res.json()
 				productId = data.id
-				// console.log(data)
-				
 				expect(code).toBe(200)
 				expect(data).toMatchObject(expectationProduct)
 			})

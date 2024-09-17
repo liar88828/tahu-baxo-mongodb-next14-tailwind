@@ -86,7 +86,6 @@ describe("can test api penerima", async () => {
 			const code = res.status
 			const data = await res.json()
 			penerimaId = data.id
-			console.log(data)
 			expect(code).toBe(200)
 			expect(data).toMatchObject(testExpectPenerima)
 			expect(data).toMatchObject(testExpectPenerima)
@@ -360,7 +359,6 @@ describe("can test api penerima", async () => {
 			
 			expect(code).not.toBe(200)
 			expect(data).not.toMatchObject(testExpectPenerima)
-			console.log(data)
 			expect(code).toBe(400)
 			expect(data).toBe("Data is Not Found maybe was been delete")
 		})

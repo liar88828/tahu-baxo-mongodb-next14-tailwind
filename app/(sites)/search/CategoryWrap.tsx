@@ -2,12 +2,12 @@
 import React from 'react'
 import { usePageSearch } from "@/hook/usePageSearch";
 import { useSearchParams } from "next/navigation";
-import { categoryProduct } from "@/assets/category";
+import { CategoryProductDB } from "@prisma/client";
+import Link from "next/link";
 
-export default function CategoryWrap() {
-	const { addQueryParam, updateQueryParams } = usePageSearch()
+export default function CategoryWrap({ data }: { data: CategoryProductDB[] }) {
+	const { updateQueryParams } = usePageSearch()
 	const searchParams = useSearchParams();
-	
 	return (
 		<div>
 			<div className="flex justify-between items-center w-full text-2xl mb-2 px-2">
@@ -16,12 +16,19 @@ export default function CategoryWrap() {
 			</div>
 			{/*justify-between*/ }
 			<div className='flex flex-wrap gap-2'>
-				{ categoryProduct.map((item, i) => (
+				<Link
+					role='tab'
+					href={ '/search' }
+					className={ `btn btn-sm shadow ${ searchParams.get('category') === null && 'btn-active' }` }>
+					All
+				</Link>
+				{ data.map((item, i) => (
 					<button
-						onClick={ () => updateQueryParams('category', item.title) }
+						onClick={ () => updateQueryParams('category', item.id) }
 						key={ i }
-						className={ `btn btn-sm shadow ${ searchParams.get('category') === item.title && 'btn-active' }` }
-					>{ item.title }</button>
+						className={ `btn btn-sm shadow ${ searchParams.get('category') === item.id && 'btn-active' }` }>
+						{ item.id }
+					</button>
 				)) }
 			</div>
 		</div>

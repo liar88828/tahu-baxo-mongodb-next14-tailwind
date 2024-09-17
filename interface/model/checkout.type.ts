@@ -26,4 +26,6 @@ export type ResponseCheckout = {
 	transactionDB: TransactionDB
 	// penerimaDB: PenerimaDB,
 }
+
 export type CheckoutCreateSchema = z.output<typeof checkoutSchema.create>
+export type CheckoutCreateFormError = z.inferFlattenedErrors<typeof checkoutSchema.create>['fieldErrors'];

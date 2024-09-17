@@ -12,7 +12,8 @@ export type GetIdInt = {
 export type GetPage = {
 	page: number
 	take: number
-	search: string | null
+	search: string | null,
+	category?: string | null,
 	
 }
 

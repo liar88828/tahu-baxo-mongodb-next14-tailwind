@@ -23,7 +23,6 @@ export async function getTrolleyPrivate() {
 				'Content-Type': 'application/json',
 				'Authorization': 'Bearer ' + auth,
 			},
-			
 			cache: "no-cache",
 		})
 		if (!res.ok) {

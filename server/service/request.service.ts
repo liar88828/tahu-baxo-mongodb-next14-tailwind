@@ -71,12 +71,17 @@ export class RequestService implements IServiceRequest {
 		let page = Number(searchParams.get("page") ?? 1)
 		let take = Number(searchParams.get("take") ?? 100)
 		let search = searchParams.get("search") ?? null
+		let category = searchParams.get("category") ?? null
+		
 		search = search === 'undefined' ? null : search
+		category = category === 'undefined' ? null : category
 		page = page < 0 ? 1 : page
+		
 		return {
 			page,
 			take,
-			search
+			search,
+			category
 		}
 	}
 	

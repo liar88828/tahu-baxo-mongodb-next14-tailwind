@@ -1,17 +1,16 @@
 import React from 'react'
-import { IconAdd, IconBack, IconBox, IconTruck } from "@/components/icon/IconMore";
+import { IconAdd, IconBox, IconTruck } from "@/components/icon/IconMore";
 import Divider from "@/components/elements/Divider";
-import Link from "next/link";
-import { OrderSummary } from "@/app/(sites)/profile/(order)/order/[id]/OrderSummary";
-import { getTransactionComplete } from "@/server/action/transaction.action";
+import { OrderSummary } from "@/app/(sites)/profile/(menu)/recent/OrderSummary";
+import { getTransactionCompleteById } from "@/server/action/transaction.action";
 import { SearchParams } from "@/interface/model/model";
 import ErrorComponent from "@/components/error/ErrorComponent";
 import { toDate } from "@/lib/utils/formatDate";
 import { Rupiah } from "@/lib/utils/formatMoney";
-import { orderStatuses } from "@/app/(sites)/profile/(order)/order/[id]/orderStatuses";
+import { orderStatuses } from "@/app/(sites)/profile/(menu)/recent/orderStatuses";
 
 export default async function Page({ params }: SearchParams) {
-	const data = await getTransactionComplete(Number(params.id))
+	const data = await getTransactionCompleteById(Number(params.id))
 	console.log(data)
 	
 	if (!data) {
@@ -20,35 +19,7 @@ export default async function Page({ params }: SearchParams) {
 	if (!data.OrderanDB || !data.ReceiverDB || !data.BankDB) {
 		return <ErrorComponent/>
 	}
-	return (
-		<>
-			<div className='navbar bg-base-100'>
-				<div className='navbar-start'>
-					<Link
-						href='/profile'
-						className='btn btn-ghost btn-circle'
-					>
-						<IconBack/>
-					</Link>
-				</div>
-				<div className='navbar-center'>
-					<a className='btn btn-ghost text-xl'>Profile</a>
-				</div>
-				<div className='navbar-end'>
-					<button className='btn btn-ghost btn-circle'>
-					
-					</button>
-					<button className='btn btn-ghost btn-circle'>
-						<div className='indicator'>
-						
-						</div>
-					</button>
-				</div>
-			</div>
-			
-			{/**/ }
-			<div className="p-4">
-				<div className=" card card-compact sm:card-normal card-bordered w-full  ">
+	return (<div className=" card card-compact sm:card-normal card-bordered w-full  ">
 					<div className="card-body space-y-2">
 						
 						<div className="">
@@ -138,8 +109,6 @@ export default async function Page({ params }: SearchParams) {
 						</div>
 					</div>
 				</div>
-			</div>
-		</>
 	)
 }
 

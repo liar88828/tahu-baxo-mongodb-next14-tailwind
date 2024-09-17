@@ -13,7 +13,6 @@ export async function setSession(token: string, expires: Date) {
 }
 
 export async function getSession() {
-	console.log()
 	const cookie = cookies().get('session')?.value
 	if (!cookie) {
 		throw new ErrorAuth('unauthorized', "cookie is not stored")

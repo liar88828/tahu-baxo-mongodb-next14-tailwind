@@ -4,7 +4,7 @@ import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { ProductDB } from "@prisma/client"
 import type { IService } from "@/interface/server/IService"
 import type { ProductCreate, ProductId, ProductTransaction, ProductUpdate, } from "@/interface/model/product.type"
-import { GetPage } from "@/interface/server/IServiceRequest";
+import { GetPage } from "@/interface/server/IServiceRequest"
 
 export type PaginationDB<T> = {
 	data: T[]
@@ -19,7 +19,7 @@ export class ProductService implements IService<ProductDB> {
 	async findAllStock(
 		page: number,
 		take: number = 100,
-		stock: string
+		qty: string
 	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
@@ -43,33 +43,35 @@ export class ProductService implements IService<ProductDB> {
 		})
 	}
 	
-	async findAllPrivate({ page, take, search }: GetPage, user: AccessTokenPayload
+	async findAllPrivate(
+		{ page, take, search }: GetPage,
+		user: AccessTokenPayload
 	): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				orderBy: { created_at: "desc" },
 				where: {
 					userId: user.id,
-					...(search ? { name: { contains: search } } : {})
+					...(search ? { name: { contains: search } } : {}),
 				},
 				take: take,
 				skip: (page - 1) * take,
 			})
-			return { data, page, take, }
+			return { data, page, take }
 		})
 	}
 	
-	async findAllPublic({ page, take, search }: GetPage): Promise<PaginationDB<ProductDB>> {
+	async findAllPublic({ page, take, search, category }: GetPage): Promise<PaginationDB<ProductDB>> {
 		return prisma.$transaction(async (tx) => {
 			const data = await tx.productDB.findMany({
 				where: {
-					...(search ? { name: { contains: search } } : {})
+					...(search ? { name: { contains: search } } : {}),
+					...(category ? { type: { contains: category } } : {}),
 				},
 				take: take,
 				skip: (page - 1) * take,
-				
 			})
-			return { data, page, take, }
+			return { data, page, take }
 		})
 	}
 	
@@ -93,7 +95,15 @@ export class ProductService implements IService<ProductDB> {
 	
 	async createOne(data: ProductCreate): Promise<ProductDB> {
 		data = this.valid.createValid(data)
-		return prisma.productDB.create({
+		return prisma.$transaction(async (tx) => {
+			
+			await tx.categoryProductDB.upsert({
+				where: { id: data.type },
+				create: { id: data.type },
+				update: { id: data.type }
+			})
+			
+			return tx.productDB.create({
 			data: {
 				price: data.price,
 				img: data.img,
@@ -104,19 +114,30 @@ export class ProductService implements IService<ProductDB> {
 				qty: data.qty,
 				// ...(id ? { id } : {}),
 				userId: data.userId,
+				
 			},
 		})
+		})
+		
 	}
 	
 	async updateOne(
 		{ id_product, id_user }: ProductId,
-		data: ProductUpdate,
+		data: ProductUpdate
 	): Promise<ProductDB> {
-		console.log({ data, id_product, id_user }, 'test update')
+		console.log({ data, id_product, id_user }, "test update")
 		data = this.valid.updateValid(data)
-		return prisma.productDB.update({
+		
+		return prisma.$transaction(async (tx) => {
+			await tx.categoryProductDB.upsert({
+				where: { id: data.type },
+				create: { id: data.type },
+				update: { id: data.type }
+			})
+			return tx.productDB.update({
 			where: { id: id_product, userId: id_user },
 			data: { ...data },
+		})
 		})
 	}
 	

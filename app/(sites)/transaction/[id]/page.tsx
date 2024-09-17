@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from "next/link";
-import { getTransactionComplete } from "@/server/action/transaction.action";
+import { getTransactionCompleteById } from "@/server/action/transaction.action";
 import ErrorComponent from "@/components/error/ErrorComponent";
 import { SearchParams } from "@/interface/model/model";
 import { toDate } from "@/lib/utils/formatDate";
@@ -10,7 +10,7 @@ import { TextTransaction } from "@/app/(sites)/transaction/[id]/textTransaction"
 
 export default async function Page({ params }: SearchParams) {
 	const auth = cookieService().getData
-	const data = await getTransactionComplete(Number(params.id))
+	const data = await getTransactionCompleteById(Number(params.id))
 	if (!data) {
 		return <ErrorComponent/>
 	}
@@ -64,7 +64,6 @@ export default async function Page({ params }: SearchParams) {
 				</Link>
 			</div>
 		</>
-	
 	);
 }
 

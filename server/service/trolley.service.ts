@@ -8,8 +8,8 @@ import {
 	TrolleyCreate,
 	TrolleyDataId,
 	TrolleyResponse,
-	TrolleyUpdate
-} from "@/interface/model/trolley.type";
+	TrolleyUpdate,
+} from "@/interface/model/trolley.type"
 
 export class TrolleyService {
 	constructor(private serviceSchema: TrolleySchema) {
@@ -22,7 +22,6 @@ export class TrolleyService {
 				userId: user.id,
 			},
 		})
-		
 	}
 	
 	async getAllPublic(): Promise<GetAllTrolley[]> {
@@ -37,6 +36,7 @@ export class TrolleyService {
 			include: { Product: true },
 			where: {
 				userId: user.id,
+				isBuy: false
 			},
 		})
 	}
@@ -44,24 +44,32 @@ export class TrolleyService {
 	async create(data: TrolleyCreate): Promise<TrolleyResponse> {
 		data = this.serviceSchema.validCreate(data)
 		return prisma.$transaction(async (tx) => {
-			
 			const trolleyDB = await tx.trolleyDB.count({
 				where: { userId: data.userId },
 			})
 			
 			if (trolleyDB >= 200) {
-				throw new ErrorTrolley("badRequest", 'the data trolley is maximum the count cannot more than 200 item')
+				throw new ErrorTrolley(
+					"badRequest",
+					"the data trolley is maximum the count cannot more than 200 item"
+				)
 			}
 			
 			const createProduct = async () => {
-				const trolleyDB = await tx.trolleyDB.findFirst({ where: { userId: data.userId, productId: data.productId } })
+				const trolleyDB = await tx.trolleyDB.findFirst({
+					where: {
+						userId: data.userId,
+						productId: data.productId,
+						isBuy: false,
+					},
+				})
 				if (!trolleyDB) {
 					return tx.trolleyDB.create({
 						data: {
 							userId: data.userId,
 							productId: data.productId,
 							qty: data.qty,
-						}
+						},
 					})
 				} else {
 					return tx.trolleyDB.update({
@@ -69,18 +77,19 @@ export class TrolleyService {
 						data: {
 							userId: data.userId,
 							productId: data.productId,
-							qty: { increment: data.qty }
-						}
+							qty: { increment: data.qty },
+						},
 					})
 				}
-				
 			}
 			return { data: await createProduct(), status: "create data" }
-			
 		})
 	}
 	
-	async increment(data: TrolleyUpdate, user: AccessTokenPayload): Promise<TrolleyResponse> {
+	async increment(
+		data: TrolleyUpdate,
+		user: AccessTokenPayload
+	): Promise<TrolleyResponse> {
 		// console.log(data)
 		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
@@ -89,7 +98,10 @@ export class TrolleyService {
 				where: { userId: user.id },
 			})
 			if (trolleyDB >= 200) {
-				throw new ErrorTrolley("badRequest", 'the data trolley is maximum the count cannot more than 200 item')
+				throw new ErrorTrolley(
+					"badRequest",
+					"the data trolley is maximum the count cannot more than 200 item"
+				)
 			}
 			// find trolley
 			const trolley = await tx.trolleyDB.findFirst({
@@ -101,7 +113,10 @@ export class TrolleyService {
 			
 			if (!trolley) {
 				// create trolley
-				throw new ErrorTrolley("notFound", 'data trolley is not found maybe user id or product id')
+				throw new ErrorTrolley(
+					"notFound",
+					"data trolley is not found maybe user id or product id"
+				)
 			} else {
 				// update trolley
 				const res = await tx.trolleyDB.update({
@@ -121,7 +136,10 @@ export class TrolleyService {
 		})
 	}
 	
-	async decrement(data: TrolleyUpdate, user: AccessTokenPayload): Promise<TrolleyResponse> {
+	async decrement(
+		data: TrolleyUpdate,
+		user: AccessTokenPayload
+	): Promise<TrolleyResponse> {
 		data = this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			const trolley = await tx.trolleyDB.findUnique({
@@ -133,7 +151,10 @@ export class TrolleyService {
 			})
 			
 			if (!trolley) {
-				throw new ErrorTrolley("notFound", 'data trolley is not found maybe product id or user id ')
+				throw new ErrorTrolley(
+					"notFound",
+					"data trolley is not found maybe product id or user id "
+				)
 			} else {
 				const res = await tx.trolleyDB.update({
 					where: {
@@ -152,17 +173,27 @@ export class TrolleyService {
 		})
 	}
 	
-	async remove({ id }: TrolleyDataId, user: AccessTokenPayload): Promise<TrolleyResponse> {
+	async remove(
+		{ id }: TrolleyDataId,
+		user: AccessTokenPayload
+	): Promise<TrolleyResponse> {
 		return {
 			data: await prisma.trolleyDB.delete({ where: { id, userId: user.id } }),
-			status: 'success Delete Data'
+			status: "success Delete Data",
 		}
 	}
 	
-	protected async addxx2(
-		data: TrolleyUpdate,
-		user: AccessTokenPayload
-	) {
+	async getCount({ id }: AccessTokenPayload): Promise<ResponseTrolleyCount> {
+		return prisma.trolleyDB.count({
+			where: {
+				userId: id,
+				isBuy: false,
+				
+			},
+		})
+	}
+	
+	protected async addxx2(data: TrolleyUpdate, user: AccessTokenPayload) {
 		this.serviceSchema.validUpdate(data)
 		return prisma.$transaction(async (tx) => {
 			const trolleyDB = await prisma.trolleyDB.count({
@@ -202,13 +233,19 @@ export class TrolleyService {
 			where: { userId: user.id },
 		})
 		if (!trolleyDB) {
-			throw new ErrorTrolley("notFound", 'the data trolley is not found search by id user')
+			throw new ErrorTrolley(
+				"notFound",
+				"the data trolley is not found search by id user"
+			)
 		}
 		const productDB = await prisma.productDB.findUnique({
 			where: { id: data.id },
 		})
 		if (!productDB) {
-			throw new ErrorProduct("notFound", 'data product is is not found search by product id')
+			throw new ErrorProduct(
+				"notFound",
+				"data product is is not found search by product id"
+			)
 		}
 		return prisma.$transaction(async (tx) => {
 			const trolley = await tx.trolleyDB.findUnique({
@@ -262,13 +299,6 @@ export class TrolleyService {
 			//   }
 			// })
 		})
-	}
-	
-	async getCount({ id }: AccessTokenPayload): Promise<ResponseTrolleyCount> {
-		return prisma.trolleyDB.count({
-			where: { userId: id },
-		})
-		
 	}
 }
 

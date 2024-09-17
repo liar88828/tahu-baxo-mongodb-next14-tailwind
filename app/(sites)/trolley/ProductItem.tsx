@@ -28,23 +28,14 @@ export function ProductItem({ data }: { data: GetAllTrolley[] }) {
 		
 		<div className='space-y-4 '>
 			{
-				data.length === 0 ?
-					<ErrorComponent
-						msg={ 'Product Is Empty' }
-						title={ message.trolley.empty }
-					/>
-					:
-					data.map((item, index) => {
-							return (item.Product
-								? <ProductItems
-									// handleCheckBoxMany={ () => handleCheckBoxMany(item) }
-									// foundTrolley={ foundTrolley(item) }
-									trolley={ item }
-									product={ item.Product }
-									key={ index }/>
-								: <ErrorComponent/>)
-						}
-					) }
+				data.length === 0
+					? <ErrorComponent msg={ 'Product Is Empty' } title={ message.trolley.empty }/>
+					: data.map((item, index) => (
+						
+						item.Product
+							? <ProductItems isCheck={ true } trolley={ item } product={ item.Product } key={ index }/>
+							: <ErrorComponent/>))
+			}
 		</div>
 	);
 }
@@ -52,11 +43,14 @@ export function ProductItem({ data }: { data: GetAllTrolley[] }) {
 interface ProductItemProps {
 	trolley: TrolleyDB;
 	product: ProductDB;
+	isCheck: boolean
+	
 	// handleCheckBoxMany: () => void
 	// foundTrolley: boolean
 }
 
-export function ProductItems({ product, trolley, }: ProductItemProps) {
+export function ProductItems({ product, trolley, isCheck = true }: ProductItemProps) {
+	// trolley
 	const [foundTrolley, setFound] = useState<boolean>()
 	const { addTrolleyMany, removeTrolleyMany, foundTrolley: foundTrolleyStore, trolley: store } = useTrolley()
 	
@@ -79,15 +73,12 @@ export function ProductItems({ product, trolley, }: ProductItemProps) {
 	}
 	return (
 		<div className={ "flex items-center " }>
-			<div>
-				<input
-					onChange={ handleCheckBoxMany }
-					type="checkbox"
-					defaultChecked={ foundTrolley }
-					className="checkbox checkbox-sm mr-2"
-				/>
+			{ isCheck
+				? <input onChange={ handleCheckBoxMany } type="checkbox" defaultChecked={ foundTrolley }
+								 className="checkbox checkbox-sm mr-2"/>
+				: null
+			}
 			
-			</div>
 			<div className="flex rounded-lg p-2 space-x-2 w-full border ">
 				<img
 					src="https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
@@ -105,12 +96,11 @@ export function ProductItems({ product, trolley, }: ProductItemProps) {
 									{ Rupiah(product.price) }
 								</h1>
 							</div>
-							<button
-								onClick={ async () => deleteTrolley(trolley.id) }
-								className="btn btn-circle btn-sm"
-							>
-								<IconDelete/>
-							</button>
+							{ isCheck
+								? <button onClick={ async () => deleteTrolley(trolley.id) } className="btn btn-circle btn-sm">
+									<IconDelete/>
+								</button>
+								: null }
 						</div>
 						<div className="flex justify-between items-center w-full ">
 							<div className="">

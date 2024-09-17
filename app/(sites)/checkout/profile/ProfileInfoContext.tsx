@@ -21,7 +21,7 @@ export function ProfileInfoContext() {
 		<div>
 			<ShippingAddressCheckout
 				item={ receiver }
-				fun={ removeReceiver }
+				fun={ () => removeReceiver() }
 				add={ false }
 			/>
 		</div>

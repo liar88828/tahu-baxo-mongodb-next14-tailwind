@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
-import { RegisterUser } from "@/interface/model/auth.type";
 import { dataTestDelivery, dataTestDeliveryEmpty, expectationDelivery, } from "@/assets/example/delivery";
 
 let deliveryToken = ''
@@ -230,7 +229,6 @@ describe
 				})
 				const code = res.status
 				const data = await res.json()
-				console.log(data)
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
@@ -291,7 +289,6 @@ describe
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
-				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe('Not have token in Bearer')
 			})
@@ -343,7 +340,6 @@ describe
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
-				console.log(data)
 				expect(code).toBe(400)
 				expect(data).toBe('Data is Not Found maybe was been delete')
 				deliveryFinish = true

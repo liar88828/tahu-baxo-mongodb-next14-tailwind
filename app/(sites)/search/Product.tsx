@@ -3,8 +3,8 @@ import { ProductItemSearch } from "@/components/product/ProductItem";
 import { getProductsAll } from "@/server/action/product.action";
 import { ParamsProfile } from "@/interface/server/param";
 
-export default async function Product({ params: { searchParams: { search } } }: { params: ParamsProfile }) {
-	const data = await getProductsAll(search)
+export default async function Product({ params: { searchParams: { search, category } } }: { params: ParamsProfile }) {
+	const data = await getProductsAll(search, category)
 	
 	if (!data) {
 		return <h1>Data Bank is Not found</h1>

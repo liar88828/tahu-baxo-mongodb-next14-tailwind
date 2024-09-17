@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileRecent } from "@/app/(sites)/profile/com/profileRecent";
+import { ProfileRecent } from "@/app/(sites)/profile/(menu)/recent/profileRecent";
 import {
 	ProfileOrderHistory,
 	ProfilePaymentMethods,

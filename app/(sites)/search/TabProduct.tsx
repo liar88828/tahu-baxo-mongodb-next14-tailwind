@@ -23,7 +23,8 @@ export function TabProduct({ params: { searchParams: { tab } } }: { params: Para
 	
 	tab = tab === undefined ? 'new-product' : tab;
 	return (
-		<div role="tablist" className="tabs  tabs-bordered">
+		<div role="tablist" className="tabs tabs-bordered">
+			
 			{ loopTabBar.map(item => (
 				<button
 					key={ item.key }
@@ -32,7 +33,8 @@ export function TabProduct({ params: { searchParams: { tab } } }: { params: Para
 					onClick={ () => updateQueryParams("tab", item.key) }
 					className={ `tab ${ tab === item.key ? 'tab-active' : '' }` }>
 					{ item.title }
-				</button>)) }
+				</button>
+			)) }
 		
 		</div>
 	)

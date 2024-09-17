@@ -4,12 +4,17 @@ import { AccessUserID } from "@/server/service/auth/jwt.service"
 import { checkoutSchema, CheckoutSchema } from "@/server/schema/checkout.schema";
 import { validIdNum, validUserId } from "@/server/schema/init.schema";
 import { CheckoutCreateMany, CheckoutCreateSchema, ResponseCheckout } from "@/interface/model/checkout.type";
+import { OrderanDB, TransactionDB } from "@prisma/client";
 
 type transactionId = {
 	idProduct: number
 	idOrder: string
 	idTransaction: number
 }
+export type TransactionCheckout = {
+	orderanDB: OrderanDB, transactionDB: TransactionDB, trollyDB: { count: number },
+}
+
 
 export class TransactionService {
 	constructor(
@@ -92,8 +97,11 @@ export class TransactionService {
 	}
 	
 	async createMany(data: CheckoutCreateMany, user: AccessUserID) {
+		
 		const { order, transaction, trollyIds } = await this.validCheckout.checkoutValidMany(data)
+		
 		return prisma.$transaction(async (tx) => {
+			
 			const orderanDB: ResponseCheckout['orderanDB'] = await tx.orderanDB.create({
 				data: {
 					from: order.from,
@@ -105,9 +113,9 @@ export class TransactionService {
 					shipping_cost: order.shipping_cost,
 					total: order.total,
 					sub_total: data.order.sub_total
-					
 				},
 			})
+			
 			const transactionDB: ResponseCheckout['transactionDB'] = await tx.transactionDB.create({
 				data: {
 					receiverDBId: transaction.receiverDBId,
@@ -119,21 +127,23 @@ export class TransactionService {
 					
 				},
 			})
-			const TrollyDB = await tx.trolleyDB.updateMany({
+			
+			const trollyDB = await tx.trolleyDB.updateMany({
 				where: {
 					id: {
 						in: trollyIds.map(d => d.id)
 					}
 				},
 				data: {
-					transactionId: transactionDB.id
+					transactionId: transactionDB.id,
+					isBuy: true
 				}
 			})
 			
 			return {
 				orderanDB,
 				transactionDB,
-				TrollyDB,
+				trollyDB,
 			}
 		})
 	}
@@ -154,13 +164,23 @@ export class TransactionService {
 	
 	async findAll(page: number, limit: number = 100, user: AccessUserID) {
 		return prisma.transactionDB.findMany({
+			orderBy: { created_at: 'desc' },
 			where: { userId: user.id },
 			take: limit,
 			skip: (page - 1) * limit,
 		})
 	}
 	
-	async findAllComplete(id: number, user: AccessUserID) {
+	async findAllEx(user: AccessUserID, page?: number, limit?: number,) {
+		return prisma.transactionDB.findMany({
+			where: { userId: user.id },
+			...(limit ? { take: limit } : {}),
+			...(page ? { skip: (page - 1) * (limit ? limit : 100), } : {}),
+			
+		})
+	}
+	
+	async findCompleteById(id: number, user: AccessUserID) {
 		id = validIdNum(id)
 		user = validUserId(user)
 		const res = await prisma.transactionDB.findUnique({
@@ -177,7 +197,28 @@ export class TransactionService {
 						Product: true
 					}
 				},
-				
+			}
+		})
+		if (!res) {
+			throw new Error('data is not found')
+		}
+		return res
+	}
+	
+	async findAllComplete(user: AccessUserID) {
+		user = validUserId(user)
+		const res = await prisma.transactionDB.findMany({
+			orderBy: { created_at: 'desc' },
+			where: {
+				userId: user.id
+			},
+			include: {
+				OrderanDB: true,
+				TrolleyDB: {
+					include: {
+						Product: true
+					}
+				},
 			}
 		})
 		if (!res) {

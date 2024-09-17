@@ -54,7 +54,6 @@ export async function onForgot(prevState : any, formData : FormData) {
 
 export async function onReset(prevState: any, formData: FormData): Promise<OnFormState<ResetFormError>> {
   const form = Object.fromEntries(formData.entries())
-  console.log(form);
   try {
     const rawFormData = {
       password : formData.get('password'),

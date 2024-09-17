@@ -10,7 +10,7 @@ export function ProductCheckout() {
 				<h1 className={ 'font-bold text-xl' }>Product List</h1>
 				{/*<button className={'btn btn-primary btn-sm'}>Show</button>*/ }
 			</div>
-			<div className='space-y-2 h-56 overflow-y-auto'>
+			<div className=' '>
 				<ProductItemCheckout/>
 			</div>
 		</ >

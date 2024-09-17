@@ -34,6 +34,7 @@ export default function NavBottom() {
 				<h1 className='text-lg font-bold'>{ rupiah }</h1>
 			</div>
       <button
+				disabled={ trolley.length === 0 }
 				onClick={ () => route.push("/checkout") }
 				className="btn btn-primary w-full font-bold text-lg"
       >

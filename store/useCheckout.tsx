@@ -53,7 +53,7 @@ export const useCheckout = create<UseCheckout>()(
 					// 	...prevState.description,
 					// 	totalPrice: totalTrolley + prevState.description.shippingCost
 					// }
-					subtotal: prevState.description.subTotal = prevState.description.shippingCost,
+					subtotal: prevState.description.subTotal = totalTrolley,
 					totalPrice: prevState.description.totalPrice = prevState.description.shippingCost + totalTrolley,
 					// description: {
 					// 	...prevState.description,

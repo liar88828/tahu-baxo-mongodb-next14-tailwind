@@ -11,13 +11,21 @@ interface UseTrolley {
 	foundTrolley: (item: TrolleyDB) => boolean
 	increment: (item: TrolleyDB) => void
 	decrement: (item: TrolleyDB) => void
-	totalTrolley: () => number
+	totalTrolley: () => number,
+	resetTrolley: () => void
+}
+
+const initialState = {
+	trolley: [],
 }
 
 export const useTrolley = create<UseTrolley>()(
 	persist(
 		(set, get) => ({
-			trolley: [],
+			...initialState,
+			resetTrolley: () => {
+				set(initialState)
+			},
 			
 			foundTrolley: (item: TrolleyDB) => {
 				return get().trolley.some(t => t.id === item.id)

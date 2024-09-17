@@ -10,9 +10,9 @@ import { errorApi } from "@/lib/error/errorApi";
 import { revalidatePath } from "next/cache";
 import { errorGetData } from "@/lib/error/errorGetData";
 
-export async function getProductsAll(search?: string) {
+export async function getProductsAll(search?: string, category?: string) {
 	try {
-		const res = await fetch(`${ config.url }/api/product?search=${ search }`, {
+		const res = await fetch(`${ config.url }/api/product?search=${ search }&category=${ category }`, {
 			method: "GET",
 			headers: {
 				'content-type': 'application/json',
