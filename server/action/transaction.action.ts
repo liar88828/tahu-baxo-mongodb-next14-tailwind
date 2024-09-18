@@ -1,10 +1,10 @@
 "use server"
-import config from "@/tailwind.config"
-import { cookieService } from "@/server/service/auth/cookie.service"
+import { getDataClient } from "@/server/service/auth/cookie.service"
 import { transactionService, } from "@/server/service/transaction.service"
 import { errorForm } from "@/lib/error/errorForm"
 import { TCheckoutContext } from "@/components/provider/ProviderContext"
 import { CheckoutCreateFormError, CheckoutCreateMany, } from "@/interface/model/checkout.type"
+import { config } from "@/config/baseConfig";
 
 export async function transactionCreate(token: string) {
   return fetch(`${ config.url }/api/transactions/checkout`, {
@@ -31,7 +31,7 @@ export async function onTransaction(state: TCheckoutContext) {
     if (state.trolley.length === 0) {
       return { message: "Please Add Trolley is required" }
     }
-    const auth = cookieService().getData
+    const auth = await getDataClient()
     if (!auth) {
       return { message: "please login " }
     }
@@ -83,7 +83,7 @@ export async function onTransaction(state: TCheckoutContext) {
 
 export async function getTransaction(limit: number = 10) {
   try {
-    const auth = cookieService().getData
+    const auth = await getDataClient()
     return await transactionService.findAll(1, limit, auth)
   } catch (e: unknown) {
     console.error(e)
@@ -93,7 +93,7 @@ export async function getTransaction(limit: number = 10) {
 
 export async function getTransactionAll(page: number = 1, limit: number = 100) {
   try {
-    const auth = cookieService().getData
+    const auth = await getDataClient()
     return await transactionService.findAll(page, limit, auth)
   } catch (e: unknown) {
     console.error(e)
@@ -103,7 +103,7 @@ export async function getTransactionAll(page: number = 1, limit: number = 100) {
 
 export async function getTransactionCompleteById(id: number) {
   try {
-    const auth = cookieService().getData
+    const auth = await getDataClient()
     return transactionService.findCompleteById(id, auth)
   } catch (e: unknown) {
     console.error(e)
@@ -113,7 +113,7 @@ export async function getTransactionCompleteById(id: number) {
 
 export async function getTransactionComplete() {
   try {
-    const auth = cookieService().getData
+    const auth = await getDataClient()
     return transactionService.findAllComplete(auth)
   } catch (e: unknown) {
     console.error(e)

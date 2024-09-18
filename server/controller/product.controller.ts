@@ -38,6 +38,7 @@ class ProductController implements IController {
   async findId(req: NextRequest, params: Params) {
     try {
       let { id } = this.serviceReq.getIdInt(params)
+      console.log(id, 'test----')
       return Response.json(await this.serviceProduct.findIdPublic(id))
     } catch (e: unknown) {
       return errorHanding(e)

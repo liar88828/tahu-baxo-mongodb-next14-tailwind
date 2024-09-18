@@ -3,16 +3,15 @@ import React from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { initialState } from "@/interface/model/auth.type";
 import { createProduct } from "@/server/action/product.action";
-import { redirect } from "next/navigation";
 
 function Page() {
 	
 	const [state, formAction,] = useFormState(createProduct, initialState)
 	const { pending } = useFormStatus();
-	console.log(state)
-	if (state?.message === 'true') {
-		redirect('/profile/product')
-	}
+	// console.log(state)
+	// if (state?.message === 'true') {
+	// 	redirect('/profile/product')
+	// }
 	
 	return (
 		<div className="p-5 space-y-5">

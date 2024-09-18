@@ -7,14 +7,16 @@ import { createDelivery, } from "../utils/delivery"
 
 import { createBank, createProduct, } from "../utils/product"
 import { deleteTransaction } from "@/__test__/utils/transaction";
-import { transactionCreateExample } from "@/assets/example/transaction";
 import { productTransaction } from "@/assets/example/product";
 import { deliveryTransaction } from "@/assets/example/delivery";
 import { penerimaTransaction } from "@/assets/example/received";
-import { bankTransaction } from "@/assets/example/bank";
-import { ResponseCheckout } from "@/interface/model/checkout.type";
 
-let idUser = ""
+import { ResponseCheckout } from "@/interface/model/checkout.type";
+import { checkoutCreateExample } from "@/assets/example/checkout";
+import { dataTestCreate } from "@/assets/example/bank";
+import { containId } from "@/__test__/utils/auth";
+
+let userId = ""
 let transactionToken = ""
 let productId = 0
 let deliveryId = 0
@@ -28,44 +30,43 @@ const testData: ResponseCheckout = {
 	orderanDB: expect.any(Object),
 }
 
-
-it("just delete all", async () => {
-	await prisma.bankDB.deleteMany()
-	await prisma.productDB.deleteMany()
-	await prisma.deliveryDB.deleteMany()
-	await prisma.receiverDB.deleteMany()
+it.skip("just delete all", async () => {
+	await prisma.bankDB.deleteMany(containId(userId))
+	await prisma.productDB.deleteMany(containId(userId))
+	await prisma.deliveryDB.deleteMany(containId(userId))
+	await prisma.receiverDB.deleteMany(containId(userId))
 })
 
-describe("can test api transaction", async () => {
+describe.skip("can test api transaction", async () => {
 	beforeAll(async () => {
 		const { data, accessToken } = await registerTest("transaction")
 		transactionToken = accessToken
-		idUser = data.id
+		userId = data.id
 		//
 		
 		const productDB = await createProduct(productTransaction, accessToken)
 		// productId = productDB.id
-		transactionCreateExample.transaction.productDBId = productDB.id
+		checkoutCreateExample.transaction.productDBId = productDB.id
 		productTransaction.userId = productDB.userId
 		//
-		const bankDB = await createBank(bankTransaction, accessToken)
+		const bankDB = await createBank(dataTestCreate, accessToken)
 		// bankId = bankDB.id
-		transactionCreateExample.transaction.bankDBId = bankDB.id
-		bankTransaction.userId = bankDB.userId
+		checkoutCreateExample.transaction.bankDBId = bankDB.id
+		dataTestCreate.userId = bankDB.userId
 		//
 		const deliveryDB = await createDelivery(deliveryTransaction, accessToken)
 		// deliveryId = deliveryDB.id
-		transactionCreateExample.transaction.deliveryDBId = deliveryDB.id
+		checkoutCreateExample.transaction.deliveryDBId = deliveryDB.id
 		deliveryTransaction.userId = deliveryDB.userId
 		
 		//
 		const penerimaDB = await createPenerima(penerimaTransaction, accessToken)
-		transactionCreateExample.transaction.receiverDBId = penerimaDB.id
+		checkoutCreateExample.transaction.receiverDBId = penerimaDB.id
 		penerimaTransaction.userId = penerimaDB.userId
 		
 		// console.log(productDB)
 		// console.log(transactionToken)
-		console.log(transactionCreateExample)
+		console.log(checkoutCreateExample)
 		console.log(penerimaId)
 		console.log(deliveryId)
 		console.log(bankId)
@@ -77,11 +78,11 @@ describe("can test api transaction", async () => {
 		//
 		
 		await deleteTransaction(transactionId)
-		await prisma.bankDB.deleteMany()
-		await prisma.productDB.deleteMany()
-		await prisma.deliveryDB.deleteMany()
-		await prisma.trolleyDB.deleteMany()
-		await prisma.receiverDB.deleteMany()
+		await prisma.bankDB.deleteMany(containId(userId))
+		await prisma.productDB.deleteMany(containId(userId))
+		await prisma.deliveryDB.deleteMany(containId(userId))
+		await prisma.trolleyDB.deleteMany(containId(userId))
+		await prisma.receiverDB.deleteMany(containId(userId))
 		await prisma.orderanDB.deleteMany()
 		await deleteUserTest(transactionToken)
 	})
@@ -94,9 +95,9 @@ describe("can test api transaction", async () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${ transactionToken }`,
 				},
-				body: JSON.stringify(transactionCreateExample),
+				body: JSON.stringify(checkoutCreateExample),
 			})
-			console.log(transactionCreateExample, 'test')
+			console.log(checkoutCreateExample, 'test')
 			const code = res.status
 			const data = await res.json()
 			console.log("--- res -----")

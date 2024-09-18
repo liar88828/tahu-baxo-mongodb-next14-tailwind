@@ -1,11 +1,40 @@
+'use server'
 import { cookies } from "next/headers";
 import { AuthCookie, ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
 import { decrypt } from "@/server/service/auth/jose.service";
 import { ErrorAuth } from "@/lib/error/errorCustome";
+import { redirect } from "next/navigation";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
-export function createSession(data: ResponseAuthUser) {
+async function getDataCookie(keys: "access" | 'refresh' | 'user'): Promise<RequestCookie> {
+	const cookieData = cookies().get(keys)
+	return new Promise((resolve) =>
+		setTimeout(() => {
+			// @ts-ignore
+			resolve(cookieData)
+		}, 1000)
+	)
+}
+
+export async function getCookie(keys: "access" | 'refresh' | 'user') {
+	const cookie = await getDataCookie(keys)
+	if (!cookie) {
+		return undefined
+	}
+	return cookie.value
+}
+
+export async function getAccess() {
+	const token = await getCookie('access')
+	if (!token) {
+		throw null
+	}
+	return token
+}
+
+export async function createSession(data: ResponseAuthUser) {
 	// access
 	const cookieStore = cookies()
 	cookieStore.set('access', data.accessToken, {
@@ -21,9 +50,7 @@ export function createSession(data: ResponseAuthUser) {
 	// cookieStore.set('auth', JSON.stringify(data), { secure: true })
 }
 
-export async function getSession() {
-	return cookies().get('access')?.value
-}
+
 
 export async function updateSession() {
 	const cookie = cookies()
@@ -44,7 +71,7 @@ export async function updateSession() {
 	}
 }
 
-export function checkSession() {
+async function checkSession() {
 	const cookieStore = cookies()
 	return {
 		accessToken: cookieStore.has("access") ?? null,
@@ -64,40 +91,43 @@ const getData = () => {
 	return JSON.parse(userCookie?.value ?? '') as UserPublic
 }
 
-export function cookieService() {
-	const cookieStore = cookies()
+async function getAuth(): Promise<AuthCookie> {
+	const cookieStore = await cookies()
 	
-	const getAccess = () => {
-		if (cookieStore.has("access")) {
-			const access = cookieStore.get('access')
-			return access?.value ?? ''
-		}
-		return ''
-	}
+	let refresh = cookieStore.get('refresh')
+	return {
+		accessToken: await getAccess(),
+		refreshToken: refresh?.value ?? '',
+		data: getData()
+	};
+}
 
-	const getAuth = (): AuthCookie => {
-		let refresh = cookieStore.get('refresh')
-		
-		return {
-			accessToken: getAccess(),
-			refreshToken: refresh?.value ?? '',
-			data: getData()
-		};
+export async function getDataClient() {
+	const data = await getCookie('user')
+	if (!data) {
+		throw redirect('/auth/login')
 	}
-	
-	function deleteSession() {
-		cookieStore.delete('access')
-		cookieStore.delete('refresh')
-		cookieStore.delete('user')
-	}
+	return JSON.parse(data) as UserPublic
+}
+
+export async function deleteSession() {
+	const cookieStore = await cookies()
+	cookieStore.delete('access')
+	cookieStore.delete('refresh')
+	cookieStore.delete('user')
+}
+
+export async function cookieService() {
 	
 	return {
-		getAccess: getAccess,
-		checkAuth: checkSession(),
-		getAuth: getAuth,
-		getData: getData(),
+		getAccess: await getAccess(),
+		checkAuth: await checkSession(),
+		getAuth: await getAuth(),
+		// getData: getData(),
+		getDataClient: await getDataClient(),
 		setAuth: createSession,
-		deleteAuth: deleteSession
+		deleteAuth: await deleteSession()
 		
 	}
 }
+

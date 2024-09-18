@@ -4,7 +4,7 @@ import { BankDB } from "@prisma/client"
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
-import { BankCreate, BankId, BankUpdate } from "@/interface/model/bank.type";
+import { BankCreatePrisma, BankId, BankUpdatePrisma } from "@/interface/model/bank.type";
 
 export class BankService implements IService<BankDB> {
 	constructor(private valid: BankSchema) {
@@ -60,12 +60,12 @@ export class BankService implements IService<BankDB> {
     return data
   }
 	
-	async createOne(data: BankCreate): Promise<BankDB> {
+	async createOne(data: BankCreatePrisma): Promise<BankDB> {
     data = this.valid.createValid(data)
 		return prisma.bankDB.create({ data: { ...data } })
   }
 	
-	async updateOne({ id_bank }: BankId, data: BankUpdate,): Promise<BankDB> {
+	async updateOne({ id_bank }: BankId, data: BankUpdatePrisma,): Promise<BankDB> {
     data = this.valid.updateValid(data)
 		return prisma.bankDB.update({ data: { ...data }, where: { id: id_bank } })
   }

@@ -25,7 +25,9 @@ export function ProductCount({ item }: { item: TrolleyDB }) {
 	}
 	
 	return (
-		<div className='flex space-x-2 justify-center items-center'>
+		<div
+			data-testid={ "ProductCount" }
+			className='flex space-x-2 justify-center items-center'>
 			
 			<button
 				onClick={ onIncrement }

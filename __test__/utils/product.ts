@@ -1,10 +1,10 @@
 import type { BankDB, ProductDB } from "@prisma/client"
 import type { CreateDB } from "@/interface/model/transaction.type"
 import type { ProductCreate } from "@/interface/model/product.type"
-import { BankCreate } from "@/interface/model/bank.type";
+import { BankCreatePrisma } from "@/interface/model/bank.type";
 
 export async function createBank(
-  bank: CreateDB<BankCreate>,
+  bank: CreateDB<BankCreatePrisma>,
   token: string
 ): Promise<BankDB> {
   const res = await fetch("http://localhost:3000/api/bank", {

@@ -2,18 +2,17 @@
 import React from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { initialState } from "@/interface/model/auth.type";
-import { redirect } from "next/navigation";
 import { createDelivery } from "@/server/action/delivery.action";
 import { InputTel } from "@/components/elements/Input";
 
 function Page() {
 	const [state, formAction,] = useFormState(createDelivery, initialState)
 	const { pending } = useFormStatus();
-	console.log(state)
-	if (state?.message === 'true') {
-		redirect('/profile/delivery')
-		
-	}
+	// console.log(state)
+	// if (state?.message === 'true') {
+	// 	redirect('/profile/delivery')
+	//
+	// }
 	
 	return (
 		<div className="p-5 space-y-5">

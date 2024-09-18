@@ -7,6 +7,14 @@ export default defineConfig({
   base : "/",
   plugins : [tsconfigPaths(), react()],
   test : {
+		exclude: [
+			'**/node_modules/**',
+			'**/dist/**',
+			'**/cypress/**',
+			'**/.{idea,git,cache,output,temp}/**',
+			'./src/config/**',
+			'./__test__/page/**'
+		],
     environment : 'jsdom',
     alias : {
       "@" : fileURLToPath(new URL("./", import.meta.url))

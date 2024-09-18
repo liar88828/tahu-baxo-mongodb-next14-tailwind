@@ -3,16 +3,16 @@ import React from 'react';
 import Link from "next/link";
 import { onReset } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
-import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
 
 function Page() {
   const [state, formAction,] = useFormState(onReset, initialState)
   const {pending} = useFormStatus();
-  console.log(state)
-  if (state?.message?.[0] === 'true') {
-    redirect('/auth/done')
-  }
+  
+  // console.log(state)
+  // if (state?.message?.[0] === 'true') {
+  //   redirect('/auth/done')
+  // }
   return (
     <div
       data-testid="reset-Page"
@@ -34,7 +34,7 @@ function Page() {
             className={'input input-bordered w-full'}
             placeholder="Enter Your New Password ..."
           />
-					{ state.err?.password &&
+          { state.err?.password &&
             <p className={'text-error text-xs'}>
 							{ state.err.password }
             </p>

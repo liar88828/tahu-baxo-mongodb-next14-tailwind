@@ -3,7 +3,6 @@ import React from 'react';
 import Link from "next/link";
 import { onRegister } from "@/server/action/auth.action";
 import { useFormState, useFormStatus } from "react-dom";
-import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
 import usePhone from "@/hook/usePhone";
 
@@ -19,10 +18,10 @@ function Page() {
   const { phone, setPhone } = usePhone()
   const [state, formAction,] = useFormState(onRegister, initialState)
   const {pending} = useFormStatus();
-  console.log(state)
-  if (state?.message === 'true') {
-    redirect('/auth/otp')
-  }
+  // console.log(state)
+  // if (state?.message === 'true') {
+  //   redirect('/auth/otp')
+  // }
   return (
     <div
       data-testid="register-Page"

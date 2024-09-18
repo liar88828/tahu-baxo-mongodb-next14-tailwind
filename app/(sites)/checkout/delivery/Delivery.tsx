@@ -3,11 +3,14 @@ import { getDeliveryAll } from "@/server/action/delivery.action";
 import { DeliveryContext, DeliveryModal } from "@/app/(sites)/checkout/delivery/DeliveryModal";
 
 export async function Delivery() {
-  const data = await getDeliveryAll()
-  if (!data) {
+	
+	const data = await getDeliveryAll()
+	
+	if (!data) {
     return <h1>Data Delivery is Empty </h1>
   }
-  return (
+	
+	return (
     <div>
       <div
         data-testid={ 'checkout-Delivery' }

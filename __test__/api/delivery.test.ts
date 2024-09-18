@@ -2,60 +2,55 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import prisma from "@/config/prisma";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 import { dataTestDelivery, dataTestDeliveryEmpty, expectationDelivery, } from "@/assets/example/delivery";
+import {
+	apiCreateDelivery,
+	apiDeleteDelivery,
+	apiGetDeliveryAll,
+	apiGetDeliveryId,
+	apiUpdateDelivery
+} from "@/server/api/delivery.api";
 
 let deliveryToken = ''
 let deliveryId = 0
+// let userId = ''
 
-export let deliveryFinish = false
+// export let deliveryFinish = false
 
-describe
-	//.skipIf(bankFinish === true)
-	('can test api delivery', async () => {
+describe('can test api delivery', async () => {
 		beforeAll(async () => {
 			const { data, accessToken } = await registerTest('delivery');
 			deliveryToken = accessToken
 			dataTestDelivery.userId = data.id
+			// userId = data.id
 		})
 		afterAll(async () => {
-				await prisma.deliveryDB.deleteMany()
+			await prisma.deliveryDB.deleteMany({ where: { userId: { contains: dataTestDelivery.userId } } })
 				await deleteUserTest(deliveryToken)
 				
 			}
 		)
-		
+	
+	describe('just test', () => {
+		it('test function', () => {
+			expect(2).toBe(2)
+		})
+	})
+	
 		describe("POST can create Data Delivery", async () => {
 			
 			it('ERROR Create data delivery, not have token', async () => {
+				const { code, data } = await apiCreateDelivery(dataTestDelivery, 'not token')
 				
-				const res = await fetch("http://localhost:3000/api/delivery", {
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ 'empty token' }`
-					},
-					body: JSON.stringify(dataTestDelivery),
-				})
-				const code = res.status
-				const data = await res.json()
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).toBe("Invalid Compact JWS")
-				
 			})
 			
 			it('ERROR Create data delivery, is empty', async () => {
+				// @ts-ignore
+				const { code, data } = await apiCreateDelivery({}, deliveryToken)
 				
-				const res = await fetch("http://localhost:3000/api/delivery", {
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify({}),
-				})
-				const code = res.status
-				const data = await res.json()
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -66,16 +61,7 @@ describe
 			it('ERROR Create data delivery, name is empty', async () => {
 				const test = structuredClone(dataTestDelivery)
 				test.name = ''
-				const res = await fetch("http://localhost:3000/api/delivery", {
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(test),
-				})
-				const code = res.status
-				const data = await res.json()
+				const { code, data } = await apiCreateDelivery(dataTestDelivery, deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -84,17 +70,8 @@ describe
 			})
 			
 			it('SUCCESS Create data delivery ', async () => {
+				const { code, data } = await apiCreateDelivery(dataTestDelivery, deliveryToken)
 				
-				const res = await fetch("http://localhost:3000/api/delivery", {
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(dataTestDelivery),
-				})
-				const code = res.status
-				const data = await res.json()
 				deliveryId = data.id
 				expect(code).toBe(200)
 				expect(data).toMatchObject(expectationDelivery)
@@ -105,14 +82,7 @@ describe
 			
 			it('SUCCESS GET data delivery all delivery', async () => {
 				
-				const res = await fetch("http://localhost:3000/api/delivery", {
-					method: "GET",
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				const { data, code } = await apiGetDeliveryAll()
 				
 				expect(code).toBe(200)
 				expect(data).toMatchObject({
@@ -126,31 +96,16 @@ describe
 			})
 			
 			it('SUCCESS GET data delivery my id', async () => {
-				
-
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "GET",
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				const { code, data } = await apiGetDeliveryId(deliveryId)
 				
 				expect(code).toBe(200)
 				expect(data).toMatchObject(expectationDelivery)
 				expect(code).not.toBe(400)
 			})
 			
-			it('SUCCESS GET data delivery. wrong id', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
-					method: "GET",
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+			it('ERROR GET data delivery. wrong id', async () => {
+				// @ts-ignore
+				const { code, data } = await apiGetDeliveryId('not know',)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -163,16 +118,8 @@ describe
 		describe("PUT can create Data Delivery", async () => {
 			
 			it('ERROR PUT data delivery, not have token', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ 'woring id' }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ 'empty token' }`
-					},
-					body: JSON.stringify(dataTestDelivery),
-				})
-				const code = res.status
-				const data = await res.json()
+				// @ts-ignore
+				const { data, code } = await apiUpdateDelivery('wrong id ', dataTestDelivery, 'empry token')
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -182,16 +129,8 @@ describe
 			})
 			
 			it('ERROR PUT data delivery, wrong id', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ 'woring id' }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(dataTestDelivery),
-				})
-				const code = res.status
-				const data = await res.json()
+				// @ts-ignore
+				const { data, code } = await apiUpdateDelivery('wrong id ', dataTestDelivery, deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -200,16 +139,8 @@ describe
 			})
 			
 			it('ERROR PUT data delivery, data is has empty object', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify({}),
-				})
-				const code = res.status
-				const data = await res.json()
+				// @ts-ignore
+				const { data, code } = await apiUpdateDelivery(deliveryId, {}, deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -219,16 +150,9 @@ describe
 			})
 			
 			it('ERROR PUT data delivery, data is has empty value', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(dataTestDeliveryEmpty),
-				})
-				const code = res.status
-				const data = await res.json()
+				
+				const { data, code } = await apiUpdateDelivery(deliveryId, dataTestDeliveryEmpty, deliveryToken)
+				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
@@ -238,20 +162,10 @@ describe
 			it('ERROR PUT data delivery, name is empty', async () => {
 				const test = structuredClone(dataTestDelivery)
 				test.name = ''
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(test),
-				})
-				const code = res.status
-				const data = await res.json()
+				const { data, code } = await apiUpdateDelivery(deliveryId, test, deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(test)
-				
 				expect(code).toBe(400)
 				expect(data).length(1)
 			})
@@ -259,16 +173,7 @@ describe
 			it('SUCCESS PUT data delivery use mock', async () => {
 				const test = structuredClone(dataTestDelivery)
 				test.name = 'name delivery is updated'
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "PUT",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-					body: JSON.stringify(test),
-				})
-				const code = res.status
-				const data = await res.json()
+				const { data, code } = await apiUpdateDelivery(deliveryId, test, deliveryToken)
 				deliveryId = data.id
 				expect(code).toBe(200)
 				expect(data).toMatchObject(test)
@@ -278,14 +183,8 @@ describe
 		describe("DELETE can create Data Delivery", async () => {
 			
 			it('ERROR delete data delivery. not have token', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
-					method: "DELETE",
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				// @ts-ignore
+				const { code, data } = await apiDeleteDelivery('not know', '')
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -294,15 +193,8 @@ describe
 			})
 			
 			it('ERROR delete data delivery. wrong id ', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ 'not know' }`, {
-					method: "DELETE",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				// @ts-ignore
+				const { code, data } = await apiDeleteDelivery('not know', deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
@@ -311,16 +203,7 @@ describe
 			})
 			
 			it('SUCCESS delete data delivery.', async () => {
-				
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "DELETE",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				const { code, data } = await apiDeleteDelivery(deliveryId, deliveryToken)
 				
 				expect(code).toBe(200)
 				expect(data).toMatchObject(expectationDelivery)
@@ -328,21 +211,13 @@ describe
 			})
 			
 			it('ERROR delete data delivery. data has deleted', async () => {
-				const res = await fetch(`http://localhost:3000/api/delivery/${ deliveryId }`, {
-					method: "DELETE",
-					headers: {
-						'Content-Type': 'application/json',
-						"Authorization": `Bearer ${ deliveryToken }`
-					},
-				})
-				const code = res.status
-				const data = await res.json()
+				const { code, data } = await apiDeleteDelivery(deliveryId, deliveryToken)
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)
 				expect(code).toBe(400)
 				expect(data).toBe('Data is Not Found maybe was been delete')
-				deliveryFinish = true
+				// deliveryFinish = true
 			})
 			
 		})

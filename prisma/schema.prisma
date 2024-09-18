@@ -54,7 +54,7 @@ model User {
   address       String
   //
   role          String          @default("USER")
-  token         String?         @unique
+  // token         String?         @unique
   password      String?
   otp           Int?
   expiresOtp    DateTime?
@@ -127,26 +127,25 @@ model OrderanDB {
 }
 
 model ProductDB {
-  id           Int         @id @default(autoincrement())
-  name         String
-  location     String
-  type         String
-  img          String?     @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
-  price        Int
-  qty          Int
-  desc         String
+  id         Int                @id @default(autoincrement())
+  name       String
+  location   String
+  type       String
+  img        String?            @default("https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")
+  price      Int
+  qty        Int
+  desc       String
   // at update / create
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @updatedAt
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
   // TransactionDB          TransactionDB[]
-  TrolleyDB    TrolleyDB[]
-  User         User        @relation(fields: [userId], references: [id])
-  userId       String
-  CategoryDB   CategoryDB? @relation(fields: [categoryDBId], references: [id])
-  categoryDBId String?
+  TrolleyDB  TrolleyDB[]
+  User       User               @relation(fields: [userId], references: [id])
+  userId     String
+  CategoryDB CategoryProductDB? @relation(fields: [type], references: [id])
 }
 
-model CategoryDB {
+model CategoryProductDB {
   id        String      @id
   ProductDB ProductDB[]
 }

@@ -1,11 +1,9 @@
-'use server'
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import { config } from "@/config/baseConfig";
 import { ResponseRegister as ResponseAuthUser, UserPublic } from "@/interface/user/UserPublic";
-import { cookieService, createSession } from "@/server/service/auth/cookie.service";
 import { errorApi } from "@/lib/error/errorApi";
 
-export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
+export async function apiLogin(form: LoginUser) {
 	const res = await fetch(`${ config.url }/api/user/login`,
 		{
 			headers: {
@@ -16,14 +14,15 @@ export async function apiLogin(form: LoginUser): Promise<ResponseAuthUser> {
 			body: JSON.stringify(form),
 		}
 	)
-	const data: ResponseAuthUser = await res.json()
 	
 	if (!res.ok) {
 		console.log('will throw')
 		errorApi(res.status, 'auth', await res.text());
 	}
-	createSession(data)
-	return data
+	return {
+		data: await res.json() as ResponseAuthUser,
+		code: res.status
+	}
 }
 
 export async function apiRegister(form: RegisterUser) {
@@ -36,15 +35,14 @@ export async function apiRegister(form: RegisterUser) {
 			body: JSON.stringify(form),
 		}
 	)
-	console.log(res.status, 'status')
-	console.log(await res.json(), 'text')
 	if (!res.ok) {
 		console.error('will throw')
 		errorApi(res.status, 'auth', await res.text());
 	}
-	const data: ResponseAuthUser = await res.json()
-	cookieService().setAuth(data)
-	return data
+	return {
+		data: await res.json() as ResponseAuthUser,
+		code: res.status
+	}
 }
 
 export async function apiLogout() {
@@ -60,10 +58,10 @@ export async function apiLogout() {
 	if (!res.ok) {
 		errorApi(res.status, 'auth', 'logout failed');
 	}
-	const data: ResponseAuthUser = await res.json()
-	console.log('hello api logout')
-	cookieService().deleteAuth()
-	return data
+	return {
+		data: await res.json() as ResponseAuthUser,
+		code: res.status
+	}
 }
 
 export async function apiProfile(id: string) {
@@ -79,7 +77,33 @@ export async function apiProfile(id: string) {
 	if (!res.ok) {
 		errorApi(res.status, 'auth', 'profile failed');
 	}
-	const data: UserPublic = await res.json()
-	return data
+	
+	return {
+		data: await res.json() as UserPublic,
+		code: res.status
+	}
+}
+
+export async function apiRefresh(idRefreshToken: string) {
+	try {
+		
+		const res = await fetch(`${ config.url }/api/user/refresh/${ idRefreshToken }`,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				cache: "no-cache",
+				method: "GET",
+			}
+		)
+		console.log(await res.json(), 'response refresh')
+		if (!res.ok) {
+			errorApi(res.status, 'auth', 'profile failed');
+		}
+		
+		return true
+	} catch (e) {
+		return false
+	}
 }
 

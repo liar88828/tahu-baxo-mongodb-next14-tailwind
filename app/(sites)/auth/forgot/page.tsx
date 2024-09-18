@@ -2,15 +2,16 @@
 import { useFormState, useFormStatus } from 'react-dom';
 import Link from "next/link";
 import { onForgot } from "@/server/action/auth.action";
-import { redirect } from "next/navigation";
 import { initialState } from "@/interface/model/auth.type";
+import { ErrorMessage } from "@/components/error/errorMessage";
+import React from "react";
 
 function Page() {
   const [state, formAction,] = useFormState(onForgot, initialState)
   const {pending} = useFormStatus();
-  if (state?.message?.[0] === 'true') {
-    redirect('/auth/reset');
-  }
+  // if (state?.message?.[0] === 'true') {
+  //   redirect('/auth/reset');
+  // }
   console.log(pending)
   return (
     <div
@@ -35,8 +36,9 @@ function Page() {
             placeholder="Enter Your Email ..."
           />
         </div>
-        <p aria-live="polite">{state?.message}</p>
-
+        
+        <ErrorMessage state={ state.message }/>
+        
         <button
           disabled={pending}
           className={'btn btn-block btn-primary'}

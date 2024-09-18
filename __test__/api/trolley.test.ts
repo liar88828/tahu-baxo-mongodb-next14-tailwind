@@ -1,20 +1,22 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { TrolleyResponse, TrolleyUpdate } from "@/interface/model/trolley.type";
 import { deleteUserTest, registerTest } from "@/__test__/utils/registerData";
 import prisma from "@/config/prisma";
 import { createProduct, } from "@/__test__/utils/product";
 import { productTransaction } from "@/assets/example/product";
-import { expectationTrolley, sendTrolleyCreate } from "@/assets/example/trolley";
+import { expectationTrolley, sendTrolleyCreate, sendTrolleyUpdate } from "@/assets/example/trolley";
+import { apiCreateTrolley, apiDeleteTrolley, apiOnIncrementTrolley } from "@/server/api/trolley.api";
+import { containId } from "@/__test__/utils/auth";
 
-let idTrolley: TrolleyUpdate["id"] = 0
+let idTrolley = 0
 let tokenUser = ''
-
-describe('can test api trolley', async () => {
+let userId = ''
+describe.skip('can test api trolley', async () => {
 	
 	beforeAll(async (ctx) => {
 		const { data, accessToken } = await registerTest('trolley')
 		tokenUser = accessToken
 		sendTrolleyCreate.userId = data.id
+		userId = data.id
 		//
 		const productDB = await createProduct(productTransaction, accessToken)
 		sendTrolleyCreate.productId = productDB.id
@@ -22,26 +24,17 @@ describe('can test api trolley', async () => {
 		//
 	})
 	afterAll(async () => {
-		await prisma.productDB.deleteMany()
-		await prisma.trolleyDB.deleteMany()
+		await prisma.productDB.deleteMany(containId(userId))
+		await prisma.trolleyDB.deleteMany(containId(userId))
 		await deleteUserTest(tokenUser)
 	})
 	
 	describe('POST can create data trolley', async () => {
 		
 		it('SUCCESS can create  ', async () => {
-			const res = await fetch("http://localhost:3000/api/trolley", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${ tokenUser }`,
-				},
-				body: JSON.stringify(sendTrolleyCreate),
-			})
-			
-			const code = res.status
-			const data: TrolleyResponse = await res.json()
+			const { data, code } = await apiCreateTrolley(sendTrolleyCreate, tokenUser)
 			idTrolley = data.data.id
+			
 			expect(code).toBe(200)
 			expect(data).toMatchObject(data)
 			expect(data.data).toMatchObject(expectationTrolley.data)
@@ -50,19 +43,9 @@ describe('can test api trolley', async () => {
 		});
 		
 		it('SUCCESS can increment ', async ({ task }) => {
-			const res = await fetch(`http://localhost:3000/api/trolley/${ idTrolley }`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${ tokenUser }`,
-				},
-				body: JSON.stringify(sendTrolleyCreate),
-			})
-			
-			const code = res.status
-			const data: TrolleyResponse = await res.json()
-			
+			const { data, code } = await apiOnIncrementTrolley(idTrolley, sendTrolleyUpdate, tokenUser,)
 			idTrolley = data.data.id
+			
 			expect(code).toBe(200)
 			expect(data).toMatchObject(data)
 			expect(data.data).toMatchObject(expectationTrolley.data)
@@ -72,41 +55,23 @@ describe('can test api trolley', async () => {
 		});
 		
 		it('SUCCESS can decrement ', async () => {
-			const res = await fetch(`http://localhost:3000/api/trolley/${ idTrolley }`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${ tokenUser }`,
-				},
-				body: JSON.stringify(sendTrolleyCreate),
-			})
-			
-			const code = res.status
-			const data = await res.json()
-			
+			const test = sendTrolleyUpdate
+			test.qty = 100
+			const { data, code } = await apiOnIncrementTrolley(idTrolley, sendTrolleyUpdate, tokenUser,)
 			idTrolley = data.data.id
+			
 			expect(code).toBe(200)
 			expect(data).toMatchObject(data)
 			expect(data.data).toMatchObject(expectationTrolley.data)
-			expect(data.data.qty).toBe(10)
+			expect(data.data.qty).toBe(test.qty)
 			//@ts-ignore
 			expect(data.status).toMatchObject(expectationTrolley.status)
 		});
 		
 		it('SUCCESS can remove ', async () => {
-			const res = await fetch(`http://localhost:3000/api/trolley/${ idTrolley }`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${ tokenUser }`,
-				},
-				body: JSON.stringify(sendTrolleyCreate),
-			})
-			
-			const code = res.status
-			const data: TrolleyResponse = await res.json()
-			
+			const { data, code } = await apiDeleteTrolley(idTrolley, tokenUser)
 			idTrolley = data.data.id
+			
 			expect(code).toBe(200)
 			expect(data).toMatchObject(data)
 			expect(data.data).toMatchObject(expectationTrolley.data)

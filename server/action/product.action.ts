@@ -1,30 +1,18 @@
 'use server'
-import { config } from "@/config/baseConfig";
-import { ProductDB } from "@prisma/client";
-import { PaginationDB, productService } from "@/server/service/product.service";
-import { ProductCreateFormError, ProductCreateKey } from "@/interface/model/product.type";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { productService } from "@/server/service/product.service";
+import { ProductCreateFormError } from "@/interface/model/product.type";
+import { getAccess, getDataClient } from "@/server/service/auth/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { errorForm } from "@/lib/error/errorForm";
-import { errorApi } from "@/lib/error/errorApi";
 import { revalidatePath } from "next/cache";
 import { errorGetData } from "@/lib/error/errorGetData";
+import { productSanitize } from "@/server/sanitize/product.sanitize";
+import { redirect } from "next/navigation";
+import { apiGetProductId, apiGetProductsAll, apiGetProductsAllPrivate } from "@/server/api/product.api";
 
 export async function getProductsAll(search?: string, category?: string) {
 	try {
-		const res = await fetch(`${ config.url }/api/product?search=${ search }&category=${ category }`, {
-			method: "GET",
-			headers: {
-				'content-type': 'application/json',
-			},
-			cache: "no-cache",
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'product', 'api product get all error')
-			
-		}
-		const data: PaginationDB<ProductDB> = await res.json()
-		return data
+		return await apiGetProductsAll(search, category)
 	} catch (err: unknown) {
 		return errorGetData(err);
 	}
@@ -32,21 +20,8 @@ export async function getProductsAll(search?: string, category?: string) {
 
 export async function getProductsAllPrivate(search?: string) {
 	try {
-		const token = cookieService().getAuth()
-		// console.log(token)
-		const res = await fetch(`${ config.url }/api/product/user?search=${ search }`, {
-			method: "GET",
-			headers: {
-				'content-type': 'application/json',
-				'Authorization': `Bearer ${ token.accessToken }`
-			},
-			cache: "no-cache",
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'product', await res.json())
-		}
-		const data: PaginationDB<ProductDB> = await res.json()
-		return data
+		const token = await getAccess()
+		return await apiGetProductsAllPrivate(search, token)
 	} catch (err: unknown) {
 		return null
 	}
@@ -54,47 +29,24 @@ export async function getProductsAllPrivate(search?: string) {
 
 export async function getProductId(id: number) {
 	try {
-		const res = await fetch(`${ config.url }/api/product/${ id }`, {
-			method: "GET",
-			headers: {
-				'Accept': 'application/json',
-			},
-			cache: "no-cache",
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'product', await res.json())
-		}
-		const data: ProductDB = await res.json()
-		// const access = cookies().has('access')
-		// await updateSession()
+		const { data, } = await apiGetProductId(id)
 		return data
 	} catch (err: unknown) {
 		return null
-		
 	}
-	
 }
 
-export async function createProduct(prevState: any, formData: FormData): Promise<OnFormState<ProductCreateFormError>> {
+export async function createProduct(_: any, formData: FormData): Promise<OnFormState<ProductCreateFormError>> {
 	try {
-		// @ts-ignore
-		// const rawFormData = Object.fromEntries(formData.entries())
-		const rawFormData: ProductCreateKey = {
-			name: formData.get('name') ?? '',
-			type: formData.get('type') ?? '',
-			location: formData.get('location') ?? '',
-			desc: formData.get('desc') ?? '',
-			qty: Number(formData.get('qty')),
-			price: Number(formData.get('price')),
-			userId: cookieService().getAuth().data.id
-		}
-		// console.log(rawFormData)
+		const auth = await getDataClient()
+		const rawFormData = productSanitize(formData, auth)
 		const data = await productService.createOne(rawFormData)
-		revalidatePath('/')
 		console.log(data)
-		// redirect('/profile')
-		return { message: 'true' }
+		revalidatePath('/')
+		redirect('/profile')
+		// return { message: 'true' }
 	} catch (err) {
 		return errorForm(err);
 	}
 }
+

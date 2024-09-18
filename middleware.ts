@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
-import { decryptMiddleware } from "@/server/service/auth/jose.service";
 import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
-import { getSession } from "@/server/service/auth/cookie.service";
+import { getCookie } from "@/server/service/auth/cookie.service";
+import { sessionMiddleware } from "@/server/service/auth/session.service";
 
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public
@@ -13,21 +13,21 @@ export default async function middleware(req: NextRequest) {
 	const isPublicRoute = publicRoutes.includes(path)
 	
 	// 3. Decrypt the session from the cookie
-	const cookie = await getSession()
+	const session = await sessionMiddleware()
+	console.log(session, 'session-------')
 	
-	const session = await decryptMiddleware(cookie)
-	// if (session !== null) {
-	// 	const payload = await updateSession()
-	// 	console.log(payload, 'payload')
-	// }
-	// console.log(session,` ${path} session----------xxx-`)
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
-		console.log('will redirect')
-		return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
+		console.log('will validate refresh token ------------')
+		const refresh = getCookie('refresh')
+		console.log(refresh, ' : refresh will redirect')
+		
+		if (!refresh) {
+			console.log(' : refresh token will redirect-------------')
+			return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
+		}
 	}
 	
-	// 6. Redirect to /dashboard if the user is authenticated
 	if (
 		isPublicRoute &&
 		session &&
@@ -36,13 +36,12 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.redirect(new URL('/home', req.nextUrl))
 	}
 	
-	// console.log(publicRoutes && session)
-	// if(publicRoutes&& session){
-	// 	return NextResponse.redirect(new URL('/home', req.nextUrl))
-	//
-	// }
-	//
-	// console.log(req.nextUrl.pathname)
+	if (publicRoutes && session) {
+		console.log('is public')
+		// return NextResponse.redirect(new URL('/home', req.nextUrl))
+		
+	}
+	
 	if (req.nextUrl.pathname.startsWith('/product')) {
 		return productMiddleWare(req)
 	}
@@ -50,15 +49,10 @@ export default async function middleware(req: NextRequest) {
 	if (req.nextUrl.pathname.startsWith('/trolley')) {
 		return trolleyMiddleware(req)
 	}
+	
 	if (req.nextUrl.pathname.startsWith('/api')) {
 		if (!req.nextUrl.pathname.startsWith('/api/user')) {
-			// console.log('will update session')
-			// const payload = await updateSession(cookie)
-			// console.log(payload, 'payload')
 		}
-		
-		// console.log('middleware api-------')
-		// return trolleyMiddleware(req)
 	}
 	
 	return NextResponse.next()

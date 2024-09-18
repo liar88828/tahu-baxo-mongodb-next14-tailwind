@@ -4,7 +4,7 @@ import { bankService, BankService } from "@/server/service/bank.service"
 import { IController } from "@/interface/server/IController"
 import { errorHanding } from "@/lib/error/errorHanding"
 import type { Params } from "@/interface/server/param"
-import { BankCreate, BankUpdate } from "@/interface/model/bank.type";
+import { BankCreatePrisma, BankUpdatePrisma } from "@/interface/model/bank.type";
 
 class BankController implements IController {
 	constructor(
@@ -61,7 +61,7 @@ class BankController implements IController {
 	async createOne(req: NextRequest) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data } = await this.serviceReq.getData<BankCreate>(req)
+			let { data } = await this.serviceReq.getData<BankCreatePrisma>(req)
 			data.userId = user.id
 			data = await this.serviceBank.createOne(data)
 			return Response.json(data)
@@ -73,7 +73,7 @@ class BankController implements IController {
 	async updateOne(req: NextRequest, params: Params) {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
-			let { data, id } = await this.serviceReq.getUpdateInt<BankUpdate>(
+			let { data, id } = await this.serviceReq.getUpdateInt<BankUpdatePrisma>(
 				req,
 				params
 			)

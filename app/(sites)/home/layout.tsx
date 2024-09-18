@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cookieService } from "@/server/service/auth/cookie.service";
 
 export default async function layout({ children }: { children: React.ReactNode }) {
-  const auth = cookieService().checkAuth
+  const auth = await cookieService()
 	// console.log(auth)
   return (<>
     <div className='navbar bg-base-100'>
@@ -55,7 +55,7 @@ export default async function layout({ children }: { children: React.ReactNode }
           <ul
             tabIndex={ 0 }
             className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3  p-2 shadow'
-					>{ auth.data ? (<>
+          >{ auth.checkAuth.data ? (<>
 							<li>
 								<Link href={ '/profile' }>Info</Link>
 							</li>

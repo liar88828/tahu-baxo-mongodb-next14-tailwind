@@ -1,31 +1,19 @@
 'use server'
-import { config } from "@/config/baseConfig";
-import { BankDB, DeliveryDB } from "@prisma/client";
-import { DeliveryCreateFormError, DeliveryCreateKey, DeliveryId } from "@/interface/model/delivery.type";
-import { ResponseData } from "@/interface/server/IService";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { DeliveryCreateFormError, DeliveryId } from "@/interface/model/delivery.type";
+import { getAccess } from "@/server/service/auth/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";
 import { deliveryService } from "@/server/service/delivery.service";
-import { errorApi } from "@/lib/error/errorApi";
 import { errorGetData } from "@/lib/error/errorGetData";
+import { apiGetDeliveryAll, apiGetDeliveryAllPrivate, apiGetDeliveryId } from "@/server/api/delivery.api";
+import { deliverySanitize } from "@/server/sanitize/delivery.sanitize";
+import { redirect } from "next/navigation";
 
 export async function getDeliveryAllPrivate(search: string) {
-  const token = cookieService().getAuth()
   try {
-    const res = await fetch(`${ config.url }/api/delivery/user?search=${ search }`, {
-      method: "GET",
-      headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${ token.accessToken }`
-      },
-      cache: "no-cache",
-    })
-    if (!res.ok) {
-      errorApi(res.status, 'trolley', await res.json())
-    }
-    const data: ResponseData<DeliveryDB> = await res.json()
+    const token = await getAccess()
+    const { data } = await apiGetDeliveryAllPrivate(search, token)
     return data
   } catch (err: unknown) {
     return errorGetData(err);
@@ -34,17 +22,7 @@ export async function getDeliveryAllPrivate(search: string) {
 
 export async function getDeliveryAll() {
   try {
-    const res = await fetch(`${config.url}/api/delivery/`, {
-      method : "GET",
-      headers : {
-        'Accept' : 'application/json',
-      },
-      cache : "no-cache",
-    })
-    if (!res.ok) {
-      errorApi(res.status, 'trolley', await res.json())
-    }
-    const data: ResponseData<DeliveryDB> = await res.json()
+    const { data } = await apiGetDeliveryAll()
     return data
   } catch (err : unknown) {
     return errorGetData(err);
@@ -53,17 +31,7 @@ export async function getDeliveryAll() {
 
 export async function getDeliveryId(id : DeliveryId) {
   try {
-    const res = await fetch(`${config.url}/api/bank/${id.id_delivery}`, {
-      method : "GET",
-      headers : {
-        'Accept' : 'application/json',
-      },
-      cache : "no-cache",
-    })
-    if (!res.ok) {
-      errorApi(res.status, 'trolley', await res.json())
-    }
-    const data : BankDB = await res.json()
+    const { data } = await apiGetDeliveryId(id.id_delivery)
     return data
   } catch (err : unknown) {
     return errorGetData(err);
@@ -73,20 +41,12 @@ export async function getDeliveryId(id : DeliveryId) {
 export async function createDelivery(prevState: any, formData: FormData): Promise<OnFormState<DeliveryCreateFormError>> {
   try {
     // @ts-ignore
-    const rawFormData: DeliveryCreateKey = {
-      name: formData.get('name') ?? '',
-      type: formData.get('type') ?? '',
-      location: formData.get('location') ?? '',
-      desc: formData.get('desc') ?? '',
-      price: Number(formData.get('price')),
-      userId: cookieService().getAuth().data.id,
-      phone: formData.get('phone'),
-    }
-    // console.log(rawFormData)
+    const rawFormData = deliverySanitize(formData)
     const data = await deliveryService.createOne(rawFormData)
-    revalidatePath('/')
     console.log(data)
-    return { message: 'true' }
+    revalidatePath('/')
+    redirect('/profile/delivery')
+    // return { message: 'true' }
   } catch (err) {
     console.error('on get All error', err)
     return errorForm(err)

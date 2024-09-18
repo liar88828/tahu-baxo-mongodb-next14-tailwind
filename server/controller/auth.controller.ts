@@ -37,12 +37,21 @@ class AuthController {
 		}
 	}
 	
-	async logout(req: NextRequest) {
+	async logout(req: NextRequest, { params }: Params) {
+		try {
+			const sendData = await this.serviceAuth.logout(params.id)
+			return Response.json(sendData)
+		} catch (e) {
+			return errorHanding(e)
+		}
+	}
+	
+	async logoutXXX(req: NextRequest,) {
 		try {
 			
 			const token = this.serviceRequest.getTokenCookie(req)
 			// console.log(token)
-			const sendData = await this.serviceAuth.logout(token)
+			const sendData = await this.serviceAuth.logoutXXX(token)
 			return Response.json(sendData)
 		} catch (e) {
 			return errorHanding(e)

@@ -1,11 +1,10 @@
 import React from 'react';
 import Link from "next/link";
 import { onLogout } from "@/server/action/auth.action";
-
 import { cookieService } from "@/server/service/auth/cookie.service";
 
-function Page() {
-	const user = cookieService().checkAuth
+async function Page() {
+	const user = await cookieService()
 	return (< >
 			<div
 				data-testid="logout-Page"
@@ -14,7 +13,7 @@ function Page() {
 					<h1 className={ 'text-3xl font-bold' }>You’ve Been Logged Out</h1>
 					<p className={ 'text-lg font-light' }>You have successfully logged out of your account.</p>
 				</div>
-				{ user &&
+				{ user.checkAuth &&
 					<form action={ onLogout }>
 						<button
 							type={ 'submit' }

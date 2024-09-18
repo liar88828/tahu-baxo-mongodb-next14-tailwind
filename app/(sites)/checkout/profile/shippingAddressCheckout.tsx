@@ -2,7 +2,7 @@ import { IconAdd, IconLocation, IconRemove } from "@/components/icon/IconMore";
 import React from "react";
 import { ShippingProps } from "@/app/(sites)/profile/(tab)/receiver/shipping";
 
-export function ShippingAddressCheckout({ item, fun, add = false }: ShippingProps) {
+export function ShippingAddressCheckout({ item, click, add = false }: ShippingProps) {
 	return <div
 		className={ "card card-bordered card-compact" }>
 		<div className="card-body">
@@ -13,7 +13,7 @@ export function ShippingAddressCheckout({ item, fun, add = false }: ShippingProp
 				</div>
 				<form method="dialog">
 					<button
-						onClick={ fun }
+						onClick={ click }
 						className="btn mt-4 btn-square btn-sm">
 						{
 							add ? <IconAdd/> : <IconRemove/>

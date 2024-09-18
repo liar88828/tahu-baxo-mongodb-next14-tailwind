@@ -24,7 +24,7 @@ export class JwtService {
 	}
 	
 	async verifyRefreshToken(token: string) {
-		const data = await jwt.verify(token, this.refreshSecret)
+		const data = jwt.verify(token, this.refreshSecret)
 		if (!data) {
 			throw new Error("Token is not verified")
 		}

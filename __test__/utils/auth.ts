@@ -8,3 +8,13 @@ export const registerUserTransaction: RegisterUser = {
 	phone: "081 1232 1234",
 	address: "jln jakarta raya",
 }
+
+export const containId = (userId: string) => {
+	return {
+		where: {
+			userId: {
+				contains: userId
+			}
+		}
+	}
+}

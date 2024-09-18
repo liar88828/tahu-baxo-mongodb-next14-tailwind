@@ -37,7 +37,7 @@ export function ProfileModal({ data }: { data: ReceiverDB[] }) {
 							key={ item.id }
 							item={ item }
 							add={ true }
-							fun={ () => addReceiver(item) }
+							click={ () => addReceiver(item) }
 						/>)
 						}
 					</div>

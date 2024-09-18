@@ -12,7 +12,8 @@ import { userSchema, type UserSchema, } from "../../schema/user.schema"
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import prisma from "@/config/prisma";
 import { ErrorAuth } from "@/lib/error/errorCustome";
-import { deleteSession } from "@/server/service/auth/session.service";
+import { createSession } from "@/server/service/auth/cookie.service";
+import { deleteSession, deleteSessionXXX } from "@/server/service/auth/session.service";
 
 export class AuthService extends UserService {
 	constructor(
@@ -58,10 +59,19 @@ export class AuthService extends UserService {
 		}
 	}
 	
-	async logout(token: string) {
-		token = await deleteSession()
+	async logout(userId: string) {
+		await prisma.session.delete({ where: { userId } })
+		deleteSession()
+		return {
+			accessToken: "",
+			refreshToken: "",
+			data: "success logout",
+		}
+	}
+	
+	async logoutXXX(token: string) {
+		token = await deleteSessionXXX()
 		// this.serviceJwt.verifyRefreshToken()
-		
 		await this.serviceJwt.deleteRefreshToken(token)
 		// send
 		return {
@@ -72,6 +82,7 @@ export class AuthService extends UserService {
 	}
 	
 	async refresh(idRefreshToken: string) {
+		
 		const token = await prisma.session.findUnique({
 			where: { id: idRefreshToken },
 			include: {
@@ -79,22 +90,39 @@ export class AuthService extends UserService {
 					select: {
 						name: true,
 						email: true,
-						id: true
+						id: true,
+						image: true
 					}
 				}
 			}
 		})
+		
 		if (!token || !token.sessionToken || !token?.user?.id) {
 			throw new ErrorAuth("unauthorized", 'id / session / user token is not valid')
 		}
 		
-		const data = await this.serviceJwt.verifyRefreshToken(token.sessionToken) as RefreshTokenPayload
-		return this.token({
-			id: token.user.id,
-			email: token.user.email,
-			name: token.user.name,
-		})
+		// const data = await this.serviceJwt.verifyRefreshToken(token.sessionToken) as RefreshTokenPayload
+		// return this.token({
+		// 	id: token.user.id,
+		// 	email: token.user.email,
+		// 	name: token.user.name,
+		// })
 		
+		// console.log("---------- refresh token")
+		const { refreshToken, accessToken } = await this.token(token.user)
+		
+		createSession({
+			accessToken,
+			refreshToken,
+			data: token.user,
+		})
+		console.log(token.user)
+		// send
+		return {
+			accessToken,
+			refreshToken,
+			data: token.user,
+		}
 	}
 	
 	async refreshByUserId(tokenCookie: string) {

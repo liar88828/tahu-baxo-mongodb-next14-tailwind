@@ -1,13 +1,12 @@
 import { errorStatus } from "@/lib/error/errorStatus";
 import { ErrorAuth } from "@/lib/error/errorCustome";
 import { FromType } from "@/interface/model/from.type";
-import { redirect } from "next/navigation";
 
 export function errorApi(status: number, from: FromType, message: string = '') {
 	console.log(message, 'message')
 	if (status === errorStatus.unauthorized) {
 		console.error('will redirect')
-		return redirect('/auth/login')
+		// return redirect('/auth/login')
 	}
 	if (from === 'auth') {
 		if (status === errorStatus.notFound) {

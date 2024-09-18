@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { productController } from '@/server/controller/product.controller'
 
 export async function GET(request : NextRequest) {
-	// console.log('--product index ---')
+	console.log('--product index ---')
   return productController.findAll(request)
 }
 

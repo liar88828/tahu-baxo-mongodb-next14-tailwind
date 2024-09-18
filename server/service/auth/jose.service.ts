@@ -1,4 +1,4 @@
-import 'server-only'
+// import 'server-only'
 import { jwtVerify, SignJWT } from "jose";
 import { AccessTokenPayload } from "@/server/service/auth/jwt.service";
 import { ErrorAuth } from "@/lib/error/errorCustome";

@@ -5,11 +5,11 @@ import ErrorComponent from "@/components/error/ErrorComponent";
 import { SearchParams } from "@/interface/model/model";
 import { toDate } from "@/lib/utils/formatDate";
 import { Rupiah } from "@/lib/utils/formatMoney";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie.service";
 import { TextTransaction } from "@/app/(sites)/transaction/[id]/textTransaction";
 
 export default async function Page({ params }: SearchParams) {
-	const auth = cookieService().getData
+	const user = await getDataClient()
 	const data = await getTransactionCompleteById(Number(params.id))
 	if (!data) {
 		return <ErrorComponent/>
@@ -26,7 +26,7 @@ export default async function Page({ params }: SearchParams) {
 			<div className="p-4 space-y-8">
 				<div className="text-center space-y-2">
 					<h1 className={ 'font-bold text-2xl' }>Transaction Success</h1>
-					<h2 className={ ' text-xl' }>Success { auth.name }</h2>
+					<h2 className={ ' text-xl' }>Success { user.name }</h2>
 				</div>
 				<div className="rounded-3xl p-5 border shadow-md space-y-3">
 					<h1 className='font-bold text-xl'>Detail Transaction</h1>

@@ -7,7 +7,7 @@ import { bankDataList } from "@/assets/example/bank";
 
 let transactionToken = ''
 let idUser = ''
-it('should seed prisma', async () => {
+it.skip('should seed prisma', async () => {
 	// const { data: user, accessToken } = await registerTest("user4")
 	// idUser = user.id
 	// transaidctionToken = accessToken

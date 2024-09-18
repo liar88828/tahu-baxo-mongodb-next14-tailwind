@@ -7,6 +7,7 @@ import { ProductItem } from "@/app/(sites)/trolley/ProductItem";
 
 export async function Product() {
 	const data = await getTrolleyPrivate()
+	
 	if (!data) {
 		return <ErrorComponent
 			code={ errorStatus.internalServerError }
@@ -15,8 +16,9 @@ export async function Product() {
 			title={ 'Server Busy' }
 		/>
 	}
+	
 	return (
-		<div>
+		<div data-testid="Product">
 			<div className="flex justify-between items-center w-full text-2xl mb-2 ">
 				<div className="flex space-x-2 items-center justify-between ">
 					<input type="checkbox" defaultChecked className="checkbox checkbox-sm"/>

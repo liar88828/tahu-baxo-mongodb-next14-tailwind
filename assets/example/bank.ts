@@ -1,8 +1,8 @@
 import { BankDB } from "@prisma/client";
 import { expect } from "vitest";
-import { BankCreate } from "@/interface/model/bank.type";
+import { BankCreate, BankCreatePrisma, BankUpdate } from "@/interface/model/bank.type";
 
-export const dataExpectType: BankCreate = {
+export const dataExpectTypeDB: BankDB = {
 	phone: expect.any(String),
 	id: expect.any(Number),
 	img: expect.any(String),
@@ -11,11 +11,12 @@ export const dataExpectType: BankCreate = {
 	location: expect.any(String),
 	name: expect.any(String),
 	no_req: expect.any(String),
-	userId: expect.any(String)
-	
+	userId: expect.any(String),
+	created_at: expect.any(Date),
+	updated_at: expect.any(Date)
 }
 
-export const dataTestBankEmpty: BankCreate = {
+export const dataTestBankEmpty: BankCreatePrisma = {
 	desc: "",
 	img: "",
 	location: "",
@@ -27,29 +28,6 @@ export const dataTestBankEmpty: BankCreate = {
 }
 
 export const dataTestCreate: BankCreate = {
-	phone: "(024) 1233 1231 2 ",
-	img: "not have image",
-	no_req: "1230 1231 1231",
-	name: "mandiri",
-	location: "semarang",
-	type: "atm",
-	desc: "atm kui di gesek",
-	userId: "asda",
-}
-
-export const bankTransaction: BankCreate = {
-	id: 503,
-	name: "Bank ABC",
-	phone: "081234567898",
-	no_req: "1234-5678-9876",
-	location: "Bandung",
-	type: "Savings Account",
-	img: "https://example.com/bank_abc.jpg",
-	desc: "High-interest savings account with zero monthly fees",
-	userId: "cm0ray6cb0001rsx0eaaiat90"
-}
-
-export const dataTestCreate2: BankCreate = {
 	phone: "(024) 1233 12343 ",
 	img: "not have image",
 	no_req: "1230 1231 1423",
@@ -57,7 +35,16 @@ export const dataTestCreate2: BankCreate = {
 	location: "semarang",
 	type: "atm",
 	desc: "atm kui di gesek",
-	userId: "asda",
+	userId: "cm0ray6cb0001rsx0eaaiat90",
+}
+const dataTestUpdate: BankUpdate = {
+	phone: "(024) 1233 12343 ",
+	img: "not have image",
+	no_req: "1230 1231 1423",
+	name: "mandiri ku update",
+	location: "semarang",
+	type: "atm",
+	desc: "atm kui di gesek",
 }
 export const bankDataList: Omit<BankDB, 'created_at' | 'updated_at'>[] = [
 	{

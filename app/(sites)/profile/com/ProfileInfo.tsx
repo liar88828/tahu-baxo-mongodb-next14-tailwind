@@ -1,9 +1,9 @@
 import { IconDetail, IconEdit } from "@/components/icon/IconMore";
 import { getUserId } from "@/server/action/user.action";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie.service";
 
 export async function ProfileInfo() {
-  const user = cookieService().getAuth().data
+  const user = await getDataClient()
   const data = await getUserId({ id_user: user.id })
   if (!data || !user) {
     return <h1>User is Not found</h1>

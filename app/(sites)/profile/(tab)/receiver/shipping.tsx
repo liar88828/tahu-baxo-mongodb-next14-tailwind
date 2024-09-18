@@ -7,11 +7,12 @@ import React from "react";
 
 export interface ShippingProps {
 	item: ReceiverDB;
-	fun: () => void;
+	click: () => void;
 	add?: boolean;
 }
 
-export function ShippingAddress({ item, fun, add = false }: ShippingProps) {
+// @ts-ignore
+export function ShippingAddress({ item, click, add = false }: ShippingProps) {
 	return <div
 		className={ "card card-bordered card-compact" }>
 		<div className="card-body">
@@ -27,7 +28,7 @@ export function ShippingAddress({ item, fun, add = false }: ShippingProps) {
 						add ? <IconAdd/> : <IconRemove/>
 					}>
 					<button
-						onClick={ fun }
+						onClick={ click }
 						className="btn mt-4 btn-square btn-sm">
 					</button>
 				</Modal>
@@ -45,7 +46,7 @@ export function Shipping({ data }: { data: ReceiverDB[] }) {
 		{ data.map(item => <ShippingAddress
 			key={ item.id }
 			item={ item }
-			fun={ () => deleteReceiver(item.id) }/>)
+			click={ () => deleteReceiver(item.id) }/>)
 		}
 	</div>
 }

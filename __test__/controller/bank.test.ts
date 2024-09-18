@@ -4,7 +4,7 @@ import prisma from "@/config/prisma";
 import * as appHandler from "../../app/api/bank/route"
 import * as appHandlerParam from "../../app/api/bank/[id]/route";
 import { BankDB, User } from "@prisma/client";
-import { dataTestCreate, dataTestCreate2 } from "@/assets/example/bank";
+import { dataTestCreate, } from "@/assets/example/bank";
 import { dataTestError, dataTestUpdate } from "@/__test__/utils/bank";
 
 describe.skip('can test controller bank', async () => {
@@ -27,18 +27,18 @@ describe.skip('can test controller bank', async () => {
 	describe.sequential("POST can create Data Bank", async () => {
 		
 		it("SUCCESS Create data bank use mock", async ({ user }: { user: User }) => {
-			dataTestCreate2.userId = user.id
+			dataTestCreate.userId = user.id
 			await testApiHandler({
 				appHandler,
 				test: async ({ fetch }) => {
 					const response = await fetch({
 						method: "POST",
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(dataTestCreate2),
+						body: JSON.stringify(dataTestCreate),
 					});
 					const json = await response.json();
 					expect(response.status).toBe(200);
-					expect(json).toMatchObject(dataTestCreate2);
+					expect(json).toMatchObject(dataTestCreate);
 				},
 			});
 		})
@@ -53,7 +53,7 @@ describe.skip('can test controller bank', async () => {
 					const response = await fetch({ method: "GET" });
 					const json = await response.json();
 					expect(response.status).toBe(200);
-					expect(json).toMatchObject([dataTestCreate, dataTestCreate2]);
+					expect(json).toMatchObject([dataTestCreate]);
 				},
 			});
 		});

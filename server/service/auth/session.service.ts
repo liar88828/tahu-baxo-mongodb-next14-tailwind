@@ -1,4 +1,6 @@
-import { cookies } from 'next/headers'
+import { getCookie } from "@/server/service/auth/cookie.service";
+import { decryptMiddleware } from "@/server/service/auth/jose.service";
+import { cookies } from "next/headers";
 import { ErrorAuth } from "@/lib/error/errorCustome";
 import prisma from "@/config/prisma";
 
@@ -20,7 +22,14 @@ export async function getSession() {
 	return cookie
 }
 
-export async function deleteSession() {
+export function deleteSession() {
+	const cookie = cookies();
+	cookie.delete('user')
+	cookie.delete('access')
+	cookie.delete('refresh')
+}
+
+export async function deleteSessionXXX() {
 	const data = await getSession()
 	cookies().delete('session')
 	return data
@@ -31,23 +40,39 @@ export async function createSession(token: string) {
 	return setSession(token, expiresAt)
 }
 
-// export async function updateSession(token) {
-// 	const session = cookies().get('session')?.value
-// 	console.log("session")
-// 	if (!session) {
-// 		throw new ErrorAuth('Session is not store')
-// 	}
-// 	console.log("payload")
-// 	const payload = await jwtService.verifyRefreshToken(session)
-// 	if (!payload) {
-// 		throw new ErrorAuth('token is not valid')
-// 	}
-//
-// 	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-// 	const sessionDB = await findSessionByUserId(payload.userId)
-//
-// 	// return setSession(sessionDB?.sessionToken, expiresAt)
-// }
+async function getRefreshTokenUser() {
+	
+	const refresh = getCookie('refresh')
+	console.log(refresh, 'refresh')
+	if (!refresh) {
+		throw false
+	}
+	
+	// const resRefresh = await apiRefresh(refresh)
+	// if (!resRefresh) {
+	// 	throw false
+	// }
+	return true
+	
+}
+
+export async function sessionMiddleware() {
+	try {
+		const access = cookies().get('access')?.value
+		const token = await decryptMiddleware(access)
+		// console.log(token, 'token -middleware')
+		// if (!token) {
+		// 	console.log('will get refresh token')
+		// 	// return getRefreshTokenUser()
+		// }
+		return token
+	} catch (e) {
+		// console.error('sessionMiddleware-----')
+		// console.log(e)
+		
+		return false
+	}
+}
 
 export async function findSessionByUserId(userId: string) {
 	const sessionDB = await prisma.session.findUnique({ where: { userId } })

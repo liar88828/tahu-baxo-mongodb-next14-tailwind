@@ -1,35 +1,26 @@
 'use server'
 import { config } from "@/config/baseConfig";
-import {
-	GetAllTrolley,
-	TrolleyCreate,
-	TrolleyDataId,
-	TrolleyResponse,
-	TrolleyUpdate
-} from "@/interface/model/trolley.type";
-import { ResponseTrolleyCount } from "@/server/service/trolley.service";
+import { TrolleyCreate, TrolleyDataId, TrolleyUpdate } from "@/interface/model/trolley.type";
 import { revalidatePath } from "next/cache";
 import { TrolleyDB } from "@prisma/client";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { getAccess, getDataClient } from "@/server/service/auth/cookie.service";
 import { errorApi } from "@/lib/error/errorApi";
 import { errorGetData } from "@/lib/error/errorGetData";
+import {
+	apiAddTrolley,
+	apiDeleteTrolley,
+	apiGetTrolleyAll,
+	apiGetTrolleyPrivate,
+	apiGetUserTrolley,
+	apiOnDecrementTrolley,
+	apiOnIncrementTrolley
+} from "@/server/api/trolley.api";
 
 export async function getTrolleyPrivate() {
-	const auth = cookieService().getAccess()
+	
 	try {
-		const res = await fetch(`${ config.url }/api/trolley`, {
-			method: "GET",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + auth,
-			},
-			cache: "no-cache",
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-			
-		}
-		const data: GetAllTrolley[] = await res.json()
+		const auth = await getAccess()
+		const { data } = await apiGetTrolleyPrivate(auth)
 		return data
 	} catch (e: unknown) {
 		return errorGetData(e)
@@ -38,17 +29,7 @@ export async function getTrolleyPrivate() {
 
 export async function getTrolleyAll() {
   try {
-    const res = await fetch(`${ config.url }/api/trolley`, {
-      method : "GET",
-      headers : {
-        'Accept' : 'application/json',
-      },
-      cache : "no-cache",
-    })
-    if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
-    const data: GetAllTrolley[] = await res.json()
+		const { data } = await apiGetTrolleyAll()
     return data
 	} catch (e: unknown) {
 		return errorGetData(e)
@@ -57,17 +38,7 @@ export async function getTrolleyAll() {
 
 export async function addTrolley(item: TrolleyDataId, id: TrolleyDataId) {
   try {
-    const res = await fetch(`${ config.url }/api/products/${ id.id }`, {
-      method : "POST",
-      headers : {
-        'Accept' : 'application/json',
-      },
-      body : JSON.stringify(item),
-    })
-    if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
-    const data: TrolleyResponse = await res.json()
+		const { data } = await apiAddTrolley(item, id)
     return data
 	} catch (e: unknown) {
 		return errorGetData(e)
@@ -76,18 +47,9 @@ export async function addTrolley(item: TrolleyDataId, id: TrolleyDataId) {
 
 export async function deleteTrolley(id: number) {
   try {
-		const res = await fetch(`${ config.url }/api/trolley/${ id }`, {
-      method : "DELETE",
-      headers : {
-        'Accept' : 'application/json',
-      },
-			
-		})
-    if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
+		const auth = await getAccess()
+		const { data } = await apiDeleteTrolley(id, auth)
 		revalidatePath('/trolley')
-    const data: TrolleyResponse = await res.json()
     return data
 	} catch (e: unknown) {
 		return errorGetData(e)
@@ -96,28 +58,20 @@ export async function deleteTrolley(id: number) {
 
 export async function getUserTrolley() {
 	try {
-		const access = cookieService().getAccess()
-		const res = await fetch(`${ config.url }/api/trolley/count`, {
-			method: "GET",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'bearer ' + access,
-			}
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
-		return await res.json() as ResponseTrolleyCount
+		const access = await getAccess()
+		const { data } = await apiGetUserTrolley(access)
+		return data
 	} catch (e) {
 		return errorGetData(e)
 	}
 }
 
 export async function onAddTrolley(id: number,) {
-	const auth = cookieService()
 	try {
+		const user = await getDataClient()
+		const auth = await getAccess()
 		const data: TrolleyCreate = {
-			userId: auth.getAuth().data.id,
+			userId: user.id,
 			qty: 1,
 			productId: Number(id)
 		}
@@ -126,7 +80,7 @@ export async function onAddTrolley(id: number,) {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': 'bearer ' + auth.getAccess(),
+				'Authorization': 'bearer ' + auth,
 				
 			},
 			body: JSON.stringify(data),
@@ -146,31 +100,19 @@ export async function onAddTrolley(id: number,) {
 
 export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = cookieService().getAuth()
-		const data: TrolleyUpdate = {
+		const auth = await getAccess()
+		const user = await getDataClient()
+		
+		const setData: TrolleyUpdate = {
 			id: id,
 			productId: productId,
 			qty: 1,
-			userId: auth.data.id
+			userId: user.id
 		}
-		const res = await fetch(`${ config.url }/api/trolley/${ data.id }`, {
-			method: "POST",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'bearer ' + auth.accessToken,
-			},
-			body: JSON.stringify(data)
-		})
 		
-		if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
-		// console.log('api trolley increment')
-		// console.log(res.status)
-		// console.log(await res.json(), 'tes trolley')
-		// console.log('api trolley increment')
+		const { data } = await apiOnIncrementTrolley(id, setData, auth)
 		revalidatePath('/trolley')
-		return await res.json() as TrolleyResponse
+		return data
 	} catch (e) {
 		return errorGetData(e)
 	}
@@ -178,26 +120,17 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 
 export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = cookieService().getAuth()
-		const data: TrolleyUpdate = {
+		const auth = await getAccess()
+		const user = await getDataClient()
+		const setData: TrolleyUpdate = {
 			id: id,
 			productId: productId,
 			qty: 1,
-			userId: auth.data.id
+			userId: user.id
 		}
-		const res = await fetch(`${ config.url }/api/trolley/${ data.id }`, {
-			method: "PUT",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'bearer ' + auth.accessToken,
-			},
-			body: JSON.stringify(data)
-		})
-		if (!res.ok) {
-			errorApi(res.status, 'trolley', await res.json())
-		}
+		const { data } = await apiOnDecrementTrolley(id, setData, auth)
 		revalidatePath('/trolley')
-		return await res.json() as TrolleyResponse
+		return data
 	} catch (e) {
 		return errorGetData(e)
 	}
