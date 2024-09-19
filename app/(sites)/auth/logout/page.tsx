@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from "next/link";
-import { onLogout } from "@/server/action/auth.action";
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie/cookie.service";
+import ButtonLogout from "@/app/(sites)/auth/logout/ButtonLogout";
 
 async function Page() {
-	const user = await cookieService()
+	const user = getDataClient()
 	return (< >
 			<div
 				data-testid="logout-Page"
@@ -13,16 +13,7 @@ async function Page() {
 					<h1 className={ 'text-3xl font-bold' }>You’ve Been Logged Out</h1>
 					<p className={ 'text-lg font-light' }>You have successfully logged out of your account.</p>
 				</div>
-				{ user.checkAuth &&
-					<form action={ onLogout }>
-						<button
-							type={ 'submit' }
-							className="btn btn-primary btn-lg"
-						>Logout
-						</button>
-					</form>
-				}
-				
+				{ user.name && <ButtonLogout/> }
 				
 				<div className="space-y-1 pt-1 flex flex-col">
 					<p>

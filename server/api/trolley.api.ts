@@ -141,12 +141,11 @@ export async function apiOnDecrementTrolley(id: number, data: TrolleyUpdate, tok
 }
 
 export async function apiCreateTrolley(data: TrolleyCreate, token: string) {
-	const res = await fetch(`${ config.url }/api/api/trolley`, {
+	const res = await fetch(`${ config.url }/api/trolley`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${ token }`,
-			
+			'Authorization': `Bearer ${ token }`,
 		},
 		
 		body: JSON.stringify(data),

@@ -5,7 +5,7 @@ import ErrorComponent from "@/components/error/ErrorComponent";
 import { SearchParams } from "@/interface/model/model";
 import { toDate } from "@/lib/utils/formatDate";
 import { Rupiah } from "@/lib/utils/formatMoney";
-import { getDataClient } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie/cookie.service";
 import { TextTransaction } from "@/app/(sites)/transaction/[id]/textTransaction";
 
 export default async function Page({ params }: SearchParams) {

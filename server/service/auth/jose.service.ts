@@ -49,14 +49,21 @@ export async function decryptAPI(session: string | undefined = '') {
 
 export async function decryptMiddleware(session: string | undefined = '', _throw: boolean = false) {
 	if (!session) {
-		return null
+		throw null
 	}
 	try {
 		return await jwtVerify(session, encodedKey, {
 			algorithms: ['HS256'],
 		})
 	} catch (error) {
-		console.error(error)
-		return null
+		
+		// @ts-ignore
+		if (error.code === 'ERR_JWT_EXPIRED') {
+			// console.log('ERR_JWT_EXPIRED---test')
+			throw new ErrorAuth('unauthorized', 'ERR_JWT_EXPIRED')
+		}
+		// console.error(error, ' is decryptMiddleware error')
+		
+		throw error
 	}
 }

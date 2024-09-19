@@ -71,9 +71,7 @@ export async function ProfileRecentPaging() {
 						</section>
 						<Divider/>
 					</>
-				
 				)) }
-			
 			</div>
 		</div>
 	

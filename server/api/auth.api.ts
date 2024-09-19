@@ -19,6 +19,7 @@ export async function apiLogin(form: LoginUser) {
 		console.log('will throw')
 		errorApi(res.status, 'auth', await res.text());
 	}
+	
 	return {
 		data: await res.json() as ResponseAuthUser,
 		code: res.status
@@ -35,8 +36,8 @@ export async function apiRegister(form: RegisterUser) {
 			body: JSON.stringify(form),
 		}
 	)
+	
 	if (!res.ok) {
-		console.error('will throw')
 		errorApi(res.status, 'auth', await res.text());
 	}
 	return {
@@ -45,8 +46,8 @@ export async function apiRegister(form: RegisterUser) {
 	}
 }
 
-export async function apiLogout() {
-	const res = await fetch(`${ config.url }/api/user/logout`,
+export async function apiLogout(userId: string) {
+	const res = await fetch(`${ config.url }/api/user/logout/${ userId }`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
@@ -55,9 +56,13 @@ export async function apiLogout() {
 			method: "DELETE",
 		}
 	)
+	
 	if (!res.ok) {
-		errorApi(res.status, 'auth', 'logout failed');
+		errorApi(res.status, 'logout', await res.text());
 	}
+	
+	console.log(await res.json(), 'test json')
+	
 	return {
 		data: await res.json() as ResponseAuthUser,
 		code: res.status
@@ -96,12 +101,14 @@ export async function apiRefresh(idRefreshToken: string) {
 				method: "GET",
 			}
 		)
-		console.log(await res.json(), 'response refresh')
+		// console.log(await res.json(), 'response refresh')
 		if (!res.ok) {
 			errorApi(res.status, 'auth', 'profile failed');
 		}
-		
-		return true
+		return {
+			data: await res.json(),
+			code: res.status
+		}
 	} catch (e) {
 		return false
 	}

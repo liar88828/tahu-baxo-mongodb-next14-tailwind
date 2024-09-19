@@ -1,6 +1,6 @@
 'use server'
 import { DeliveryCreateFormError, DeliveryId } from "@/interface/model/delivery.type";
-import { getAccess } from "@/server/service/auth/cookie.service";
+import { getAccess } from "@/server/service/auth/cookie/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";

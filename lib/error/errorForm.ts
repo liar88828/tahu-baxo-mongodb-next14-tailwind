@@ -8,7 +8,7 @@ export function errorForm<T>(err: unknown) {
 	}
 	if (err instanceof ZodError) {
 		//@ts-ignore
-		return { err: err.flatten().fieldErrors } as T
+		return { message: err.flatten().fieldErrors } as T
 	}
 	if (err instanceof ErrorAuth) {
 		console.error(err.message, 'client error auth get from api')

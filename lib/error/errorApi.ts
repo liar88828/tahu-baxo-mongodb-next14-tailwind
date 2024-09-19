@@ -18,8 +18,26 @@ export function errorApi(status: number, from: FromType, message: string = '') {
 			throw new ErrorAuth('badRequest', `${ message }`,);
 		}
 		
+		if (status === errorStatus.notFound) {
+			throw new ErrorAuth('notFound', `${ message }`,);
+		}
 	}
-
+	
+	if (from === 'logout') {
+		console.log('is error')
+		if (status === errorStatus.notFound) {
+			// dev-check
+			console.error('not found')
+			throw new ErrorAuth('notFound', `error woy`,);
+		}
+		if (status === errorStatus.badRequest) {
+			// dev-check
+			console.error('bad request')
+			throw new ErrorAuth('badRequest', `the user maybe last logout`,);
+			
+		}
+		console.log(` ${ status } : not throw `)
+	}
 	
 	if (status === errorStatus.notFound) {
 		console.error('error not found')

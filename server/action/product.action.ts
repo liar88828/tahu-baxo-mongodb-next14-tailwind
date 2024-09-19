@@ -1,7 +1,7 @@
 'use server'
 import { productService } from "@/server/service/product.service";
 import { ProductCreateFormError } from "@/interface/model/product.type";
-import { getAccess, getDataClient } from "@/server/service/auth/cookie.service";
+import { getAccess, getDataClient } from "@/server/service/auth/cookie/cookie.service";
 import { OnFormState } from "@/app/(sites)/auth/register/page";
 import { errorForm } from "@/lib/error/errorForm";
 import { revalidatePath } from "next/cache";
@@ -20,7 +20,7 @@ export async function getProductsAll(search?: string, category?: string) {
 
 export async function getProductsAllPrivate(search?: string) {
 	try {
-		const token = await getAccess()
+		const token = getAccess()
 		return await apiGetProductsAllPrivate(search, token)
 	} catch (err: unknown) {
 		return null
@@ -38,7 +38,7 @@ export async function getProductId(id: number) {
 
 export async function createProduct(_: any, formData: FormData): Promise<OnFormState<ProductCreateFormError>> {
 	try {
-		const auth = await getDataClient()
+		const auth = getDataClient()
 		const rawFormData = productSanitize(formData, auth)
 		const data = await productService.createOne(rawFormData)
 		console.log(data)

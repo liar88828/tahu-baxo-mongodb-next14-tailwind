@@ -119,7 +119,7 @@ describe('can test api delivery', async () => {
 			
 			it('ERROR PUT data delivery, not have token', async () => {
 				// @ts-ignore
-				const { data, code } = await apiUpdateDelivery('wrong id ', dataTestDelivery, 'empry token')
+				const { data, code } = await apiUpdateDelivery('wrong id ', dataTestDelivery, 'empty token')
 				
 				expect(code).not.toBe(200)
 				expect(data).not.toMatchObject(expectationDelivery)

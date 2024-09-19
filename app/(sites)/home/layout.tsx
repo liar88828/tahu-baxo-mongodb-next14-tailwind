@@ -2,10 +2,10 @@ import React from "react";
 import { IconBell, IconMenu, IconPerson } from "@/components/icon/IconMore";
 import Link from "next/link";
 
-import { cookieService } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie/cookie.service";
 
-export default async function layout({ children }: { children: React.ReactNode }) {
-  const auth = await cookieService()
+export default function layout({ children }: { children: React.ReactNode }) {
+  const auth = getDataClient()
 	// console.log(auth)
   return (<>
     <div className='navbar bg-base-100'>
@@ -55,7 +55,7 @@ export default async function layout({ children }: { children: React.ReactNode }
           <ul
             tabIndex={ 0 }
             className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3  p-2 shadow'
-          >{ auth.checkAuth.data ? (<>
+          >{ auth ? (<>
 							<li>
 								<Link href={ '/profile' }>Info</Link>
 							</li>

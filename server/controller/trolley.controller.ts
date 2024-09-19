@@ -45,6 +45,7 @@ export class TrolleyController {
 	async create(req: NextRequest,) {
 		try {
 			const user: AccessTokenPayload = await this.serviceReq.getUserPayload(req)
+			console.log(user, 'user data')
 			const { data } = await this.serviceReq.getData<TrolleyCreate>(req)
 			data.userId = user.id
 			const res = await this.serviceTrolley.create(data,)

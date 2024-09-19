@@ -2,7 +2,6 @@
 import jwt from "jsonwebtoken"
 import { User } from "@prisma/client"
 import prisma from "@/config/prisma"
-import { createSession } from "@/server/service/auth/session.service";
 import { decryptAPI, encrypt } from "@/server/service/auth/jose.service";
 
 export type UserBaseToken = Pick<User, "id" | "email" | "name">
@@ -37,7 +36,6 @@ export class JwtService {
 			this.refreshSecret,
 			{ expiresIn: this.refreshExp })
 		
-		await createSession(token)
 		// 3. Store the session in cookies for optimistic auth checks
 		return prisma.session.upsert({
 			where: {

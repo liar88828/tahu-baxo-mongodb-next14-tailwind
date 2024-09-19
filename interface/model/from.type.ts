@@ -7,4 +7,5 @@ export type FromType =
 	| 'transaction'
 	| 'bank'
 	| 'auth'
+	| 'logout'
 	| "receiver"

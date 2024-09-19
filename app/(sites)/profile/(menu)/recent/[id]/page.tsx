@@ -103,8 +103,13 @@ export default async function Page({ params }: SearchParams) {
 								<span>{ data.BankDB.name }</span>
 							</div>
 						</div>
+						<Divider/>
+						
 						<div className="">
-							
+							<h1 className={ 'text-lg font-semibold mb-2' }>Description</h1>
+							<p>{ data.OrderanDB.desc }</p>
+						</div>
+						<div className="">
 							<button className="btn mt-2 btn-block">Track Order</button>
 						</div>
 					</div>

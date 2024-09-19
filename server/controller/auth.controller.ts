@@ -40,6 +40,7 @@ class AuthController {
 	async logout(req: NextRequest, { params }: Params) {
 		try {
 			const sendData = await this.serviceAuth.logout(params.id)
+			// deleteSession()
 			return Response.json(sendData)
 		} catch (e) {
 			return errorHanding(e)

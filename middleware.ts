@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { protectedRoutes, publicRoutes } from "@/server/middleware/baseRoute";
 import { productMiddleWare } from "@/server/middleware/productMiddleWare";
 import { trolleyMiddleware } from "@/server/middleware/trolleyMiddleware";
-import { getCookie } from "@/server/service/auth/cookie.service";
 import { sessionMiddleware } from "@/server/service/auth/session.service";
 
 export default async function middleware(req: NextRequest) {
@@ -14,18 +13,17 @@ export default async function middleware(req: NextRequest) {
 	
 	// 3. Decrypt the session from the cookie
 	const session = await sessionMiddleware()
-	console.log(session, 'session-------')
 	
 	// 5. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !session) {
-		console.log('will validate refresh token ------------')
-		const refresh = getCookie('refresh')
-		console.log(refresh, ' : refresh will redirect')
+		// console.log('will validate refresh token ------------')
+		// const refresh = getCookie('refresh')
+		// console.log(refresh, ' : refresh will redirect')
 		
-		if (!refresh) {
-			console.log(' : refresh token will redirect-------------')
-			return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
-		}
+		// if (!refresh) {
+		// 	// console.log(' : refresh token will redirect-------------')
+		// 	return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
+		// }
 	}
 	
 	if (

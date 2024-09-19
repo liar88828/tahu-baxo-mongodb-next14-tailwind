@@ -1,13 +1,12 @@
 'use server'
-import { config } from "@/config/baseConfig";
 import { TrolleyCreate, TrolleyDataId, TrolleyUpdate } from "@/interface/model/trolley.type";
 import { revalidatePath } from "next/cache";
 import { TrolleyDB } from "@prisma/client";
-import { getAccess, getDataClient } from "@/server/service/auth/cookie.service";
-import { errorApi } from "@/lib/error/errorApi";
+import { getAccess, getCookieUser } from "@/server/service/auth/cookie/cookie.service";
 import { errorGetData } from "@/lib/error/errorGetData";
 import {
 	apiAddTrolley,
+	apiCreateTrolley,
 	apiDeleteTrolley,
 	apiGetTrolleyAll,
 	apiGetTrolleyPrivate,
@@ -19,8 +18,8 @@ import {
 export async function getTrolleyPrivate() {
 	
 	try {
-		const auth = await getAccess()
-		const { data } = await apiGetTrolleyPrivate(auth)
+		const { access } = getCookieUser()
+		const { data } = await apiGetTrolleyPrivate(access)
 		return data
 	} catch (e: unknown) {
 		return errorGetData(e)
@@ -47,7 +46,7 @@ export async function addTrolley(item: TrolleyDataId, id: TrolleyDataId) {
 
 export async function deleteTrolley(id: number) {
   try {
-		const auth = await getAccess()
+		const auth = getAccess()
 		const { data } = await apiDeleteTrolley(id, auth)
 		revalidatePath('/trolley')
     return data
@@ -58,7 +57,7 @@ export async function deleteTrolley(id: number) {
 
 export async function getUserTrolley() {
 	try {
-		const access = await getAccess()
+		const { access } = getCookieUser()
 		const { data } = await apiGetUserTrolley(access)
 		return data
 	} catch (e) {
@@ -67,31 +66,18 @@ export async function getUserTrolley() {
 }
 
 export async function onAddTrolley(id: number,) {
+	
 	try {
-		const user = await getDataClient()
-		const auth = await getAccess()
-		const data: TrolleyCreate = {
+		const { user, access } = getCookieUser()
+		const form: TrolleyCreate = {
 			userId: user.id,
 			qty: 1,
 			productId: Number(id)
 		}
-		console.log(data)
-		const res = await fetch(`${ config.url }/api/trolley`, {
-			method: "POST",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'bearer ' + auth,
-				
-			},
-			body: JSON.stringify(data),
-		})
-		if (!res.ok) {
-			// console.log('---------------error')
-			// console.log(await res.text(),)
-			// console.log('---------------error')
-			errorApi(res.status, 'trolley', await res.json())
-		}
-		revalidatePath('/')
+		
+		const { data } = await apiCreateTrolley(form, access)
+		console.log(data, 'test data')
+		revalidatePath('/product')
 		return { id: 1 }
 	} catch (e) {
 		return errorGetData(e)
@@ -100,9 +86,7 @@ export async function onAddTrolley(id: number,) {
 
 export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = await getAccess()
-		const user = await getDataClient()
-		
+		const { user, access } = getCookieUser()
 		const setData: TrolleyUpdate = {
 			id: id,
 			productId: productId,
@@ -110,7 +94,7 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 			userId: user.id
 		}
 		
-		const { data } = await apiOnIncrementTrolley(id, setData, auth)
+		const { data } = await apiOnIncrementTrolley(id, setData, access)
 		revalidatePath('/trolley')
 		return data
 	} catch (e) {
@@ -120,15 +104,14 @@ export async function onIncrementTrolley({ id, productId }: TrolleyDB) {
 
 export async function onDecrementTrolley({ id, productId }: TrolleyDB) {
 	try {
-		const auth = await getAccess()
-		const user = await getDataClient()
+		const { user, access } = getCookieUser()
 		const setData: TrolleyUpdate = {
 			id: id,
 			productId: productId,
 			qty: 1,
 			userId: user.id
 		}
-		const { data } = await apiOnDecrementTrolley(id, setData, auth)
+		const { data } = await apiOnDecrementTrolley(id, setData, access)
 		revalidatePath('/trolley')
 		return data
 	} catch (e) {

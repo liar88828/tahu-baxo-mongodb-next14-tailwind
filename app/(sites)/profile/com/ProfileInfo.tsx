@@ -1,6 +1,6 @@
 import { IconDetail, IconEdit } from "@/components/icon/IconMore";
 import { getUserId } from "@/server/action/user.action";
-import { getDataClient } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie/cookie.service";
 
 export async function ProfileInfo() {
   const user = await getDataClient()

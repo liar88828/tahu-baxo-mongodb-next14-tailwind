@@ -1,6 +1,6 @@
 'use server'
 import { OnFormState } from "@/app/(sites)/auth/register/page";
-import { getDataClient } from "@/server/service/auth/cookie.service";
+import { getDataClient } from "@/server/service/auth/cookie/cookie.service";
 import { revalidatePath } from "next/cache";
 import { errorForm } from "@/lib/error/errorForm";
 import { ReceiverCreateFormError } from "@/interface/model/receiver.type";

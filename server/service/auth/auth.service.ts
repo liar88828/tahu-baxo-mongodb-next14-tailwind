@@ -12,8 +12,7 @@ import { userSchema, type UserSchema, } from "../../schema/user.schema"
 import { LoginUser, RegisterUser } from "@/interface/model/auth.type";
 import prisma from "@/config/prisma";
 import { ErrorAuth } from "@/lib/error/errorCustome";
-import { createSession } from "@/server/service/auth/cookie.service";
-import { deleteSession, deleteSessionXXX } from "@/server/service/auth/session.service";
+import { createSession } from "@/server/service/auth/cookie/cookie.service";
 
 export class AuthService extends UserService {
 	constructor(
@@ -60,8 +59,8 @@ export class AuthService extends UserService {
 	}
 	
 	async logout(userId: string) {
-		await prisma.session.delete({ where: { userId } })
-		deleteSession()
+		const session = await prisma.session.delete({ where: { userId: userId } })
+		console.log(session, ' is logout prisma')
 		return {
 			accessToken: "",
 			refreshToken: "",
@@ -70,7 +69,6 @@ export class AuthService extends UserService {
 	}
 	
 	async logoutXXX(token: string) {
-		token = await deleteSessionXXX()
 		// this.serviceJwt.verifyRefreshToken()
 		await this.serviceJwt.deleteRefreshToken(token)
 		// send
@@ -116,6 +114,7 @@ export class AuthService extends UserService {
 			refreshToken,
 			data: token.user,
 		})
+		
 		console.log(token.user)
 		// send
 		return {

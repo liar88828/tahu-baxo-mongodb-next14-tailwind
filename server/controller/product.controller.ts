@@ -14,7 +14,7 @@ class ProductController implements IController {
   }
   
   async findAll(req: NextRequest) {
-		console.log('get all')
+		// console.log('get all')
     try {
 			const page = this.serviceReq.getPage(req)
 			const data = await this.serviceProduct.findAllPublic(page)
