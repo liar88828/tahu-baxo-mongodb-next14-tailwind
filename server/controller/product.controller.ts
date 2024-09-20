@@ -58,9 +58,11 @@ class ProductController implements IController {
   
   async findIdPrivate(req: NextRequest, params: Params) {
     try {
-      const user = this.serviceReq.getUserPayload(req)
+			const user = await this.serviceReq.getUserPayload(req)
       let { id } = this.serviceReq.getIdInt(params)
-      return Response.json(await this.serviceProduct.findIdPublic(id))
+			return Response.json(await this.serviceProduct.findIdPrivate({
+				id_product: id, id_user: user.id
+			}))
     } catch (e: unknown) {
       return errorHanding(e)
     }

@@ -1,6 +1,4 @@
-import { BankCreateKey } from "@/interface/model/bank.type";
-
-export const bankSanitize = (formData: FormData, userId: string): BankCreateKey => {
+export const bankSanitize = <T>(formData: FormData, userId: string): T => {
 	// @ts-expect-error
 	return {
 		name: formData.get('name') ?? '',

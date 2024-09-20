@@ -5,7 +5,7 @@ import Link from "next/link";
 import { categoryProduct } from "@/assets/category";
 
 export default function Category() {
-	const categoryItem = categoryProduct.map((item, i) => {
+	const categoryItem = categoryProduct.map((item,) => {
 		return (
 			<div
 				className='flex flex-col items-center '

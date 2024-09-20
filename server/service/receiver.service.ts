@@ -2,7 +2,7 @@ import prisma from "@/config/prisma"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
 import { ReceiverDB } from "@prisma/client";
-import { ReceiverCreate } from "@/interface/model/receiver.type";
+import { IdReceiver, ReceiverCreate } from "@/interface/model/receiver.type";
 import { AccessUserID } from "@/server/service/auth/jwt.service";
 import { receiverSchema, ReceiverSchema } from "@/server/schema/receiver.schema";
 
@@ -31,8 +31,13 @@ export class ReceiverService implements IService<ReceiverDB> {
 		return { data, page, take }
 	}
 	
-	async findOne(id: number) {
-		const data = await prisma.receiverDB.findUnique({ where: { id } })
+	async findOne({ id_receiver, id_user }: IdReceiver) {
+		const data = await prisma.receiverDB.findUnique({
+			where: {
+				id: id_receiver,
+				userId: id_user,
+			}
+		})
 		if (!data) {
 			throw new Error("Data Penerima is not found")
 		}
@@ -51,10 +56,13 @@ export class ReceiverService implements IService<ReceiverDB> {
 		})
 	}
 	
-	async updateOne(id: number, data: any,) {
+	async updateOne({ id_receiver, id_user }: IdReceiver, data: any,) {
 		data = this.valid.validCreate(data)
 		return prisma.receiverDB.update({
-			where: { id },
+			where: {
+				id: id_receiver,
+				userId: id_user
+			},
 			data: {
 				name: data.name,
 				address: data.address,

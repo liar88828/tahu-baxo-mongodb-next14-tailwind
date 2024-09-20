@@ -3,16 +3,16 @@ import { CarouselImageDetail } from '../CarouselImageDetail'
 import { Description } from "@/app/(sites)/product/description";
 import NavBottom from "@/app/(sites)/product/NavBottom";
 import { getProductId } from "@/server/action/product.action";
-import { ParamsProduct } from "@/interface/server/param";
+import { ParamsClient } from "@/interface/server/param";
 import { ProductItem } from "@/components/product/ProductItem";
 
 import { TitleMore } from "@/components/title/TitleMore";
+import { EmptyComponent } from "@/components/error/EmptyComponent";
 
-export default async function page({ params }: ParamsProduct) {
-  const data = await getProductId(params.id)
-  if (!data) {
-    return <h1>Error Bos</h1>
-  }
+export default async function page({ params: { id } }: ParamsClient) {
+	const data = await getProductId(Number(id))
+	
+	if (!data) return <EmptyComponent/>
 	
 	return (
     <>
@@ -26,7 +26,7 @@ export default async function page({ params }: ParamsProduct) {
 					</div>
 				</div>
 			</div>
-			<NavBottom params={ params }/>
+			<NavBottom id_product={ Number(id) }/>
     </>
   )
 }

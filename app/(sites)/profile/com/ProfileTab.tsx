@@ -43,7 +43,7 @@ export function ProfileTab({}) {
   );
 }
 
-export function ProfileTabx() {
+export function ProfileTabX() {
   return (
     <div className=" tabs tabs-boxed">
       <div className={ 'tab tab-active' }>Overview</div>

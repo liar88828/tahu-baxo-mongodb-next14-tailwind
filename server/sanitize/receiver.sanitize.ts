@@ -1,11 +1,13 @@
 import { ReceiverCreateKey } from "@/interface/model/receiver.type";
 
-export const productCreateSanitize = (formData: FormData, userId: string): ReceiverCreateKey => {
+export const receiverCreateSanitize = <T>(formData: FormData, userId: string): T => {
+	//@ts-ignore
 	return {
 		name: formData.get('name') ?? '',
-		phone: formData.get('name') ?? '',
+		phone: formData.get('phone') ?? '',
 		address: formData.get('address') ?? '',
-		userId
-	}
+		// id_receiver: Number(formData.get('id_receiver')),
+		userId,
+	} as ReceiverCreateKey
 }
 

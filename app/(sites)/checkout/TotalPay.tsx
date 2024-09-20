@@ -8,6 +8,7 @@ import { useBank } from "@/store/useBank"
 import { useTrolley } from "@/store/useTrolley"
 import { useCheckout } from "@/store/useCheckout"
 import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
 
 export function TotalPay() {
   const [message, setMessage] = useState()
@@ -18,7 +19,7 @@ export function TotalPay() {
   const { trolley, totalTrolley, resetTrolley } = useTrolley()
   const { description, totalPay } = useCheckout()
   const route = useRouter()
-  
+	const { pending } = useFormStatus()
   useEffect(() => {
     const totalProduct = totalTrolley()
     totalPay(totalProduct)
@@ -61,9 +62,12 @@ export function TotalPay() {
           || receiver === null
           || delivery === null
           || bank === null
+					|| pending
+          
         }
         onClick={ onCheckout }
-        className="btn btn-primary w-full font-bold text-lg  "
+				
+				className="btn btn-primary w-full font-bold text-lg  "
       >
         Buy Now
       </button>

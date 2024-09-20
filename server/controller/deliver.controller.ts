@@ -63,7 +63,7 @@ class DeliverController implements IController {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<DeliveryCreate>(req)
 			data.userId = user.id
-			return Response.json(await this.serviceDeliver.createOne(data))
+			return Response.json(await this.serviceDeliver.createOne(data, user))
 		} catch (e: unknown) {
 			return errorHanding(e)
 		}

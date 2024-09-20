@@ -1,7 +1,7 @@
 import { bankSchema, BankSchema, } from "@/server/schema/bank.schema"
 import prisma from "@/config/prisma"
 import { BankDB } from "@prisma/client"
-import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
+import { AccessTokenPayload, AccessUserID } from "@/server/service/auth/jwt.service"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import { GetPage } from "@/interface/server/IServiceRequest";
 import { BankCreatePrisma, BankId, BankUpdatePrisma } from "@/interface/model/bank.type";
@@ -52,7 +52,10 @@ export class BankService implements IService<BankDB> {
 	
 	async findIdPrivate({ id_bank, id_user }: BankId): Promise<BankDB> {
 		const data = await prisma.bankDB.findUnique({
-			where: { id: id_bank, userId: id_user },
+			where: {
+				id: id_bank,
+				userId: id_user
+			},
 		})
 		if (!data) {
 			throw new Error("Data Bank Is Not Found")
@@ -60,18 +63,44 @@ export class BankService implements IService<BankDB> {
     return data
   }
 	
-	async createOne(data: BankCreatePrisma): Promise<BankDB> {
+	async createOne(data: BankCreatePrisma, user: AccessUserID): Promise<BankDB> {
     data = this.valid.createValid(data)
-		return prisma.bankDB.create({ data: { ...data } })
+		return prisma.bankDB.create({
+			data: {
+				name: data.name,
+				phone: data.phone,
+				no_req: data.no_req,
+				location: data.location,
+				type: data.type,
+				// img:data.img,
+				desc: data.desc,
+				userId: user.id,
+				
+			}
+		})
   }
 	
-	async updateOne({ id_bank }: BankId, data: BankUpdatePrisma,): Promise<BankDB> {
+	async updateOne({ id_bank, id_user }: BankId, data: BankUpdatePrisma,): Promise<BankDB> {
     data = this.valid.updateValid(data)
-		return prisma.bankDB.update({ data: { ...data }, where: { id: id_bank } })
+		return prisma.bankDB.update({
+			where: {
+				id: id_bank,
+				userId: id_user
+			},
+			data: {
+				name: data.name,
+				phone: data.phone,
+				no_req: data.no_req,
+				location: data.location,
+				type: data.type,
+				// img:data.img,
+				desc: data.desc,
+			},
+		})
   }
 	
-	async deleteOne({ id_bank }: BankId,): Promise<BankDB> {
-		return prisma.bankDB.delete({ where: { id: id_bank } })
+	async deleteOne({ id_bank }: BankId, user: AccessUserID): Promise<BankDB> {
+		return prisma.bankDB.delete({ where: { id: id_bank, userId: user.id } })
   }
 }
 

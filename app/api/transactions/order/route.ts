@@ -1,10 +1,8 @@
-import { NextRequest } from "next/server";
-
-export async function GET(req: NextRequest) {
+export async function GET() {
 	return Response.json('not implement')
 	
 }
 
-export async function POST(req: NextRequest) {
+export async function POST() {
 	return Response.json('not implement')
 }

@@ -87,14 +87,13 @@ export async function apiUpdateDelivery(id: number, data: DeliveryCreate, token:
 	}
 }
 
-export async function apiGetDeliveryPrivate(id: number, data: DeliveryCreate, token: string) {
+export async function apiGetDeliveryIdPrivate(id: number, token: string) {
 	const res = await fetch(`http://localhost:3000/api/delivery/${ id }`, {
 		method: "GET",
 		headers: {
 			'Content-Type': 'application/json',
 			"Authorization": `Bearer ${ token }`
 		},
-		body: JSON.stringify(data),
 	})
 	
 	return {

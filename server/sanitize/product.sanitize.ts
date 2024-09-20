@@ -1,7 +1,6 @@
-import { ProductCreateKey } from "@/interface/model/product.type";
 import { UserPublic } from "@/interface/user/UserPublic";
 
-export const productSanitize = (formData: FormData, user: UserPublic): ProductCreateKey => {
+export const productSanitize = <T>(formData: FormData, user: UserPublic): T => {
 	// @ts-ignore
 	return {
 		name: formData.get('name') ?? '',

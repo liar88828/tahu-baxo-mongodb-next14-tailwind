@@ -1,7 +1,8 @@
+// noinspection JSUnusedGlobalSymbols
+
 'use client'
 import { ReceiverDB } from "@prisma/client";
 import { IconAdd, IconLocation, IconRemove } from "@/components/icon/IconMore";
-import { deleteReceiver } from "@/server/action/receiver.action";
 import Modal from "@/components/elements/modal";
 import React from "react";
 
@@ -41,13 +42,4 @@ export function ShippingAddress({ item, click, add = false }: ShippingProps) {
 	</div>;
 }
 
-export function Shipping({ data }: { data: ReceiverDB[] }) {
-	return <div className={ ' grid grid-cols-1 sm:grid-cols-2 gap-2' }>
-		{ data.map(item => <ShippingAddress
-			key={ item.id }
-			item={ item }
-			click={ () => deleteReceiver(item.id) }/>)
-		}
-	</div>
-}
 

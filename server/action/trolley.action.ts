@@ -65,14 +65,14 @@ export async function getUserTrolley() {
 	}
 }
 
-export async function onAddTrolley(id: number,) {
+export async function onAddTrolley(id_product: number,) {
 	
 	try {
 		const { user, access } = getCookieUser()
 		const form: TrolleyCreate = {
 			userId: user.id,
 			qty: 1,
-			productId: Number(id)
+			productId: Number(id_product)
 		}
 		
 		const { data } = await apiCreateTrolley(form, access)

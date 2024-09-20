@@ -36,8 +36,12 @@ export class ReceiverController implements IController {
 	
 	async findId(req: NextRequest, params: Params) {
 		try {
+			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
-			const data = await this.serviceReceiver.findOne(id)
+			const data = await this.serviceReceiver.findOne({
+				id_user: user.id,
+				id_receiver: id
+			})
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -48,7 +52,10 @@ export class ReceiverController implements IController {
 		try {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { id } = this.serviceReq.getIdInt(params)
-			const data = await this.serviceReceiver.findOne(id)
+			const data = await this.serviceReceiver.findOne({
+				id_receiver: id,
+				id_user: user.id
+			})
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -73,7 +80,10 @@ export class ReceiverController implements IController {
 				req,
 				params
 			)
-			data = await this.serviceReceiver.updateOne(id, data,)
+			data = await this.serviceReceiver.updateOne({
+				id_receiver: id,
+				id_user: user.id
+			}, data,)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)

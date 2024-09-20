@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-function usePhone() {
-	const [state, setState] = useState('')
+function usePhone(value: string = '') {
+	const [state, setState] = useState(value)
 	const setPhone = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// const value = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
 		// const formattedValue = value
@@ -27,7 +27,7 @@ function usePhone() {
 		
 		setState(value);
 	}
-	return { setPhone, phone: state }
+	return { setPhone, phone: state, onReset: () => setState('') };
 }
 
 export default usePhone;

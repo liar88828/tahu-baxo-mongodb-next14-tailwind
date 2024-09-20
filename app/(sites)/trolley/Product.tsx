@@ -1,19 +1,17 @@
 import React from 'react'
 import { getTrolleyPrivate } from "@/server/action/trolley.action";
 import { ProductDB, TrolleyDB } from "@prisma/client";
-import ErrorComponent from "@/components/error/ErrorComponent";
-import { errorStatus } from "@/lib/error/errorStatus";
 import { ProductItem } from "@/app/(sites)/trolley/ProductItem";
+import { EmptyTrolley } from "@/components/error/EmptyComponent";
 
 export async function Product() {
 	const data = await getTrolleyPrivate()
 	
-	if (!data) {
-		return <ErrorComponent
-			code={ errorStatus.internalServerError }
-			msg={ 'Service api maybe busy' }
+	if (!data || data.length === 0) {
+		return <EmptyTrolley
 			link={ '/home' }
-			title={ 'Server Busy' }
+			title={ 'Please Add Trolley' }
+			btnOn={ true }
 		/>
 	}
 	

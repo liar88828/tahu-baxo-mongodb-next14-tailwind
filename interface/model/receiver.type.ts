@@ -13,4 +13,10 @@ export type ReceiverCreateFormError = z.inferFlattenedErrors<typeof receiverSche
 
 //key
 export type ReceiverCreateKey = Record<keyof ReceiverCreate, any>
+export type ReceiverUpdateKey = Record<keyof ReceiverUpdate, any>
 export type ReceiverKeyName = keyof ReceiverCreate
+
+export type IdReceiver = {
+	id_user: string,
+	id_receiver: number
+};

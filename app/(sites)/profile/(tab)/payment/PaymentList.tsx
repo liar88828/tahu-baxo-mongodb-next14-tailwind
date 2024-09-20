@@ -1,74 +1,72 @@
 import { getBankAllPrivate } from "@/server/action/bank.action";
 import { Loading } from "@/components/loading/loading";
 import { TitleSearch } from "@/components/title/TitleSearch";
-import { IconSearch } from "@/components/icon/IconMore";
+import { IconEdit, IconSearch } from "@/components/icon/IconMore";
 import React from "react";
 import { BankDB } from "@prisma/client";
+import Link from "next/link";
+import { DeliveryTitle } from "@/app/(sites)/profile/(tab)/delivery/DeliveryList";
 
-interface BankListProps {
+export interface BankListProps {
 	search: string
 }
 
 export async function PaymentList({ search }: BankListProps) {
-	const payment = await getBankAllPrivate(search)
-	if (!payment) {
+	const data = await getBankAllPrivate(search)
+	if (!data || data.data.length === 0) {
 		return <Loading/>
 	}
 	return (
 		<div>
 			<TitleSearch
-				title={ `Result :${ payment.data.length }` }
+				title={ `Result :${ data.data.length }` }
 				button={ <IconSearch/> }
 			/>
 			<div className='grid-card-bank'>
-				<DeliveryItemPrivate data={ payment.data }/>
+				{ data.data.map(item => <BankListItem
+					item={ item }
+					key={ item.id }
+				/>) }
 			</div>
 		</div>
 	)
 }
 
-interface BankItemPrivateProps {
-	data: BankDB[]
-}
-
-export function DeliveryItemPrivate({ data }: BankItemPrivateProps) {
-	return data.map(item => (
-			// src/components/PaymentCard.jsx
-			<div
-				key={ item.id }
-				className="w-full h-56 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg relative">
-				{/* Card Logo */ }
-				<div className="flex justify-between items-center">
-					<div>
-						<h1 className="text-xl font-bold tracking-wider">{ item.name }</h1>
-					</div>
-					<img
-						src="https://via.placeholder.com/40"
-						alt="Card Chip"
-						className="w-10"
-					/>
-				</div>
-				
-				{/* Card Number */ }
-				<div className="mt-6 text-lg tracking-widest font-semibold">
-					{ item.no_req }
-				</div>
-				
-				{/* Cardholder Name */ }
-				<div className="mt-4">
-					<div className="text-sm text-wrap w-52">{ item.phone }</div>
-					<div className="font-semibold text-lg tracking-wider">{ item.type }</div>
-				</div>
-				
-				{/* Expiry Date */ }
-				<div className="absolute bottom-6 right-6">
-					<div className="text-sm font-light">VALID THRU</div>
-					<div className="text-lg font-semibold tracking-wide">12/24</div>
-					<div className="text-sm ">{ item.location }</div>
-				</div>
+export function BankListItem({ item }: { item: BankDB }) {
+	return (
+		<div className="bg-base-100 rounded-lg shadow border p-4 ">
+			{/* Header */ }
+			<div className="flex items-center justify-between">
+				<h1 className=" text-lg font-semibold text-gray-800">Delivery Details</h1>
+				<Link
+					href={ `/profile/payment/edit/${ item.id }` }
+					className="btn btn-circle btn-sm"
+				><IconEdit/>
+				</Link>
 			</div>
-		)
-	)
-		;
+			<section className={ 'grid grid-cols-2 gap-2' }>
+				
+				<section>
+					<DeliveryTitle title={ "Name Delivery" } text={ item.name } titleBold={ true }/>
+					<DeliveryTitle title={ "Shipping Base" } text={ item.location }/>
+					<DeliveryTitle title={ "Phone Number" } text={ item.phone }/>
+				</section>
+				
+				<section>
+					<div className="mt-4 row-span-2">
+						<label className="block text-sm text-gray-600 ">Type</label>
+						<p className="text-gray-700 mt-1">{ item.type }</p>
+						<p className="text-gray-700 mt-1">{ item.type }</p>
+					</div>
+					{/*<DeliveryTitle title={ "Price/kilo" } text={ Rupiah(item.) }/>*/ }
+					{/*<DeliveryTitle title={ "Price/kg" } text={ Rupiah(item.price) }/>*/ }
+				</section>
+			
+			</section>
+			<div className="mt-4">
+				<label className="block text-sm text-gray-600">Description</label>
+				<p className="text-gray-700 mt-1">{ item.desc }</p>
+			</div>
+		</div>
+	);
 }
-

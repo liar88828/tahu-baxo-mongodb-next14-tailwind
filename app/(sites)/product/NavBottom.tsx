@@ -1,13 +1,12 @@
 'use client'
 import React from 'react'
 import { onAddTrolley } from "@/server/action/trolley.action";
-import { ParamsProduct } from "@/interface/server/param";
 
-export default function NavBottom({ params }: ParamsProduct) {
+export default function NavBottom({ id_product }: { id_product: number }) {
   return (
     <div className='fixed bottom-0 right-0 left-0 bg-base-100 p-2 grid grid-cols-2 gap-2'>
 				<button
-					onClick={ () => onAddTrolley(params.id) }
+					onClick={ () => onAddTrolley(id_product) }
 					className='btn btn-outline w-full text-lg'
       >
         Add Trolley

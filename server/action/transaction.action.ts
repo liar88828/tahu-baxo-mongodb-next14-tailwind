@@ -1,5 +1,5 @@
 "use server"
-import { getDataClient } from "@/server/service/auth/cookie/cookie.service"
+import { getCookieUser, getDataClient } from "@/server/service/auth/cookie/cookie.service"
 import { transactionService, } from "@/server/service/transaction.service"
 import { errorForm } from "@/lib/error/errorForm"
 import { TCheckoutContext } from "@/components/provider/ProviderContext"
@@ -83,8 +83,8 @@ export async function onTransaction(state: TCheckoutContext) {
 
 export async function getTransaction(limit: number = 10) {
   try {
-    const auth = await getDataClient()
-    return await transactionService.findAll(1, limit, auth)
+    const { user } = getCookieUser()
+    return await transactionService.findAll(1, limit, user)
   } catch (e: unknown) {
     console.error(e)
     return null
@@ -103,8 +103,8 @@ export async function getTransactionAll(page: number = 1, limit: number = 100) {
 
 export async function getTransactionCompleteById(id: number) {
   try {
-    const auth = await getDataClient()
-    return transactionService.findCompleteById(id, auth)
+    const { user } = getCookieUser()
+    return transactionService.findCompleteById(id, user)
   } catch (e: unknown) {
     console.error(e)
     return null
@@ -113,8 +113,8 @@ export async function getTransactionCompleteById(id: number) {
 
 export async function getTransactionComplete() {
   try {
-    const auth = await getDataClient()
-    return transactionService.findAllComplete(auth)
+    const { user } = getCookieUser()
+    return transactionService.findAllComplete(user)
   } catch (e: unknown) {
     console.error(e)
     return null

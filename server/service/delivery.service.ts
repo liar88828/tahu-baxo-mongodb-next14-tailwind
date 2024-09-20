@@ -1,7 +1,7 @@
 import { DeliverSchema, deliverySchema } from "@/server/schema/deliver.schema"
 import prisma from "@/config/prisma"
 import { DeliveryDB } from "@prisma/client"
-import { AccessTokenPayload } from "@/server/service/auth/jwt.service"
+import { AccessTokenPayload, AccessUserID } from "@/server/service/auth/jwt.service"
 import type { IService, ResponseData } from "@/interface/server/IService"
 import type { DeliveryCreate, DeliveryId, DeliveryUpdate, } from "@/interface/model/delivery.type"
 import { GetPage } from "@/interface/server/IServiceRequest";
@@ -39,9 +39,8 @@ export class ServiceDeliver implements IService<DeliveryDB> {
 		return { data, page, take }
   }
 	
-	async findIdPublic({
-											 id_delivery,
-										 }: Pick<DeliveryId, "id_delivery">): Promise<DeliveryDB> {
+	async findIdPublic(
+		{ id_delivery, }: Pick<DeliveryId, "id_delivery">): Promise<DeliveryDB> {
 		const data = await prisma.deliveryDB.findUnique({
 			where: { id: id_delivery },
 		})
@@ -51,10 +50,8 @@ export class ServiceDeliver implements IService<DeliveryDB> {
 		return data
 	}
 	
-	async findIdPrivate({
-												id_delivery,
-												id_user,
-											}: DeliveryId): Promise<DeliveryDB> {
+	async findIdPrivate(
+		{ id_delivery, id_user, }: DeliveryId): Promise<DeliveryDB> {
 		const data = await prisma.deliveryDB.findUnique({
 			where: { id: id_delivery, userId: id_user },
 		})
@@ -64,19 +61,41 @@ export class ServiceDeliver implements IService<DeliveryDB> {
     return data
   }
 	
-	async createOne(data: DeliveryCreate): Promise<DeliveryDB> {
+	async createOne(data: DeliveryCreate, user: AccessUserID): Promise<DeliveryDB> {
     data = this.valid.createValid(data)
-		return prisma.deliveryDB.create({ data: { ...data } })
+		return prisma.deliveryDB.create({
+			data: {
+				name: data.name,
+				phone: data.phone,
+				location: data.location,
+				type: data.type,
+				price: data.price,
+				img: data.img,
+				desc: data.desc,
+				userId: user.id,
+			}
+		})
   }
 	
 	async updateOne(
-		{ id_delivery }: DeliveryId,
+		{ id_delivery, id_user }: DeliveryId,
 		data: DeliveryUpdate,
 	): Promise<DeliveryDB> {
     data = this.valid.updateValid(data)
 		return prisma.deliveryDB.update({
-			data: { ...data },
-			where: { id: id_delivery },
+			data: {
+				name: data.name,
+				phone: data.phone,
+				location: data.location,
+				type: data.type,
+				price: data.price,
+				img: data.img,
+				desc: data.desc,
+			},
+			where: {
+				id: id_delivery,
+				userId: id_user
+			},
 		})
   }
 	

@@ -63,7 +63,7 @@ class BankController implements IController {
 			const user = await this.serviceReq.getUserPayload(req)
 			let { data } = await this.serviceReq.getData<BankCreatePrisma>(req)
 			data.userId = user.id
-			data = await this.serviceBank.createOne(data)
+			data = await this.serviceBank.createOne(data, user,)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)
@@ -97,7 +97,8 @@ class BankController implements IController {
 			const data = await this.serviceBank.deleteOne({
 				id_bank: id,
 				id_user: user.id,
-			})
+				},
+				user)
 			return Response.json(data)
 		} catch (e: unknown) {
 			return errorHanding(e)

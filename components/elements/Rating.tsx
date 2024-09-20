@@ -1,13 +1,13 @@
 import React from 'react';
 
-function Rating({ size = 'rating-md', name = '123' }: {
-	size?: string,
+function Rating({ size = 'md', name = '123' }: {
+	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl',
 	name: string,
 }) {
 	return (
 		<div
 			data-testid={ "Rating" }
-			className={ `rating ${ size }` }>
+			className={ `rating ${ "rating-" + size }` }>
 			<input type="radio" name={ `rating-${ name }` } className="mask mask-star-2 bg-orange-400"/>
 			<input type="radio" name={ `rating-${ name }` } className="mask mask-star-2 bg-orange-400"/>
 			<input type="radio" name={ `rating-${ name }` } className="mask mask-star-2 bg-orange-400" defaultChecked/>

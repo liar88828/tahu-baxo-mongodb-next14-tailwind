@@ -54,7 +54,7 @@ export function OrderSummary({ trolley, subTotal }: { subTotal?: number, trolley
 						{
 							trolley.length === 0
 								? <li className={ 'text-sm' }>Data is Empty</li>
-								: trolley.map((item, index) => (
+								: trolley.map((item) => (
 									<li
 										key={ item.id }
 										className="flex justify-between text-sm">

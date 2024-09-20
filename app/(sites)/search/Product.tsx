@@ -1,9 +1,9 @@
 import React from 'react'
 import { ProductItemSearch } from "@/components/product/ProductItem";
 import { getProductsAll } from "@/server/action/product.action";
-import { ParamsProfile } from "@/interface/server/param";
+import { ParamsClient } from "@/interface/server/param";
 
-export default async function Product({ params: { searchParams: { search, category } } }: { params: ParamsProfile }) {
+export default async function Product({ params: { searchParams: { search, category } } }: { params: ParamsClient }) {
 	const data = await getProductsAll(search, category)
 	
 	if (!data) {

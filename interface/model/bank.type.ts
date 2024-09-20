@@ -16,5 +16,7 @@ export type BankId = {
 export type BankData = Omit<BankDB, 'updated_at' | 'created_at'>
 //
 export type BankCreateFormError = z.inferFlattenedErrors<typeof bankSchema.create>['fieldErrors'];
+export type BankUpdateFormError = z.inferFlattenedErrors<typeof bankSchema.update>['fieldErrors'];
 //
 export type BankCreateKey = Record<keyof BankCreatePrisma, any>
+export type BankUpdateKey = Record<keyof BankCreatePrisma, any>

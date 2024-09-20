@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { repeat } from "@/lib/utils/repeat";
 import React from "react";
 import { ProductDB } from "@prisma/client";

@@ -1,5 +1,5 @@
 'use client'
-import { ParamsProfile } from "@/interface/server/param";
+import { ParamsClient } from "@/interface/server/param";
 import { usePageSearch } from "@/hook/usePageSearch";
 
 const loopTabBar = [
@@ -18,7 +18,7 @@ const loopTabBar = [
 	}
 ]
 
-export function TabProduct({ params: { searchParams: { tab } } }: { params: ParamsProfile }) {
+export function TabProduct({ params: { searchParams: { tab } } }: { params: ParamsClient }) {
 	const { updateQueryParams } = usePageSearch()
 	
 	tab = tab === undefined ? 'new-product' : tab;

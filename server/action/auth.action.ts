@@ -41,7 +41,7 @@ export async function onForgot(prevState: any, formData: FormData): Promise<OnFo
 		// return { message: 'true' }
 		redirect('/auth/reset');
   } catch (err) {
-		console.error('on forget error')
+		// console.error('on forget error')
 		return errorForm(err)
   }
 }

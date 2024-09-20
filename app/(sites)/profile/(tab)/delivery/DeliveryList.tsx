@@ -6,6 +6,7 @@ import { getDeliveryAllPrivate } from "@/server/action/delivery.action";
 import { DeliveryDB } from "@prisma/client";
 import ErrorComponent from "@/components/error/ErrorComponent";
 import { Rupiah } from "@/lib/utils/formatMoney";
+import Link from "next/link";
 
 export async function DeliveryList({ search }: { search: string }) {
 	const delivery = await getDeliveryAllPrivate(search)
@@ -24,21 +25,24 @@ export async function DeliveryList({ search }: { search: string }) {
 					? <ErrorComponent/>
 					: delivery.data.map(item => <DeliveryListItem
 						key={ item.id }
-						item={ item }/>)
-					
-				}
+						item={ item }/>
+					) }
+				
 			</div>
 		</div>
 	)
 }
 
-function DeliveryListItem({ item }: { item: DeliveryDB }) {
+export function DeliveryListItem({ item }: { item: DeliveryDB }) {
 	return (
 		<div className="bg-base-100 rounded-lg shadow border p-4 ">
 			{/* Header */ }
 			<div className="flex items-center justify-between">
 				<h1 className=" text-lg font-semibold text-gray-800">Delivery Details</h1>
-				<button className="btn btn-circle  btn-sm"><IconEdit/></button>
+				<Link
+					href={ `/profile/delivery/edit/${ item.id }` }
+					className="btn btn-circle btn-sm"
+				><IconEdit/></Link>
 			</div>
 			<section className={ 'grid grid-cols-2 gap-2' }>
 				
@@ -57,13 +61,12 @@ function DeliveryListItem({ item }: { item: DeliveryDB }) {
 					<DeliveryTitle title={ "Price/kilo" } text={ Rupiah(item.price) }/>
 					<DeliveryTitle title={ "Price/kg" } text={ Rupiah(item.price) }/>
 				</section>
+			
 			</section>
 			<div className="mt-4">
 				<label className="block text-sm text-gray-600">Description</label>
 				<p className="text-gray-700 mt-1">{ item.desc }</p>
 			</div>
-		
-		
 		</div>
 	);
 }

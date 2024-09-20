@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 import { deliveryController } from "@/server/controller/deliver.controller"
-import type { Params } from "../../../../interface/server/param"
+import type { Params } from "@/interface/server/param"
 
 export async function GET(request: NextRequest, params: Params) {
   return deliveryController.findId(request, params)

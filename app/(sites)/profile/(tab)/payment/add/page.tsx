@@ -2,7 +2,6 @@
 import React from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { initialState } from "@/interface/model/auth.type";
-import { redirect } from "next/navigation";
 import { createBank } from "@/server/action/bank.action";
 import usePhone from "@/hook/usePhone";
 import useCredit from "@/hook/useCredit";
@@ -12,10 +11,10 @@ function Page() {
 	const { setCredit, credit } = useCredit()
 	const [state, formAction,] = useFormState(createBank, initialState)
 	const { pending } = useFormStatus();
-	console.log(state)
-	if (state?.message === 'true') {
-		redirect('/profile/payment')
-	}
+	// console.log(state)
+	// if (state?.message === 'true') {
+	// 	redirect('/profile/payment')
+	// }
 	
 	return (
 		<div className="p-5 space-y-5">

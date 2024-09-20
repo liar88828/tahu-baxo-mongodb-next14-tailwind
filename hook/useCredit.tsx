@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-function useCredit() {
-	const [state, setState] = useState('')
+function useCredit(value: string = '') {
+	const [state, setState] = useState(value)
 	const setCredit = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
 		const formattedValue = value

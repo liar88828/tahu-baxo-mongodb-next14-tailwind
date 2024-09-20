@@ -40,11 +40,13 @@ export async function apiGetBankAll() {
 	};
 }
 
-export async function apiGetBankId(id: number) {
-	const res = await fetch(`${ config.url }/api/bank/${ id }`, {
+export async function apiGetBankId(id_bank: number, token: string) {
+	const res = await fetch(`${ config.url }/api/bank/${ id_bank }`, {
 		method: "GET",
 		headers: {
 			'Content-Type': 'application/json',
+			"Authorization": `Bearer ${ token }`
+			
 		},
 		cache: "no-cache",
 	})
