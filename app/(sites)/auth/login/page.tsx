@@ -4,17 +4,16 @@ import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { onLogin } from "@/server/action/auth.action";
 import { initialState } from "@/interface/model/auth.type";
-import { redirect } from "next/navigation";
 import { ErrorMessage } from "@/components/error/errorMessage";
 
 export default function Page() {
 	const [state, formAction,] = useFormState(onLogin, initialState)
 	const { pending } = useFormStatus();
 	
-	console.log(state.message, 'state user login')
-	if (state.message === 'true') {
-		redirect('/home')
-	}
+	// console.log(state.message, 'state user login')
+	// if (state.message === 'true') {
+	// 	redirect('/home')
+	// }
 	return (
 		<div
 			data-testid="login-Page"

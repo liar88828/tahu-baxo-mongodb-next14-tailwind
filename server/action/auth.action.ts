@@ -38,8 +38,8 @@ export async function onForgot(prevState: any, formData: FormData): Promise<OnFo
 		const rawFormData = forgetSanitize(formData)
     const data = userSchema.forgotSchema.parse(rawFormData);
     revalidatePath('/')
-		// return { message: 'true' }
 		redirect('/auth/reset');
+		// return { message: 'true' }
   } catch (err) {
 		// console.error('on forget error')
 		return errorForm(err)
@@ -54,7 +54,7 @@ export async function onReset(prevState: any, formData: FormData): Promise<OnFor
 		// return { message: 'true' }
 		redirect('/auth/done')
   } catch (err) {
-		console.error('on reset error')
+		// console.error('on reset error')
 		return errorForm(err)
   }
 }

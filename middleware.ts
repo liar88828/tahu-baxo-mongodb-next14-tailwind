@@ -22,7 +22,7 @@ export default async function middleware(req: NextRequest) {
 		
 		// if (!refresh) {
 		// 	// console.log(' : refresh token will redirect-------------')
-		// 	return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
+		return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
 		// }
 	}
 	
@@ -39,6 +39,11 @@ export default async function middleware(req: NextRequest) {
 		// return NextResponse.redirect(new URL('/home', req.nextUrl))
 		
 	}
+	
+	if (req.nextUrl.pathname.startsWith('/profile')) {
+		return productMiddleWare(req)
+	}
+	
 	
 	if (req.nextUrl.pathname.startsWith('/product')) {
 		return productMiddleWare(req)
