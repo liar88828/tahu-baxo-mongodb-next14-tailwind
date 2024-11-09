@@ -1,9 +1,5 @@
 const btnS      = " btn text-white shadow "
-const SDiTerima = " bg-error  " + btnS
-const SProcess  = " bg-info  " + btnS
-const SKirim    = " bg-warning  " + btnS
-const SSelesai  = " bg-purple-400  " + btnS
-export type  TStatusProduk = "Terima" | "Proses" | "Semua" | "Kirim" | "Selesai" | string
+export type  TStatusProduct = "Terima" | "Proses" | "Semua" | "Kirim" | "Selesai" | string
 
 export const OStatus = [
   { s: "Terima" },
@@ -18,7 +14,7 @@ export const OStatus = [
 //          ( s === "Kirim" ) ? SKirim : SSelesai
 // }
 
-export const statusWarna = ( s: TStatusProduk ): string => {
+export const statusWarna = (s: TStatusProduct): string => {
   return ( s === "Terima" ) ? " bg-error " :
          ( s === "Proses" ) ? " bg-info " :
          ( s === "Kirim" ) ? " bg-warning " :

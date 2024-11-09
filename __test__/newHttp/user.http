@@ -1,0 +1,64 @@
+@api = http://localhost:3000/api
+@path = {{api}}/user
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFRva2VuIjoiY20wc3Z0bXZmMDA0ZzQ1ZWd2cjVyOGduMiIsImVtYWlsIjoidXNlcjRUZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyNFRlc3QiLCJpZCI6ImNtMHNua2d0MDAwMDM0NWVnZmRkaXZ2cHEiLCJpbWFnZSI6Imh0dHBzOi8vdDQuZnRjZG4ubmV0L2pwZy8wNC83My8yNS80OS8zNjBfRl80NzMyNTQ5NTdfYnhHOXlmNGx5N09CTzVJME81S0FCbE45MzBHd2FNUXouanBnIiwiaWF0IjoxNzI1NzYyNzg2LCJleHAiOjE3MjU3NjYzODZ9.g1APjCrkX1Lwcs83bPcx71CNAGRRfmvwea--drIXpE0
+
+@cookie = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTBzbmtndDAwMDAzNDVlZ2ZkZGl2dnBxIiwiaWF0IjoxNzI1NzY1NDM0LCJleHAiOjE3MjYzNzAyMzR9.6WTRH-qhpwB_45ENX3V2cSmksxuhvkVthJmuhUF9_UU
+####
+#"refreshToken": {
+#"id": "cm0svtmvf004g45egvr5r8gn2"
+#},
+####
+###  refresh
+GET {{path}}/refresh/cm0svtmvf004g45egvr5r8gn2
+Content-Type: application/json
+
+### rotate
+GET {{path}}/rotate
+Content-Type: application/json
+#Authorization: Bearer {{token}}
+Set-Cookie:session={{cookie}}
+
+
+### check
+GET {{path}}/check
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{path}}/login
+Content-Type: application/json
+
+{
+  "email": "user4Test@gmail.com",
+  "password": "user1234"
+}
+
+###
+POST {{path}}/register
+Content-Type: application/json
+
+{
+  "fullname": "user4Test",
+  "email": "user4Test@gmail.com",
+  "password": "user1234",
+  "confPass": "user1234",
+  "phone": "081 1232 1234",
+  "address": "jln jakarta raya"
+}
+
+###
+GET {{path}}/refresh
+Content-Type: application/json
+
+###
+
+DELETE {{path}}/logout
+Content-Type: application/json
+Set-Cookie:session={{cookie}}
+
+###
+GET {{path}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###

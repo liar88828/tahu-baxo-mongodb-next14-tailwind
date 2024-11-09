@@ -1,0 +1,50 @@
+@api = http://localhost:3000/api
+@path = {{api}}/bank
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMyIsImlkIjoiY20wbjh0eGo3MDAwMXR3eWtoeWRneWFzYyIsInRyb2xsZXlJZCI6MSwiaWF0IjoxNzI1NDE3MTY1LCJleHAiOjE3MjU0MjA3NjV9.yVhHV2VnaPQoZxOMoq22QMTuzVDfe2USDrH2ujuWesM
+
+### get data Bank
+GET {{path}}
+Authorization: Bearer {{token}}
+
+#Ma_09_Un_Kr_Bi_1693367481943
+### get data Bank by id
+
+### get data Bank
+GET {{path}}/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+####POST
+POST {{path}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "hp": "(081 242 2333 234)",
+  "no": "123 2323324 2324 243",
+  "nama": "mandiri semarang 2",
+  "lokasi": "semarang",
+  "jenis": "atm",
+  "keterangan": "orak genah"
+}
+
+
+### update data Bank
+PUT {{path}}/6
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "hp": "test1",
+  "no": "asdasdas",
+  "nama": "mandiri update name",
+  "lokasi": "Semrang",
+  "keterangan": "orak jelas",
+  "img": "https://logowik.com/content/uploads/images/cash2548.jpg",
+  "jenis": "Kredit"
+}
+
+###
+DELETE {{path}}/6
+Content-Type: application/json
+Authorization: Bearer {{token}}

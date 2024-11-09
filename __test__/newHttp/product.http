@@ -1,0 +1,55 @@
+@api = http://localhost:3000/api
+@path = {{api}}/product
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFRva2VuIjoiY20wdDA5NDF2MDAwMW41cjYydmxkdG84NSIsImVtYWlsIjoidXNlcjRUZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyNFRlc3QiLCJpZCI6ImNtMHNua2d0MDAwMDM0NWVnZmRkaXZ2cHEiLCJpbWFnZSI6Imh0dHBzOi8vdDQuZnRjZG4ubmV0L2pwZy8wNC83My8yNS80OS8zNjBfRl80NzMyNTQ5NTdfYnhHOXlmNGx5N09CTzVJME81S0FCbE45MzBHd2FNUXouanBnIiwiaWF0IjoxNzI1NzY5MzAyLCJleHAiOjE3MjU3NzI5MDJ9.JOE6CAN9TYkeVPoHAk1pSxF3yECI7CYkNHy3kjHfIrE
+
+### get data Produk
+GET {{path}}
+
+### get data Produk with param
+GET {{path}}/user?search=Organic Coffee Beans
+Authorization: Bearer {{token}}
+
+
+### get data Produk with param
+GET {{path}}?page=100&take=2
+Authorization: Bearer {{token}}
+
+### get data Produk by id
+GET {{path}}/1
+Authorization: Bearer {{token}}
+
+### create data Produk`
+POST  {{path}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "harga": 20000,
+  "img": "tidak ada ",
+  "jenis": "orderan",
+  "jumlah": 86,
+  "keterangan": "Pedas",
+  "lokasi": "Semarang",
+  "nama": "tahu baxo enak sekali"
+}
+
+
+### update data Produk`
+PUT {{path}}/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nama": "tahu baxo update",
+  "harga": 20000,
+  "img": "tidak ada ",
+  "jenis": "orderan",
+  "jumlah": 1,
+  "keterangan": "Pedas",
+  "lokasi": "Semarang"
+}
+
+
+### delete data Produks`
+DELETE {{path}}/1
+Authorization: Bearer {{token}}

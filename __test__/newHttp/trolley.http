@@ -1,0 +1,30 @@
+@api = http://localhost:3000/api
+@path = {{api}}/trolley
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsIm5hbWUiOiJ1c2VyMSIsImlkIjoiY20wbWV0eWRhMDAwNDE3ZnoxeTI5eXh2dCIsInRyb2xsZXlJZCI6MSwiaWF0IjoxNzI1MzcyMzExLCJleHAiOjE3MjUzNzU5MTF9.TXx_W2hUxjzcBNUt2zWDMR7U-yVSPK98zwOyrzP2q98
+
+### get trolly
+GET {{path}}
+Authorization: Bearer {{token}}
+
+### increment trolly
+POST {{path}}/99
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": 2,
+  "qty": 123
+}
+
+### decrement trolly
+PUT {{path}}/99
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": 2,
+  "qty": 123
+}
+
+### deletetrolly
+DELETE {{path}}

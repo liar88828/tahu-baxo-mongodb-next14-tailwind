@@ -1,0 +1,3 @@
+must add a diagram for static buying
+must responsive when user desktop
+must fix refresh token !!!

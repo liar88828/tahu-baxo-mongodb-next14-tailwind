@@ -1,4 +1,3 @@
-
 // @ts-ignore
 import { statusWarna } from '@/app/style/status';
 import { IconProps } from '@iconify/react';
@@ -78,7 +77,7 @@ export const routesNav: TRoutesNav[] = [
     links      : [
       {
         name: "List",
-        path: "/product/list?page=1&take=10",
+        path : "/product/list?navButton=1&take=10",
       },
       // {
       //   name: "Create",
@@ -92,7 +91,7 @@ export const routesNav: TRoutesNav[] = [
     links      : [
       {
         name: "List",
-        path: "/delivery/list?page=1&take=10",
+        path : "/delivery/list?navButton=1&take=10",
       },
       // {
       //   name: "Create",
@@ -107,7 +106,7 @@ export const routesNav: TRoutesNav[] = [
     links      : [
       {
         name: "List",
-        path: "/bank/list?page=1&take=10",
+        path : "/bank/list?navButton=1&take=10",
       },
       // {
       //   name: "Create",
